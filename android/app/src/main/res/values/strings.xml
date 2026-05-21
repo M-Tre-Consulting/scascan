@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ScaScan</string>
+    <string name="home_subtitle">AI-powered nutritional analysis</string>
+    <string name="btn_take_photo">Take a Photo</string>
+    <string name="btn_scan_barcode">Scan Barcode</string>
+    <string name="btn_search_food">Search Food</string>
+    <string name="btn_analyze">Analyze</string>
+    <string name="search_title">Search Food</string>
+    <string name="search_description">Describe a food or meal to get its nutritional facts.</string>
+    <string name="search_hint">e.g. Chicken breast, 100g</string>
+    <string name="barcode_scan_prompt">Point camera at a barcode</string>
+    <string name="analyzing">Analyzing…</string>
+    <string name="permission_camera_denied">Camera permission is required to use this feature</string>
+    <string name="label_camera">Take Photo</string>
+    <string name="label_barcode_scan">Scan Barcode</string>
+    <string name="label_search">Search Food</string>
+    <string name="label_result">Nutritional Facts</string>
+    <string name="per_serving">Per serving</string>
+    <string name="nutrient_calories">Calories</string>
+    <string name="nutrient_protein">Protein</string>
+    <string name="nutrient_carbs">Carbohydrates</string>
+    <string name="nutrient_fat">Fat</string>
+    <string name="nutrient_fiber">Fiber</string>
+    <string name="nutrient_sugar">Sugar</string>
+    <string name="nutrient_sodium">Sodium</string>
+    <string name="value_grams">%.1f g</string>
+    <string name="value_milligrams">%.0f mg</string>
+    <string name="ai_disclaimer">Values are AI-estimated and may vary. Always verify with official food labels.</string>
+</resources>
