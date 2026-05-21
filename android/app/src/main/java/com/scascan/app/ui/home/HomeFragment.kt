@@ -27,13 +27,16 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnCamera.setOnClickListener {
+        binding.btnSettings.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_apiKeyFragment)
+        }
+        binding.cardCamera.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_cameraFragment)
         }
-        binding.btnBarcode.setOnClickListener {
+        binding.cardBarcode.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_barcodeScanFragment)
         }
-        binding.btnSearch.setOnClickListener {
+        binding.cardSearch.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
         }
     }

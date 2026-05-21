@@ -3,7 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/apiKeyFragment">
+
+    <fragment
+        android:id="@+id/apiKeyFragment"
+        android:name="com.scascan.app.ui.setup.ApiKeyFragment"
+        android:label="@string/setup_title">
+        <action
+            android:id="@+id/action_apiKeyFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/apiKeyFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/homeFragment"
@@ -18,6 +29,9 @@
         <action
             android:id="@+id/action_homeFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_apiKeyFragment"
+            app:destination="@id/apiKeyFragment" />
     </fragment>
 
     <fragment

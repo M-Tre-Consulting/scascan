@@ -19,8 +19,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val geminiApiKey = project.findProperty("GEMINI_API_KEY") as String? ?: ""
-        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
+        // API key is entered by the user at runtime, not baked into the APK
     }
 
     buildTypes {

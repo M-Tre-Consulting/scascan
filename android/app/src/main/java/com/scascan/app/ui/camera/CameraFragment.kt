@@ -63,6 +63,7 @@ class CameraFragment : Fragment() {
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
+        binding.btnBack.setOnClickListener { findNavController().navigateUp() }
         binding.captureButton.setOnClickListener { takePhoto() }
         observeUiState()
     }
@@ -114,15 +115,15 @@ class CameraFragment : Fragment() {
             viewModel.uiState.collect { state ->
                 when (state) {
                     is CameraUiState.Idle -> {
-                        binding.progressBar.visibility = View.GONE
+                        binding.analyzingBar.visibility = View.GONE
                         binding.captureButton.isEnabled = true
                     }
                     is CameraUiState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
+                        binding.analyzingBar.visibility = View.VISIBLE
                         binding.captureButton.isEnabled = false
                     }
                     is CameraUiState.Success -> {
-                        binding.progressBar.visibility = View.GONE
+                        binding.analyzingBar.visibility = View.GONE
                         findNavController().navigate(
                             R.id.action_cameraFragment_to_nutritionResultFragment,
                             bundleOf("nutritionFacts" to state.nutritionFacts)
@@ -130,7 +131,7 @@ class CameraFragment : Fragment() {
                         viewModel.resetToIdle()
                     }
                     is CameraUiState.Error -> {
-                        binding.progressBar.visibility = View.GONE
+                        binding.analyzingBar.visibility = View.GONE
                         binding.captureButton.isEnabled = true
                         Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
                         viewModel.resetToIdle()

@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4CAF50</color>
-    <color name="colorPrimaryVariant">#388E3C</color>
+    <!-- M3 Expressive — green seed palette -->
+    <color name="colorPrimary">#386A20</color>
     <color name="colorOnPrimary">#FFFFFF</color>
-    <color name="colorSecondary">#8BC34A</color>
+    <color name="colorPrimaryContainer">#B7F397</color>
+    <color name="colorOnPrimaryContainer">#042100</color>
+
+    <color name="colorSecondary">#55624C</color>
     <color name="colorOnSecondary">#FFFFFF</color>
-    <color name="colorBackground">#FFFFFF</color>
-    <color name="colorSurface">#FFFFFF</color>
-    <color name="colorOnBackground">#1C1B1F</color>
-    <color name="colorOnSurface">#1C1B1F</color>
-    <color name="colorError">#B3261E</color>
+    <color name="colorSecondaryContainer">#D9E8CB</color>
+    <color name="colorOnSecondaryContainer">#131F0D</color>
+
+    <color name="colorTertiary">#386663</color>
+    <color name="colorOnTertiary">#FFFFFF</color>
+    <color name="colorTertiaryContainer">#BCECE8</color>
+    <color name="colorOnTertiaryContainer">#00201F</color>
+
+    <color name="colorError">#BA1A1A</color>
     <color name="colorOnError">#FFFFFF</color>
+    <color name="colorErrorContainer">#FFDAD6</color>
+    <color name="colorOnErrorContainer">#410002</color>
+
+    <color name="colorBackground">#F9FBF2</color>
+    <color name="colorOnBackground">#1A1C18</color>
+    <color name="colorSurface">#F9FBF2</color>
+    <color name="colorOnSurface">#1A1C18</color>
+    <color name="colorSurfaceVariant">#DEE5D4</color>
+    <color name="colorOnSurfaceVariant">#424940</color>
+    <color name="colorOutline">#72796A</color>
+    <color name="colorOutlineVariant">#C2C9BA</color>
 </resources>

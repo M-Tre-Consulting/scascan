@@ -4,13 +4,14 @@ import android.graphics.Bitmap
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import com.google.gson.Gson
+import com.scascan.app.data.local.GeminiKeyStore
 import com.scascan.app.data.model.NutritionFacts
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class NutritionRepository @Inject constructor(
-    private val generativeModel: GenerativeModel,
+    private val keyStore: GeminiKeyStore,
     private val gson: Gson
 ) {
     private val responseSchema = """
@@ -19,25 +20,28 @@ class NutritionRepository @Inject constructor(
         Numeric values: protein/carbohydrates/fat/fiber/sugar in grams, sodium in milligrams, all per serving.
     """.trimIndent()
 
+    private fun model(): GenerativeModel {
+        val key = keyStore.apiKey
+        require(key.isNotBlank()) { "Gemini API key is not configured. Please set it in the app settings." }
+        return GenerativeModel(modelName = "gemini-1.5-flash", apiKey = key)
+    }
+
     suspend fun analyzeImage(bitmap: Bitmap): Result<NutritionFacts> = runCatching {
         val inputContent = content {
             image(bitmap)
             text("You are a nutrition expert. Identify the food in this image and provide nutritional facts. $responseSchema")
         }
-        val response = generativeModel.generateContent(inputContent)
-        parseResponse(response.text ?: error("Empty response from Gemini"))
+        parseResponse(model().generateContent(inputContent).text ?: error("Empty response from Gemini"))
     }
 
     suspend fun analyzeBarcode(barcode: String): Result<NutritionFacts> = runCatching {
         val prompt = "You are a nutrition expert. The barcode value is '$barcode'. Identify the food product and provide its nutritional facts. $responseSchema"
-        val response = generativeModel.generateContent(prompt)
-        parseResponse(response.text ?: error("Empty response from Gemini"))
+        parseResponse(model().generateContent(prompt).text ?: error("Empty response from Gemini"))
     }
 
     suspend fun searchFood(query: String): Result<NutritionFacts> = runCatching {
         val prompt = "You are a nutrition expert. Provide nutritional facts for: $query. $responseSchema"
-        val response = generativeModel.generateContent(prompt)
-        parseResponse(response.text ?: error("Empty response from Gemini"))
+        parseResponse(model().generateContent(prompt).text ?: error("Empty response from Gemini"))
     }
 
     private fun parseResponse(text: String): NutritionFacts {

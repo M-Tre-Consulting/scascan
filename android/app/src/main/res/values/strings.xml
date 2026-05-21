@@ -6,6 +6,9 @@
     <string name="btn_scan_barcode">Scan Barcode</string>
     <string name="btn_search_food">Search Food</string>
     <string name="btn_analyze">Analyze</string>
+    <string name="card_camera_desc">Identify food from any image</string>
+    <string name="card_barcode_desc">Look up any product by barcode</string>
+    <string name="card_search_desc">Type any food or meal description</string>
     <string name="search_title">Search Food</string>
     <string name="search_description">Describe a food or meal to get its nutritional facts.</string>
     <string name="search_hint">e.g. Chicken breast, 100g</string>
@@ -27,4 +30,14 @@
     <string name="value_grams">%.1f g</string>
     <string name="value_milligrams">%.0f mg</string>
     <string name="ai_disclaimer">Values are AI-estimated and may vary. Always verify with official food labels.</string>
+
+    <!-- API key setup -->
+    <string name="setup_title">Set up your API key</string>
+    <string name="setup_description">ScaScan uses Google Gemini to analyze food. Paste your Gemini API key below to get started.</string>
+    <string name="setup_key_hint">Gemini API key</string>
+    <string name="setup_key_error">Please enter a valid API key</string>
+    <string name="setup_btn_save">Save and continue</string>
+    <string name="setup_info_title">Where do I find my key?</string>
+    <string name="setup_info_body">Go to aistudio.google.com → Get API key. The key is stored locally on this device only and never sent anywhere except to the Gemini API.</string>
+    <string name="menu_update_key">Update API key</string>
 </resources>

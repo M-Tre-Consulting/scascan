@@ -70,6 +70,7 @@ class BarcodeScanFragment : Fragment() {
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
+        binding.btnBack.setOnClickListener { findNavController().navigateUp() }
         observeUiState()
     }
 
@@ -131,6 +132,7 @@ class BarcodeScanFragment : Fragment() {
                     is BarcodeScanUiState.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE
                         binding.tvStatus.text = getString(R.string.analyzing)
+                        binding.btnBack.isEnabled = false
                     }
                     is BarcodeScanUiState.Success -> {
                         findNavController().navigate(
@@ -141,6 +143,7 @@ class BarcodeScanFragment : Fragment() {
                     }
                     is BarcodeScanUiState.Error -> {
                         binding.progressBar.visibility = View.GONE
+                        binding.btnBack.isEnabled = true
                         Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
                         viewModel.resetToScanning()
                     }
