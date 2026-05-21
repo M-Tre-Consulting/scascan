@@ -1,10 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Adaptive icon foreground — 108×108 dp canvas.
+    Safe zone: 18–90 dp in each axis (72×72 dp square, ~33 dp radius from centre).
+
+    Layout:
+      • Rotation group (+45° CW around pivot 52,54): vertical pill becomes a
+        diagonal leaf/carrot pointing upper-right.  Foliage extends from the
+        pre-rotation top of the pill; after rotation they appear upper-right.
+      • Magnifying glass: absolute coords, overlapping the lower body of the carrot.
+
+    Post-rotation sanity (pivot 52,54, formula x'=px+(dx-dy)/√2, y'=py+(dx+dy)/√2):
+      Carrot tip  (52,32) → (68, 38)   ✓
+      Carrot base (52,72) → (39, 67)   ✓
+      Foliage far tip      → (~83, 40)  ✓  distance from centre ≈ 32 dp < 33
+      Mag-glass edge       → (74, 54)   ✓  distance = 20 dp
+      Handle end  (79,72)  →  distance ≈ 31 dp < 33  ✓
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!-- ── Carrot / leaf body + foliage (rotated 45° CW) ───────────────────── -->
+    <group
+        android:rotation="45"
+        android:pivotX="52"
+        android:pivotY="54">
+
+        <!-- Body: tapered pill — narrow at tip (top), wider at base (bottom) -->
+        <path
+            android:pathData="M52,32
+                              C55,32 60,37 60,47
+                              L60,62
+                              C60,68 56,72 52,72
+                              C48,72 44,68 44,62
+                              L44,47
+                              C44,37 49,32 52,32 Z"
+            android:fillColor="#B7F397" />
+
+        <!-- Foliage — left leaf -->
+        <path
+            android:pathData="M50,30 C46,24 48,18 52,20 C54,21 52,27 50,30 Z"
+            android:fillColor="#9CD67A" />
+
+        <!-- Foliage — right leaf -->
+        <path
+            android:pathData="M54,28 C58,22 64,22 64,27 C64,30 58,30 54,28 Z"
+            android:fillColor="#9CD67A" />
+
+        <!-- Foliage — centre leaf (slightly lighter for depth) -->
+        <path
+            android:pathData="M52,31 C50,23 54,17 58,19 C60,20 57,26 52,31 Z"
+            android:fillColor="#C8EBA8" />
+
+    </group>
+
+    <!-- ── Magnifying glass (absolute coordinates) ─────────────────────────── -->
+
+    <!-- Lens — subtle frosted fill -->
     <path
-        android:fillColor="@color/colorOnPrimary"
-        android:pathData="M31,31h46v46h-46z" />
+        android:pathData="M61,54 m-13,0 a13,13,0,1,0,26,0 a13,13,0,1,0,-26,0"
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.18" />
+
+    <!-- Lens — white ring -->
+    <path
+        android:pathData="M61,54 m-13,0 a13,13,0,1,0,26,0 a13,13,0,1,0,-26,0"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.5"
+        android:fillColor="#00000000" />
+
+    <!-- Handle -->
+    <path
+        android:pathData="M70,63 L79,72"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
 </vector>

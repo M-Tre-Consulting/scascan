@@ -45,6 +45,14 @@ android {
         viewBinding = true
         buildConfig = true
     }
+
+    packaging {
+        jniLibs {
+            // Store .so files uncompressed and page-aligned in the APK.
+            // Required for 16 KB page-size compliance (Play Store mandate from Nov 2025).
+            useLegacyPackaging = false
+        }
+    }
 }
 
 dependencies {
@@ -62,7 +70,7 @@ dependencies {
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
-    implementation(libs.mlkit.barcode.scanning)
+    implementation(libs.zxing.core)
     implementation(libs.generativeai)
     implementation(libs.gson)
     implementation(libs.kotlinx.coroutines.android)

@@ -18,10 +18,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions
-import com.google.mlkit.vision.common.InputImage
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.DecodeHintType
+import com.google.zxing.MultiFormatReader
+import com.google.zxing.NotFoundException
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.common.HybridBinarizer
 import com.scascan.app.R
 import com.scascan.app.databinding.FragmentBarcodeScanBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,11 +41,21 @@ class BarcodeScanFragment : Fragment() {
     private val viewModel: BarcodeScanViewModel by viewModels()
     private lateinit var cameraExecutor: ExecutorService
 
-    private val barcodeScanner = BarcodeScanning.getClient(
-        BarcodeScannerOptions.Builder()
-            .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
-            .build()
-    )
+    private val barcodeReader = MultiFormatReader().apply {
+        setHints(
+            mapOf(
+                DecodeHintType.POSSIBLE_FORMATS to listOf(
+                    BarcodeFormat.QR_CODE,
+                    BarcodeFormat.EAN_13, BarcodeFormat.EAN_8,
+                    BarcodeFormat.UPC_A, BarcodeFormat.UPC_E,
+                    BarcodeFormat.CODE_128, BarcodeFormat.CODE_39,
+                    BarcodeFormat.ITF, BarcodeFormat.DATA_MATRIX,
+                    BarcodeFormat.PDF_417, BarcodeFormat.AZTEC
+                ),
+                DecodeHintType.TRY_HARDER to true
+            )
+        )
+    }
 
     private val cameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -90,19 +103,17 @@ class BarcodeScanFragment : Fragment() {
                             imageProxy.close()
                             return@setAnalyzer
                         }
-                        val mediaImage = imageProxy.image
-                        if (mediaImage != null) {
-                            val inputImage = InputImage.fromMediaImage(
-                                mediaImage, imageProxy.imageInfo.rotationDegrees
-                            )
-                            barcodeScanner.process(inputImage)
-                                .addOnSuccessListener { barcodes ->
-                                    barcodes.firstOrNull()?.rawValue?.let { value ->
-                                        viewModel.analyzeBarcode(value)
-                                    }
-                                }
-                                .addOnCompleteListener { imageProxy.close() }
-                        } else {
+                        try {
+                            val bitmap = imageProxy.toBitmap()
+                            val pixels = IntArray(bitmap.width * bitmap.height)
+                            bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+                            val source = RGBLuminanceSource(bitmap.width, bitmap.height, pixels)
+                            val result = barcodeReader.decodeWithState(BinaryBitmap(HybridBinarizer(source)))
+                            viewModel.analyzeBarcode(result.text)
+                        } catch (_: NotFoundException) {
+                            // No barcode in this frame — keep scanning
+                        } finally {
+                            barcodeReader.reset()
                             imageProxy.close()
                         }
                     }
@@ -156,6 +167,5 @@ class BarcodeScanFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         cameraExecutor.shutdown()
-        barcodeScanner.close()
     }
 }
