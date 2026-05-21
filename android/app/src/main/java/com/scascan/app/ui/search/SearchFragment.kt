@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -36,13 +39,19 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnBack.setOnClickListener { findNavController().navigateUp() }
+        // Whole pill bar is the back target
+        binding.topBar.setOnClickListener { findNavController().navigateUp() }
         binding.btnAnalyze.setOnClickListener { submitSearch() }
         binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                submitSearch()
-                true
-            } else false
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) { submitSearch(); true } else false
+        }
+
+        // Pad the root down by the status-bar height so the floating bar and content
+        // clear the status bar together (both have relative positioning inside the root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            binding.root.updatePadding(top = statusBar)
+            insets
         }
 
         observeUiState()

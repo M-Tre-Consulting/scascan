@@ -13,11 +13,11 @@ class GeminiKeyStore @Inject constructor(
 
     var apiKey: String
         get() = prefs.getString(KEY_GEMINI_API, "") ?: ""
-        set(value) { prefs.edit().putString(KEY_GEMINI_API, value.trim()).apply() }
+        set(value) { prefs.edit().putString(KEY_GEMINI_API, value.trim()).commit() }
 
     fun hasKey(): Boolean = apiKey.isNotBlank()
 
-    fun clearKey() { prefs.edit().remove(KEY_GEMINI_API).apply() }
+    fun clearKey() { prefs.edit().remove(KEY_GEMINI_API).commit() }
 
     companion object {
         private const val PREFS_NAME = "scascan_prefs"

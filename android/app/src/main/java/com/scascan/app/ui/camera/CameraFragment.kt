@@ -16,6 +16,9 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -57,14 +60,25 @@ class CameraFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         cameraExecutor = Executors.newSingleThreadExecutor()
 
+        // Whole pill bar is the back target — larger touch area, no clipping issues
+        binding.topBar.setOnClickListener { findNavController().navigateUp() }
+        binding.captureButton.setOnClickListener { takePhoto() }
+
+        // Push the floating bar below the status bar (camera preview stays full-screen)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            binding.topBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = statusBar + (16 * resources.displayMetrics.density).toInt()
+            }
+            insets
+        }
+
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startCamera()
         } else {
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
-        binding.btnBack.setOnClickListener { findNavController().navigateUp() }
-        binding.captureButton.setOnClickListener { takePhoto() }
         observeUiState()
     }
 

@@ -14,6 +14,9 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -77,13 +80,24 @@ class BarcodeScanFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         cameraExecutor = Executors.newSingleThreadExecutor()
 
+        // Whole pill bar is the back target
+        binding.topBar.setOnClickListener { findNavController().navigateUp() }
+
+        // Push the floating bar below the status bar (camera preview stays full-screen)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            binding.topBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = statusBar + (16 * resources.displayMetrics.density).toInt()
+            }
+            insets
+        }
+
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startScanner()
         } else {
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
-        binding.btnBack.setOnClickListener { findNavController().navigateUp() }
         observeUiState()
     }
 
@@ -143,7 +157,7 @@ class BarcodeScanFragment : Fragment() {
                     is BarcodeScanUiState.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE
                         binding.tvStatus.text = getString(R.string.analyzing)
-                        binding.btnBack.isEnabled = false
+                        binding.topBar.isEnabled = false
                     }
                     is BarcodeScanUiState.Success -> {
                         findNavController().navigate(
@@ -154,7 +168,7 @@ class BarcodeScanFragment : Fragment() {
                     }
                     is BarcodeScanUiState.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        binding.btnBack.isEnabled = true
+                        binding.topBar.isEnabled = true
                         Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
                         viewModel.resetToScanning()
                     }

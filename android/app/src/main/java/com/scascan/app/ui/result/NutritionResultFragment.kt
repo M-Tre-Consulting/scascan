@@ -4,8 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.scascan.app.R
 import com.scascan.app.data.model.NutritionFacts
 import com.scascan.app.databinding.FragmentNutritionResultBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +31,17 @@ class NutritionResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnBack.setOnClickListener { findNavController().navigateUp() }
+
+        // Whole pill bar is the back target
+        binding.topBar.setOnClickListener { findNavController().navigateUp() }
+
+        // Pad the root down by the status-bar height
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            binding.root.updatePadding(top = statusBar)
+            insets
+        }
+
         val facts = requireArguments().getParcelable<NutritionFacts>("nutritionFacts")!!
         bindFacts(facts)
     }
@@ -36,12 +50,12 @@ class NutritionResultFragment : Fragment() {
         binding.tvFoodName.text = facts.foodName
         binding.tvServingSize.text = facts.servingSize
         binding.tvCaloriesValue.text = facts.calories.toInt().toString()
-        binding.tvProteinValue.text = getString(com.scascan.app.R.string.value_grams, facts.protein)
-        binding.tvCarbsValue.text = getString(com.scascan.app.R.string.value_grams, facts.carbohydrates)
-        binding.tvFatValue.text = getString(com.scascan.app.R.string.value_grams, facts.fat)
-        binding.tvFiberValue.text = getString(com.scascan.app.R.string.value_grams, facts.fiber)
-        binding.tvSugarValue.text = getString(com.scascan.app.R.string.value_grams, facts.sugar)
-        binding.tvSodiumValue.text = getString(com.scascan.app.R.string.value_milligrams, facts.sodium)
+        binding.tvProteinValue.text = getString(R.string.value_grams, facts.protein)
+        binding.tvCarbsValue.text = getString(R.string.value_grams, facts.carbohydrates)
+        binding.tvFatValue.text = getString(R.string.value_grams, facts.fat)
+        binding.tvFiberValue.text = getString(R.string.value_grams, facts.fiber)
+        binding.tvSugarValue.text = getString(R.string.value_grams, facts.sugar)
+        binding.tvSodiumValue.text = getString(R.string.value_milligrams, facts.sodium)
     }
 
     override fun onDestroyView() {
