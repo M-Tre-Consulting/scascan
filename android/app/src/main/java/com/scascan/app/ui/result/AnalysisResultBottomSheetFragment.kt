@@ -32,11 +32,11 @@ class AnalysisResultBottomSheetFragment : BottomSheetDialogFragment() {
         val facts = requireArguments().getParcelable<NutritionFacts>(ARG_FACTS)!!
 
         binding.tvFoodName.text = facts.foodName
-        binding.tvCalories.text = "${facts.calories.toInt()} kcal · ${facts.servingSize}"
+        binding.tvCalories.text = "${Math.round(facts.calories).toInt()} kcal · ${facts.servingSize}"
         binding.tvMacros.text = buildString {
-            append("${facts.protein.toInt()}g protein")
-            append(" · ${facts.carbohydrates.toInt()}g carbs")
-            append(" · ${facts.fat.toInt()}g fat")
+            append("${Math.round(facts.protein).toInt()}g protein")
+            append(" · ${Math.round(facts.carbohydrates).toInt()}g carbs")
+            append(" · ${Math.round(facts.fat).toInt()}g fat")
         }
 
         binding.btnAddToLog.setOnClickListener {

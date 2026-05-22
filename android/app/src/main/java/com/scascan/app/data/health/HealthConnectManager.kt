@@ -143,20 +143,7 @@ class HealthConnectManager @Inject constructor(
         }
     }
 
-    private fun estimateDailyBmr(): Double {
-        if (!profileStore.hasProfile()) return 1700.0 // Baseline average
-        
-        // Mifflin-St Jeor Equation
-        val w = profileStore.weightKg.toDouble()
-        val h = profileStore.heightCm.toDouble()
-        val a = profileStore.age.toDouble()
-        
-        return if (profileStore.isMale) {
-            (10.0 * w) + (6.25 * h) - (5.0 * a) + 5.0
-        } else {
-            (10.0 * w) + (6.25 * h) - (5.0 * a) - 161.0
-        }
-    }
+    private fun estimateDailyBmr(): Double = profileStore.bmr()
 
     /**
      * Returns (timestampMs, weightKg) pairs in ascending order for the past [pastDays] days.
@@ -219,6 +206,6 @@ class HealthConnectManager @Inject constructor(
 
     private fun todayRange(): Pair<Instant, Instant> {
         val start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()
-        return start to start.plus(1, ChronoUnit.DAYS)
+        return start to Instant.now()
     }
 }

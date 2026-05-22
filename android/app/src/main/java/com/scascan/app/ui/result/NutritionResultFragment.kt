@@ -76,7 +76,7 @@ class NutritionResultFragment : Fragment() {
     private fun bindFacts(facts: NutritionFacts) {
         binding.tvFoodName.text = facts.foodName
         binding.tvServingSize.text = facts.servingSize
-        binding.tvCaloriesValue.text = facts.calories.toInt().toString()
+        binding.tvCaloriesValue.text = Math.round(facts.calories).toInt().toString()
         binding.tvProteinValue.text = getString(R.string.value_grams, facts.protein)
         binding.tvCarbsValue.text = getString(R.string.value_grams, facts.carbohydrates)
         binding.tvFatValue.text = getString(R.string.value_grams, facts.fat)
