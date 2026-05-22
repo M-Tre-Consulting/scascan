@@ -33,10 +33,21 @@ class UserProfileStore @Inject constructor(
         get() = prefs.getInt(KEY_ACTIVITY, 2)
         set(v) { prefs.edit().putInt(KEY_ACTIVITY, v).commit() }
 
+    /** 0 = lose weight, 1 = maintain, 2 = build muscle */
+    var goalIndex: Int
+        get() = prefs.getInt(KEY_GOAL, 1)
+        set(v) { prefs.edit().putInt(KEY_GOAL, v).commit() }
+
+    /** AI-computed daily calorie target from Gemini. 0 = not computed yet. */
+    var aiCalorieTarget: Int
+        get() = prefs.getInt(KEY_AI_CALORIES, 0)
+        set(v) { prefs.edit().putInt(KEY_AI_CALORIES, v).commit() }
+
     fun hasProfile(): Boolean = age > 0 && heightCm > 0 && weightKg > 0f
 
-    /** Mifflin-St Jeor TDEE. Returns 2000 kcal if no profile is set. */
+    /** Returns the AI-computed target if available, otherwise falls back to Mifflin-St Jeor TDEE. */
     fun dailyCalorieTarget(): Int {
+        if (aiCalorieTarget > 0) return aiCalorieTarget
         if (!hasProfile()) return DEFAULT_CALORIES
         val bmr = if (isMale) {
             10.0 * weightKg + 6.25 * heightCm - 5.0 * age + 5.0
@@ -47,13 +58,16 @@ class UserProfileStore @Inject constructor(
     }
 
     companion object {
-        private const val PREFS_NAME  = "scascan_profile"
-        private const val KEY_AGE     = "age"
+        private const val PREFS_NAME   = "scascan_profile"
+        private const val KEY_AGE      = "age"
         private const val KEY_SEX_MALE = "sex_male"
-        private const val KEY_HEIGHT  = "height_cm"
-        private const val KEY_WEIGHT  = "weight_kg"
+        private const val KEY_HEIGHT   = "height_cm"
+        private const val KEY_WEIGHT   = "weight_kg"
         private const val KEY_ACTIVITY = "activity_idx"
+        private const val KEY_GOAL     = "goal_idx"
+        private const val KEY_AI_CALORIES = "ai_calories"
         const val DEFAULT_CALORIES = 2_000
         val ACTIVITY_MULTIPLIERS = doubleArrayOf(1.2, 1.375, 1.55, 1.725, 1.9)
+        val GOAL_LABELS = arrayOf("Lose weight", "Maintain weight", "Build muscle")
     }
 }

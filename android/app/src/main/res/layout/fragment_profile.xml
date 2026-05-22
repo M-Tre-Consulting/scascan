@@ -25,6 +25,43 @@
             android:textColor="?attr/colorPrimary"
             android:layout_marginBottom="32dp" />
 
+        <!-- Setup reminder card — shown when AI targets haven't been computed yet -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardSetupReminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="?attr/colorTertiaryContainer"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_setup_reminder_title"
+                    style="@style/TextAppearance.Material3.TitleSmall"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnTertiaryContainer"
+                    android:layout_marginBottom="6dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_setup_reminder_body"
+                    style="@style/TextAppearance.Material3.BodySmall"
+                    android:textColor="?attr/colorOnTertiaryContainer" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Personal Info card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -172,6 +209,64 @@
                         android:layout_height="wrap_content"
                         android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Fitness goal dropdown -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilGoal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/profile_goal_hint"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxCornerRadiusTopStart="16dp">
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/goalSelector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- AI target status -->
+                <LinearLayout
+                    android:id="@+id/layoutAiTarget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp"
+                    android:visibility="gone">
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/progressAiTarget"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:indeterminate="true"
+                        android:layout_marginEnd="10dp"
+                        app:indicatorSize="20dp"
+                        app:trackThickness="2dp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvAiTargetStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        style="@style/TextAppearance.Material3.BodySmall"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRecompute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_recompute"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+                </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSaveProfile"

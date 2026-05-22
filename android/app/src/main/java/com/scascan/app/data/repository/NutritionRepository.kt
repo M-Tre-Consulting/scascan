@@ -3,7 +3,9 @@ package com.scascan.app.data.repository
 import android.graphics.Bitmap
 import com.google.gson.Gson
 import com.scascan.app.data.local.GeminiKeyStore
+import com.scascan.app.data.local.UserProfileStore
 import com.scascan.app.data.model.NutritionFacts
+import com.scascan.app.data.model.NutritionTargets
 import com.scascan.app.data.remote.GeminiRestClient
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -57,6 +59,26 @@ class NutritionRepository @Inject constructor(
                 "You are a nutrition expert. Provide nutritional facts for: $query. $responseSchema"
             )
         )
+    }
+
+    suspend fun computeTargets(profile: UserProfileStore): Result<NutritionTargets> = runCatching {
+        val activityLabels = listOf("sedentary", "lightly active", "moderately active", "very active", "extra active")
+        val goalLabels = listOf("lose weight (moderate calorie deficit)", "maintain current weight", "build muscle (moderate calorie surplus)")
+        val activityLabel = activityLabels[profile.activityIndex.coerceIn(0, 4)]
+        val goalLabel = goalLabels[profile.goalIndex.coerceIn(0, 2)]
+        val sex = if (profile.isMale) "male" else "female"
+        val prompt = """
+            You are a certified nutritionist. Compute daily nutrition targets for this user:
+            Age: ${profile.age}, Sex: $sex, Height: ${profile.heightCm}cm, Weight: ${profile.weightKg}kg
+            Activity: $activityLabel, Goal: $goalLabel
+            Return ONLY valid JSON with no markdown or extra text:
+            {"dailyCalories":0,"proteinGrams":0,"carbsGrams":0,"fatGrams":0}
+        """.trimIndent()
+        val json = client.generateText(model(), apiKey(), prompt)
+        val start = json.indexOf('{')
+        val end = json.lastIndexOf('}')
+        require(start != -1 && end != -1) { "No JSON in AI response" }
+        gson.fromJson(json.substring(start, end + 1), NutritionTargets::class.java)
     }
 
     suspend fun fixEntry(foodName: String, servingSize: String, correction: String): Result<NutritionFacts> = runCatching {

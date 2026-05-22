@@ -61,6 +61,8 @@ class ProfileFragment : Fragment() {
         setupApiKey()
         setupModelSelector()
         setupHealthConnect()
+        updateSetupReminder()
+        observeTargetState()
     }
 
     // ── Personal info ─────────────────────────────────────────────────────────
@@ -68,8 +70,8 @@ class ProfileFragment : Fragment() {
     private fun setupPersonalInfo() {
         val profile = viewModel.profileStore
         val activityLabels = resources.getStringArray(R.array.activity_levels)
+        val goalLabels = resources.getStringArray(R.array.goal_levels)
 
-        // Pre-populate saved values
         if (profile.hasProfile()) {
             binding.etAge.setText(profile.age.toString())
             binding.etHeight.setText(profile.heightCm.toString())
@@ -77,16 +79,24 @@ class ProfileFragment : Fragment() {
             if (!profile.isMale) binding.chipGroupSex.check(R.id.chipFemale)
         }
 
-        // Activity dropdown
         binding.activitySelector.setAdapter(
             ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, activityLabels)
         )
         binding.activitySelector.setText(activityLabels[profile.activityIndex], false)
 
-        binding.btnSaveProfile.setOnClickListener { savePersonalInfo(activityLabels) }
+        binding.goalSelector.setAdapter(
+            ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, goalLabels)
+        )
+        binding.goalSelector.setText(goalLabels[profile.goalIndex], false)
+
+        if (profile.aiCalorieTarget > 0) {
+            showAiTargetStatus(getString(R.string.profile_target_computed, profile.aiCalorieTarget))
+        }
+
+        binding.btnSaveProfile.setOnClickListener { savePersonalInfo(activityLabels, goalLabels) }
     }
 
-    private fun savePersonalInfo(activityLabels: Array<String>) {
+    private fun savePersonalInfo(activityLabels: Array<String>, goalLabels: Array<String>) {
         val age = binding.etAge.text?.toString()?.trim()?.toIntOrNull() ?: 0
         val height = binding.etHeight.text?.toString()?.trim()?.toIntOrNull() ?: 0
         val weight = binding.etWeight.text?.toString()?.trim()?.toFloatOrNull() ?: 0f
@@ -104,8 +114,12 @@ class ProfileFragment : Fragment() {
         profile.heightCm = height
         profile.weightKg = weight
         profile.isMale = binding.chipGroupSex.checkedChipId == R.id.chipMale
-        val idx = activityLabels.indexOf(binding.activitySelector.text.toString())
-        if (idx >= 0) profile.activityIndex = idx
+
+        val actIdx = activityLabels.indexOf(binding.activitySelector.text.toString())
+        if (actIdx >= 0) profile.activityIndex = actIdx
+
+        val goalIdx = goalLabels.indexOf(binding.goalSelector.text.toString())
+        if (goalIdx >= 0) profile.goalIndex = goalIdx
 
         requireContext().getSystemService<InputMethodManager>()
             ?.hideSoftInputFromWindow(binding.etWeight.windowToken, 0)
@@ -113,6 +127,62 @@ class ProfileFragment : Fragment() {
         Snackbar.make(binding.root, R.string.profile_info_saved, Snackbar.LENGTH_SHORT)
             .setAnchorView(binding.btnSaveProfile)
             .show()
+
+        // Trigger AI-based target computation if key is available
+        if (viewModel.keyStore.hasKey()) {
+            viewModel.computeTargets()
+        }
+    }
+
+    private fun updateSetupReminder() {
+        val needsSetup = viewModel.profileStore.aiCalorieTarget == 0
+        binding.cardSetupReminder.isVisible = needsSetup
+    }
+
+    private fun showAiTargetStatus(text: String) {
+        binding.layoutAiTarget.isVisible = true
+        binding.tvAiTargetStatus.text = text
+    }
+
+    private fun observeTargetState() {
+        binding.btnRecompute.setOnClickListener {
+            viewModel.computeTargets()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.targetState.collect { state ->
+                when (state) {
+                    is ProfileViewModel.TargetState.Idle -> Unit
+                    is ProfileViewModel.TargetState.Computing -> {
+                        binding.layoutAiTarget.isVisible = true
+                        binding.progressAiTarget.isVisible = true
+                        binding.btnRecompute.isVisible = false
+                        binding.tvAiTargetStatus.text = getString(R.string.profile_target_computing)
+                        binding.btnSaveProfile.isEnabled = false
+                    }
+                    is ProfileViewModel.TargetState.Done -> {
+                        binding.progressAiTarget.isVisible = false
+                        binding.btnRecompute.isVisible = true
+                        binding.cardSetupReminder.isVisible = false
+                        showAiTargetStatus(getString(R.string.profile_target_computed, state.calories))
+                        binding.btnSaveProfile.isEnabled = true
+                        viewModel.resetTargetState()
+                    }
+                    is ProfileViewModel.TargetState.Error -> {
+                        binding.progressAiTarget.isVisible = false
+                        binding.btnRecompute.isVisible = viewModel.profileStore.aiCalorieTarget > 0
+                        binding.btnSaveProfile.isEnabled = true
+                        Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
+                        viewModel.resetTargetState()
+                    }
+                }
+            }
+        }
+
+        // Show recompute button immediately if a target already exists
+        if (viewModel.profileStore.aiCalorieTarget > 0) {
+            binding.btnRecompute.isVisible = true
+        }
     }
 
     override fun onResume() {
@@ -124,7 +194,7 @@ class ProfileFragment : Fragment() {
 
     private fun setupHealthConnect() {
         val hm = viewModel.healthManager
-        if (!hm.isAvailable) return  // keep "Coming soon" chip, hide all buttons
+        if (!hm.isAvailable) return
 
         binding.btnConnectHcProfile.setOnClickListener {
             requestHcPermissions.launch(HealthConnectManager.PERMISSIONS)
