@@ -23,7 +23,7 @@ class NutritionRepository @Inject constructor(
     private fun model(): GenerativeModel {
         val key = keyStore.apiKey
         require(key.isNotBlank()) { "Gemini API key is not configured. Please set it in the app settings." }
-        return GenerativeModel(modelName = "gemini-1.5-flash", apiKey = key)
+        return GenerativeModel(modelName = "gemini-2.0-flash", apiKey = key)
     }
 
     suspend fun analyzeImage(bitmap: Bitmap): Result<NutritionFacts> = runCatching {

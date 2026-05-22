@@ -40,4 +40,29 @@
     <string name="setup_info_title">Where do I find my key?</string>
     <string name="setup_info_body">Go to aistudio.google.com → Get API key. The key is stored locally on this device only and never sent anywhere except to the Gemini API.</string>
     <string name="menu_update_key">Update API key</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_scan">Scan</string>
+    <string name="nav_log">Log</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Log screen -->
+    <string name="log_subtitle">Track your daily nutrition</string>
+    <string name="log_today_intake">Today\'s intake</string>
+    <string name="log_no_data">—</string>
+    <string name="log_of_target">/ 2,000 kcal</string>
+    <string name="log_connect_title">Health Connect</string>
+    <string name="log_connect_body">Sync your steps, workouts, and weight to automatically adapt your daily calorie allowance.</string>
+    <string name="log_adaptive_title">Adaptive targets</string>
+    <string name="log_adaptive_body">Your calorie goal will adjust daily based on your activity, workouts, and weight trends pulled from Health Connect.</string>
+    <string name="coming_soon">Coming soon</string>
+
+    <!-- Profile screen -->
+    <string name="profile_api_key_title">Gemini API Key</string>
+    <string name="profile_api_key_desc">ScaScan uses Google Gemini to analyse food. Get your key at aistudio.google.com.</string>
+    <string name="profile_save_key">Save key</string>
+    <string name="profile_key_saved">API key saved</string>
+    <string name="profile_health_title">Health Connect</string>
+    <string name="profile_health_desc">Connect your Google Health data to enable calorie tracking and adaptive daily goals.</string>
+    <string name="profile_about_desc">Powered by Gemini AI · Built with Material 3 Expressive</string>
 </resources>

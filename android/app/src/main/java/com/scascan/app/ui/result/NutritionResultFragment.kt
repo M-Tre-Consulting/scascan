@@ -42,7 +42,12 @@ class NutritionResultFragment : Fragment() {
             insets
         }
 
-        val facts = requireArguments().getParcelable<NutritionFacts>("nutritionFacts")!!
+        val facts = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            requireArguments().getParcelable("nutritionFacts", NutritionFacts::class.java)!!
+        } else {
+            @Suppress("DEPRECATION")
+            requireArguments().getParcelable<NutritionFacts>("nutritionFacts")!!
+        }
         bindFacts(facts)
     }
 
