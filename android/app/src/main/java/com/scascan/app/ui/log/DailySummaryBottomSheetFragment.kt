@@ -63,8 +63,6 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun renderCalories(consumed: Int, target: Int, activeKcal: Int, steps: Long) {
-        binding.tvSummaryConsumed.text = getString(R.string.log_kcal_of, consumed, target)
-            .substringBefore(" /")  // show just the consumed number
         binding.tvSummaryConsumed.text = consumed.toString()
         binding.tvSummaryCalorieTarget.text = "/ $target kcal"
 
@@ -79,10 +77,12 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
         else
             getString(R.string.log_summary_over, -remaining)
 
-        binding.tvActivityContribution.isVisible = activeKcal > 0
-        if (activeKcal > 0) {
-            binding.tvActivityContribution.text =
-                getString(R.string.log_summary_activity, activeKcal, steps)
+        val hasHealth = activeKcal > 0 || steps > 0
+        binding.layoutHealthSummary.isVisible = hasHealth
+        if (hasHealth) {
+            binding.tvSummarySteps.text = steps.toString()
+            binding.tvSummaryActiveKcal.text = activeKcal.toString()
+            binding.tvSummaryDistance.text = String.format(java.util.Locale.getDefault(), "%.1f km", steps * 0.0008)
         }
     }
 

@@ -105,8 +105,9 @@ class HealthConnectManager @Inject constructor(
             )
             val activeKcal = activeResponse[ActiveCaloriesBurnedRecord.ACTIVE_CALORIES_TOTAL]?.inKilocalories ?: 0.0
             
+            Log.d(TAG, "Active Kcal from record: $activeKcal")
             // If we have meaningful active calories, return them
-            if (activeKcal > 5.0) return activeKcal
+            if (activeKcal > 1.0) return activeKcal
 
             // 2. Fallback: (TotalCaloriesBurnedRecord - BMR)
             // This is necessary because some platforms record everything as "Total"
@@ -136,6 +137,7 @@ class HealthConnectManager @Inject constructor(
                 bmrKcal = (dailyBmr / 1440.0) * minutesPassed
             }
             
+            Log.d(TAG, "Total Kcal: $totalKcal, BMR Kcal: $bmrKcal, Diff: ${totalKcal - bmrKcal}")
             (totalKcal - bmrKcal).coerceAtLeast(0.0)
         } catch (e: Exception) {
             Log.e(TAG, "readTodayActiveCalories error: $e")
@@ -205,7 +207,9 @@ class HealthConnectManager @Inject constructor(
     }
 
     private fun todayRange(): Pair<Instant, Instant> {
-        val start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()
-        return start to Instant.now()
+        val zone = ZoneId.systemDefault()
+        val start = LocalDate.now(zone).atStartOfDay(zone).toInstant()
+        val end = Instant.now()
+        return start to end
     }
 }

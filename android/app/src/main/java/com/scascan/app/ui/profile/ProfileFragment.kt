@@ -127,9 +127,11 @@ class ProfileFragment : Fragment() {
                     is ProfileViewModel.SyncState.Syncing -> {
                         binding.btnGoogleSync.isEnabled = false
                         binding.btnGoogleSync.text = getString(R.string.profile_sync_status_syncing)
+                        Snackbar.make(binding.root, R.string.profile_sync_status_syncing, Snackbar.LENGTH_SHORT).show()
                     }
                     is ProfileViewModel.SyncState.Success -> {
                         binding.btnGoogleSync.isEnabled = true
+                        binding.btnGoogleSync.text = getString(R.string.profile_sync_btn_google)
                         Snackbar.make(binding.root, R.string.profile_sync_status_complete, Snackbar.LENGTH_SHORT).show()
                         viewModel.resetSyncState()
                     }
