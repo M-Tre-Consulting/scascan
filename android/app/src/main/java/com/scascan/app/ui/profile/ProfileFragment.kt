@@ -206,7 +206,10 @@ class ProfileFragment : Fragment() {
 
     private fun setupHealthConnect() {
         val hm = viewModel.healthManager
-        if (!hm.isAvailable) return
+        if (!hm.isAvailable) {
+            binding.chipHcProfile.text = getString(R.string.hc_not_available)
+            return
+        }
 
         binding.btnConnectHcProfile.setOnClickListener {
             it.hapticClick()
@@ -224,7 +227,7 @@ class ProfileFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             val connected = hm.hasPermissions()
             binding.chipHcProfile.text = getString(
-                if (connected) R.string.hc_connected else R.string.coming_soon
+                if (connected) R.string.hc_connected else R.string.hc_disconnected
             )
             binding.btnConnectHcProfile.isVisible = !connected
             binding.btnSyncWeight.isVisible = connected
