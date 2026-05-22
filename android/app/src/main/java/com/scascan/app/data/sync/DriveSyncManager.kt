@@ -31,11 +31,14 @@ class DriveSyncManager @Inject constructor(
     private val SYNC_FILE_NAME = "scascan_sync.json"
 
     suspend fun sync(accessToken: String): Result<Unit> = withContext(Dispatchers.IO) {
+        Log.d("DriveSync", "Starting sync process...")
         try {
             val drive = getDriveService(accessToken)
             
             // 1. Download existing data from Drive
+            Log.d("DriveSync", "Downloading data...")
             val existingData = downloadData(drive)
+            Log.d("DriveSync", "Download complete, found data: ${existingData != null}")
             
             // 2. Merge local data with Drive data
             val localLogs = logRepository.getAllEntries()

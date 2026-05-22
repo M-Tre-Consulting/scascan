@@ -1,6 +1,7 @@
 package com.scascan.app.ui.profile
 
 import android.app.Activity
+import android.util.Log
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import com.google.android.gms.auth.api.identity.AuthorizationRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.Scope
 import com.google.android.material.snackbar.Snackbar
+import com.google.api.services.drive.DriveScopes
 import com.scascan.app.R
 import com.scascan.app.data.health.HealthConnectManager
 import com.scascan.app.data.remote.ModelInfo
@@ -50,30 +52,40 @@ class ProfileFragment : Fragment() {
     private val requestDriveAuth = registerForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
+        Log.d("ProfileFragment", "requestDriveAuth result: ${result.resultCode}")
         if (result.resultCode == Activity.RESULT_OK) {
-            val authClient = Identity.getAuthorizationClient(requireActivity())
-            val authResult = authClient.getAuthorizationResultFromIntent(result.data)
-            
-            // Try to extract account info from the intent
-            val account = com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(result.data)
             try {
-                val googleAccount = account.getResult(com.google.android.gms.common.api.ApiException::class.java)
-                googleAccount?.let {
-                    if (viewModel.profileStore.name.isBlank()) {
-                        it.displayName?.let { name -> viewModel.profileStore.name = name }
+                val authClient = Identity.getAuthorizationClient(requireActivity())
+                val authResult = authClient.getAuthorizationResultFromIntent(result.data)
+                Log.d("ProfileFragment", "authResult accessToken: ${authResult.accessToken?.take(10)}...")
+                
+                authResult.accessToken?.let { token ->
+                    if (viewModel.profileStore.syncEmail.isBlank()) {
+                        try {
+                            val credential = Identity.getSignInClient(requireActivity())
+                                .getSignInCredentialFromIntent(result.data)
+                            Log.d("ProfileFragment", "Found credential: ${credential.id}")
+                            viewModel.profileStore.syncEmail = credential.id
+                        } catch (_: Exception) {
+                            Log.d("ProfileFragment", "No sign-in credential found in intent")
+                        }
                     }
-                    it.email?.let { email -> viewModel.profileStore.syncEmail = email }
+                    
+                    if (viewModel.profileStore.syncEmail.isBlank()) {
+                        viewModel.profileStore.syncEmail = "Connected Account"
+                    }
+                    
+                    viewModel.triggerSync(token) 
                 }
-            } catch (e: Exception) {
-                // Fallback if the above doesn't work with AuthorizationClient intent
+            } catch (e: com.google.android.gms.common.api.ApiException) {
+                Log.e("ProfileFragment", "ApiException in result handler: status=${e.statusCode}", e)
+                Snackbar.make(binding.root, "Auth error: ${e.statusCode}", Snackbar.LENGTH_LONG).show()
             }
-
-            authResult.accessToken?.let { 
-                if (viewModel.profileStore.syncEmail.isBlank()) {
-                    viewModel.profileStore.syncEmail = "Connected"
-                }
-                viewModel.triggerSync(it) 
-            }
+        } else if (result.resultCode == Activity.RESULT_CANCELED) {
+            Log.e("ProfileFragment", "Auth CANCELED (code 0). Check SHA-1 and Package Name in Google Cloud Console.")
+            Snackbar.make(binding.root, "Auth canceled - check configuration", Snackbar.LENGTH_LONG).show()
+        } else {
+            Log.e("ProfileFragment", "Auth failed with result code: ${result.resultCode}")
         }
     }
 
@@ -113,42 +125,74 @@ class ProfileFragment : Fragment() {
             it.hapticClick()
             startDriveSync()
         }
-    }
-
-    private fun updateSyncButton() {
-        binding.btnGoogleSync.isEnabled = true
-        val email = viewModel.profileStore.syncEmail
-        if (email.isNotBlank()) {
-            binding.btnGoogleSync.text = getString(R.string.profile_sync_status_connected, email)
-        } else {
-            binding.btnGoogleSync.text = getString(R.string.profile_sync_btn_google)
+        binding.btnDisconnectGoogle.setOnClickListener {
+            it.hapticTick()
+            disconnectGoogle()
         }
     }
 
+    private fun updateSyncButton() {
+        val email = viewModel.profileStore.syncEmail
+        val connected = email.isNotBlank()
+
+        binding.btnGoogleSync.isEnabled = true
+        binding.btnGoogleSync.text = if (connected) {
+            getString(R.string.profile_sync_now)
+        } else {
+            getString(R.string.profile_sync_btn_google)
+        }
+
+        binding.chipGoogleSyncStatus.text = if (connected) {
+            getString(R.string.profile_sync_status_connected, email)
+        } else {
+            getString(R.string.hc_disconnected)
+        }
+        
+        binding.btnDisconnectGoogle.isVisible = connected
+    }
+
+    private fun disconnectGoogle() {
+        viewModel.profileStore.syncEmail = ""
+        updateSyncButton()
+        Snackbar.make(binding.root, R.string.profile_sync_disconnected, Snackbar.LENGTH_SHORT)
+            .setAnchorView(binding.btnGoogleSync)
+            .show()
+    }
+
     private fun startDriveSync() {
+        Log.d("ProfileFragment", "Starting Drive Sync Auth...")
         val request = AuthorizationRequest.builder()
-            .setRequestedScopes(listOf(Scope("https://www.googleapis.com/auth/drive.appdata")))
+            .setRequestedScopes(listOf(
+                Scope(DriveScopes.DRIVE_APPDATA),
+                Scope("https://www.googleapis.com/auth/userinfo.email"),
+                Scope("https://www.googleapis.com/auth/userinfo.profile")
+            ))
             .build()
         
         Identity.getAuthorizationClient(requireActivity())
             .authorize(request)
             .addOnSuccessListener { result ->
+                Log.d("ProfileFragment", "Authorize success, hasResolution: ${result.hasResolution()}")
                 if (result.hasResolution()) {
                     val pendingIntent = result.pendingIntent
                     requestDriveAuth.launch(
                         androidx.activity.result.IntentSenderRequest.Builder(pendingIntent!!).build()
                     )
                 } else {
-                    result.accessToken?.let { 
+                    result.accessToken?.let { token ->
+                        Log.d("ProfileFragment", "Already authorized, token: ${token.take(10)}...")
                         if (viewModel.profileStore.syncEmail.isBlank()) {
-                            viewModel.profileStore.syncEmail = "Connected"
+                            viewModel.profileStore.syncEmail = "Connected Account"
                         }
-                        viewModel.triggerSync(it) 
+                        viewModel.triggerSync(token) 
                     }
                 }
             }
             .addOnFailureListener { e ->
-                Snackbar.make(binding.root, "Auth failed: ${e.message}", Snackbar.LENGTH_LONG).show()
+                Log.e("ProfileFragment", "Authorize failed", e)
+                Snackbar.make(binding.root, "Auth failed: ${e.message}", Snackbar.LENGTH_LONG)
+                    .setAnchorView(binding.btnGoogleSync)
+                    .show()
             }
     }
 
@@ -166,7 +210,9 @@ class ProfileFragment : Fragment() {
                     }
                     is ProfileViewModel.SyncState.Success -> {
                         updateSyncButton()
-                        Snackbar.make(binding.root, R.string.profile_sync_status_complete, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, R.string.profile_sync_status_complete, Snackbar.LENGTH_SHORT)
+                            .setAnchorView(binding.btnGoogleSync)
+                            .show()
                         viewModel.resetSyncState()
                     }
                     is ProfileViewModel.SyncState.Error -> {
