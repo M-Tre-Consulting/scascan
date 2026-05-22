@@ -14,7 +14,20 @@ class LogRepository @Inject constructor(
     private val dao: LogEntryDao,
     private val profileStore: UserProfileStore
 ) {
-    fun todayEntries(): Flow<List<LogEntry>> = dao.getEntriesForDay(startOfToday())
+    fun todayEntries(): Flow<List<LogEntry>> = entriesForDateOffset(0)
+
+    fun entriesForDateOffset(offsetDays: Int): Flow<List<LogEntry>> {
+        val cal = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_YEAR, offsetDays)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        val start = cal.timeInMillis
+        val end = start + DAY_MS
+        return dao.getEntriesForRange(start, end)
+    }
 
     suspend fun addEntry(facts: NutritionFacts) = dao.insert(
         LogEntry(
@@ -36,10 +49,7 @@ class LogRepository @Inject constructor(
 
     fun dailyCalorieTarget(): Int = profileStore.dailyCalorieTarget()
 
-    private fun startOfToday(): Long = Calendar.getInstance().apply {
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-    }.timeInMillis
+    companion object {
+        private const val DAY_MS = 24 * 60 * 60 * 1000L
+    }
 }

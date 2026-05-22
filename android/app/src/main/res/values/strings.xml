@@ -62,6 +62,25 @@
     <string name="log_empty">No entries yet — scan or search a food to get started.</string>
     <string name="log_entry_remove">Remove</string>
     <string name="log_entry_fix">Fix</string>
+    <string name="hc_label_distance">Distance</string>
+
+    <!-- Goal & AI targets -->
+    <string name="profile_goal_hint">Fitness goal</string>
+    <string name="profile_target_computing">Computing your personalized targets…</string>
+    <string name="profile_target_computed">Daily target: %1$d kcal (AI-computed)</string>
+    <string name="profile_recompute">Recompute</string>
+    <string name="profile_setup_reminder_title">Personalized targets not set</string>
+    <string name="profile_setup_reminder_body">Your daily calorie goal is currently estimated. Select a fitness goal below and save your profile to get an AI-computed personalized target.</string>
+
+    <!-- Background analysis -->
+    <string name="analysis_ready_title">Analysis Ready</string>
+    <string name="analysis_view_details">View details</string>
+    <string name="analysis_dismiss">Dismiss</string>
+    <string name="analysis_error_generic">Analysis failed</string>
+    <string name="notif_channel_name">Food Analysis</string>
+    <string name="notif_channel_desc">Notifies when background food analysis is complete</string>
+    <string name="notif_analysis_title">Analysis ready</string>
+    <string name="notif_analysis_text">%1$s · %2$d kcal — tap to add to log</string>
 
     <!-- Fix entry bottom sheet -->
     <string name="fix_entry_title">Fix this entry</string>
@@ -113,6 +132,13 @@
     <string name="profile_model_need_key">Save your API key first to load available models</string>
     <string name="profile_model_empty">No models found for this API key</string>
     <string name="profile_model_saved">Model saved</string>
+
+    <!-- Goal options (index matches UserProfileStore.GOAL_LABELS) -->
+    <string-array name="goal_levels">
+        <item>Lose weight</item>
+        <item>Maintain weight</item>
+        <item>Build muscle</item>
+    </string-array>
 
     <!-- Activity level options (index matches UserProfileStore.ACTIVITY_MULTIPLIERS) -->
     <string-array name="activity_levels">

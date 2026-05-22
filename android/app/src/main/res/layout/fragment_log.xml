@@ -25,13 +25,42 @@
             android:textColor="?attr/colorPrimary"
             android:layout_marginBottom="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Date navigation row -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/log_subtitle"
-            style="@style/TextAppearance.Material3.BodyLarge"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:layout_marginBottom="32dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="24dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPrevDay"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                style="@style/Widget.Material3.Button.IconButton"
+                app:icon="@drawable/ic_arrow_back" />
+
+            <TextView
+                android:id="@+id/tvSelectedDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Today"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="?attr/colorOnBackground" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnNextDay"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                style="@style/Widget.Material3.Button.IconButton"
+                app:icon="@drawable/ic_arrow_forward" />
+        </LinearLayout>
 
         <!-- Calorie summary card -->
         <com.google.android.material.card.MaterialCardView
@@ -200,116 +229,94 @@
             android:orientation="vertical"
             android:layout_marginBottom="24dp" />
 
-        <!-- Health Connect card -->
+        <!-- Health Connect compact metrics — shown only when connected -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardHcMetrics"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:visibility="gone"
             app:cardBackgroundColor="?attr/colorSecondaryContainer"
-            app:cardCornerRadius="28dp"
+            app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="24dp">
+                android:orientation="horizontal"
+                android:padding="16dp">
 
-                <!-- Title row with status chip -->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="6dp">
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:id="@+id/tvHcSteps"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/log_connect_title"
+                        android:text="—"
                         style="@style/TextAppearance.Material3.TitleMedium"
                         android:textStyle="bold"
                         android:textColor="?attr/colorOnSecondaryContainer" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipHcStatus"
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/coming_soon"
-                        android:clickable="false"
-                        style="@style/Widget.Material3.Chip.Suggestion" />
+                        android:text="@string/hc_label_steps"
+                        style="@style/TextAppearance.Material3.BodySmall"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/log_connect_body"
-                    style="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:layout_marginBottom="16dp" />
-
-                <!-- Shown when HC is available but not yet connected -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnConnectHealth"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:text="@string/hc_connect"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:visibility="gone" />
-
-                <!-- Shown when HC is connected -->
                 <LinearLayout
-                    android:id="@+id/hcDataRow"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/tvHcCalories"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:text="—"
+                        style="@style/TextAppearance.Material3.TitleMedium"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
 
-                        <TextView
-                            android:id="@+id/tvHcSteps"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/TextAppearance.Material3.TitleMedium"
-                            android:textStyle="bold"
-                            android:textColor="?attr/colorOnSecondaryContainer" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/hc_label_steps"
-                            style="@style/TextAppearance.Material3.BodySmall"
-                            android:textColor="?attr/colorOnSecondaryContainer" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:text="@string/hc_label_active"
+                        style="@style/TextAppearance.Material3.BodySmall"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
+                </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/tvHcCalories"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/TextAppearance.Material3.TitleMedium"
-                            android:textStyle="bold"
-                            android:textColor="?attr/colorOnSecondaryContainer" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/hc_label_active"
-                            style="@style/TextAppearance.Material3.BodySmall"
-                            android:textColor="?attr/colorOnSecondaryContainer" />
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvHcDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="—"
+                        style="@style/TextAppearance.Material3.TitleMedium"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hc_label_distance"
+                        style="@style/TextAppearance.Material3.BodySmall"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

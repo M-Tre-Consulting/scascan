@@ -10,11 +10,9 @@ import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.health.connect.client.PermissionController
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.scascan.app.R
-import com.scascan.app.data.health.HealthConnectManager
 import com.scascan.app.data.local.LogEntry
 import com.scascan.app.databinding.FragmentLogBinding
 import com.scascan.app.databinding.ItemLogEntryBinding
@@ -29,14 +27,6 @@ class LogFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: LogViewModel by viewModels()
-
-    private val requestHcPermissions = registerForActivityResult(
-        PermissionController.createRequestPermissionResultContract()
-    ) { granted ->
-        if (granted.containsAll(HealthConnectManager.PERMISSIONS)) {
-            viewModel.loadHealthData()
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,24 +46,44 @@ class LogFragment : Fragment() {
             insets
         }
 
-        binding.btnConnectHealth.setOnClickListener {
-            requestHcPermissions.launch(HealthConnectManager.PERMISSIONS)
-        }
+        setupDateNavigation()
+        setupFixResultListener()
+        observeState()
+        viewModel.loadHealthData()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadHealthData()
+    }
+
+    private fun setupDateNavigation() {
+        binding.btnPrevDay.setOnClickListener { viewModel.goToPreviousDay() }
+        binding.btnNextDay.setOnClickListener { viewModel.goToNextDay() }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.selectedDateLabel.collect { binding.tvSelectedDate.text = it }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.isToday.collect { binding.btnNextDay.isEnabled = !it }
+        }
+    }
+
+    private fun setupFixResultListener() {
         childFragmentManager.setFragmentResultListener(
             FixEntryBottomSheetFragment.RESULT_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
             val entryId = bundle.getLong(FixEntryBottomSheetFragment.RESULT_ENTRY_ID)
             val correction = bundle.getString(FixEntryBottomSheetFragment.RESULT_CORRECTION) ?: return@setFragmentResultListener
-            val entry = viewModel.todayEntries.value.find { it.id == entryId } ?: return@setFragmentResultListener
+            val entry = viewModel.logEntries.value.find { it.id == entryId } ?: return@setFragmentResultListener
             viewModel.fixEntry(entry, correction)
         }
+    }
 
-        viewModel.loadHealthData()
-
+    private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            combine(viewModel.todayEntries, viewModel.healthState) { entries, health ->
+            combine(viewModel.logEntries, viewModel.healthState) { entries, health ->
                 entries to health
             }.collect { (entries, health) ->
                 renderScreen(entries, health)
@@ -97,18 +107,13 @@ class LogFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadHealthData()
-    }
-
     private fun renderScreen(entries: List<LogEntry>, health: LogViewModel.HealthUiState) {
         val base = viewModel.dailyTarget
         val activeKcal = (health as? LogViewModel.HealthUiState.Connected)?.activeKcal?.toInt() ?: 0
         val target = base + activeKcal
 
         renderEntries(entries, target)
-        renderHealthCard(health)
+        renderHealthMetrics(health)
     }
 
     private fun renderEntries(entries: List<LogEntry>, target: Int) {
@@ -144,33 +149,19 @@ class LogFragment : Fragment() {
             }
             item.btnRemove.setOnClickListener { viewModel.deleteEntry(entry) }
 
-            // Fade-in animation for each new item
             item.root.alpha = 0f
-            item.root.animate().alpha(1f).setDuration(200).setStartDelay(0).start()
+            item.root.animate().alpha(1f).setDuration(200).start()
         }
     }
 
-    private fun renderHealthCard(health: LogViewModel.HealthUiState) {
-        when (health) {
-            is LogViewModel.HealthUiState.Unavailable -> {
-                binding.chipHcStatus.isVisible = true
-                binding.chipHcStatus.text = getString(R.string.coming_soon)
-                binding.btnConnectHealth.isVisible = false
-                binding.hcDataRow.isVisible = false
-            }
-            is LogViewModel.HealthUiState.Disconnected -> {
-                binding.chipHcStatus.isVisible = false
-                binding.btnConnectHealth.isVisible = true
-                binding.hcDataRow.isVisible = false
-            }
-            is LogViewModel.HealthUiState.Connected -> {
-                binding.chipHcStatus.isVisible = true
-                binding.chipHcStatus.text = getString(R.string.hc_connected)
-                binding.btnConnectHealth.isVisible = false
-                binding.hcDataRow.isVisible = true
-                binding.tvHcSteps.text = getString(R.string.hc_steps, health.steps)
-                binding.tvHcCalories.text = getString(R.string.hc_active_kcal, health.activeKcal.toInt())
-            }
+    private fun renderHealthMetrics(health: LogViewModel.HealthUiState) {
+        val connected = health is LogViewModel.HealthUiState.Connected
+        binding.cardHcMetrics.isVisible = connected
+        if (health is LogViewModel.HealthUiState.Connected) {
+            val km = String.format("%.1f km", health.steps * 0.0008)
+            binding.tvHcSteps.text = getString(R.string.hc_steps, health.steps)
+            binding.tvHcCalories.text = getString(R.string.hc_active_kcal, health.activeKcal.toInt())
+            binding.tvHcDistance.text = km
         }
     }
 

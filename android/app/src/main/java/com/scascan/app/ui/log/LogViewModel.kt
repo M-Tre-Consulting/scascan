@@ -7,11 +7,17 @@ import com.scascan.app.data.local.LogEntry
 import com.scascan.app.data.repository.LogRepository
 import com.scascan.app.data.repository.NutritionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,8 +27,36 @@ class LogViewModel @Inject constructor(
     val healthManager: HealthConnectManager
 ) : ViewModel() {
 
-    val todayEntries: StateFlow<List<LogEntry>> = logRepository.todayEntries()
+    // ── Date navigation ────────────────────────────────────────────────────────
+
+    private val _dateOffset = MutableStateFlow(0) // 0 = today, -1 = yesterday, etc.
+
+    val isToday: StateFlow<Boolean> = _dateOffset
+        .map { it == 0 }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+
+    val selectedDateLabel: StateFlow<String> = _dateOffset
+        .map { offset ->
+            when (offset) {
+                0 -> "Today"
+                -1 -> "Yesterday"
+                else -> {
+                    val cal = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, offset) }
+                    SimpleDateFormat("MMM d", Locale.getDefault()).format(cal.time)
+                }
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, "Today")
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val logEntries: StateFlow<List<LogEntry>> = _dateOffset
+        .flatMapLatest { offset -> logRepository.entriesForDateOffset(offset) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    fun goToPreviousDay() { _dateOffset.value-- }
+    fun goToNextDay() { if (_dateOffset.value < 0) _dateOffset.value++ }
+
+    // ── Health Connect ─────────────────────────────────────────────────────────
 
     sealed class HealthUiState {
         object Unavailable : HealthUiState()
@@ -32,15 +66,6 @@ class LogViewModel @Inject constructor(
 
     private val _healthState = MutableStateFlow<HealthUiState>(HealthUiState.Unavailable)
     val healthState: StateFlow<HealthUiState> = _healthState
-
-    sealed class FixState {
-        object Idle : FixState()
-        data class Success(val foodName: String) : FixState()
-        data class Error(val message: String) : FixState()
-    }
-
-    private val _fixState = MutableStateFlow<FixState>(FixState.Idle)
-    val fixState: StateFlow<FixState> = _fixState
 
     val dailyTarget: Int get() = logRepository.dailyCalorieTarget()
 
@@ -60,9 +85,20 @@ class LogViewModel @Inject constructor(
         }
     }
 
+    // ── Log entry operations ───────────────────────────────────────────────────
+
     fun deleteEntry(entry: LogEntry) {
         viewModelScope.launch { logRepository.deleteEntry(entry) }
     }
+
+    sealed class FixState {
+        object Idle : FixState()
+        data class Success(val foodName: String) : FixState()
+        data class Error(val message: String) : FixState()
+    }
+
+    private val _fixState = MutableStateFlow<FixState>(FixState.Idle)
+    val fixState: StateFlow<FixState> = _fixState
 
     fun fixEntry(entry: LogEntry, correction: String) {
         viewModelScope.launch {

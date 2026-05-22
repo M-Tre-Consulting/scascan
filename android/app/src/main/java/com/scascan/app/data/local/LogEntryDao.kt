@@ -18,6 +18,6 @@ interface LogEntryDao {
     @Delete
     suspend fun delete(entry: LogEntry)
 
-    @Query("SELECT * FROM log_entries WHERE timestamp >= :startOfDay ORDER BY timestamp DESC")
-    fun getEntriesForDay(startOfDay: Long): Flow<List<LogEntry>>
+    @Query("SELECT * FROM log_entries WHERE timestamp >= :start AND timestamp < :end ORDER BY timestamp DESC")
+    fun getEntriesForRange(start: Long, end: Long): Flow<List<LogEntry>>
 }
