@@ -37,6 +37,10 @@
     <string name="setup_key_hint">Gemini API key</string>
     <string name="setup_key_error">Please enter a valid API key</string>
     <string name="setup_btn_save">Save and continue</string>
+    <string name="setup_model_title">Choose a model</string>
+    <string name="setup_model_desc">Select the Gemini model that will analyse your food.</string>
+    <string name="setup_model_hint">Gemini model</string>
+    <string name="setup_btn_get_started">Get started</string>
     <string name="setup_info_title">Where do I find my key?</string>
     <string name="setup_info_body">Go to aistudio.google.com → Get API key. The key is stored locally on this device only and never sent anywhere except to the Gemini API.</string>
     <string name="menu_update_key">Update API key</string>

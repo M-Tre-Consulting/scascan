@@ -19,7 +19,7 @@ class GeminiKeyStore @Inject constructor(
     // Falls back to a single well-known ID so the app works before the user
     // visits Profile — this is the only hardcoded string and it is intentional.
     var selectedModel: String
-        get() = prefs.getString(KEY_MODEL, FALLBACK_MODEL) ?: FALLBACK_MODEL
+        get() = prefs.getString(KEY_MODEL, "") ?: ""
         set(value) { prefs.edit().putString(KEY_MODEL, value).commit() }
 
     fun hasKey(): Boolean = apiKey.isNotBlank()
@@ -30,7 +30,5 @@ class GeminiKeyStore @Inject constructor(
         private const val PREFS_NAME = "scascan_prefs"
         private const val KEY_API    = "gemini_api_key"
         private const val KEY_MODEL  = "gemini_model"
-        // Single fallback — updated to whatever is current; the real list is fetched at runtime.
-        const val FALLBACK_MODEL = "gemini-2.5-flash-preview-05-20"
     }
 }

@@ -26,10 +26,16 @@ class NutritionRepository @Inject constructor(
         return key
     }
 
+    private fun model(): String {
+        val m = keyStore.selectedModel
+        require(m.isNotBlank()) { "No AI model selected — go to Profile to choose one." }
+        return m
+    }
+
     suspend fun analyzeImage(bitmap: Bitmap): Result<NutritionFacts> = runCatching {
         parseResponse(
             client.generateWithImage(
-                keyStore.selectedModel, apiKey(), bitmap,
+                model(), apiKey(), bitmap,
                 "You are a nutrition expert. Identify the food in this image and provide nutritional facts. $responseSchema"
             )
         )
@@ -38,7 +44,7 @@ class NutritionRepository @Inject constructor(
     suspend fun analyzeBarcode(barcode: String): Result<NutritionFacts> = runCatching {
         parseResponse(
             client.generateText(
-                keyStore.selectedModel, apiKey(),
+                model(), apiKey(),
                 "You are a nutrition expert. The barcode value is '$barcode'. Identify the food product and provide its nutritional facts. $responseSchema"
             )
         )
@@ -47,7 +53,7 @@ class NutritionRepository @Inject constructor(
     suspend fun searchFood(query: String): Result<NutritionFacts> = runCatching {
         parseResponse(
             client.generateText(
-                keyStore.selectedModel, apiKey(),
+                model(), apiKey(),
                 "You are a nutrition expert. Provide nutritional facts for: $query. $responseSchema"
             )
         )
