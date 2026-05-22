@@ -46,19 +46,97 @@ class ProfileFragment : Fragment() {
             insets
         }
 
-        val keyStore = viewModel.keyStore
+        setupPersonalInfo()
+        setupApiKey()
+        setupModelSelector()
+    }
 
-        // Pre-populate key field
-        if (keyStore.hasKey()) {
-            binding.etApiKey.setText(keyStore.apiKey)
+    // ── Personal info ─────────────────────────────────────────────────────────
+
+    private fun setupPersonalInfo() {
+        val profile = viewModel.profileStore
+        val activityLabels = resources.getStringArray(R.array.activity_levels)
+
+        // Pre-populate saved values
+        if (profile.hasProfile()) {
+            binding.etAge.setText(profile.age.toString())
+            binding.etHeight.setText(profile.heightCm.toString())
+            binding.etWeight.setText(profile.weightKg.toString())
+            if (!profile.isMale) binding.chipGroupSex.check(R.id.chipFemale)
         }
+
+        // Activity dropdown
+        binding.activitySelector.setAdapter(
+            ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, activityLabels)
+        )
+        binding.activitySelector.setText(activityLabels[profile.activityIndex], false)
+
+        binding.btnSaveProfile.setOnClickListener { savePersonalInfo(activityLabels) }
+    }
+
+    private fun savePersonalInfo(activityLabels: Array<String>) {
+        val age = binding.etAge.text?.toString()?.trim()?.toIntOrNull() ?: 0
+        val height = binding.etHeight.text?.toString()?.trim()?.toIntOrNull() ?: 0
+        val weight = binding.etWeight.text?.toString()?.trim()?.toFloatOrNull() ?: 0f
+
+        if (age <= 0) { binding.tilAge.error = "Required"; return }
+        if (height <= 0) { binding.tilHeight.error = "Required"; return }
+        if (weight <= 0f) { binding.tilWeight.error = "Required"; return }
+
+        binding.tilAge.error = null
+        binding.tilHeight.error = null
+        binding.tilWeight.error = null
+
+        val profile = viewModel.profileStore
+        profile.age = age
+        profile.heightCm = height
+        profile.weightKg = weight
+        profile.isMale = binding.chipGroupSex.checkedChipId == R.id.chipMale
+        val idx = activityLabels.indexOf(binding.activitySelector.text.toString())
+        if (idx >= 0) profile.activityIndex = idx
+
+        requireContext().getSystemService<InputMethodManager>()
+            ?.hideSoftInputFromWindow(binding.etWeight.windowToken, 0)
+
+        Snackbar.make(binding.root, R.string.profile_info_saved, Snackbar.LENGTH_SHORT)
+            .setAnchorView(binding.btnSaveProfile)
+            .show()
+    }
+
+    // ── API key ───────────────────────────────────────────────────────────────
+
+    private fun setupApiKey() {
+        val keyStore = viewModel.keyStore
+        if (keyStore.hasKey()) binding.etApiKey.setText(keyStore.apiKey)
 
         binding.btnSaveKey.setOnClickListener { saveKey() }
         binding.etApiKey.setOnEditorActionListener { _, _, _ -> saveKey(); true }
+    }
 
-        // Model selector — show loading state immediately, then populate from API
+    private fun saveKey() {
+        val input = binding.etApiKey.text?.toString()?.trim() ?: ""
+        if (input.isBlank()) {
+            binding.tilApiKey.error = getString(R.string.setup_key_error)
+            return
+        }
+        binding.tilApiKey.error = null
+        viewModel.keyStore.apiKey = input
+
+        requireContext().getSystemService<InputMethodManager>()
+            ?.hideSoftInputFromWindow(binding.etApiKey.windowToken, 0)
+
+        Snackbar.make(binding.root, R.string.profile_key_saved, Snackbar.LENGTH_SHORT)
+            .setAnchorView(binding.btnSaveKey)
+            .show()
+
+        viewModel.loadModels()
+    }
+
+    // ── Model selector ────────────────────────────────────────────────────────
+
+    private fun setupModelSelector() {
         observeModelState()
-        if (keyStore.hasKey()) {
+        if (viewModel.keyStore.hasKey()) {
             viewModel.loadModels()
         } else {
             binding.tilModel.helperText = getString(R.string.profile_model_need_key)
@@ -98,7 +176,6 @@ class ProfileFragment : Fragment() {
         binding.modelSelector.isEnabled = true
         binding.tilModel.helperText = null
 
-        // Select previously chosen model, or auto-pick the first
         val currentId = viewModel.keyStore.selectedModel
         val idx = models.indexOfFirst { it.id == currentId }
         binding.modelSelector.setText(labels[if (idx >= 0) idx else 0], false)
@@ -110,26 +187,6 @@ class ProfileFragment : Fragment() {
                 .setAnchorView(binding.tilModel)
                 .show()
         }
-    }
-
-    private fun saveKey() {
-        val input = binding.etApiKey.text?.toString()?.trim() ?: ""
-        if (input.isBlank()) {
-            binding.tilApiKey.error = getString(R.string.setup_key_error)
-            return
-        }
-        binding.tilApiKey.error = null
-        viewModel.keyStore.apiKey = input
-
-        requireContext().getSystemService<InputMethodManager>()
-            ?.hideSoftInputFromWindow(binding.etApiKey.windowToken, 0)
-
-        Snackbar.make(binding.root, R.string.profile_key_saved, Snackbar.LENGTH_SHORT)
-            .setAnchorView(binding.btnSaveKey)
-            .show()
-
-        // Reload available models for the new key
-        viewModel.loadModels()
     }
 
     override fun onDestroyView() {

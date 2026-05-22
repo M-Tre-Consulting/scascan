@@ -272,7 +272,15 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ai_disclaimer"
                 style="@style/TextAppearance.Material3.BodySmall"
-                android:textColor="?attr/colorOnSurfaceVariant" />
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_marginBottom="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddToLog"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="@string/btn_add_to_log"
+                app:icon="@drawable/ic_add" />
 
         </LinearLayout>
     </ScrollView>

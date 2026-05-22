@@ -30,6 +30,8 @@
     <string name="value_grams">%.1f g</string>
     <string name="value_milligrams">%.0f mg</string>
     <string name="ai_disclaimer">Values are AI-estimated and may vary. Always verify with official food labels.</string>
+    <string name="btn_add_to_log">Add to log</string>
+    <string name="log_added">Added to today\'s log</string>
 
     <!-- API key setup -->
     <string name="setup_title">Set up your API key</string>
@@ -55,6 +57,10 @@
     <string name="log_today_intake">Today\'s intake</string>
     <string name="log_no_data">—</string>
     <string name="log_of_target">/ 2,000 kcal</string>
+    <string name="log_kcal_of">%1$d / %2$d kcal</string>
+    <string name="log_entries_today">Today\'s meals</string>
+    <string name="log_empty">No entries yet — scan or search a food to get started.</string>
+    <string name="log_entry_remove">Remove</string>
     <string name="log_connect_title">Health Connect</string>
     <string name="log_connect_body">Sync your steps, workouts, and weight to automatically adapt your daily calorie allowance.</string>
     <string name="log_adaptive_title">Adaptive targets</string>
@@ -62,6 +68,16 @@
     <string name="coming_soon">Coming soon</string>
 
     <!-- Profile screen -->
+    <string name="profile_info_title">Personal Info</string>
+    <string name="profile_info_desc">Used to calculate your daily calorie goal.</string>
+    <string name="profile_age_hint">Age</string>
+    <string name="profile_height_hint">Height (cm)</string>
+    <string name="profile_weight_hint">Weight (kg)</string>
+    <string name="profile_sex_male">Male</string>
+    <string name="profile_sex_female">Female</string>
+    <string name="profile_activity_hint">Activity level</string>
+    <string name="profile_save_info">Save profile</string>
+    <string name="profile_info_saved">Profile saved</string>
     <string name="profile_api_key_title">Gemini API Key</string>
     <string name="profile_api_key_desc">ScaScan uses Google Gemini to analyse food. Get your key at aistudio.google.com.</string>
     <string name="profile_save_key">Save key</string>
@@ -76,4 +92,13 @@
     <string name="profile_model_need_key">Save your API key first to load available models</string>
     <string name="profile_model_empty">No models found for this API key</string>
     <string name="profile_model_saved">Model saved</string>
+
+    <!-- Activity level options (index matches UserProfileStore.ACTIVITY_MULTIPLIERS) -->
+    <string-array name="activity_levels">
+        <item>Sedentary</item>
+        <item>Lightly active</item>
+        <item>Moderately active</item>
+        <item>Very active</item>
+        <item>Extra active</item>
+    </string-array>
 </resources>

@@ -8,17 +8,23 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.scascan.app.R
 import com.scascan.app.data.model.NutritionFacts
 import com.scascan.app.databinding.FragmentNutritionResultBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NutritionResultFragment : Fragment() {
 
     private var _binding: FragmentNutritionResultBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: NutritionResultViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,10 +38,8 @@ class NutritionResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Whole pill bar is the back target
         binding.topBar.setOnClickListener { findNavController().navigateUp() }
 
-        // Pad the root down by the status-bar height
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
             binding.root.updatePadding(top = statusBar)
@@ -48,7 +52,25 @@ class NutritionResultFragment : Fragment() {
             @Suppress("DEPRECATION")
             requireArguments().getParcelable<NutritionFacts>("nutritionFacts")!!
         }
+
         bindFacts(facts)
+        observeLogState()
+
+        binding.btnAddToLog.setOnClickListener {
+            viewModel.addToLog(facts)
+        }
+    }
+
+    private fun observeLogState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.logState.collect { state ->
+                if (state is NutritionResultViewModel.LogState.Added) {
+                    binding.btnAddToLog.isEnabled = false
+                    binding.btnAddToLog.text = getString(R.string.log_added)
+                    Snackbar.make(binding.root, R.string.log_added, Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun bindFacts(facts: NutritionFacts) {

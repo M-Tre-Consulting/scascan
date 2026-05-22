@@ -3,6 +3,7 @@ package com.scascan.app.ui.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scascan.app.data.local.GeminiKeyStore
+import com.scascan.app.data.local.UserProfileStore
 import com.scascan.app.data.remote.GeminiRestClient
 import com.scascan.app.data.remote.ModelInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     val keyStore: GeminiKeyStore,
+    val profileStore: UserProfileStore,
     private val client: GeminiRestClient
 ) : ViewModel() {
 

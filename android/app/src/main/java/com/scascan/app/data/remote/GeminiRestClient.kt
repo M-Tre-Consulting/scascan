@@ -62,7 +62,9 @@ class GeminiRestClient @Inject constructor() {
             if (!supported) continue
             val name = obj.getString("name") // e.g. "models/gemini-2.5-flash-preview-05-20"
             val id = name.removePrefix("models/")
-            if (!id.startsWith("gemini-")) continue  // exclude non-Gemini models (embedding, AQA, PaLM 2, etc.)
+            if (!id.startsWith("gemini-")) continue        // exclude AQA, PaLM 2, embedding-001, etc.
+            val inputTokenLimit = obj.optInt("inputTokenLimit", 0)
+            if (inputTokenLimit in 1..8_191) continue      // exclude Nano and other tiny-context models
             val label = obj.optString("displayName", id)
             result += ModelInfo(id, label)
         }
