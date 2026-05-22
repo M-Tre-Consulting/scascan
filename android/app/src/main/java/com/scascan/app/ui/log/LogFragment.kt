@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.health.connect.client.PermissionController
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
 import com.scascan.app.R
 import com.scascan.app.data.health.HealthConnectManager
 import com.scascan.app.data.local.LogEntry
@@ -59,6 +60,16 @@ class LogFragment : Fragment() {
             requestHcPermissions.launch(HealthConnectManager.PERMISSIONS)
         }
 
+        childFragmentManager.setFragmentResultListener(
+            FixEntryBottomSheetFragment.RESULT_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val entryId = bundle.getLong(FixEntryBottomSheetFragment.RESULT_ENTRY_ID)
+            val correction = bundle.getString(FixEntryBottomSheetFragment.RESULT_CORRECTION) ?: return@setFragmentResultListener
+            val entry = viewModel.todayEntries.value.find { it.id == entryId } ?: return@setFragmentResultListener
+            viewModel.fixEntry(entry, correction)
+        }
+
         viewModel.loadHealthData()
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -66,6 +77,22 @@ class LogFragment : Fragment() {
                 entries to health
             }.collect { (entries, health) ->
                 renderScreen(entries, health)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.fixState.collect { state ->
+                when (state) {
+                    is LogViewModel.FixState.Idle -> Unit
+                    is LogViewModel.FixState.Success -> {
+                        Snackbar.make(binding.root, R.string.fix_entry_fixed, Snackbar.LENGTH_SHORT).show()
+                        viewModel.resetFixState()
+                    }
+                    is LogViewModel.FixState.Error -> {
+                        Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
+                        viewModel.resetFixState()
+                    }
+                }
             }
         }
     }
@@ -111,7 +138,15 @@ class LogFragment : Fragment() {
                 append(" · ${entry.carbohydrates.toInt()}g carbs")
                 append(" · ${entry.fat.toInt()}g fat")
             }
+            item.btnFix.setOnClickListener {
+                FixEntryBottomSheetFragment.newInstance(entry.id, entry.foodName)
+                    .show(childFragmentManager, "fix_entry")
+            }
             item.btnRemove.setOnClickListener { viewModel.deleteEntry(entry) }
+
+            // Fade-in animation for each new item
+            item.root.alpha = 0f
+            item.root.animate().alpha(1f).setDuration(200).setStartDelay(0).start()
         }
     }
 

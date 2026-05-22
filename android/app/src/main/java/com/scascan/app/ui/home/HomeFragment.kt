@@ -38,13 +38,13 @@ class HomeFragment : Fragment() {
         }
 
         binding.cardCamera.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_cameraFragment)
+            findNavController().navigate(R.id.action_main_to_camera)
         }
         binding.cardBarcode.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_barcodeScanFragment)
+            findNavController().navigate(R.id.action_main_to_barcode)
         }
         binding.cardSearch.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+            findNavController().navigate(R.id.action_main_to_search)
         }
     }
 

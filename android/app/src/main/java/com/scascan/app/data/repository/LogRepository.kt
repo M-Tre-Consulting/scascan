@@ -30,6 +30,8 @@ class LogRepository @Inject constructor(
         )
     )
 
+    suspend fun updateEntry(entry: LogEntry) = dao.update(entry)
+
     suspend fun deleteEntry(entry: LogEntry) = dao.delete(entry)
 
     fun dailyCalorieTarget(): Int = profileStore.dailyCalorieTarget()

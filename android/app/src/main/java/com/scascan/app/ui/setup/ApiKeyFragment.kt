@@ -139,7 +139,7 @@ class ApiKeyFragment : Fragment() {
 
     private fun navigateToHome() {
         findNavController().navigate(
-            R.id.action_apiKeyFragment_to_homeFragment,
+            R.id.action_apiKeyFragment_to_mainFragment,
             null,
             NavOptions.Builder()
                 .setPopUpTo(R.id.apiKeyFragment, true)

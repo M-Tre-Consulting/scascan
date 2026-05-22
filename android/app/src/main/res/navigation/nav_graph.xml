@@ -11,37 +11,39 @@
         android:name="com.scascan.app.ui.setup.ApiKeyFragment"
         android:label="@string/setup_title">
         <action
-            android:id="@+id/action_apiKeyFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
+            android:id="@+id/action_apiKeyFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
             app:popUpTo="@id/apiKeyFragment"
             app:popUpToInclusive="true" />
     </fragment>
 
-    <!-- ── Bottom nav top-level destinations ──────────────────────────────── -->
+    <!-- ── Main tab host ──────────────────────────────────────────────────── -->
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.scascan.app.ui.home.HomeFragment"
-        android:label="@string/nav_scan">
+        android:id="@+id/mainFragment"
+        android:name="com.scascan.app.ui.main.MainFragment"
+        android:label="ScaScan">
         <action
-            android:id="@+id/action_homeFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
+            android:id="@+id/action_main_to_camera"
+            app:destination="@id/cameraFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
-            android:id="@+id/action_homeFragment_to_barcodeScanFragment"
-            app:destination="@id/barcodeScanFragment" />
+            android:id="@+id/action_main_to_barcode"
+            app:destination="@id/barcodeScanFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
-            android:id="@+id/action_homeFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
+            android:id="@+id/action_main_to_search"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
-
-    <fragment
-        android:id="@+id/logFragment"
-        android:name="com.scascan.app.ui.log.LogFragment"
-        android:label="@string/nav_log" />
-
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.scascan.app.ui.profile.ProfileFragment"
-        android:label="@string/nav_profile" />
 
     <!-- ── Detail screens ─────────────────────────────────────────────────── -->
     <fragment
@@ -50,7 +52,11 @@
         android:label="@string/label_camera">
         <action
             android:id="@+id/action_cameraFragment_to_nutritionResultFragment"
-            app:destination="@id/nutritionResultFragment" />
+            app:destination="@id/nutritionResultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -59,7 +65,11 @@
         android:label="@string/label_barcode_scan">
         <action
             android:id="@+id/action_barcodeScanFragment_to_nutritionResultFragment"
-            app:destination="@id/nutritionResultFragment" />
+            app:destination="@id/nutritionResultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -68,7 +78,11 @@
         android:label="@string/label_search">
         <action
             android:id="@+id/action_searchFragment_to_nutritionResultFragment"
-            app:destination="@id/nutritionResultFragment" />
+            app:destination="@id/nutritionResultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment

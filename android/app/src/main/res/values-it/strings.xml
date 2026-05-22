@@ -61,6 +61,17 @@
     <string name="log_entries_today">Pasti di oggi</string>
     <string name="log_empty">Nessuna voce ancora — scansiona o cerca un alimento per iniziare.</string>
     <string name="log_entry_remove">Rimuovi</string>
+    <string name="log_entry_fix">Correggi</string>
+
+    <!-- Fix entry bottom sheet -->
+    <string name="fix_entry_title">Correggi questa voce</string>
+    <string name="fix_entry_desc">Descrivi l\'alimento corretto e ScaScan ricalcolerà i valori nutrizionali.</string>
+    <string name="fix_entry_current_label">Identificato come:</string>
+    <string name="fix_entry_hint">Alimento corretto (es. Petto di tacchino, 150g)</string>
+    <string name="fix_entry_apply">Applica correzione</string>
+    <string name="fix_entry_cancel">Annulla</string>
+    <string name="fix_entry_error_empty">Descrivi l\'alimento corretto</string>
+    <string name="fix_entry_fixed">Voce aggiornata</string>
     <string name="log_connect_title">Health Connect</string>
     <string name="log_connect_body">Sincronizza passi e allenamenti per adattare automaticamente il tuo obiettivo calorico giornaliero.</string>
     <string name="log_adaptive_title">Obiettivi adattativi</string>

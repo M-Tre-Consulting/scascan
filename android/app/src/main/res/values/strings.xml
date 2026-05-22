@@ -61,6 +61,17 @@
     <string name="log_entries_today">Today\'s meals</string>
     <string name="log_empty">No entries yet — scan or search a food to get started.</string>
     <string name="log_entry_remove">Remove</string>
+    <string name="log_entry_fix">Fix</string>
+
+    <!-- Fix entry bottom sheet -->
+    <string name="fix_entry_title">Fix this entry</string>
+    <string name="fix_entry_desc">Describe the correct food and ScaScan will recalculate the nutritional values.</string>
+    <string name="fix_entry_current_label">Currently identified as:</string>
+    <string name="fix_entry_hint">Correct food (e.g. Turkey breast, 150g)</string>
+    <string name="fix_entry_apply">Apply fix</string>
+    <string name="fix_entry_cancel">Cancel</string>
+    <string name="fix_entry_error_empty">Please describe the correct food</string>
+    <string name="fix_entry_fixed">Entry updated</string>
     <string name="log_connect_title">Health Connect</string>
     <string name="log_connect_body">Sync your steps and workouts to automatically adjust your daily calorie goal.</string>
     <string name="log_adaptive_title">Adaptive targets</string>

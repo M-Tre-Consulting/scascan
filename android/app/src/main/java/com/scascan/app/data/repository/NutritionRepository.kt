@@ -59,6 +59,18 @@ class NutritionRepository @Inject constructor(
         )
     }
 
+    suspend fun fixEntry(foodName: String, servingSize: String, correction: String): Result<NutritionFacts> = runCatching {
+        parseResponse(
+            client.generateText(
+                model(), apiKey(),
+                "You are a nutrition expert. A food was originally identified as '$foodName' ($servingSize). " +
+                "The user says the correct food is: $correction. " +
+                "Provide updated nutritional facts for the correct food, keeping the same serving size if possible. " +
+                responseSchema
+            )
+        )
+    }
+
     private fun parseResponse(text: String): NutritionFacts {
         val start = text.indexOf('{')
         val end   = text.lastIndexOf('}')
