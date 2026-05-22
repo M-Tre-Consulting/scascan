@@ -13,6 +13,14 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/analysisProgress"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:trackCornerRadius="0dp" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"

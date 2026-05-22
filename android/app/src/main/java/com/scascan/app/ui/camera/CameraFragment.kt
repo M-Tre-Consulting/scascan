@@ -15,20 +15,18 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.scascan.app.R
+import com.scascan.app.data.analysis.AnalysisManager
 import com.scascan.app.databinding.FragmentCameraBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CameraFragment : Fragment() {
@@ -36,7 +34,8 @@ class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: CameraViewModel by viewModels()
+    @Inject lateinit var analysisManager: AnalysisManager
+
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
 
@@ -60,11 +59,9 @@ class CameraFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        // Whole pill bar is the back target — larger touch area, no clipping issues
         binding.topBar.setOnClickListener { findNavController().navigateUp() }
         binding.captureButton.setOnClickListener { takePhoto() }
 
-        // Push the floating bar below the status bar (camera preview stays full-screen)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
             binding.topBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -78,8 +75,6 @@ class CameraFragment : Fragment() {
         } else {
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
-
-        observeUiState()
     }
 
     private fun startCamera() {
@@ -108,51 +103,23 @@ class CameraFragment : Fragment() {
 
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
+        binding.captureButton.isEnabled = false
         imageCapture.takePicture(
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageCapturedCallback() {
                 override fun onCaptureSuccess(image: ImageProxy) {
                     val bitmap = image.toBitmap()
                     image.close()
-                    viewModel.analyzeImage(bitmap)
+                    analysisManager.analyze(bitmap)
+                    findNavController().popBackStack()
                 }
 
                 override fun onError(exception: ImageCaptureException) {
+                    binding.captureButton.isEnabled = true
                     Toast.makeText(requireContext(), "Capture failed: ${exception.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         )
-    }
-
-    private fun observeUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiState.collect { state ->
-                when (state) {
-                    is CameraUiState.Idle -> {
-                        binding.analyzingBar.visibility = View.GONE
-                        binding.captureButton.isEnabled = true
-                    }
-                    is CameraUiState.Loading -> {
-                        binding.analyzingBar.visibility = View.VISIBLE
-                        binding.captureButton.isEnabled = false
-                    }
-                    is CameraUiState.Success -> {
-                        binding.analyzingBar.visibility = View.GONE
-                        findNavController().navigate(
-                            R.id.action_cameraFragment_to_nutritionResultFragment,
-                            bundleOf("nutritionFacts" to state.nutritionFacts)
-                        )
-                        viewModel.resetToIdle()
-                    }
-                    is CameraUiState.Error -> {
-                        binding.analyzingBar.visibility = View.GONE
-                        binding.captureButton.isEnabled = true
-                        Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
-                        viewModel.resetToIdle()
-                    }
-                }
-            }
-        }
     }
 
     override fun onDestroyView() {
