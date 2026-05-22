@@ -1,16 +1,22 @@
 package com.scascan.app.ui.setup
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.identity.AuthorizationRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.common.api.Scope
+import com.google.android.material.snackbar.Snackbar
 import com.scascan.app.R
 import com.scascan.app.data.local.GeminiKeyStore
 import com.scascan.app.data.remote.ModelInfo
@@ -30,6 +36,21 @@ class ApiKeyFragment : Fragment() {
     lateinit var keyStore: GeminiKeyStore
 
     private val viewModel: ProfileViewModel by viewModels()
+
+    private val requestDriveAuth = registerForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val authResult = Identity.getAuthorizationClient(requireActivity())
+                .getAuthorizationResultFromIntent(result.data)
+            authResult.accessToken?.let { 
+                if (viewModel.profileStore.syncEmail.isBlank()) {
+                    viewModel.profileStore.syncEmail = "Connected"
+                }
+                viewModel.triggerSync(it) 
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,8 +77,69 @@ class ApiKeyFragment : Fragment() {
 
         binding.btnSave.setOnClickListener { attemptSaveKey() }
         binding.btnGetStarted.setOnClickListener { finish() }
+        binding.btnStartupSync.setOnClickListener { startDriveSync() }
 
         observeModelState()
+        observeSyncState()
+    }
+
+    private fun startDriveSync() {
+        val request = AuthorizationRequest.builder()
+            .setRequestedScopes(listOf(Scope("https://www.googleapis.com/auth/drive.appdata")))
+            .build()
+        
+        Identity.getAuthorizationClient(requireActivity())
+            .authorize(request)
+            .addOnSuccessListener { result ->
+                if (result.hasResolution()) {
+                    val pendingIntent = result.pendingIntent
+                    requestDriveAuth.launch(
+                        androidx.activity.result.IntentSenderRequest.Builder(pendingIntent!!).build()
+                    )
+                } else {
+                    result.accessToken?.let { 
+                        if (viewModel.profileStore.syncEmail.isBlank()) {
+                            viewModel.profileStore.syncEmail = "Connected"
+                        }
+                        viewModel.triggerSync(it) 
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Snackbar.make(binding.root, "Auth failed: ${e.message}", Snackbar.LENGTH_LONG).show()
+            }
+    }
+
+    private fun observeSyncState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.syncState.collect { state ->
+                when (state) {
+                    is ProfileViewModel.SyncState.Idle -> {
+                        val email = viewModel.profileStore.syncEmail
+                        if (email.isNotBlank()) {
+                            binding.btnStartupSync.text = getString(R.string.profile_sync_status_connected, email)
+                            binding.btnStartupSync.isEnabled = false
+                        }
+                    }
+                    is ProfileViewModel.SyncState.Syncing -> {
+                        binding.btnStartupSync.isEnabled = false
+                        binding.btnStartupSync.text = getString(R.string.profile_sync_status_syncing)
+                    }
+                    is ProfileViewModel.SyncState.Success -> {
+                        val email = viewModel.profileStore.syncEmail
+                        binding.btnStartupSync.text = getString(R.string.profile_sync_status_connected, email)
+                        binding.btnStartupSync.isEnabled = false
+                        viewModel.resetSyncState()
+                    }
+                    is ProfileViewModel.SyncState.Error -> {
+                        binding.btnStartupSync.isEnabled = true
+                        binding.btnStartupSync.text = getString(R.string.profile_sync_btn_google)
+                        Snackbar.make(binding.root, "Sync error: ${state.message}", Snackbar.LENGTH_LONG).show()
+                        viewModel.resetSyncState()
+                    }
+                }
+            }
+        }
     }
 
     private fun observeModelState() {
@@ -70,12 +152,15 @@ class ApiKeyFragment : Fragment() {
                         binding.modelSelector.setText(getString(R.string.profile_model_loading), false)
                         binding.modelSelector.isEnabled = false
                         binding.tilModel.helperText = null
+                        binding.btnGetStarted.isVisible = true
                         binding.btnGetStarted.isEnabled = false
                         binding.btnSave.isEnabled = false
                     }
                     is ProfileViewModel.ModelState.Ready -> {
                         binding.modelSection.isVisible = true
+                        binding.syncSection.isVisible = true
                         binding.btnSave.isEnabled = true
+                        binding.btnGetStarted.isVisible = true
                         applyModels(state.models)
                     }
                     is ProfileViewModel.ModelState.Error -> {
@@ -83,6 +168,7 @@ class ApiKeyFragment : Fragment() {
                         binding.modelSelector.setText("", false)
                         binding.modelSelector.isEnabled = false
                         binding.tilModel.helperText = state.message
+                        binding.btnGetStarted.isVisible = true
                         binding.btnGetStarted.isEnabled = false
                         binding.btnSave.isEnabled = true
                     }

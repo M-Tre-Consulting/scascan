@@ -59,6 +59,10 @@ class UserProfileStore @Inject constructor(
         get() = prefs.getInt(KEY_AI_FAT, 0)
         set(v) { prefs.edit().putInt(KEY_AI_FAT, v).commit() }
 
+    var syncEmail: String
+        get() = prefs.getString(KEY_SYNC_EMAIL, "") ?: ""
+        set(v) { prefs.edit().putString(KEY_SYNC_EMAIL, v).commit() }
+
     fun hasProfile(): Boolean = age > 0 && heightCm > 0 && weightKg > 0f
 
     /** Returns the AI-computed target if available, otherwise falls back to Mifflin-St Jeor TDEE with goal adjustment. */
@@ -139,6 +143,7 @@ class UserProfileStore @Inject constructor(
         private const val KEY_AI_CARBS    = "ai_carbs"
         private const val KEY_AI_FAT      = "ai_fat"
         private const val KEY_NAME        = "user_name"
+        private const val KEY_SYNC_EMAIL   = "sync_email"
         const val DEFAULT_CALORIES = 2_000
         val ACTIVITY_MULTIPLIERS = doubleArrayOf(1.2, 1.375, 1.55, 1.725, 1.9)
         val GOAL_LABELS = arrayOf("Lose weight", "Maintain weight", "Build muscle")

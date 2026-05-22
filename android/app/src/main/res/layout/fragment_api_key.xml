@@ -120,15 +120,55 @@
                     android:focusable="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Google Sync Section (Phase 3) -->
+        <LinearLayout
+            android:id="@+id/syncSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="28dp"
+                android:background="?attr/colorOutlineVariant" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_sync_title"
+                style="@style/TextAppearance.Material3.HeadlineSmall"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnBackground"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_sync_desc"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_marginBottom="24dp" />
+
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnGetStarted"
+                android:id="@+id/btnStartupSync"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:text="@string/setup_btn_get_started"
-                android:layout_marginTop="16dp"
-                android:enabled="false" />
-
+                android:text="@string/profile_sync_btn_google"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_marginBottom="16dp" />
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGetStarted"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="@string/setup_btn_get_started"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:enabled="false" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"

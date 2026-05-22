@@ -103,11 +103,14 @@ class ProfileViewModel @Inject constructor(
         _targetState.value = TargetState.Idle
     }
 
-    fun triggerSync(accessToken: String) {
+    fun triggerSync(accessToken: String, email: String? = null) {
         _syncState.value = SyncState.Syncing
         viewModelScope.launch {
             syncManager.sync(accessToken)
-                .onSuccess { _syncState.value = SyncState.Success }
+                .onSuccess { 
+                    if (email != null) profileStore.syncEmail = email
+                    _syncState.value = SyncState.Success 
+                }
                 .onFailure { _syncState.value = SyncState.Error(it.message ?: "Sync failed") }
         }
     }

@@ -51,9 +51,29 @@ class ProfileFragment : Fragment() {
         ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val authResult = Identity.getAuthorizationClient(requireActivity())
-                .getAuthorizationResultFromIntent(result.data)
-            authResult.accessToken?.let { viewModel.triggerSync(it) }
+            val authClient = Identity.getAuthorizationClient(requireActivity())
+            val authResult = authClient.getAuthorizationResultFromIntent(result.data)
+            
+            // Try to extract account info from the intent
+            val account = com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                val googleAccount = account.getResult(com.google.android.gms.common.api.ApiException::class.java)
+                googleAccount?.let {
+                    if (viewModel.profileStore.name.isBlank()) {
+                        it.displayName?.let { name -> viewModel.profileStore.name = name }
+                    }
+                    it.email?.let { email -> viewModel.profileStore.syncEmail = email }
+                }
+            } catch (e: Exception) {
+                // Fallback if the above doesn't work with AuthorizationClient intent
+            }
+
+            authResult.accessToken?.let { 
+                if (viewModel.profileStore.syncEmail.isBlank()) {
+                    viewModel.profileStore.syncEmail = "Connected"
+                }
+                viewModel.triggerSync(it) 
+            }
         }
     }
 
@@ -88,9 +108,20 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupGoogleSync() {
+        updateSyncButton()
         binding.btnGoogleSync.setOnClickListener {
             it.hapticClick()
             startDriveSync()
+        }
+    }
+
+    private fun updateSyncButton() {
+        binding.btnGoogleSync.isEnabled = true
+        val email = viewModel.profileStore.syncEmail
+        if (email.isNotBlank()) {
+            binding.btnGoogleSync.text = getString(R.string.profile_sync_status_connected, email)
+        } else {
+            binding.btnGoogleSync.text = getString(R.string.profile_sync_btn_google)
         }
     }
 
@@ -108,7 +139,12 @@ class ProfileFragment : Fragment() {
                         androidx.activity.result.IntentSenderRequest.Builder(pendingIntent!!).build()
                     )
                 } else {
-                    result.accessToken?.let { viewModel.triggerSync(it) }
+                    result.accessToken?.let { 
+                        if (viewModel.profileStore.syncEmail.isBlank()) {
+                            viewModel.profileStore.syncEmail = "Connected"
+                        }
+                        viewModel.triggerSync(it) 
+                    }
                 }
             }
             .addOnFailureListener { e ->
@@ -121,8 +157,7 @@ class ProfileFragment : Fragment() {
             viewModel.syncState.collect { state ->
                 when (state) {
                     is ProfileViewModel.SyncState.Idle -> {
-                        binding.btnGoogleSync.isEnabled = true
-                        binding.btnGoogleSync.text = getString(R.string.profile_sync_btn_google)
+                        updateSyncButton()
                     }
                     is ProfileViewModel.SyncState.Syncing -> {
                         binding.btnGoogleSync.isEnabled = false
@@ -130,13 +165,12 @@ class ProfileFragment : Fragment() {
                         Snackbar.make(binding.root, R.string.profile_sync_status_syncing, Snackbar.LENGTH_SHORT).show()
                     }
                     is ProfileViewModel.SyncState.Success -> {
-                        binding.btnGoogleSync.isEnabled = true
-                        binding.btnGoogleSync.text = getString(R.string.profile_sync_btn_google)
+                        updateSyncButton()
                         Snackbar.make(binding.root, R.string.profile_sync_status_complete, Snackbar.LENGTH_SHORT).show()
                         viewModel.resetSyncState()
                     }
                     is ProfileViewModel.SyncState.Error -> {
-                        binding.btnGoogleSync.isEnabled = true
+                        updateSyncButton()
                         Snackbar.make(binding.root, getString(R.string.profile_sync_error, state.message), Snackbar.LENGTH_LONG).show()
                         viewModel.resetSyncState()
                     }
