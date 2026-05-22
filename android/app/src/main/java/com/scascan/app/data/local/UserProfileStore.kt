@@ -12,6 +12,10 @@ class UserProfileStore @Inject constructor(
 ) {
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
+    var name: String
+        get() = prefs?.getString(KEY_NAME, "") ?: ""
+        set(v) { prefs?.edit()?.putString(KEY_NAME, v)?.apply() }
+
     var age: Int
         get() = prefs.getInt(KEY_AGE, 0)
         set(v) { prefs.edit().putInt(KEY_AGE, v).commit() }
@@ -114,6 +118,7 @@ class UserProfileStore @Inject constructor(
         private const val KEY_AI_PROTEIN  = "ai_protein"
         private const val KEY_AI_CARBS    = "ai_carbs"
         private const val KEY_AI_FAT      = "ai_fat"
+        private const val KEY_NAME        = "user_name"
         const val DEFAULT_CALORIES = 2_000
         val ACTIVITY_MULTIPLIERS = doubleArrayOf(1.2, 1.375, 1.55, 1.725, 1.9)
         val GOAL_LABELS = arrayOf("Lose weight", "Maintain weight", "Build muscle")

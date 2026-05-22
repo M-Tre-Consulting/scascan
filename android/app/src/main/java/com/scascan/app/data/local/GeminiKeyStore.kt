@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import androidx.core.content.edit
 
 @Singleton
 class GeminiKeyStore @Inject constructor(
@@ -13,18 +14,18 @@ class GeminiKeyStore @Inject constructor(
 
     var apiKey: String
         get() = prefs.getString(KEY_API, "") ?: ""
-        set(value) { prefs.edit().putString(KEY_API, value.trim()).commit() }
+        set(value) { prefs.edit(commit = true) { putString(KEY_API, value.trim()) } }
 
     // Persists the last model the user chose.
     // Falls back to a single well-known ID so the app works before the user
-    // visits Profile — this is the only hardcoded string and it is intentional.
+    // visits Profile — this is the only hardcoded string, and it is intentional.
     var selectedModel: String
         get() = prefs.getString(KEY_MODEL, "") ?: ""
-        set(value) { prefs.edit().putString(KEY_MODEL, value).commit() }
+        set(value) { prefs.edit(commit = true) { putString(KEY_MODEL, value) } }
 
     fun hasKey(): Boolean = apiKey.isNotBlank()
 
-    fun clearKey() { prefs.edit().remove(KEY_API).commit() }
+    fun clearKey() { prefs.edit(commit = true) { remove(KEY_API) } }
 
     companion object {
         private const val PREFS_NAME = "scascan_prefs"
