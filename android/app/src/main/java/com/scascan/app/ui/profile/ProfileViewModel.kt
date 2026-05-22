@@ -12,6 +12,7 @@ import com.scascan.app.data.local.UserProfileStore
 import com.scascan.app.data.remote.GeminiRestClient
 import com.scascan.app.data.remote.ModelInfo
 import com.scascan.app.data.repository.NutritionRepository
+import com.scascan.app.data.sync.DriveSyncManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +25,8 @@ class ProfileViewModel @Inject constructor(
     val profileStore: UserProfileStore,
     val healthManager: HealthConnectManager,
     private val client: GeminiRestClient,
-    private val nutritionRepository: NutritionRepository
+    private val nutritionRepository: NutritionRepository,
+    private val syncManager: DriveSyncManager
 ) : ViewModel() {
 
     sealed class ModelState {
@@ -69,6 +71,16 @@ class ProfileViewModel @Inject constructor(
     )
     val authState: StateFlow<AuthState> = _authState
 
+    sealed class SyncState {
+        object Idle : SyncState()
+        object Syncing : SyncState()
+        object Success : SyncState()
+        data class Error(val message: String) : SyncState()
+    }
+
+    private val _syncState = MutableStateFlow<SyncState>(SyncState.Idle)
+    val syncState: StateFlow<SyncState> = _syncState
+
     fun computeTargets() {
         if (!profileStore.hasProfile() || !keyStore.hasKey()) return
         _targetState.value = TargetState.Computing
@@ -89,6 +101,19 @@ class ProfileViewModel @Inject constructor(
 
     fun resetTargetState() {
         _targetState.value = TargetState.Idle
+    }
+
+    fun triggerSync(accessToken: String) {
+        _syncState.value = SyncState.Syncing
+        viewModelScope.launch {
+            syncManager.sync(accessToken)
+                .onSuccess { _syncState.value = SyncState.Success }
+                .onFailure { _syncState.value = SyncState.Error(it.message ?: "Sync failed") }
+        }
+    }
+
+    fun resetSyncState() {
+        _syncState.value = SyncState.Idle
     }
 
     fun signIn(context: android.content.Context) {

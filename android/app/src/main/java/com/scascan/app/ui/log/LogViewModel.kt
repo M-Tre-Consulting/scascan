@@ -165,16 +165,20 @@ class LogViewModel @Inject constructor(
 
     data class TargetInfo(
         val caloriesKcal: Int,
+        val bmrKcal: Int,
+        val goalOffsetKcal: Int,
         val macros: MacroTargets,
         val goalIndex: Int,
         val isAiComputed: Boolean
     )
 
     private fun buildTargetInfo() = TargetInfo(
-        caloriesKcal = logRepository.dailyCalorieTarget(),
-        macros       = logRepository.macroTargets(),
-        goalIndex    = logRepository.goalIndex(),
-        isAiComputed = logRepository.isAiComputed()
+        caloriesKcal   = logRepository.dailyCalorieTarget(),
+        bmrKcal         = logRepository.bmr(),
+        goalOffsetKcal = logRepository.goalOffset(),
+        macros         = logRepository.macroTargets(),
+        goalIndex      = logRepository.goalIndex(),
+        isAiComputed   = logRepository.isAiComputed()
     )
 
     private val _targetInfo = MutableStateFlow(buildTargetInfo())

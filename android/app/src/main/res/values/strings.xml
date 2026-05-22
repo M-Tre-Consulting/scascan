@@ -93,6 +93,8 @@
     <string name="log_adaptive_breakdown_total">Today\'s target</string>
     <string name="log_adaptive_kcal">%1$d kcal</string>
     <string name="log_adaptive_plus_kcal">+%1$d kcal</string>
+    <string name="log_adaptive_minus_kcal">-%1$d kcal</string>
+    <string name="log_adaptive_trend_rate">%1$s kcal (%2$.2f kg/wk)</string>
     <string name="log_adaptive_trend_collecting">Collecting data…</string>
     <string name="log_adaptive_hint_unavailable">Health Connect is not available on this device.</string>
     <string name="log_adaptive_hint_connect">Connect Health Connect in Profile to enable adaptive targets.</string>
@@ -135,8 +137,9 @@
     <string name="hc_disconnected">Disconnected</string>
     <string name="hc_not_available">Not available</string>
     <string name="hc_disconnect">Disconnect</string>
-    <string name="hc_sync_weight">Sync weight</string>
-    <string name="hc_weight_synced">Weight synced: %.1f kg</string>
+    <string name="hc_sync_weight">Sync weight &amp; height</string>
+    <string name="hc_weight_synced">Weight &amp; height synced</string>
+    <string name="profile_sync_error">Sync failed: %s</string>
     <string name="hc_weight_unavailable">No weight data found in Health Connect</string>
     <string name="hc_steps">%d steps</string>
     <string name="hc_active_kcal">%d kcal</string>
@@ -159,10 +162,12 @@
     <string name="profile_section_goals">Activity &amp; Goals</string>
     <string name="profile_section_sync">Sync &amp; Backup</string>
     <string name="profile_section_settings">App Settings</string>
-    <string name="profile_sync_title">Cross-device Sync</string>
-    <string name="profile_sync_desc">Keep your logs and profile in sync across your devices using your Google Account.</string>
-    <string name="profile_sync_btn_google">Sign in with Google</string>
+    <string name="profile_sync_title">Cloud Sync</string>
+    <string name="profile_sync_desc">Keep your logs and profile in sync across your devices using Google Drive.</string>
+    <string name="profile_sync_btn_google">Sign in &amp; Sync</string>
     <string name="profile_sync_status_connected">Synced as %s</string>
+    <string name="profile_sync_status_syncing">Syncing…</string>
+    <string name="profile_sync_status_complete">Sync complete</string>
     <string name="profile_api_key_title">Gemini API Key</string>
     <string name="profile_api_key_desc">ScaScan uses Google Gemini to analyse food. Get your key at aistudio.google.com.</string>
     <string name="profile_save_key">Save key</string>

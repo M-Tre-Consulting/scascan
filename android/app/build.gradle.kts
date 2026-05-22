@@ -50,6 +50,9 @@ android {
     }
 
     packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1,INDEX.LIST,DEPENDENCIES}"
+        }
         jniLibs {
             // Store .so files uncompressed and page-aligned in the APK.
             // Required for 16 KB page-size compliance (Play Store mandate from Nov 2025).
@@ -84,4 +87,8 @@ dependencies {
     implementation(libs.androidx.credentials.core)
     implementation(libs.androidx.credentials.play)
     implementation(libs.googleid)
+    implementation(libs.googleapi.client)
+    implementation(libs.googledrive.services)
+    implementation(libs.googleauth.http)
+    implementation(libs.play.services.auth)
 }

@@ -1,11 +1,13 @@
 package com.scascan.app.ui.profile
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,6 +17,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.health.connect.client.PermissionController
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.auth.api.identity.AuthorizationRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.common.api.Scope
 import com.google.android.material.snackbar.Snackbar
 import com.scascan.app.R
 import com.scascan.app.data.health.HealthConnectManager
@@ -39,6 +44,16 @@ class ProfileFragment : Fragment() {
     ) { granted ->
         if (granted.containsAll(HealthConnectManager.PERMISSIONS)) {
             checkHcStatus()
+        }
+    }
+
+    private val requestDriveAuth = registerForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val authResult = Identity.getAuthorizationClient(requireActivity())
+                .getAuthorizationResultFromIntent(result.data)
+            authResult.accessToken?.let { viewModel.triggerSync(it) }
         }
     }
 
@@ -69,12 +84,62 @@ class ProfileFragment : Fragment() {
         observeTargetState()
         observeModelState()
         observeAuthState()
+        observeSyncState()
     }
 
     private fun setupGoogleSync() {
         binding.btnGoogleSync.setOnClickListener {
             it.hapticClick()
-            viewModel.signIn(requireContext())
+            startDriveSync()
+        }
+    }
+
+    private fun startDriveSync() {
+        val request = AuthorizationRequest.builder()
+            .setRequestedScopes(listOf(Scope("https://www.googleapis.com/auth/drive.appdata")))
+            .build()
+        
+        Identity.getAuthorizationClient(requireActivity())
+            .authorize(request)
+            .addOnSuccessListener { result ->
+                if (result.hasResolution()) {
+                    val pendingIntent = result.pendingIntent
+                    requestDriveAuth.launch(
+                        androidx.activity.result.IntentSenderRequest.Builder(pendingIntent!!).build()
+                    )
+                } else {
+                    result.accessToken?.let { viewModel.triggerSync(it) }
+                }
+            }
+            .addOnFailureListener { e ->
+                Snackbar.make(binding.root, "Auth failed: ${e.message}", Snackbar.LENGTH_LONG).show()
+            }
+    }
+
+    private fun observeSyncState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.syncState.collect { state ->
+                when (state) {
+                    is ProfileViewModel.SyncState.Idle -> {
+                        binding.btnGoogleSync.isEnabled = true
+                        binding.btnGoogleSync.text = getString(R.string.profile_sync_btn_google)
+                    }
+                    is ProfileViewModel.SyncState.Syncing -> {
+                        binding.btnGoogleSync.isEnabled = false
+                        binding.btnGoogleSync.text = getString(R.string.profile_sync_status_syncing)
+                    }
+                    is ProfileViewModel.SyncState.Success -> {
+                        binding.btnGoogleSync.isEnabled = true
+                        Snackbar.make(binding.root, R.string.profile_sync_status_complete, Snackbar.LENGTH_SHORT).show()
+                        viewModel.resetSyncState()
+                    }
+                    is ProfileViewModel.SyncState.Error -> {
+                        binding.btnGoogleSync.isEnabled = true
+                        Snackbar.make(binding.root, getString(R.string.profile_sync_error, state.message), Snackbar.LENGTH_LONG).show()
+                        viewModel.resetSyncState()
+                    }
+                }
+            }
         }
     }
 
@@ -286,13 +351,7 @@ class ProfileFragment : Fragment() {
                 viewModel.profileStore.heightCm = rounded
             }
 
-            val msg = if (kg != null && cm != null) {
-                "Weight and height synced"
-            } else if (kg != null) {
-                getString(R.string.hc_weight_synced, kg.toFloat())
-            } else {
-                "Height synced: ${cm?.toInt()} cm"
-            }
+            val msg = getString(R.string.hc_weight_synced)
 
             Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
                 .setAnchorView(binding.btnSyncWeight)

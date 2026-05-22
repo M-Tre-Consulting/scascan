@@ -61,16 +61,28 @@ class UserProfileStore @Inject constructor(
 
     fun hasProfile(): Boolean = age > 0 && heightCm > 0 && weightKg > 0f
 
-    /** Returns the AI-computed target if available, otherwise falls back to Mifflin-St Jeor TDEE. */
+    /** Returns the AI-computed target if available, otherwise falls back to Mifflin-St Jeor TDEE with goal adjustment. */
     fun dailyCalorieTarget(): Int {
         if (aiCalorieTarget > 0) return aiCalorieTarget
         if (!hasProfile()) return DEFAULT_CALORIES
-        val bmr = if (isMale) {
+        
+        val tdee = bmr() * ACTIVITY_MULTIPLIERS[activityIndex.coerceIn(0, 4)]
+        val offset = when (goalIndex.coerceIn(0, 2)) {
+            0 -> -500 // Lose weight: ~0.5kg/week deficit
+            2 -> 300  // Build muscle: surplus
+            else -> 0 // Maintain
+        }
+        
+        return (tdee + offset).toInt()
+    }
+
+    fun bmr(): Double {
+        if (!hasProfile()) return 1700.0
+        return if (isMale) {
             10.0 * weightKg + 6.25 * heightCm - 5.0 * age + 5.0
         } else {
             10.0 * weightKg + 6.25 * heightCm - 5.0 * age - 161.0
         }
-        return (bmr * ACTIVITY_MULTIPLIERS[activityIndex.coerceIn(0, 4)]).toInt()
     }
 
     /**
@@ -103,6 +115,14 @@ class UserProfileStore @Inject constructor(
                 carbsG   = (cal * 0.50 / 4).toInt(),
                 fatG     = (cal * 0.30 / 9).toInt()
             )
+        }
+    }
+
+    fun goalOffset(): Int {
+        return when (goalIndex.coerceIn(0, 2)) {
+            0 -> -500
+            2 -> 300
+            else -> 0
         }
     }
 

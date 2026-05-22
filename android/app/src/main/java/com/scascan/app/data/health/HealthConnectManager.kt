@@ -13,7 +13,9 @@ import androidx.health.connect.client.records.WeightRecord
 import androidx.health.connect.client.request.AggregateRequest
 import androidx.health.connect.client.request.ReadRecordsRequest
 import androidx.health.connect.client.time.TimeRangeFilter
+import com.scascan.app.data.local.UserProfileStore
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -23,7 +25,8 @@ import javax.inject.Singleton
 
 @Singleton
 class HealthConnectManager @Inject constructor(
-    @param:ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context,
+    private val profileStore: UserProfileStore
 ) {
     companion object {
         private const val TAG = "HealthConnectManager"
@@ -86,14 +89,14 @@ class HealthConnectManager @Inject constructor(
 
     /**
      * Returns today's ACTIVE calories burned.
-     * Some apps only write TotalCaloriesBurnedRecord, so we fall back to (Total - BMR) if Active is 0.
+     * Some apps (Samsung Health) only write TotalCaloriesBurnedRecord, so we fall back to (Total - BMR).
      */
     suspend fun readTodayActiveCalories(): Double {
         val c = client ?: return 0.0
         return try {
             val (start, end) = todayRange()
             
-            // 1. Try ActiveCaloriesBurnedRecord first
+            // 1. Try ActiveCaloriesBurnedRecord first (Most accurate for "active" burn)
             val activeResponse = c.aggregate(
                 AggregateRequest(
                     metrics = setOf(ActiveCaloriesBurnedRecord.ACTIVE_CALORIES_TOTAL),
@@ -102,9 +105,11 @@ class HealthConnectManager @Inject constructor(
             )
             val activeKcal = activeResponse[ActiveCaloriesBurnedRecord.ACTIVE_CALORIES_TOTAL]?.inKilocalories ?: 0.0
             
-            if (activeKcal > 1.0) return activeKcal
+            // If we have meaningful active calories, return them
+            if (activeKcal > 5.0) return activeKcal
 
-            // 2. Fallback: (TotalCaloriesBurnedRecord - BasalMetabolicRateRecord)
+            // 2. Fallback: (TotalCaloriesBurnedRecord - BMR)
+            // This is necessary because some platforms record everything as "Total"
             val totalResponse = c.aggregate(
                 AggregateRequest(
                     metrics = setOf(TotalCaloriesBurnedRecord.ENERGY_TOTAL),
@@ -115,20 +120,41 @@ class HealthConnectManager @Inject constructor(
             
             if (totalKcal <= 0.0) return 0.0
 
-            // We need BMR to subtract from total. If not in HC, we assume 0 or use a rough estimate.
-            // BMR in HC is usually a point-in-time record representing the daily rate.
+            // Get BMR for the same period
             val bmrResponse = c.aggregate(
                 AggregateRequest(
                     metrics = setOf(BasalMetabolicRateRecord.BASAL_CALORIES_TOTAL),
                     timeRangeFilter = TimeRangeFilter.between(start, end)
                 )
             )
-            val bmrKcal = bmrResponse[BasalMetabolicRateRecord.BASAL_CALORIES_TOTAL]?.inKilocalories ?: 0.0
+            var bmrKcal = bmrResponse[BasalMetabolicRateRecord.BASAL_CALORIES_TOTAL]?.inKilocalories ?: 0.0
+            
+            // If BMR is missing in HC (common), estimate it from profile to avoid huge numbers
+            if (bmrKcal <= 0.0) {
+                val dailyBmr = estimateDailyBmr()
+                val minutesPassed = Duration.between(start, end).toMinutes()
+                bmrKcal = (dailyBmr / 1440.0) * minutesPassed
+            }
             
             (totalKcal - bmrKcal).coerceAtLeast(0.0)
         } catch (e: Exception) {
             Log.e(TAG, "readTodayActiveCalories error: $e")
             0.0
+        }
+    }
+
+    private fun estimateDailyBmr(): Double {
+        if (!profileStore.hasProfile()) return 1700.0 // Baseline average
+        
+        // Mifflin-St Jeor Equation
+        val w = profileStore.weightKg.toDouble()
+        val h = profileStore.heightCm.toDouble()
+        val a = profileStore.age.toDouble()
+        
+        return if (profileStore.isMale) {
+            (10.0 * w) + (6.25 * h) - (5.0 * a) + 5.0
+        } else {
+            (10.0 * w) + (6.25 * h) - (5.0 * a) - 161.0
         }
     }
 

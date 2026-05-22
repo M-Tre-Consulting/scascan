@@ -18,6 +18,10 @@ healthconnect = "1.1.0-rc01"
 viewpager2 = "1.1.0"
 credentials = "1.6.0"
 googleid = "1.2.0"
+google-api-client = "2.9.0"
+google-drive = "v3-rev20220815-2.0.0"
+google-auth = "1.47.0"
+play-services-auth = "21.5.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,6 +49,10 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-health-connect = { group = "androidx.health.connect", name = "connect-client", version.ref = "healthconnect" }
 androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
+googleapi-client = { group = "com.google.api-client", name = "google-api-client-android", version.ref = "google-api-client" }
+googledrive-services = { group = "com.google.apis", name = "google-api-services-drive", version.ref = "google-drive" }
+googleauth-http = { group = "com.google.auth", name = "google-auth-library-oauth2-http", version.ref = "google-auth" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

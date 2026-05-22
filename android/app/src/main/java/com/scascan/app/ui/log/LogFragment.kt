@@ -278,30 +278,38 @@ class LogFragment : Fragment() {
                 binding.tvAdaptiveHint.isVisible = false
                 binding.layoutAdaptiveBreakdown.isVisible = true
 
-                val base       = targetInfo.caloriesKcal
+                val baseTarget = targetInfo.caloriesKcal
                 val activeKcal = adaptive.activeKcal.toInt()
                 val trendAdj   = adaptive.trendAdjustment
+                
+                // Predicted activity already included in the base target (based on Activity Level)
+                val predictedActivity = (baseTarget - (targetInfo.bmrKcal + targetInfo.goalOffsetKcal)).coerceAtLeast(0)
+                
+                // Extra activity is what exceeds our daily prediction
+                val extraActivity = (activeKcal - predictedActivity).coerceAtLeast(0)
 
-                binding.tvAdaptiveBase.text     = getString(R.string.log_adaptive_kcal, base)
-                binding.tvAdaptiveActivity.text = if (activeKcal > 0)
-                    getString(R.string.log_adaptive_plus_kcal, activeKcal)
+                binding.tvAdaptiveBase.text     = getString(R.string.log_adaptive_kcal, baseTarget)
+                binding.tvAdaptiveActivity.text = if (extraActivity > 0)
+                    getString(R.string.log_adaptive_plus_kcal, extraActivity)
                 else
                     getString(R.string.log_adaptive_kcal, 0)
 
                 binding.tvAdaptiveTrend.text = when (adaptive.trendStatus) {
                     LogViewModel.AdaptiveState.TrendStatus.NoData ->
                         getString(R.string.log_adaptive_trend_collecting)
-                    else -> buildString {
-                        if (trendAdj >= 0) append("+")
-                        append("$trendAdj kcal")
-                        adaptive.weeklyRateKgPerWeek?.let {
-                            append(String.format(" (%.2f kg/wk)", it))
+                    else -> {
+                        val adjStr = if (trendAdj >= 0) "+$trendAdj" else "$trendAdj"
+                        val rate = adaptive.weeklyRateKgPerWeek
+                        if (rate != null) {
+                            getString(R.string.log_adaptive_trend_rate, adjStr, rate)
+                        } else {
+                            getString(R.string.log_adaptive_kcal, trendAdj)
                         }
                     }
                 }
 
                 binding.tvAdaptiveTotal.text = getString(
-                    R.string.log_adaptive_kcal, base + activeKcal + trendAdj
+                    R.string.log_adaptive_kcal, baseTarget + extraActivity + trendAdj
                 )
 
                 val noData = adaptive.trendStatus == LogViewModel.AdaptiveState.TrendStatus.NoData
