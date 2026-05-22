@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.scascan.app.R
 import com.scascan.app.databinding.FragmentHomeBinding
+import com.scascan.app.ui.util.hapticClick
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,12 +39,15 @@ class HomeFragment : Fragment() {
         }
 
         binding.cardCamera.setOnClickListener {
+            it.hapticClick()
             findNavController().navigate(R.id.action_main_to_camera)
         }
         binding.cardBarcode.setOnClickListener {
+            it.hapticClick()
             findNavController().navigate(R.id.action_main_to_barcode)
         }
         binding.cardSearch.setOnClickListener {
+            it.hapticClick()
             findNavController().navigate(R.id.action_main_to_search)
         }
     }

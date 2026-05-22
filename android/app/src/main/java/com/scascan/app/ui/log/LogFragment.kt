@@ -13,6 +13,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.scascan.app.R
+import com.scascan.app.ui.util.hapticClick
+import com.scascan.app.ui.util.hapticConfirm
+import com.scascan.app.ui.util.hapticReject
+import com.scascan.app.ui.util.hapticTick
 import com.scascan.app.data.local.LogEntry
 import com.scascan.app.databinding.FragmentLogBinding
 import com.scascan.app.databinding.ItemLogEntryBinding
@@ -58,8 +62,8 @@ class LogFragment : Fragment() {
     }
 
     private fun setupDateNavigation() {
-        binding.btnPrevDay.setOnClickListener { viewModel.goToPreviousDay() }
-        binding.btnNextDay.setOnClickListener { viewModel.goToNextDay() }
+        binding.btnPrevDay.setOnClickListener { it.hapticTick(); viewModel.goToPreviousDay() }
+        binding.btnNextDay.setOnClickListener { it.hapticTick(); viewModel.goToNextDay() }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.selectedDateLabel.collect { binding.tvSelectedDate.text = it }
@@ -95,6 +99,7 @@ class LogFragment : Fragment() {
                 when (state) {
                     is LogViewModel.FixState.Idle -> Unit
                     is LogViewModel.FixState.Success -> {
+                        binding.root.hapticConfirm()
                         Snackbar.make(binding.root, R.string.fix_entry_fixed, Snackbar.LENGTH_SHORT).show()
                         viewModel.resetFixState()
                     }
@@ -144,10 +149,11 @@ class LogFragment : Fragment() {
                 append(" · ${entry.fat.toInt()}g fat")
             }
             item.btnFix.setOnClickListener {
+                it.hapticClick()
                 FixEntryBottomSheetFragment.newInstance(entry.id, entry.foodName)
                     .show(childFragmentManager, "fix_entry")
             }
-            item.btnRemove.setOnClickListener { viewModel.deleteEntry(entry) }
+            item.btnRemove.setOnClickListener { it.hapticReject(); viewModel.deleteEntry(entry) }
 
             item.root.alpha = 0f
             item.root.animate().alpha(1f).setDuration(200).start()

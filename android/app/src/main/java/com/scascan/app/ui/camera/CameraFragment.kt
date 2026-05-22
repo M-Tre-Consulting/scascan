@@ -23,6 +23,7 @@ import androidx.navigation.fragment.findNavController
 import com.scascan.app.R
 import com.scascan.app.data.analysis.AnalysisManager
 import com.scascan.app.databinding.FragmentCameraBinding
+import com.scascan.app.ui.util.hapticClick
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -60,7 +61,7 @@ class CameraFragment : Fragment() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         binding.topBar.setOnClickListener { findNavController().navigateUp() }
-        binding.captureButton.setOnClickListener { takePhoto() }
+        binding.captureButton.setOnClickListener { it.hapticClick(); takePhoto() }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top

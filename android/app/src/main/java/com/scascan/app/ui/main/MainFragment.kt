@@ -19,6 +19,7 @@ import com.scascan.app.data.model.NutritionFacts
 import com.scascan.app.data.repository.LogRepository
 import com.scascan.app.databinding.FragmentMainBinding
 import com.scascan.app.ui.result.AnalysisResultBottomSheetFragment
+import com.scascan.app.ui.util.hapticTick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -72,6 +73,7 @@ class MainFragment : Fragment() {
                 R.id.profileFragment -> 2
                 else -> return@setOnItemSelectedListener false
             }
+            binding.bottomNav.hapticTick()
             binding.viewPager.setCurrentItem(page, true)
             true
         }

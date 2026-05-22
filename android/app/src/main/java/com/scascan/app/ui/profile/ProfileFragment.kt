@@ -20,6 +20,9 @@ import com.scascan.app.R
 import com.scascan.app.data.health.HealthConnectManager
 import com.scascan.app.data.remote.ModelInfo
 import com.scascan.app.databinding.FragmentProfileBinding
+import com.scascan.app.ui.util.hapticClick
+import com.scascan.app.ui.util.hapticConfirm
+import com.scascan.app.ui.util.hapticTick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -76,7 +79,11 @@ class ProfileFragment : Fragment() {
             binding.etAge.setText(profile.age.toString())
             binding.etHeight.setText(profile.heightCm.toString())
             binding.etWeight.setText(profile.weightKg.toString())
-            if (!profile.isMale) binding.chipGroupSex.check(R.id.chipFemale)
+            if (!profile.isMale) binding.toggleGroupSex.check(R.id.btnSexFemale)
+        }
+
+        binding.toggleGroupSex.addOnButtonCheckedListener { _, _, _ ->
+            binding.toggleGroupSex.hapticTick()
         }
 
         binding.activitySelector.setAdapter(
@@ -93,7 +100,10 @@ class ProfileFragment : Fragment() {
             showAiTargetStatus(getString(R.string.profile_target_computed, profile.aiCalorieTarget))
         }
 
-        binding.btnSaveProfile.setOnClickListener { savePersonalInfo(activityLabels, goalLabels) }
+        binding.btnSaveProfile.setOnClickListener {
+            it.hapticClick()
+            savePersonalInfo(activityLabels, goalLabels)
+        }
     }
 
     private fun savePersonalInfo(activityLabels: Array<String>, goalLabels: Array<String>) {
@@ -113,7 +123,7 @@ class ProfileFragment : Fragment() {
         profile.age = age
         profile.heightCm = height
         profile.weightKg = weight
-        profile.isMale = binding.chipGroupSex.checkedChipId == R.id.chipMale
+        profile.isMale = binding.toggleGroupSex.checkedButtonId == R.id.btnSexMale
 
         val actIdx = activityLabels.indexOf(binding.activitySelector.text.toString())
         if (actIdx >= 0) profile.activityIndex = actIdx
@@ -124,11 +134,12 @@ class ProfileFragment : Fragment() {
         requireContext().getSystemService<InputMethodManager>()
             ?.hideSoftInputFromWindow(binding.etWeight.windowToken, 0)
 
+        binding.cardSetupReminder.isVisible = false
+        binding.btnSaveProfile.hapticConfirm()
         Snackbar.make(binding.root, R.string.profile_info_saved, Snackbar.LENGTH_SHORT)
             .setAnchorView(binding.btnSaveProfile)
             .show()
 
-        // Trigger AI-based target computation if key is available
         if (viewModel.keyStore.hasKey()) {
             viewModel.computeTargets()
         }
@@ -146,6 +157,7 @@ class ProfileFragment : Fragment() {
 
     private fun observeTargetState() {
         binding.btnRecompute.setOnClickListener {
+            it.hapticClick()
             viewModel.computeTargets()
         }
 
@@ -197,10 +209,11 @@ class ProfileFragment : Fragment() {
         if (!hm.isAvailable) return
 
         binding.btnConnectHcProfile.setOnClickListener {
+            it.hapticClick()
             requestHcPermissions.launch(HealthConnectManager.PERMISSIONS)
         }
-        binding.btnSyncWeight.setOnClickListener { syncWeightFromHc() }
-        binding.btnDisconnectHc.setOnClickListener { disconnectHc() }
+        binding.btnSyncWeight.setOnClickListener { it.hapticClick(); syncWeightFromHc() }
+        binding.btnDisconnectHc.setOnClickListener { it.hapticTick(); disconnectHc() }
 
         checkHcStatus()
     }
@@ -252,7 +265,7 @@ class ProfileFragment : Fragment() {
         val keyStore = viewModel.keyStore
         if (keyStore.hasKey()) binding.etApiKey.setText(keyStore.apiKey)
 
-        binding.btnSaveKey.setOnClickListener { saveKey() }
+        binding.btnSaveKey.setOnClickListener { it.hapticClick(); saveKey() }
         binding.etApiKey.setOnEditorActionListener { _, _, _ -> saveKey(); true }
     }
 

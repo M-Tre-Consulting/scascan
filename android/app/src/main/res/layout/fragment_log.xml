@@ -35,11 +35,17 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPrevDay"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                style="@style/Widget.Material3.Button.IconButton"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                app:iconSize="20dp"
+                app:iconPadding="0dp"
                 app:icon="@drawable/ic_arrow_back" />
 
             <TextView
@@ -48,17 +54,22 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Today"
                 style="@style/TextAppearance.Material3.TitleMedium"
                 android:textColor="?attr/colorOnBackground" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnNextDay"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                style="@style/Widget.Material3.Button.IconButton"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                app:iconSize="20dp"
+                app:iconPadding="0dp"
                 app:icon="@drawable/ic_arrow_forward" />
         </LinearLayout>
 

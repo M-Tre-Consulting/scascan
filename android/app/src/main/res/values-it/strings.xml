@@ -63,6 +63,8 @@
     <string name="log_entry_remove">Rimuovi</string>
     <string name="log_entry_fix">Correggi</string>
     <string name="hc_label_distance">Distanza</string>
+    <string name="log_date_today">Oggi</string>
+    <string name="log_date_yesterday">Ieri</string>
 
     <!-- Goal & AI targets -->
     <string name="profile_goal_hint">Obiettivo fitness</string>

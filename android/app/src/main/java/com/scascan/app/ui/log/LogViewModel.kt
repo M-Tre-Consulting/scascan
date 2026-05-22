@@ -1,8 +1,11 @@
 package com.scascan.app.ui.log
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.scascan.app.R
 import com.scascan.app.data.health.HealthConnectManager
+import dagger.hilt.android.qualifiers.ApplicationContext
 import com.scascan.app.data.local.LogEntry
 import com.scascan.app.data.repository.LogRepository
 import com.scascan.app.data.repository.NutritionRepository
@@ -22,6 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LogViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val logRepository: LogRepository,
     private val nutritionRepository: NutritionRepository,
     val healthManager: HealthConnectManager
@@ -38,15 +42,15 @@ class LogViewModel @Inject constructor(
     val selectedDateLabel: StateFlow<String> = _dateOffset
         .map { offset ->
             when (offset) {
-                0 -> "Today"
-                -1 -> "Yesterday"
+                0 -> context.getString(R.string.log_date_today)
+                -1 -> context.getString(R.string.log_date_yesterday)
                 else -> {
                     val cal = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, offset) }
                     SimpleDateFormat("MMM d", Locale.getDefault()).format(cal.time)
                 }
             }
         }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, "Today")
+        .stateIn(viewModelScope, SharingStarted.Eagerly, context.getString(R.string.log_date_today))
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val logEntries: StateFlow<List<LogEntry>> = _dateOffset

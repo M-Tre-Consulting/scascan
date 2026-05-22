@@ -165,30 +165,32 @@
                         android:imeOptions="actionNext" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Sex selector -->
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroupSex"
+                <!-- Sex selector — segmented button for graphical consistency -->
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggleGroupSex"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     app:singleSelection="true"
-                    app:selectionRequired="true">
+                    app:selectionRequired="true"
+                    app:checkedButton="@id/btnSexMale">
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipMale"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSexMale"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/profile_sex_male"
-                        style="@style/Widget.Material3.Chip.Filter"
-                        android:checked="true" />
+                        android:layout_weight="1"
+                        android:text="@string/profile_sex_male" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipFemale"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSexFemale"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/profile_sex_female"
-                        style="@style/Widget.Material3.Chip.Filter" />
-                </com.google.android.material.chip.ChipGroup>
+                        android:layout_weight="1"
+                        android:text="@string/profile_sex_female" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
 
                 <!-- Activity level dropdown -->
                 <com.google.android.material.textfield.TextInputLayout

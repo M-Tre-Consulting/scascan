@@ -8,6 +8,9 @@ import androidx.core.os.bundleOf
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.scascan.app.data.model.NutritionFacts
 import com.scascan.app.databinding.FragmentAnalysisResultBottomSheetBinding
+import com.scascan.app.ui.util.hapticClick
+import com.scascan.app.ui.util.hapticConfirm
+import com.scascan.app.ui.util.hapticTick
 
 class AnalysisResultBottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -37,12 +40,15 @@ class AnalysisResultBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         binding.btnAddToLog.setOnClickListener {
+            it.hapticConfirm()
             sendResult(ACTION_ADD)
         }
         binding.btnViewDetails.setOnClickListener {
+            it.hapticClick()
             sendResult(ACTION_DETAILS)
         }
         binding.btnDismissAnalysis.setOnClickListener {
+            it.hapticTick()
             sendResult(ACTION_DISMISS)
         }
     }

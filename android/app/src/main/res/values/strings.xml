@@ -63,6 +63,8 @@
     <string name="log_entry_remove">Remove</string>
     <string name="log_entry_fix">Fix</string>
     <string name="hc_label_distance">Distance</string>
+    <string name="log_date_today">Today</string>
+    <string name="log_date_yesterday">Yesterday</string>
 
     <!-- Goal & AI targets -->
     <string name="profile_goal_hint">Fitness goal</string>
