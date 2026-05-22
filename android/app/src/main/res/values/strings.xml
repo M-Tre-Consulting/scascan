@@ -65,4 +65,11 @@
     <string name="profile_health_title">Health Connect</string>
     <string name="profile_health_desc">Connect your Google Health data to enable calorie tracking and adaptive daily goals.</string>
     <string name="profile_about_desc">Powered by Gemini AI · Built with Material 3 Expressive</string>
+    <string name="profile_model_title">AI Model</string>
+    <string name="profile_model_desc">Select the Gemini model used for food analysis. Models are fetched live from your API key.</string>
+    <string name="profile_model_hint">Select model</string>
+    <string name="profile_model_loading">Loading available models…</string>
+    <string name="profile_model_need_key">Save your API key first to load available models</string>
+    <string name="profile_model_empty">No models found for this API key</string>
+    <string name="profile_model_saved">Model saved</string>
 </resources>
