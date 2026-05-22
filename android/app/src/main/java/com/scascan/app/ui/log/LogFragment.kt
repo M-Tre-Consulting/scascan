@@ -53,6 +53,7 @@ class LogFragment : Fragment() {
 
         setupDateNavigation()
         setupFixResultListener()
+        setupSummaryCards()
         observeState()
         viewModel.loadHealthData()
     }
@@ -61,6 +62,42 @@ class LogFragment : Fragment() {
         super.onResume()
         viewModel.loadHealthData()
         viewModel.refreshTargets()
+    }
+
+    private fun setupSummaryCards() {
+        val openSummary = View.OnClickListener { v ->
+            v.hapticClick()
+            showDailySummary()
+        }
+        binding.cardCalories.setOnClickListener(openSummary)
+        binding.cardMacros.setOnClickListener(openSummary)
+    }
+
+    private fun showDailySummary() {
+        if (childFragmentManager.findFragmentByTag("daily_summary") != null) return
+        val entries     = viewModel.logEntries.value
+        val targetInfo  = viewModel.targetInfo.value
+        val health      = viewModel.healthState.value
+        val activeKcal  = (health as? LogViewModel.HealthUiState.Connected)?.activeKcal?.toInt() ?: 0
+        val steps       = (health as? LogViewModel.HealthUiState.Connected)?.steps ?: 0L
+
+        DailySummaryBottomSheetFragment.newInstance(
+            totalCalories  = entries.sumOf { it.calories }.toInt(),
+            totalProtein   = entries.sumOf { it.protein }.toInt(),
+            totalCarbs     = entries.sumOf { it.carbohydrates }.toInt(),
+            totalFat       = entries.sumOf { it.fat }.toInt(),
+            totalFiber     = entries.sumOf { it.fiber },
+            totalSodiumMg  = entries.sumOf { it.sodium },
+            calorieTarget  = targetInfo.caloriesKcal + activeKcal,
+            proteinTarget  = targetInfo.macros.proteinG,
+            carbsTarget    = targetInfo.macros.carbsG,
+            fatTarget      = targetInfo.macros.fatG,
+            activeKcal     = activeKcal,
+            steps          = steps,
+            goalIndex      = targetInfo.goalIndex,
+            isAiComputed   = targetInfo.isAiComputed,
+            dateLabel      = viewModel.selectedDateLabel.value
+        ).show(childFragmentManager, "daily_summary")
     }
 
     private fun setupDateNavigation() {

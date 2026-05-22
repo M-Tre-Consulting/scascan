@@ -74,15 +74,25 @@ class LogViewModel @Inject constructor(
 
     // ── Targets (refreshed on resume so Profile changes show immediately) ─────
 
-    data class TargetInfo(val caloriesKcal: Int, val macros: MacroTargets)
-
-    private val _targetInfo = MutableStateFlow(
-        TargetInfo(logRepository.dailyCalorieTarget(), logRepository.macroTargets())
+    data class TargetInfo(
+        val caloriesKcal: Int,
+        val macros: MacroTargets,
+        val goalIndex: Int,
+        val isAiComputed: Boolean
     )
+
+    private fun buildTargetInfo() = TargetInfo(
+        caloriesKcal = logRepository.dailyCalorieTarget(),
+        macros       = logRepository.macroTargets(),
+        goalIndex    = logRepository.goalIndex(),
+        isAiComputed = logRepository.isAiComputed()
+    )
+
+    private val _targetInfo = MutableStateFlow(buildTargetInfo())
     val targetInfo: StateFlow<TargetInfo> = _targetInfo
 
     fun refreshTargets() {
-        _targetInfo.value = TargetInfo(logRepository.dailyCalorieTarget(), logRepository.macroTargets())
+        _targetInfo.value = buildTargetInfo()
     }
 
     fun loadHealthData() {

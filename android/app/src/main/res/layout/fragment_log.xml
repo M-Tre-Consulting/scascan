@@ -73,11 +73,14 @@
                 app:icon="@drawable/ic_arrow_forward" />
         </LinearLayout>
 
-        <!-- Calorie summary card -->
+        <!-- Calorie summary card — tap opens daily summary sheet -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardCalories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="?attr/colorPrimaryContainer"
             app:cardCornerRadius="28dp"
             app:cardElevation="0dp"
@@ -121,11 +124,14 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Macro summary card -->
+        <!-- Macro summary card — tap also opens daily summary sheet -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardMacros"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="?attr/colorSurfaceVariant"
             app:cardCornerRadius="28dp"
             app:cardElevation="0dp"

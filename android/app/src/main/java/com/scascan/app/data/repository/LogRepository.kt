@@ -49,8 +49,9 @@ class LogRepository @Inject constructor(
     suspend fun deleteEntry(entry: LogEntry) = dao.delete(entry)
 
     fun dailyCalorieTarget(): Int = profileStore.dailyCalorieTarget()
-
     fun macroTargets(): MacroTargets = profileStore.macroTargets()
+    fun goalIndex(): Int = profileStore.goalIndex
+    fun isAiComputed(): Boolean = profileStore.aiCalorieTarget > 0
 
     companion object {
         private const val DAY_MS = 24 * 60 * 60 * 1000L
