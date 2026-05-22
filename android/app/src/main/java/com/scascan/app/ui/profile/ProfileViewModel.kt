@@ -2,6 +2,7 @@ package com.scascan.app.ui.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.scascan.app.data.health.HealthConnectManager
 import com.scascan.app.data.local.GeminiKeyStore
 import com.scascan.app.data.local.UserProfileStore
 import com.scascan.app.data.remote.GeminiRestClient
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     val keyStore: GeminiKeyStore,
     val profileStore: UserProfileStore,
+    val healthManager: HealthConnectManager,
     private val client: GeminiRestClient
 ) : ViewModel() {
 

@@ -300,7 +300,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Health Connect placeholder card -->
+        <!-- Health Connect card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -333,6 +333,7 @@
                         android:textColor="?attr/colorOnSurface" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chipHcProfile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/coming_soon"
@@ -341,11 +342,19 @@
                 </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_health_desc"
                     style="@style/TextAppearance.Material3.BodySmall"
-                    android:textColor="?attr/colorOnSurfaceVariant" />
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:layout_marginBottom="16dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnConnectHcProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="@string/hc_connect"
+                    android:visibility="gone" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

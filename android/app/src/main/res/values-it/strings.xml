@@ -62,10 +62,16 @@
     <string name="log_empty">Nessuna voce ancora — scansiona o cerca un alimento per iniziare.</string>
     <string name="log_entry_remove">Rimuovi</string>
     <string name="log_connect_title">Health Connect</string>
-    <string name="log_connect_body">Sincronizza passi, allenamenti e peso per adattare automaticamente il tuo apporto calorico giornaliero.</string>
+    <string name="log_connect_body">Sincronizza passi e allenamenti per adattare automaticamente il tuo obiettivo calorico giornaliero.</string>
     <string name="log_adaptive_title">Obiettivi adattativi</string>
     <string name="log_adaptive_body">Il tuo obiettivo calorico si adatterà quotidianamente in base all\'attività, agli allenamenti e alle tendenze del peso da Health Connect.</string>
     <string name="coming_soon">Prossimamente</string>
+    <string name="hc_connect">Connetti Health Connect</string>
+    <string name="hc_connected">Connesso</string>
+    <string name="hc_steps">%d passi</string>
+    <string name="hc_active_kcal">%d kcal</string>
+    <string name="hc_label_steps">Passi oggi</string>
+    <string name="hc_label_active">Bruciati oggi</string>
 
     <!-- Profile screen -->
     <string name="profile_info_title">Informazioni personali</string>

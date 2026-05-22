@@ -14,6 +14,7 @@ gson = "2.11.0"
 coroutines = "1.8.1"
 kotlin = "2.2.10"
 room = "2.7.1"
+healthconnect = "1.1.0-rc01"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -36,6 +37,7 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-health-connect = { group = "androidx.health.connect", name = "connect-client", version.ref = "healthconnect" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

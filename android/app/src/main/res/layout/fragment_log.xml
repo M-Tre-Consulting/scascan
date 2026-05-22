@@ -200,7 +200,7 @@
             android:orientation="vertical"
             android:layout_marginBottom="24dp" />
 
-        <!-- Health Connect teaser -->
+        <!-- Health Connect card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -216,29 +216,101 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- Title row with status chip -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/log_connect_title"
-                    style="@style/TextAppearance.Material3.TitleMedium"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:layout_marginBottom="6dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="6dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/log_connect_title"
+                        style="@style/TextAppearance.Material3.TitleMedium"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipHcStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/coming_soon"
+                        android:clickable="false"
+                        style="@style/Widget.Material3.Chip.Suggestion" />
+                </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/log_connect_body"
                     style="@style/TextAppearance.Material3.BodyMedium"
                     android:textColor="?attr/colorOnSecondaryContainer"
                     android:layout_marginBottom="16dp" />
 
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
+                <!-- Shown when HC is available but not yet connected -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnConnectHealth"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="@string/hc_connect"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:visibility="gone" />
+
+                <!-- Shown when HC is connected -->
+                <LinearLayout
+                    android:id="@+id/hcDataRow"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/coming_soon"
-                    android:clickable="false"
-                    style="@style/Widget.Material3.Chip.Suggestion" />
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvHcSteps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/TextAppearance.Material3.TitleMedium"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorOnSecondaryContainer" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hc_label_steps"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:textColor="?attr/colorOnSecondaryContainer" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvHcCalories"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/TextAppearance.Material3.TitleMedium"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorOnSecondaryContainer" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hc_label_active"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:textColor="?attr/colorOnSecondaryContainer" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

@@ -9,12 +9,15 @@ import android.widget.ArrayAdapter
 import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.health.connect.client.PermissionController
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.scascan.app.R
+import com.scascan.app.data.health.HealthConnectManager
 import com.scascan.app.data.remote.ModelInfo
 import com.scascan.app.databinding.FragmentProfileBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +30,14 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ProfileViewModel by viewModels()
+
+    private val requestHcPermissions = registerForActivityResult(
+        PermissionController.createRequestPermissionResultContract()
+    ) { granted ->
+        if (granted.containsAll(HealthConnectManager.PERMISSIONS)) {
+            checkHcStatus()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +60,7 @@ class ProfileFragment : Fragment() {
         setupPersonalInfo()
         setupApiKey()
         setupModelSelector()
+        setupHealthConnect()
     }
 
     // ── Personal info ─────────────────────────────────────────────────────────
@@ -101,6 +113,37 @@ class ProfileFragment : Fragment() {
         Snackbar.make(binding.root, R.string.profile_info_saved, Snackbar.LENGTH_SHORT)
             .setAnchorView(binding.btnSaveProfile)
             .show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkHcStatus()
+    }
+
+    // ── Health Connect ────────────────────────────────────────────────────────
+
+    private fun setupHealthConnect() {
+        val hm = viewModel.healthManager
+        if (!hm.isAvailable) {
+            // HC not present on this device — keep chip as "Coming soon", hide button
+            return
+        }
+        binding.btnConnectHcProfile.setOnClickListener {
+            requestHcPermissions.launch(HealthConnectManager.PERMISSIONS)
+        }
+        checkHcStatus()
+    }
+
+    private fun checkHcStatus() {
+        val hm = viewModel.healthManager
+        if (!hm.isAvailable) return
+        viewLifecycleOwner.lifecycleScope.launch {
+            val connected = hm.hasPermissions()
+            binding.chipHcProfile.text = getString(
+                if (connected) R.string.hc_connected else R.string.coming_soon
+            )
+            binding.btnConnectHcProfile.isVisible = !connected
+        }
     }
 
     // ── API key ───────────────────────────────────────────────────────────────
