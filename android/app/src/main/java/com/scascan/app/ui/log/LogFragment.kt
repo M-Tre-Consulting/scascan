@@ -251,20 +251,21 @@ class LogFragment : Fragment() {
     ) {
         when (adaptive) {
             is LogViewModel.AdaptiveState.HcUnavailable -> {
-                binding.chipAdaptiveStatus.text = getString(R.string.coming_soon)
+                binding.chipAdaptiveStatus.isVisible = false
                 binding.layoutAdaptiveBreakdown.isVisible = false
                 binding.tvAdaptiveHint.isVisible = true
                 binding.tvAdaptiveHint.text = getString(R.string.log_adaptive_hint_unavailable)
                 binding.tvAdaptiveWeightHint.isVisible = false
             }
             is LogViewModel.AdaptiveState.HcDisconnected -> {
-                binding.chipAdaptiveStatus.text = getString(R.string.coming_soon)
+                binding.chipAdaptiveStatus.isVisible = false
                 binding.layoutAdaptiveBreakdown.isVisible = false
                 binding.tvAdaptiveHint.isVisible = true
                 binding.tvAdaptiveHint.text = getString(R.string.log_adaptive_hint_connect)
                 binding.tvAdaptiveWeightHint.isVisible = false
             }
             is LogViewModel.AdaptiveState.Active -> {
+                binding.chipAdaptiveStatus.isVisible = true
                 binding.chipAdaptiveStatus.text = when (adaptive.trendStatus) {
                     LogViewModel.AdaptiveState.TrendStatus.OnTrack ->
                         getString(R.string.log_adaptive_status_on_track)
