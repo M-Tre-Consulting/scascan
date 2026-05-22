@@ -119,6 +119,7 @@
                     android:inputType="none"
                     android:focusable="false" />
             </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
         <!-- Google Sync Section (Phase 3) -->
         <LinearLayout
