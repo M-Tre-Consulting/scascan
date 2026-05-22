@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.scascan.app.R
+import com.scascan.app.data.model.MacroTargets
 import com.scascan.app.ui.util.hapticClick
 import com.scascan.app.ui.util.hapticConfirm
 import com.scascan.app.ui.util.hapticReject
@@ -59,6 +60,7 @@ class LogFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.loadHealthData()
+        viewModel.refreshTargets()
     }
 
     private fun setupDateNavigation() {
@@ -87,11 +89,14 @@ class LogFragment : Fragment() {
 
     private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            combine(viewModel.logEntries, viewModel.healthState) { entries, health ->
-                entries to health
-            }.collect { (entries, health) ->
-                renderScreen(entries, health)
-            }
+            combine(
+                viewModel.logEntries,
+                viewModel.healthState,
+                viewModel.targetInfo
+            ) { entries, health, targetInfo -> Triple(entries, health, targetInfo) }
+                .collect { (entries, health, targetInfo) ->
+                    renderScreen(entries, health, targetInfo)
+                }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -112,29 +117,50 @@ class LogFragment : Fragment() {
         }
     }
 
-    private fun renderScreen(entries: List<LogEntry>, health: LogViewModel.HealthUiState) {
-        val base = viewModel.dailyTarget
+    private fun renderScreen(
+        entries: List<LogEntry>,
+        health: LogViewModel.HealthUiState,
+        targetInfo: LogViewModel.TargetInfo
+    ) {
         val activeKcal = (health as? LogViewModel.HealthUiState.Connected)?.activeKcal?.toInt() ?: 0
-        val target = base + activeKcal
-
-        renderEntries(entries, target)
+        val calorieTarget = targetInfo.caloriesKcal + activeKcal
+        renderEntries(entries, calorieTarget, targetInfo.macros)
         renderHealthMetrics(health)
     }
 
-    private fun renderEntries(entries: List<LogEntry>, target: Int) {
+    private fun renderEntries(entries: List<LogEntry>, calorieTarget: Int, macros: MacroTargets) {
         val totalCalories = entries.sumOf { it.calories }.toInt()
         val totalProtein = entries.sumOf { it.protein }.toInt()
         val totalCarbs = entries.sumOf { it.carbohydrates }.toInt()
         val totalFat = entries.sumOf { it.fat }.toInt()
 
-        binding.tvCalorieSummary.text = getString(R.string.log_kcal_of, totalCalories, target)
-        binding.progressCalories.max = target
-        binding.progressCalories.progress = totalCalories.coerceIn(0, target)
+        binding.tvCalorieSummary.text = getString(R.string.log_kcal_of, totalCalories, calorieTarget)
+        binding.progressCalories.max = calorieTarget
+        binding.progressCalories.progress = totalCalories.coerceIn(0, calorieTarget)
 
-        val dash = "—"
-        binding.tvLogProtein.text = if (entries.isEmpty()) dash else "${totalProtein}g"
-        binding.tvLogCarbs.text = if (entries.isEmpty()) dash else "${totalCarbs}g"
-        binding.tvLogFat.text = if (entries.isEmpty()) dash else "${totalFat}g"
+        val hasData = entries.isNotEmpty()
+        val hasTargets = macros.proteinG > 0
+
+        binding.tvLogProtein.text = if (hasData) "${totalProtein}g" else "—"
+        binding.tvLogCarbs.text   = if (hasData) "${totalCarbs}g"   else "—"
+        binding.tvLogFat.text     = if (hasData) "${totalFat}g"     else "—"
+
+        if (hasTargets) {
+            binding.tvLogProteinTarget.text = getString(R.string.log_macro_of, macros.proteinG)
+            binding.tvLogCarbsTarget.text   = getString(R.string.log_macro_of, macros.carbsG)
+            binding.tvLogFatTarget.text     = getString(R.string.log_macro_of, macros.fatG)
+
+            binding.progressProtein.max = macros.proteinG
+            binding.progressCarbs.max   = macros.carbsG
+            binding.progressFat.max     = macros.fatG
+            binding.progressProtein.progress = totalProtein.coerceIn(0, macros.proteinG)
+            binding.progressCarbs.progress   = totalCarbs.coerceIn(0, macros.carbsG)
+            binding.progressFat.progress     = totalFat.coerceIn(0, macros.fatG)
+        }
+
+        listOf(binding.tvLogProteinTarget, binding.progressProtein).forEach { it.isVisible = hasTargets }
+        listOf(binding.tvLogCarbsTarget,   binding.progressCarbs  ).forEach { it.isVisible = hasTargets }
+        listOf(binding.tvLogFatTarget,     binding.progressFat    ).forEach { it.isVisible = hasTargets }
 
         binding.entriesContainer.removeAllViews()
         binding.tvEmptyLog.isVisible = entries.isEmpty()

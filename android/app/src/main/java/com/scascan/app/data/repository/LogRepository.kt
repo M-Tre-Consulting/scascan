@@ -3,6 +3,7 @@ package com.scascan.app.data.repository
 import com.scascan.app.data.local.LogEntry
 import com.scascan.app.data.local.LogEntryDao
 import com.scascan.app.data.local.UserProfileStore
+import com.scascan.app.data.model.MacroTargets
 import com.scascan.app.data.model.NutritionFacts
 import kotlinx.coroutines.flow.Flow
 import java.util.Calendar
@@ -48,6 +49,8 @@ class LogRepository @Inject constructor(
     suspend fun deleteEntry(entry: LogEntry) = dao.delete(entry)
 
     fun dailyCalorieTarget(): Int = profileStore.dailyCalorieTarget()
+
+    fun macroTargets(): MacroTargets = profileStore.macroTargets()
 
     companion object {
         private const val DAY_MS = 24 * 60 * 60 * 1000L

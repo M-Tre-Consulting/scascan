@@ -65,6 +65,7 @@
     <string name="hc_label_distance">Distanza</string>
     <string name="log_date_today">Oggi</string>
     <string name="log_date_yesterday">Ieri</string>
+    <string name="log_macro_of">di %1$dg</string>
 
     <!-- Goal & AI targets -->
     <string name="profile_goal_hint">Obiettivo fitness</string>

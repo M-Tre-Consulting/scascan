@@ -60,6 +60,9 @@ class ProfileViewModel @Inject constructor(
             nutritionRepository.computeTargets(profileStore)
                 .onSuccess { targets ->
                     profileStore.aiCalorieTarget = targets.dailyCalories
+                    profileStore.aiProteinTarget = targets.proteinGrams
+                    profileStore.aiCarbsTarget   = targets.carbsGrams
+                    profileStore.aiFatTarget      = targets.fatGrams
                     _targetState.value = TargetState.Done(targets.dailyCalories)
                 }
                 .onFailure { e ->

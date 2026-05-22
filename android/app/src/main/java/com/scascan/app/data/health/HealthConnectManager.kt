@@ -4,9 +4,10 @@ import android.content.Context
 import android.util.Log
 import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.permission.HealthPermission
+import androidx.health.connect.client.records.ActiveCaloriesBurnedRecord
 import androidx.health.connect.client.records.StepsRecord
-import androidx.health.connect.client.records.TotalCaloriesBurnedRecord
 import androidx.health.connect.client.records.WeightRecord
+import androidx.health.connect.client.request.AggregateRequest
 import androidx.health.connect.client.request.ReadRecordsRequest
 import androidx.health.connect.client.time.TimeRangeFilter
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -26,7 +27,7 @@ class HealthConnectManager @Inject constructor(
 
         val PERMISSIONS = setOf(
             HealthPermission.getReadPermission(StepsRecord::class),
-            HealthPermission.getReadPermission(TotalCaloriesBurnedRecord::class),
+            HealthPermission.getReadPermission(ActiveCaloriesBurnedRecord::class),
             HealthPermission.getReadPermission(WeightRecord::class)
         )
     }
@@ -56,25 +57,45 @@ class HealthConnectManager @Inject constructor(
         }
     }
 
+    /**
+     * Returns today's total step count, deduplicated via the aggregate API
+     * so multiple data sources (Fitbit, Samsung Health, etc.) don't double-count.
+     */
     suspend fun readTodaySteps(): Long {
         val c = client ?: return 0L
         return try {
             val (start, end) = todayRange()
-            c.readRecords(ReadRecordsRequest(StepsRecord::class, TimeRangeFilter.between(start, end)))
-                .records.sumOf { it.count }
+            val response = c.aggregate(
+                AggregateRequest(
+                    metrics = setOf(StepsRecord.COUNT_TOTAL),
+                    timeRangeFilter = TimeRangeFilter.between(start, end)
+                )
+            )
+            response[StepsRecord.COUNT_TOTAL] ?: 0L
         } catch (e: Exception) {
             Log.e(TAG, "readTodaySteps error: $e")
             0L
         }
     }
 
+    /**
+     * Returns today's ACTIVE calories burned (exercise + movement above baseline),
+     * deduplicated via the aggregate API.
+     *
+     * Using ActiveCaloriesBurnedRecord — not TotalCaloriesBurnedRecord — to avoid
+     * double-counting the BMR that is already factored into the user's daily target.
+     */
     suspend fun readTodayActiveCalories(): Double {
         val c = client ?: return 0.0
         return try {
             val (start, end) = todayRange()
-            c.readRecords(
-                ReadRecordsRequest(TotalCaloriesBurnedRecord::class, TimeRangeFilter.between(start, end))
-            ).records.sumOf { it.energy.inKilocalories }
+            val response = c.aggregate(
+                AggregateRequest(
+                    metrics = setOf(ActiveCaloriesBurnedRecord.ACTIVE_CALORIES_TOTAL),
+                    timeRangeFilter = TimeRangeFilter.between(start, end)
+                )
+            )
+            response[ActiveCaloriesBurnedRecord.ACTIVE_CALORIES_TOTAL]?.inKilocalories ?: 0.0
         } catch (e: Exception) {
             Log.e(TAG, "readTodayActiveCalories error: $e")
             0.0

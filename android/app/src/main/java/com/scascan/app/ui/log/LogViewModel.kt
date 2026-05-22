@@ -5,10 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scascan.app.R
 import com.scascan.app.data.health.HealthConnectManager
-import dagger.hilt.android.qualifiers.ApplicationContext
 import com.scascan.app.data.local.LogEntry
+import com.scascan.app.data.model.MacroTargets
 import com.scascan.app.data.repository.LogRepository
 import com.scascan.app.data.repository.NutritionRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -71,7 +72,18 @@ class LogViewModel @Inject constructor(
     private val _healthState = MutableStateFlow<HealthUiState>(HealthUiState.Unavailable)
     val healthState: StateFlow<HealthUiState> = _healthState
 
-    val dailyTarget: Int get() = logRepository.dailyCalorieTarget()
+    // ── Targets (refreshed on resume so Profile changes show immediately) ─────
+
+    data class TargetInfo(val caloriesKcal: Int, val macros: MacroTargets)
+
+    private val _targetInfo = MutableStateFlow(
+        TargetInfo(logRepository.dailyCalorieTarget(), logRepository.macroTargets())
+    )
+    val targetInfo: StateFlow<TargetInfo> = _targetInfo
+
+    fun refreshTargets() {
+        _targetInfo.value = TargetInfo(logRepository.dailyCalorieTarget(), logRepository.macroTargets())
+    }
 
     fun loadHealthData() {
         viewModelScope.launch {

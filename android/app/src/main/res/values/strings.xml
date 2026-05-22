@@ -65,6 +65,7 @@
     <string name="hc_label_distance">Distance</string>
     <string name="log_date_today">Today</string>
     <string name="log_date_yesterday">Yesterday</string>
+    <string name="log_macro_of">of %1$dg</string>
 
     <!-- Goal & AI targets -->
     <string name="profile_goal_hint">Fitness goal</string>
