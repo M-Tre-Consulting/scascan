@@ -349,11 +349,29 @@
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:layout_marginBottom="16dp" />
 
+                <!-- Shown when HC is available but not connected -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnConnectHcProfile"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:text="@string/hc_connect"
+                    android:visibility="gone" />
+
+                <!-- Shown when HC is connected -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSyncWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="@string/hc_sync_weight"
+                    android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDisconnectHc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hc_disconnect"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_marginTop="4dp"
                     android:visibility="gone" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

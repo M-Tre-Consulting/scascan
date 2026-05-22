@@ -37,6 +37,15 @@ class HealthConnectManager @Inject constructor(
     private val client: HealthConnectClient?
         get() = if (isAvailable) HealthConnectClient.getOrCreate(context) else null
 
+    suspend fun revokePermissions() {
+        val c = client ?: return
+        try {
+            c.permissionController.revokeAllPermissions()
+        } catch (e: Exception) {
+            Log.e(TAG, "revokePermissions error: $e")
+        }
+    }
+
     suspend fun hasPermissions(): Boolean {
         val c = client ?: return false
         return try {

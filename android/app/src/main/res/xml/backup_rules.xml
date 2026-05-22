@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Auto Backup rules for API 23–30.
+    Backs up SharedPreferences and the Room database to Google Drive automatically.
+    Referenced by android:fullBackupContent in the manifest.
+-->
+<full-backup-content>
+    <include domain="sharedpref" path="scascan_prefs" />
+    <include domain="sharedpref" path="scascan_profile" />
+    <include domain="database"   path="scascan.db" />
+    <include domain="database"   path="scascan.db-wal" />
+    <include domain="database"   path="scascan.db-shm" />
+</full-backup-content>

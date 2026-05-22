@@ -124,13 +124,14 @@ class ProfileFragment : Fragment() {
 
     private fun setupHealthConnect() {
         val hm = viewModel.healthManager
-        if (!hm.isAvailable) {
-            // HC not present on this device — keep chip as "Coming soon", hide button
-            return
-        }
+        if (!hm.isAvailable) return  // keep "Coming soon" chip, hide all buttons
+
         binding.btnConnectHcProfile.setOnClickListener {
             requestHcPermissions.launch(HealthConnectManager.PERMISSIONS)
         }
+        binding.btnSyncWeight.setOnClickListener { syncWeightFromHc() }
+        binding.btnDisconnectHc.setOnClickListener { disconnectHc() }
+
         checkHcStatus()
     }
 
@@ -143,6 +144,35 @@ class ProfileFragment : Fragment() {
                 if (connected) R.string.hc_connected else R.string.coming_soon
             )
             binding.btnConnectHcProfile.isVisible = !connected
+            binding.btnSyncWeight.isVisible = connected
+            binding.btnDisconnectHc.isVisible = connected
+        }
+    }
+
+    private fun syncWeightFromHc() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val kg = viewModel.healthManager.readLatestWeightKg()
+            if (kg == null) {
+                Snackbar.make(binding.root, R.string.hc_weight_unavailable, Snackbar.LENGTH_SHORT)
+                    .setAnchorView(binding.btnSyncWeight)
+                    .show()
+                return@launch
+            }
+            val rounded = kg.toFloat()
+            binding.etWeight.setText(rounded.toString())
+            viewModel.profileStore.weightKg = rounded
+            Snackbar.make(
+                binding.root,
+                getString(R.string.hc_weight_synced, kg),
+                Snackbar.LENGTH_SHORT
+            ).setAnchorView(binding.btnSyncWeight).show()
+        }
+    }
+
+    private fun disconnectHc() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.healthManager.revokePermissions()
+            checkHcStatus()
         }
     }
 

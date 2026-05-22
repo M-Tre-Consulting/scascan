@@ -68,6 +68,10 @@
     <string name="coming_soon">Coming soon</string>
     <string name="hc_connect">Connect Health Connect</string>
     <string name="hc_connected">Connected</string>
+    <string name="hc_disconnect">Disconnect</string>
+    <string name="hc_sync_weight">Sync weight</string>
+    <string name="hc_weight_synced">Weight synced: %.1f kg</string>
+    <string name="hc_weight_unavailable">No weight data found in Health Connect</string>
     <string name="hc_steps">%d steps</string>
     <string name="hc_active_kcal">%d kcal</string>
     <string name="hc_label_steps">Steps today</string>
