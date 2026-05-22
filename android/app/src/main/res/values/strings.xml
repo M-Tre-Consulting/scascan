@@ -83,6 +83,21 @@
     <string name="log_summary_macro_over">%1$dg over</string>
     <string name="log_summary_consumed_of">%1$dg / %2$dg</string>
 
+    <!-- Adaptive targets card -->
+    <string name="log_adaptive_status_active">Active</string>
+    <string name="log_adaptive_status_on_track">On track</string>
+    <string name="log_adaptive_status_adjusting">Adjusting</string>
+    <string name="log_adaptive_breakdown_base">Base target</string>
+    <string name="log_adaptive_breakdown_activity">Activity today</string>
+    <string name="log_adaptive_breakdown_trend">Weight trend</string>
+    <string name="log_adaptive_breakdown_total">Today\'s target</string>
+    <string name="log_adaptive_kcal">%1$d kcal</string>
+    <string name="log_adaptive_plus_kcal">+%1$d kcal</string>
+    <string name="log_adaptive_trend_collecting">Collecting data…</string>
+    <string name="log_adaptive_hint_unavailable">Health Connect is not available on this device.</string>
+    <string name="log_adaptive_hint_connect">Connect Health Connect in Profile to enable adaptive targets.</string>
+    <string name="log_adaptive_hint_weight">Add weight readings in Health Connect to enable trend-based fine-tuning.</string>
+
     <!-- Goal & AI targets -->
     <string name="profile_goal_hint">Fitness goal</string>
     <string name="profile_target_computing">Computing your personalized targets…</string>

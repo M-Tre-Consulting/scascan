@@ -9,8 +9,8 @@ import com.scascan.app.data.local.LogEntry
 import com.scascan.app.data.model.MacroTargets
 import com.scascan.app.data.repository.LogRepository
 import com.scascan.app.data.repository.NutritionRepository
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -34,7 +34,7 @@ class LogViewModel @Inject constructor(
 
     // ── Date navigation ────────────────────────────────────────────────────────
 
-    private val _dateOffset = MutableStateFlow(0) // 0 = today, -1 = yesterday, etc.
+    private val _dateOffset = MutableStateFlow(0)
 
     val isToday: StateFlow<Boolean> = _dateOffset
         .map { it == 0 }
@@ -43,7 +43,7 @@ class LogViewModel @Inject constructor(
     val selectedDateLabel: StateFlow<String> = _dateOffset
         .map { offset ->
             when (offset) {
-                0 -> context.getString(R.string.log_date_today)
+                0  -> context.getString(R.string.log_date_today)
                 -1 -> context.getString(R.string.log_date_yesterday)
                 else -> {
                     val cal = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, offset) }
@@ -61,18 +61,107 @@ class LogViewModel @Inject constructor(
     fun goToPreviousDay() { _dateOffset.value-- }
     fun goToNextDay() { if (_dateOffset.value < 0) _dateOffset.value++ }
 
-    // ── Health Connect ─────────────────────────────────────────────────────────
+    // ── Adaptive targets ───────────────────────────────────────────────────────
 
-    sealed class HealthUiState {
-        object Unavailable : HealthUiState()
-        object Disconnected : HealthUiState()
-        data class Connected(val steps: Long, val activeKcal: Double) : HealthUiState()
+    /**
+     * Unified Health Connect + adaptive-target state.
+     *
+     * [Active] carries the raw HC metrics (steps, activeKcal), the weight-trend
+     * correction, and the final adapted calorie target so the Fragment only needs
+     * to read from one flow.
+     */
+    sealed class AdaptiveState {
+        /** Health Connect SDK not installed on this device. */
+        object HcUnavailable : AdaptiveState()
+        /** SDK present but permissions not granted. */
+        object HcDisconnected : AdaptiveState()
+        /** Permissions granted; all fields computed. */
+        data class Active(
+            val steps: Long,
+            val activeKcal: Double,
+            val trendAdjustment: Int,
+            val trendStatus: TrendStatus,
+            val weeklyRateKgPerWeek: Double?
+        ) : AdaptiveState()
+
+        enum class TrendStatus {
+            /** < 5 days of weight data available. */
+            NoData,
+            /** Change rate is within ±0.15 kg/wk of the goal rate. */
+            OnTrack,
+            /** Losing/gaining faster than desired → +200 kcal correction. */
+            TooFast,
+            /** Losing/gaining slower than desired → −200 kcal correction. */
+            TooSlow
+        }
     }
 
-    private val _healthState = MutableStateFlow<HealthUiState>(HealthUiState.Unavailable)
-    val healthState: StateFlow<HealthUiState> = _healthState
+    private val _adaptiveState = MutableStateFlow<AdaptiveState>(AdaptiveState.HcUnavailable)
+    val adaptiveState: StateFlow<AdaptiveState> = _adaptiveState
 
-    // ── Targets (refreshed on resume so Profile changes show immediately) ─────
+    fun loadHealthData() {
+        viewModelScope.launch {
+            if (!healthManager.isAvailable) {
+                _adaptiveState.value = AdaptiveState.HcUnavailable
+                return@launch
+            }
+            if (!healthManager.hasPermissions()) {
+                _adaptiveState.value = AdaptiveState.HcDisconnected
+                return@launch
+            }
+            val steps        = healthManager.readTodaySteps()
+            val activeKcal   = healthManager.readTodayActiveCalories()
+            val weightHist   = healthManager.readWeightHistory(28)
+            val (adj, status, rate) = computeTrend(weightHist)
+            _adaptiveState.value = AdaptiveState.Active(
+                steps            = steps,
+                activeKcal       = activeKcal,
+                trendAdjustment  = adj,
+                trendStatus      = status,
+                weeklyRateKgPerWeek = rate
+            )
+        }
+    }
+
+    private data class TrendResult(
+        val adjustment: Int,
+        val status: AdaptiveState.TrendStatus,
+        val weeklyRate: Double?
+    )
+
+    /**
+     * Computes a stepped ±200 kcal/day correction from weight readings.
+     *
+     * Goal rates (kg/wk):
+     *   Lose weight  → −0.5   (aggressive loss threshold: −0.75; slow threshold: −0.2)
+     *   Maintain     → 0       (no trend adjustment needed)
+     *   Build muscle → +0.25  (fast threshold: +0.45; slow threshold: +0.1)
+     */
+    private fun computeTrend(readings: List<Pair<Long, Double>>): TrendResult {
+        if (readings.size < 2) return TrendResult(0, AdaptiveState.TrendStatus.NoData, null)
+        val sorted   = readings.sortedBy { it.first }
+        val daysDiff = (sorted.last().first - sorted.first().first) / 86_400_000.0
+        if (daysDiff < 5) return TrendResult(0, AdaptiveState.TrendStatus.NoData, null)
+
+        val weeklyRate = (sorted.last().second - sorted.first().second) / (daysDiff / 7.0)
+
+        val (adj, status) = when (logRepository.goalIndex()) {
+            0 -> when {  // lose weight
+                weeklyRate < -0.75 -> +200 to AdaptiveState.TrendStatus.TooFast
+                weeklyRate > -0.20 -> -200 to AdaptiveState.TrendStatus.TooSlow
+                else               ->    0 to AdaptiveState.TrendStatus.OnTrack
+            }
+            2 -> when {  // build muscle
+                weeklyRate > 0.45 -> -200 to AdaptiveState.TrendStatus.TooFast
+                weeklyRate < 0.10 -> +200 to AdaptiveState.TrendStatus.TooSlow
+                else              ->    0 to AdaptiveState.TrendStatus.OnTrack
+            }
+            else ->          0 to AdaptiveState.TrendStatus.OnTrack  // maintain
+        }
+        return TrendResult(adj, status, weeklyRate)
+    }
+
+    // ── Targets ────────────────────────────────────────────────────────────────
 
     data class TargetInfo(
         val caloriesKcal: Int,
@@ -93,22 +182,6 @@ class LogViewModel @Inject constructor(
 
     fun refreshTargets() {
         _targetInfo.value = buildTargetInfo()
-    }
-
-    fun loadHealthData() {
-        viewModelScope.launch {
-            if (!healthManager.isAvailable) {
-                _healthState.value = HealthUiState.Unavailable
-                return@launch
-            }
-            if (!healthManager.hasPermissions()) {
-                _healthState.value = HealthUiState.Disconnected
-                return@launch
-            }
-            val steps = healthManager.readTodaySteps()
-            val activeKcal = healthManager.readTodayActiveCalories()
-            _healthState.value = HealthUiState.Connected(steps, activeKcal)
-        }
     }
 
     // ── Log entry operations ───────────────────────────────────────────────────
@@ -132,15 +205,15 @@ class LogViewModel @Inject constructor(
                 .onSuccess { facts ->
                     logRepository.updateEntry(
                         entry.copy(
-                            foodName = facts.foodName,
-                            servingSize = facts.servingSize,
-                            calories = facts.calories,
-                            protein = facts.protein,
-                            carbohydrates = facts.carbohydrates,
-                            fat = facts.fat,
-                            fiber = facts.fiber,
-                            sugar = facts.sugar,
-                            sodium = facts.sodium
+                            foodName       = facts.foodName,
+                            servingSize    = facts.servingSize,
+                            calories       = facts.calories,
+                            protein        = facts.protein,
+                            carbohydrates  = facts.carbohydrates,
+                            fat            = facts.fat,
+                            fiber          = facts.fiber,
+                            sugar          = facts.sugar,
+                            sodium         = facts.sodium
                         )
                     )
                     _fixState.value = FixState.Success(facts.foodName)

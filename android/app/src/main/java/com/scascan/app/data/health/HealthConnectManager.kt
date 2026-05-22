@@ -102,6 +102,28 @@ class HealthConnectManager @Inject constructor(
         }
     }
 
+    /**
+     * Returns (timestampMs, weightKg) pairs in ascending order for the past [pastDays] days.
+     * Used by the adaptive target engine to compute weight-change trend.
+     */
+    suspend fun readWeightHistory(pastDays: Int = 28): List<Pair<Long, Double>> {
+        val c = client ?: return emptyList()
+        return try {
+            val end = Instant.now()
+            val start = end.minus(pastDays.toLong(), ChronoUnit.DAYS)
+            c.readRecords(
+                ReadRecordsRequest(
+                    WeightRecord::class,
+                    TimeRangeFilter.between(start, end),
+                    ascendingOrder = true
+                )
+            ).records.map { it.time.toEpochMilli() to it.weight.inKilograms }
+        } catch (e: Exception) {
+            Log.e(TAG, "readWeightHistory error: $e")
+            emptyList()
+        }
+    }
+
     /** Most recent weight within the last 30 days, or null. */
     suspend fun readLatestWeightKg(): Double? {
         val c = client ?: return null

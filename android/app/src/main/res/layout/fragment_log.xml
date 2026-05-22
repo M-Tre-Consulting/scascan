@@ -403,8 +403,9 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Adaptive calories teaser -->
+        <!-- Adaptive targets card -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardAdaptive"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="?attr/colorTertiaryContainer"
@@ -418,29 +419,147 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- Header row: title + status chip -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/log_adaptive_title"
-                    style="@style/TextAppearance.Material3.TitleMedium"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnTertiaryContainer"
-                    android:layout_marginBottom="6dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
 
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/log_adaptive_title"
+                        style="@style/TextAppearance.Material3.TitleMedium"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnTertiaryContainer" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipAdaptiveStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/coming_soon"
+                        android:clickable="false"
+                        style="@style/Widget.Material3.Chip.Suggestion" />
+                </LinearLayout>
+
+                <!-- Hint text (shown when HC unavailable or disconnected) -->
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvAdaptiveHint"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/log_adaptive_body"
                     style="@style/TextAppearance.Material3.BodyMedium"
                     android:textColor="?attr/colorOnTertiaryContainer"
-                    android:layout_marginBottom="16dp" />
+                    android:visibility="gone" />
 
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
+                <!-- Breakdown (shown when HC active) -->
+                <LinearLayout
+                    android:id="@+id/layoutAdaptiveBreakdown"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/coming_soon"
-                    android:clickable="false"
-                    style="@style/Widget.Material3.Chip.Suggestion" />
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/log_adaptive_breakdown_base"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:textColor="?attr/colorOnTertiaryContainer" />
+                        <TextView
+                            android:id="@+id/tvAdaptiveBase"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:textColor="?attr/colorOnTertiaryContainer" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/log_adaptive_breakdown_activity"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:textColor="?attr/colorOnTertiaryContainer" />
+                        <TextView
+                            android:id="@+id/tvAdaptiveActivity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:textColor="?attr/colorOnTertiaryContainer" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="14dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/log_adaptive_breakdown_trend"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:textColor="?attr/colorOnTertiaryContainer" />
+                        <TextView
+                            android:id="@+id/tvAdaptiveTrend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:textColor="?attr/colorOnTertiaryContainer" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginBottom="10dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/log_adaptive_breakdown_total"
+                            style="@style/TextAppearance.Material3.TitleSmall"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorOnTertiaryContainer" />
+                        <TextView
+                            android:id="@+id/tvAdaptiveTotal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/TextAppearance.Material3.TitleSmall"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorOnTertiaryContainer" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Weight-data nudge shown when trend status is NoData -->
+                <TextView
+                    android:id="@+id/tvAdaptiveWeightHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.Material3.BodySmall"
+                    android:textColor="?attr/colorOnTertiaryContainer"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone" />
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
