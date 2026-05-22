@@ -81,4 +81,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.health.connect)
     implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.credentials.core)
+    implementation(libs.androidx.credentials.play)
+    implementation(libs.googleid)
 }

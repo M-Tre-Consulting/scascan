@@ -64,8 +64,30 @@ class ProfileFragment : Fragment() {
         setupApiKey()
         setupModelSelector()
         setupHealthConnect()
+        setupGoogleSync()
         updateSetupReminder()
         observeTargetState()
+        observeModelState()
+        observeAuthState()
+    }
+
+    private fun setupGoogleSync() {
+        binding.btnGoogleSync.setOnClickListener {
+            it.hapticClick()
+            viewModel.signIn(requireContext())
+        }
+    }
+
+    private fun observeAuthState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.authState.collect { auth ->
+                auth.name?.let {
+                    if (binding.etName.text.isNullOrBlank()) {
+                        binding.etName.setText(it)
+                    }
+                }
+            }
+        }
     }
 
     // ── Personal info ─────────────────────────────────────────────────────────
@@ -76,6 +98,7 @@ class ProfileFragment : Fragment() {
         val goalLabels = resources.getStringArray(R.array.goal_levels)
 
         if (profile.hasProfile()) {
+            binding.etName.setText(profile.name)
             binding.etAge.setText(profile.age.toString())
             binding.etHeight.setText(profile.heightCm.toString())
             binding.etWeight.setText(profile.weightKg.toString())
@@ -107,19 +130,23 @@ class ProfileFragment : Fragment() {
     }
 
     private fun savePersonalInfo(activityLabels: Array<String>, goalLabels: Array<String>) {
+        val name = binding.etName.text?.toString()?.trim() ?: ""
         val age = binding.etAge.text?.toString()?.trim()?.toIntOrNull() ?: 0
         val height = binding.etHeight.text?.toString()?.trim()?.toIntOrNull() ?: 0
         val weight = binding.etWeight.text?.toString()?.trim()?.toFloatOrNull() ?: 0f
 
+        if (name.isBlank()) { binding.tilName.error = "Required"; return }
         if (age <= 0) { binding.tilAge.error = "Required"; return }
         if (height <= 0) { binding.tilHeight.error = "Required"; return }
         if (weight <= 0f) { binding.tilWeight.error = "Required"; return }
 
+        binding.tilName.error = null
         binding.tilAge.error = null
         binding.tilHeight.error = null
         binding.tilWeight.error = null
 
         val profile = viewModel.profileStore
+        profile.name = name
         profile.age = age
         profile.heightCm = height
         profile.weightKg = weight
@@ -215,7 +242,7 @@ class ProfileFragment : Fragment() {
             it.hapticClick()
             requestHcPermissions.launch(HealthConnectManager.PERMISSIONS)
         }
-        binding.btnSyncWeight.setOnClickListener { it.hapticClick(); syncWeightFromHc() }
+        binding.btnSyncWeight.setOnClickListener { it.hapticClick(); syncFromHc() }
         binding.btnDisconnectHc.setOnClickListener { it.hapticTick(); disconnectHc() }
 
         checkHcStatus()
@@ -235,23 +262,41 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun syncWeightFromHc() {
+    private fun syncFromHc() {
         viewLifecycleOwner.lifecycleScope.launch {
             val kg = viewModel.healthManager.readLatestWeightKg()
-            if (kg == null) {
+            val cm = viewModel.healthManager.readLatestHeightCm()
+            
+            if (kg == null && cm == null) {
                 Snackbar.make(binding.root, R.string.hc_weight_unavailable, Snackbar.LENGTH_SHORT)
                     .setAnchorView(binding.btnSyncWeight)
                     .show()
                 return@launch
             }
-            val rounded = kg.toFloat()
-            binding.etWeight.setText(rounded.toString())
-            viewModel.profileStore.weightKg = rounded
-            Snackbar.make(
-                binding.root,
-                getString(R.string.hc_weight_synced, kg),
-                Snackbar.LENGTH_SHORT
-            ).setAnchorView(binding.btnSyncWeight).show()
+            
+            kg?.let {
+                val rounded = it.toFloat()
+                binding.etWeight.setText(rounded.toString())
+                viewModel.profileStore.weightKg = rounded
+            }
+            
+            cm?.let {
+                val rounded = it.toInt()
+                binding.etHeight.setText(rounded.toString())
+                viewModel.profileStore.heightCm = rounded
+            }
+
+            val msg = if (kg != null && cm != null) {
+                "Weight and height synced"
+            } else if (kg != null) {
+                getString(R.string.hc_weight_synced, kg.toFloat())
+            } else {
+                "Height synced: ${cm?.toInt()} cm"
+            }
+
+            Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
+                .setAnchorView(binding.btnSyncWeight)
+                .show()
         }
     }
 

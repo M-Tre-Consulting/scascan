@@ -5,7 +5,10 @@ import android.util.Log
 import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.permission.HealthPermission
 import androidx.health.connect.client.records.ActiveCaloriesBurnedRecord
+import androidx.health.connect.client.records.BasalMetabolicRateRecord
+import androidx.health.connect.client.records.HeightRecord
 import androidx.health.connect.client.records.StepsRecord
+import androidx.health.connect.client.records.TotalCaloriesBurnedRecord
 import androidx.health.connect.client.records.WeightRecord
 import androidx.health.connect.client.request.AggregateRequest
 import androidx.health.connect.client.request.ReadRecordsRequest
@@ -28,7 +31,10 @@ class HealthConnectManager @Inject constructor(
         val PERMISSIONS = setOf(
             HealthPermission.getReadPermission(StepsRecord::class),
             HealthPermission.getReadPermission(ActiveCaloriesBurnedRecord::class),
-            HealthPermission.getReadPermission(WeightRecord::class)
+            HealthPermission.getReadPermission(TotalCaloriesBurnedRecord::class),
+            HealthPermission.getReadPermission(BasalMetabolicRateRecord::class),
+            HealthPermission.getReadPermission(WeightRecord::class),
+            HealthPermission.getReadPermission(HeightRecord::class)
         )
     }
 
@@ -79,23 +85,47 @@ class HealthConnectManager @Inject constructor(
     }
 
     /**
-     * Returns today's ACTIVE calories burned (exercise + movement above baseline),
-     * deduplicated via the aggregate API.
-     *
-     * Using ActiveCaloriesBurnedRecord — not TotalCaloriesBurnedRecord — to avoid
-     * double-counting the BMR that is already factored into the user's daily target.
+     * Returns today's ACTIVE calories burned.
+     * Some apps only write TotalCaloriesBurnedRecord, so we fall back to (Total - BMR) if Active is 0.
      */
     suspend fun readTodayActiveCalories(): Double {
         val c = client ?: return 0.0
         return try {
             val (start, end) = todayRange()
-            val response = c.aggregate(
+            
+            // 1. Try ActiveCaloriesBurnedRecord first
+            val activeResponse = c.aggregate(
                 AggregateRequest(
                     metrics = setOf(ActiveCaloriesBurnedRecord.ACTIVE_CALORIES_TOTAL),
                     timeRangeFilter = TimeRangeFilter.between(start, end)
                 )
             )
-            response[ActiveCaloriesBurnedRecord.ACTIVE_CALORIES_TOTAL]?.inKilocalories ?: 0.0
+            val activeKcal = activeResponse[ActiveCaloriesBurnedRecord.ACTIVE_CALORIES_TOTAL]?.inKilocalories ?: 0.0
+            
+            if (activeKcal > 1.0) return activeKcal
+
+            // 2. Fallback: (TotalCaloriesBurnedRecord - BasalMetabolicRateRecord)
+            val totalResponse = c.aggregate(
+                AggregateRequest(
+                    metrics = setOf(TotalCaloriesBurnedRecord.ENERGY_TOTAL),
+                    timeRangeFilter = TimeRangeFilter.between(start, end)
+                )
+            )
+            val totalKcal = totalResponse[TotalCaloriesBurnedRecord.ENERGY_TOTAL]?.inKilocalories ?: 0.0
+            
+            if (totalKcal <= 0.0) return 0.0
+
+            // We need BMR to subtract from total. If not in HC, we assume 0 or use a rough estimate.
+            // BMR in HC is usually a point-in-time record representing the daily rate.
+            val bmrResponse = c.aggregate(
+                AggregateRequest(
+                    metrics = setOf(BasalMetabolicRateRecord.BASAL_CALORIES_TOTAL),
+                    timeRangeFilter = TimeRangeFilter.between(start, end)
+                )
+            )
+            val bmrKcal = bmrResponse[BasalMetabolicRateRecord.BASAL_CALORIES_TOTAL]?.inKilocalories ?: 0.0
+            
+            (totalKcal - bmrKcal).coerceAtLeast(0.0)
         } catch (e: Exception) {
             Log.e(TAG, "readTodayActiveCalories error: $e")
             0.0
@@ -139,6 +169,24 @@ class HealthConnectManager @Inject constructor(
             ).records.firstOrNull()?.weight?.inKilograms
         } catch (e: Exception) {
             Log.e(TAG, "readLatestWeightKg error: $e")
+            null
+        }
+    }
+
+    suspend fun readLatestHeightCm(): Double? {
+        val c = client ?: return null
+        return try {
+            val end = Instant.now()
+            val start = end.minus(365, ChronoUnit.DAYS) // Height doesn't change often
+            c.readRecords(
+                ReadRecordsRequest(
+                    HeightRecord::class,
+                    TimeRangeFilter.between(start, end),
+                    ascendingOrder = false
+                )
+            ).records.firstOrNull()?.height?.inMeters?.times(100.0)
+        } catch (e: Exception) {
+            Log.e(TAG, "readLatestHeight error: $e")
             null
         }
     }

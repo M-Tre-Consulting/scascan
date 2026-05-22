@@ -1,7 +1,11 @@
 package com.scascan.app.ui.profile
 
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.scascan.app.data.health.HealthConnectManager
 import com.scascan.app.data.local.GeminiKeyStore
 import com.scascan.app.data.local.UserProfileStore
@@ -53,6 +57,18 @@ class ProfileViewModel @Inject constructor(
     private val _targetState = MutableStateFlow<TargetState>(TargetState.Idle)
     val targetState: StateFlow<TargetState> = _targetState
 
+    data class AuthState(
+        val name: String? = null,
+        val email: String? = null,
+        val photoUrl: String? = null,
+        val isError: Boolean = false
+    )
+
+    private val _authState = MutableStateFlow<AuthState>(
+        AuthState(name = profileStore.name.ifBlank { null })
+    )
+    val authState: StateFlow<AuthState> = _authState
+
     fun computeTargets() {
         if (!profileStore.hasProfile() || !keyStore.hasKey()) return
         _targetState.value = TargetState.Computing
@@ -73,5 +89,39 @@ class ProfileViewModel @Inject constructor(
 
     fun resetTargetState() {
         _targetState.value = TargetState.Idle
+    }
+
+    fun signIn(context: android.content.Context) {
+        val credentialManager = CredentialManager.create(context)
+        val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(false)
+            .setServerClientId("REPLACE_WITH_YOUR_CLIENT_ID") // User will need to provide this
+            .setAutoSelectEnabled(true)
+            .build()
+
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+
+        viewModelScope.launch {
+            try {
+                val result = credentialManager.getCredential(context, request)
+                val credential = result.credential
+                if (credential is GoogleIdTokenCredential) {
+                    val token = credential.idToken
+                    // In a real app, we'd send this to a backend. 
+                    // For now, we'll just extract the name/email from the token.
+                    _authState.value = AuthState(
+                        name = credential.displayName,
+                        email = credential.id
+                    )
+                    if (!credential.displayName.isNullOrBlank()) {
+                        profileStore.name = credential.displayName!!
+                    }
+                }
+            } catch (e: Exception) {
+                _authState.value = AuthState(isError = true)
+            }
+        }
     }
 }

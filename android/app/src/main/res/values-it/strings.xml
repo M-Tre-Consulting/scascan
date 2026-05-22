@@ -160,7 +160,7 @@
     <string name="profile_key_saved">Chiave API salvata</string>
     <string name="profile_health_title">Health Connect</string>
     <string name="profile_health_desc">Collega i tuoi dati Google Health per abilitare il monitoraggio calorico e gli obiettivi giornalieri adattativi.</string>
-    <string name="profile_about_desc">Sviluppato con Gemini AI · Realizzato con Material 3 Expressive</string>
+    <string name="profile_about_desc">Usa Gemini AI per l\'analisi nutrizionale · Realizzato con Material 3 Expressive</string>
     <string name="profile_model_title">Modello IA</string>
     <string name="profile_model_desc">Seleziona il modello Gemini per l\'analisi degli alimenti. I modelli vengono caricati in tempo reale dalla tua chiave API.</string>
     <string name="profile_model_hint">Seleziona modello</string>
