@@ -3,6 +3,7 @@ package com.scascan.app.ui.scan
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -123,6 +124,7 @@ class BarcodeScanFragment : Fragment() {
                             bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
                             val source = RGBLuminanceSource(bitmap.width, bitmap.height, pixels)
                             val result = barcodeReader.decodeWithState(BinaryBitmap(HybridBinarizer(source)))
+                            Log.d("BarcodeScanner", "Scanned Barcode: ${result.text} (Format: ${result.barcodeFormat})")
                             viewModel.analyzeBarcode(result.text)
                         } catch (_: NotFoundException) {
                             // No barcode in this frame — keep scanning

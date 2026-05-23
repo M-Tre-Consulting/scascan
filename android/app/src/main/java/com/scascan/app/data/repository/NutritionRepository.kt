@@ -1,6 +1,7 @@
 package com.scascan.app.data.repository
 
 import android.graphics.Bitmap
+import android.util.Log
 import com.google.gson.Gson
 import com.scascan.app.data.local.GeminiKeyStore
 import com.scascan.app.data.local.UserProfileStore
@@ -14,6 +15,7 @@ import javax.inject.Singleton
 class NutritionRepository @Inject constructor(
     private val keyStore: GeminiKeyStore,
     private val client: GeminiRestClient,
+    private val offClient: com.scascan.app.data.remote.OpenFoodFactsClient,
     private val gson: Gson
 ) {
     private val responseSchema = """
@@ -44,12 +46,26 @@ class NutritionRepository @Inject constructor(
     }
 
     suspend fun analyzeBarcode(barcode: String): Result<NutritionFacts> = runCatching {
-        parseResponse(
-            client.generateText(
-                model(), apiKey(),
-                "You are a nutrition expert. The barcode value is '$barcode'. Identify the food product and provide its nutritional facts. $responseSchema"
-            )
-        )
+        Log.d("NutritionRepo", "Analyzing barcode: $barcode")
+        val offData = offClient.getProduct(barcode)
+        Log.d("NutritionRepo", "OpenFoodFacts data found: ${offData != null}")
+        
+        val prompt = if (offData != null) {
+            "You are a nutrition expert. I have fetched this raw data from OpenFoodFacts for barcode '$barcode':\n" +
+            "$offData\n\n" +
+            "Please parse this data and return it in the required JSON format. " +
+            "Ensure the food name is accurate and the nutritional values are per serving as indicated in the data. " +
+            responseSchema
+        } else {
+            Log.d("NutritionRepo", "Falling back to pure AI lookup for $barcode")
+            "You are a nutrition expert. The barcode is '$barcode'. " +
+            "First, try to identify this product using your general knowledge of global barcodes (e.g., EAN-13, UPC). " +
+            "If it's a specific product, provide its exact nutritional facts. " +
+            "If you are not 100% sure, provide facts for the most likely generic version. " +
+            responseSchema
+        }
+
+        parseResponse(client.generateText(model(), apiKey(), prompt))
     }
 
     suspend fun searchFood(query: String): Result<NutritionFacts> = runCatching {

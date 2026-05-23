@@ -91,4 +91,5 @@ dependencies {
     implementation(libs.googledrive.services)
     implementation(libs.googleauth.http)
     implementation(libs.play.services.auth)
+    implementation(libs.okhttp)
 }
