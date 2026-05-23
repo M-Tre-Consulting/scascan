@@ -281,16 +281,10 @@ class LogFragment : Fragment() {
                 val baseTarget = targetInfo.caloriesKcal
                 val activeKcal = adaptive.activeKcal.toInt()
                 val trendAdj   = adaptive.trendAdjustment
-                
-                // Predicted activity already included in the base target (based on Activity Level)
-                val predictedActivity = (baseTarget - (targetInfo.bmrKcal + targetInfo.goalOffsetKcal)).coerceAtLeast(0)
-                
-                // Extra activity is what exceeds our daily prediction
-                val extraActivity = (activeKcal - predictedActivity).coerceAtLeast(0)
 
                 binding.tvAdaptiveBase.text     = getString(R.string.log_adaptive_kcal, baseTarget)
-                binding.tvAdaptiveActivity.text = if (extraActivity > 0)
-                    getString(R.string.log_adaptive_plus_kcal, extraActivity)
+                binding.tvAdaptiveActivity.text = if (activeKcal > 0)
+                    getString(R.string.log_adaptive_plus_kcal, activeKcal)
                 else
                     getString(R.string.log_adaptive_kcal, 0)
 
@@ -309,7 +303,7 @@ class LogFragment : Fragment() {
                 }
 
                 binding.tvAdaptiveTotal.text = getString(
-                    R.string.log_adaptive_kcal, baseTarget + extraActivity + trendAdj
+                    R.string.log_adaptive_kcal, baseTarget + activeKcal + trendAdj
                 )
 
                 val noData = adaptive.trendStatus == LogViewModel.AdaptiveState.TrendStatus.NoData

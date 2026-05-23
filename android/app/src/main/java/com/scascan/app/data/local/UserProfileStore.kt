@@ -73,7 +73,7 @@ class UserProfileStore @Inject constructor(
         val tdee = bmr() * ACTIVITY_MULTIPLIERS[activityIndex.coerceIn(0, 4)]
         val offset = when (goalIndex.coerceIn(0, 2)) {
             0 -> -500 // Lose weight: ~0.5kg/week deficit
-            2 -> 300  // Build muscle: surplus
+            2 -> 250  // Build muscle: surplus
             else -> 0 // Maintain
         }
         
@@ -82,10 +82,11 @@ class UserProfileStore @Inject constructor(
 
     fun bmr(): Double {
         if (!hasProfile()) return 1700.0
+        // Mifflin-St Jeor Equation
         return if (isMale) {
-            10.0 * weightKg + 6.25 * heightCm - 5.0 * age + 5.0
+            (10.0 * weightKg) + (6.25 * heightCm) - (5.0 * age) + 5.0
         } else {
-            10.0 * weightKg + 6.25 * heightCm - 5.0 * age - 161.0
+            (10.0 * weightKg) + (6.25 * heightCm) - (5.0 * age) - 161.0
         }
     }
 
@@ -94,8 +95,8 @@ class UserProfileStore @Inject constructor(
      * falls back to goal-based ratios derived from the calorie target.
      *
      * Ratios (protein/carbs/fat):
-     *   Lose weight  → 30 % / 35 % / 35 %  (high protein to preserve muscle)
-     *   Maintain     → 20 % / 50 % / 30 %  (standard balanced)
+     *   Lose weight  → 40 % / 30 % / 30 %  (higher protein to preserve muscle)
+     *   Maintain     → 30 % / 40 % / 30 %  (balanced)
      *   Build muscle → 30 % / 45 % / 25 %  (high carbs + protein for hypertrophy)
      */
     fun macroTargets(): MacroTargets {
@@ -105,9 +106,9 @@ class UserProfileStore @Inject constructor(
         val cal = dailyCalorieTarget()
         return when (goalIndex.coerceIn(0, 2)) {
             0 -> MacroTargets(
-                proteinG = (cal * 0.30 / 4).toInt(),
-                carbsG   = (cal * 0.35 / 4).toInt(),
-                fatG     = (cal * 0.35 / 9).toInt()
+                proteinG = (cal * 0.40 / 4).toInt(),
+                carbsG   = (cal * 0.30 / 4).toInt(),
+                fatG     = (cal * 0.30 / 9).toInt()
             )
             2 -> MacroTargets(
                 proteinG = (cal * 0.30 / 4).toInt(),
@@ -115,8 +116,8 @@ class UserProfileStore @Inject constructor(
                 fatG     = (cal * 0.25 / 9).toInt()
             )
             else -> MacroTargets(
-                proteinG = (cal * 0.20 / 4).toInt(),
-                carbsG   = (cal * 0.50 / 4).toInt(),
+                proteinG = (cal * 0.30 / 4).toInt(),
+                carbsG   = (cal * 0.40 / 4).toInt(),
                 fatG     = (cal * 0.30 / 9).toInt()
             )
         }
@@ -125,7 +126,7 @@ class UserProfileStore @Inject constructor(
     fun goalOffset(): Int {
         return when (goalIndex.coerceIn(0, 2)) {
             0 -> -500
-            2 -> 300
+            2 -> 250
             else -> 0
         }
     }
@@ -145,7 +146,7 @@ class UserProfileStore @Inject constructor(
         private const val KEY_NAME        = "user_name"
         private const val KEY_SYNC_EMAIL   = "sync_email"
         const val DEFAULT_CALORIES = 2_000
-        val ACTIVITY_MULTIPLIERS = doubleArrayOf(1.2, 1.375, 1.55, 1.725, 1.9)
+        val ACTIVITY_MULTIPLIERS = doubleArrayOf(1.2, 1.375, 1.45, 1.6, 1.8)
         val GOAL_LABELS = arrayOf("Lose weight", "Maintain weight", "Build muscle")
     }
 }
