@@ -130,8 +130,11 @@ class DriveSyncManager @Inject constructor(
         
         val fileId = existingFiles.files.firstOrNull()?.id
         if (fileId != null) {
-            drive.files().update(fileId, metadata, content).execute()
+            // Log for debugging 403
+            Log.d("DriveSync", "Updating existing file: $fileId")
+            drive.files().update(fileId, null, content).execute()
         } else {
+            Log.d("DriveSync", "Creating new file")
             drive.files().create(metadata, content).execute()
         }
     }

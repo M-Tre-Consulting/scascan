@@ -22,7 +22,6 @@ import com.google.android.gms.auth.api.identity.AuthorizationRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.Scope
 import com.google.android.material.snackbar.Snackbar
-import com.google.api.services.drive.DriveScopes
 import com.scascan.app.R
 import com.scascan.app.data.health.HealthConnectManager
 import com.scascan.app.data.remote.ModelInfo
@@ -57,26 +56,36 @@ class ProfileFragment : Fragment() {
             try {
                 val authClient = Identity.getAuthorizationClient(requireActivity())
                 val authResult = authClient.getAuthorizationResultFromIntent(result.data)
-                Log.d("ProfileFragment", "authResult accessToken: ${authResult.accessToken?.take(10)}...")
                 
-                authResult.accessToken?.let { token ->
-                    if (viewModel.profileStore.syncEmail.isBlank()) {
-                        try {
-                            val credential = Identity.getSignInClient(requireActivity())
-                                .getSignInCredentialFromIntent(result.data)
-                            Log.d("ProfileFragment", "Found credential: ${credential.id}")
-                            viewModel.profileStore.syncEmail = credential.id
-                        } catch (_: Exception) {
-                            Log.d("ProfileFragment", "No sign-in credential found in intent")
-                        }
+                // 1. Extract the access token for Drive sync
+                val token = authResult.accessToken
+                
+                // 2. Try to extract account info (email/name) from the sign-in intent
+                try {
+                    val signInClient = Identity.getSignInClient(requireActivity())
+                    val credential = signInClient.getSignInCredentialFromIntent(result.data)
+                    
+                    Log.d("ProfileFragment", "Found credential info: ${credential.id}, ${credential.displayName}")
+                    
+                    if (!credential.id.isNullOrBlank()) {
+                        viewModel.profileStore.syncEmail = credential.id
                     }
                     
-                    if (viewModel.profileStore.syncEmail.isBlank()) {
-                        viewModel.profileStore.syncEmail = "Connected Account"
+                    if (viewModel.profileStore.name.isBlank() && !credential.displayName.isNullOrBlank()) {
+                        viewModel.profileStore.name = credential.displayName!!
+                        binding.etName.setText(credential.displayName)
                     }
-                    
-                    viewModel.triggerSync(token) 
+                } catch (e: Exception) {
+                    Log.d("ProfileFragment", "Could not extract sign-in info: ${e.message}")
                 }
+                
+                // Final fallback: if extraction failed but we have a token, just show "Connected"
+                if (viewModel.profileStore.syncEmail.isBlank()) {
+                    viewModel.profileStore.syncEmail = "Connected"
+                }
+                
+                token?.let { viewModel.triggerSync(it) }
+                
             } catch (e: com.google.android.gms.common.api.ApiException) {
                 Log.e("ProfileFragment", "ApiException in result handler: status=${e.statusCode}", e)
                 Snackbar.make(binding.root, "Auth error: ${e.statusCode}", Snackbar.LENGTH_LONG).show()
@@ -143,7 +152,11 @@ class ProfileFragment : Fragment() {
         }
 
         binding.chipGoogleSyncStatus.text = if (connected) {
-            getString(R.string.profile_sync_status_connected, email)
+            if (email == "Connected") {
+                getString(R.string.hc_connected)
+            } else {
+                getString(R.string.profile_sync_status_connected, email)
+            }
         } else {
             getString(R.string.hc_disconnected)
         }
@@ -152,18 +165,37 @@ class ProfileFragment : Fragment() {
     }
 
     private fun disconnectGoogle() {
-        viewModel.profileStore.syncEmail = ""
-        updateSyncButton()
-        Snackbar.make(binding.root, R.string.profile_sync_disconnected, Snackbar.LENGTH_SHORT)
-            .setAnchorView(binding.btnGoogleSync)
-            .show()
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                // 1. Clear the local profile store
+                viewModel.profileStore.syncEmail = ""
+                
+                // 2. Clear the Credential Manager state (forces account picker next time)
+                val credManager = androidx.credentials.CredentialManager.create(requireContext())
+                credManager.clearCredentialState(androidx.credentials.ClearCredentialStateRequest())
+                
+                // 3. Sign out from Identity services
+                // This clears the "default" account so the picker shows up again
+                Identity.getSignInClient(requireActivity()).signOut()
+                
+                updateSyncButton()
+                Snackbar.make(binding.root, R.string.profile_sync_disconnected, Snackbar.LENGTH_SHORT)
+                    .setAnchorView(binding.btnGoogleSync)
+                    .show()
+            } catch (e: Exception) {
+                Log.e("ProfileFragment", "Error during disconnect", e)
+                viewModel.profileStore.syncEmail = ""
+                updateSyncButton()
+            }
+        }
     }
 
     private fun startDriveSync() {
         Log.d("ProfileFragment", "Starting Drive Sync Auth...")
+        // We request Drive scope AND profile/email to extract user info
         val request = AuthorizationRequest.builder()
             .setRequestedScopes(listOf(
-                Scope(DriveScopes.DRIVE_APPDATA),
+                Scope("https://www.googleapis.com/auth/drive.appdata"),
                 Scope("https://www.googleapis.com/auth/userinfo.email"),
                 Scope("https://www.googleapis.com/auth/userinfo.profile")
             ))
@@ -180,9 +212,9 @@ class ProfileFragment : Fragment() {
                     )
                 } else {
                     result.accessToken?.let { token ->
-                        Log.d("ProfileFragment", "Already authorized, token: ${token.take(10)}...")
+                        Log.d("ProfileFragment", "Already authorized")
                         if (viewModel.profileStore.syncEmail.isBlank()) {
-                            viewModel.profileStore.syncEmail = "Connected Account"
+                            viewModel.profileStore.syncEmail = "Connected"
                         }
                         viewModel.triggerSync(token) 
                     }
