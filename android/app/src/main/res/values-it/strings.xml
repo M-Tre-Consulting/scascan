@@ -13,6 +13,7 @@
     <string name="search_description">Descrivi un alimento o un pasto per ottenere i valori nutrizionali.</string>
     <string name="search_hint">es. Petto di pollo, 100g</string>
     <string name="barcode_scan_prompt">Inquadra il codice a barre</string>
+    <string name="barcode_detected">Codice rilevato! Tocca per analizzare</string>
     <string name="analyzing">Analisi in corso…</string>
     <string name="permission_camera_denied">Il permesso alla fotocamera è necessario per questa funzione</string>
     <string name="label_camera">Scatta foto</string>

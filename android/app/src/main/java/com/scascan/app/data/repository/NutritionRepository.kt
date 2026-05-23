@@ -45,6 +45,49 @@ class NutritionRepository @Inject constructor(
         )
     }
 
+    suspend fun analyzeBarcodeImage(bitmap: Bitmap): Result<NutritionFacts> = runCatching {
+        // 1. Ask Gemini to read the barcode number (OCR) from the image
+        val barcodeOcrResult = client.generateWithImage(
+            model(), apiKey(), bitmap,
+            "You are a barcode scanner. Identify the numeric barcode value in this image. " +
+            "Return ONLY the numbers, no text. If no barcode is visible, return 'NONE'."
+        ).trim()
+
+        val barcodeNumber = barcodeOcrResult.filter { it.isDigit() }
+
+        if (barcodeNumber.isNotEmpty() && barcodeOcrResult != "NONE") {
+            // 2. We have a barcode number, use the factual OpenFoodFacts database
+            Log.d("NutritionRepo", "Gemini OCR found barcode: $barcodeNumber. Fetching factual data...")
+            val offData = offClient.getProduct(barcodeNumber)
+            
+            if (offData != null) {
+                Log.d("NutritionRepo", "Factual data found in OFF for $barcodeNumber")
+                return@runCatching parseResponse(
+                    client.generateText(
+                        model(), apiKey(),
+                        "You are a nutrition expert. I have fetched this raw factual data from OpenFoodFacts for barcode '$barcodeNumber':\n" +
+                        "$offData\n\n" +
+                        "Please parse this data and return it in the required JSON format. " +
+                        "This product is specifically identified by its barcode, so ensure the food name (e.g., 'Coke Zero' vs 'Coke Original') is exact. " +
+                        responseSchema
+                    )
+                )
+            }
+        }
+
+        // 3. Fallback: If OCR failed or OFF has no data, use Gemini's vision to identify the product
+        Log.d("NutritionRepo", "No factual barcode data found. Falling back to Gemini Vision identification.")
+        parseResponse(
+            client.generateWithImage(
+                model(), apiKey(), bitmap,
+                "You are a nutrition expert. Identify the product in this image (look at the label and any barcode). " +
+                "Be very specific about the variety (e.g., 'Zero Sugar', 'Original', 'Light'). " +
+                "Provide its nutritional facts in the required format. " +
+                responseSchema
+            )
+        )
+    }
+
     suspend fun analyzeBarcode(barcode: String): Result<NutritionFacts> = runCatching {
         Log.d("NutritionRepo", "Analyzing barcode: $barcode")
         val offData = offClient.getProduct(barcode)

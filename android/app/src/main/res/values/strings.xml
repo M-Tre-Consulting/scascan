@@ -13,6 +13,7 @@
     <string name="search_description">Describe a food or meal to get its nutritional facts.</string>
     <string name="search_hint">e.g. Chicken breast, 100g</string>
     <string name="barcode_scan_prompt">Point camera at a barcode</string>
+    <string name="barcode_detected">Barcode detected! Tap to analyze</string>
     <string name="analyzing">Analyzing…</string>
     <string name="permission_camera_denied">Camera permission is required to use this feature</string>
     <string name="label_camera">Take Photo</string>

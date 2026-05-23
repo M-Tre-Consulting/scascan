@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -22,15 +24,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.BinaryBitmap
-import com.google.zxing.DecodeHintType
-import com.google.zxing.MultiFormatReader
-import com.google.zxing.NotFoundException
-import com.google.zxing.RGBLuminanceSource
-import com.google.zxing.common.HybridBinarizer
 import com.scascan.app.R
 import com.scascan.app.databinding.FragmentBarcodeScanBinding
+import com.scascan.app.ui.util.hapticClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
@@ -44,22 +40,7 @@ class BarcodeScanFragment : Fragment() {
 
     private val viewModel: BarcodeScanViewModel by viewModels()
     private lateinit var cameraExecutor: ExecutorService
-
-    private val barcodeReader = MultiFormatReader().apply {
-        setHints(
-            mapOf(
-                DecodeHintType.POSSIBLE_FORMATS to listOf(
-                    BarcodeFormat.QR_CODE,
-                    BarcodeFormat.EAN_13, BarcodeFormat.EAN_8,
-                    BarcodeFormat.UPC_A, BarcodeFormat.UPC_E,
-                    BarcodeFormat.CODE_128, BarcodeFormat.CODE_39,
-                    BarcodeFormat.ITF, BarcodeFormat.DATA_MATRIX,
-                    BarcodeFormat.PDF_417, BarcodeFormat.AZTEC
-                ),
-                DecodeHintType.TRY_HARDER to true
-            )
-        )
-    }
+    private var imageCapture: ImageCapture? = null
 
     private val cameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -99,6 +80,11 @@ class BarcodeScanFragment : Fragment() {
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
+        binding.btnScanShutter.setOnClickListener {
+            it.hapticClick()
+            takePhoto()
+        }
+
         observeUiState()
     }
 
@@ -109,38 +95,18 @@ class BarcodeScanFragment : Fragment() {
             val preview = Preview.Builder().build().also {
                 it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
             }
-            val imageAnalysis = ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            
+            imageCapture = ImageCapture.Builder()
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                 .build()
-                .also { analysis ->
-                    analysis.setAnalyzer(cameraExecutor) { imageProxy ->
-                        if (viewModel.uiState.value is BarcodeScanUiState.Loading) {
-                            imageProxy.close()
-                            return@setAnalyzer
-                        }
-                        try {
-                            val bitmap = imageProxy.toBitmap()
-                            val pixels = IntArray(bitmap.width * bitmap.height)
-                            bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
-                            val source = RGBLuminanceSource(bitmap.width, bitmap.height, pixels)
-                            val result = barcodeReader.decodeWithState(BinaryBitmap(HybridBinarizer(source)))
-                            Log.d("BarcodeScanner", "Scanned Barcode: ${result.text} (Format: ${result.barcodeFormat})")
-                            viewModel.analyzeBarcode(result.text)
-                        } catch (_: NotFoundException) {
-                            // No barcode in this frame — keep scanning
-                        } finally {
-                            barcodeReader.reset()
-                            imageProxy.close()
-                        }
-                    }
-                }
+
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     viewLifecycleOwner,
                     CameraSelector.DEFAULT_BACK_CAMERA,
                     preview,
-                    imageAnalysis
+                    imageCapture
                 )
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Camera error: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -148,17 +114,47 @@ class BarcodeScanFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
+    private fun takePhoto() {
+        val imageCapture = imageCapture ?: return
+        
+        imageCapture.takePicture(
+            ContextCompat.getMainExecutor(requireContext()),
+            object : ImageCapture.OnImageCapturedCallback() {
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    val bitmap = image.toBitmap()
+                    image.close()
+                    viewModel.onShutterClicked(bitmap)
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    Toast.makeText(requireContext(), "Capture failed: ${exception.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
+    }
+
     private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 when (state) {
                     is BarcodeScanUiState.Scanning -> {
+                        binding.layoutThinking.visibility = View.GONE
+                        binding.viewFinder.visibility = View.VISIBLE
+                        binding.ivReticle.visibility = View.VISIBLE
+                        binding.btnScanShutter.visibility = View.VISIBLE
                         binding.progressBar.visibility = View.GONE
                         binding.tvStatus.text = getString(R.string.barcode_scan_prompt)
+                        binding.btnScanShutter.isEnabled = true
+                        binding.btnScanShutter.alpha = 1.0f
+                        binding.ivReticle.imageTintList = android.content.res.ColorStateList.valueOf(
+                            ContextCompat.getColor(requireContext(), R.color.colorTertiary)
+                        )
                     }
                     is BarcodeScanUiState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.tvStatus.text = getString(R.string.analyzing)
+                        binding.layoutThinking.visibility = View.VISIBLE
+                        binding.viewFinder.visibility = View.GONE
+                        binding.ivReticle.visibility = View.GONE
+                        binding.btnScanShutter.visibility = View.GONE
                         binding.topBar.isEnabled = false
                     }
                     is BarcodeScanUiState.Success -> {

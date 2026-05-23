@@ -2,28 +2,29 @@
 <resources>
 
     <style name="Theme.ScaScan" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Color tokens -->
+        <!-- Colors will be automatically set by DynamicColors.applyToActivityIfAvailable -->
+        <!-- and these provide the fallback if DynamicColors are not available -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
-        <item name="colorPrimaryContainer">@color/colorPrimaryContainer</item>
-        <item name="colorOnPrimaryContainer">@color/colorOnPrimaryContainer</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorOnSecondary">@color/colorOnSecondary</item>
-        <item name="colorSecondaryContainer">@color/colorSecondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/colorOnSecondaryContainer</item>
-        <item name="colorTertiary">@color/colorTertiary</item>
-        <item name="colorOnTertiary">@color/colorOnTertiary</item>
-        <item name="colorTertiaryContainer">@color/colorTertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/colorOnTertiaryContainer</item>
-        <item name="colorError">@color/colorError</item>
-        <item name="colorOnError">@color/colorOnError</item>
+        <item name="colorPrimaryContainer">?attr/colorPrimaryContainer</item>
+        <item name="colorOnPrimaryContainer">?attr/colorOnPrimaryContainer</item>
+        <item name="colorSecondary">?attr/colorSecondary</item>
+        <item name="colorOnSecondary">?attr/colorOnSecondary</item>
+        <item name="colorSecondaryContainer">?attr/colorSecondaryContainer</item>
+        <item name="colorOnSecondaryContainer">?attr/colorOnSecondaryContainer</item>
+        <item name="colorTertiary">?attr/colorTertiary</item>
+        <item name="colorOnTertiary">?attr/colorOnTertiary</item>
+        <item name="colorTertiaryContainer">?attr/colorTertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">?attr/colorOnTertiaryContainer</item>
+        <item name="colorError">?attr/colorError</item>
+        <item name="colorOnError">?attr/colorOnError</item>
         <item name="android:colorBackground">@color/colorBackground</item>
-        <item name="colorSurface">@color/colorSurface</item>
-        <item name="colorOnSurface">@color/colorOnSurface</item>
-        <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
-        <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
-        <item name="colorOutline">@color/colorOutline</item>
-        <item name="colorOutlineVariant">@color/colorOutlineVariant</item>
+        <item name="colorSurface">?attr/colorSurface</item>
+        <item name="colorOnSurface">?attr/colorOnSurface</item>
+        <item name="colorSurfaceVariant">?attr/colorSurfaceVariant</item>
+        <item name="colorOnSurfaceVariant">?attr/colorOnSurfaceVariant</item>
+        <item name="colorOutline">?attr/colorOutline</item>
+        <item name="colorOutlineVariant">?attr/colorOutlineVariant</item>
 
         <!-- M3 Expressive shape system: everything is a pill or near-pill -->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.Pill</item>

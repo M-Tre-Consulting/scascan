@@ -95,15 +95,16 @@
     </com.google.android.material.card.MaterialCardView>
 
     <!-- Capture FAB -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/captureButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginBottom="40dp"
+        android:src="@drawable/shutter_button"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/btn_take_photo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Widget.App.FloatingActionButton" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

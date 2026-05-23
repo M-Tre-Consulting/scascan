@@ -1,8 +1,11 @@
 package com.scascan.app.ui.scan
 
+import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scascan.app.data.model.NutritionFacts
+import com.scascan.app.data.repository.NutritionRepository
 import com.scascan.app.domain.usecase.ScanBarcodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,17 +15,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BarcodeScanViewModel @Inject constructor(
-    private val scanBarcodeUseCase: ScanBarcodeUseCase
+    private val scanBarcodeUseCase: ScanBarcodeUseCase,
+    private val nutritionRepository: NutritionRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<BarcodeScanUiState>(BarcodeScanUiState.Scanning)
     val uiState: StateFlow<BarcodeScanUiState> = _uiState
 
-    fun analyzeBarcode(barcode: String) {
+    fun onShutterClicked(bitmap: Bitmap) {
         if (_uiState.value is BarcodeScanUiState.Loading) return
         _uiState.value = BarcodeScanUiState.Loading
+        
         viewModelScope.launch {
-            scanBarcodeUseCase(barcode)
+            nutritionRepository.analyzeBarcodeImage(bitmap)
                 .onSuccess { _uiState.value = BarcodeScanUiState.Success(it) }
                 .onFailure { _uiState.value = BarcodeScanUiState.Error(it.message ?: "Unknown error") }
         }
