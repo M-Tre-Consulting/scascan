@@ -22,6 +22,9 @@ interface LogEntryDao {
     @Query("SELECT * FROM log_entries WHERE timestamp >= :start AND timestamp < :end ORDER BY timestamp DESC")
     fun getEntriesForRange(start: Long, end: Long): Flow<List<LogEntry>>
 
+    @Query("SELECT * FROM log_entries WHERE timestamp >= :start AND timestamp < :end")
+    suspend fun getEntriesForRangeSync(start: Long, end: Long): List<LogEntry>
+
     @Query("SELECT * FROM log_entries")
     suspend fun getAllEntries(): List<LogEntry>
 

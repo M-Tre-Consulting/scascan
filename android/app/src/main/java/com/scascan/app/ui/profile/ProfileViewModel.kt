@@ -119,6 +119,50 @@ class ProfileViewModel @Inject constructor(
         _syncState.value = SyncState.Idle
     }
 
+    sealed class ActionState {
+        object Idle : ActionState()
+        object Loading : ActionState()
+        data class Success(val message: String) : ActionState()
+        data class Error(val message: String) : ActionState()
+    }
+
+    private val _actionState = MutableStateFlow<ActionState>(ActionState.Idle)
+    val actionState: StateFlow<ActionState> = _actionState
+
+    fun saveProfile(name: String, age: Int, height: Int, weight: Float, activityIdx: Int, goalIdx: Int) {
+        _actionState.value = ActionState.Loading
+        viewModelScope.launch {
+            try {
+                profileStore.name = name
+                profileStore.age = age
+                profileStore.heightCm = height
+                profileStore.weightKg = weight
+                profileStore.activityIndex = activityIdx
+                profileStore.goalIndex = goalIdx
+                _actionState.value = ActionState.Success("Profile saved successfully")
+            } catch (e: Exception) {
+                _actionState.value = ActionState.Error(e.message ?: "Failed to save profile")
+            }
+        }
+    }
+
+    fun saveApiKey(key: String, model: String) {
+        _actionState.value = ActionState.Loading
+        viewModelScope.launch {
+            try {
+                keyStore.apiKey = key
+                keyStore.selectedModel = model
+                _actionState.value = ActionState.Success("API key saved successfully")
+            } catch (e: Exception) {
+                _actionState.value = ActionState.Error(e.message ?: "Failed to save API key")
+            }
+        }
+    }
+
+    fun resetActionState() {
+        _actionState.value = ActionState.Idle
+    }
+
     fun signIn(context: android.content.Context) {
         val credentialManager = CredentialManager.create(context)
         val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()

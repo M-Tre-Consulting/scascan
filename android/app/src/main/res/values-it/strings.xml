@@ -95,6 +95,7 @@
     <string name="log_adaptive_kcal">%1$d kcal</string>
     <string name="log_adaptive_plus_kcal">+%1$d kcal</string>
     <string name="log_adaptive_minus_kcal">-%1$d kcal</string>
+    <string name="log_adaptive_bleedthrough">Bilancio giorno precedente</string>
     <string name="log_adaptive_trend_rate">%1$s kcal (%2$.2f kg/sett)</string>
     <string name="log_adaptive_trend_collecting">Raccolta dati…</string>
     <string name="log_adaptive_hint_unavailable">Health Connect non è disponibile su questo dispositivo.</string>

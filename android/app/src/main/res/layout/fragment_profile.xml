@@ -385,7 +385,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/hc_disconnected"
                         android:clickable="false"
-                        style="@style/Widget.Material3.Chip.Suggestion" />
+                        android:focusable="false"
+                        style="@style/Widget.Material3.Chip.Assist" />
                 </LinearLayout>
 
                 <TextView

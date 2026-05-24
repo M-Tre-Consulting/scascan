@@ -58,8 +58,8 @@ class LogViewModel @Inject constructor(
         .flatMapLatest { offset -> logRepository.entriesForDateOffset(offset) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    fun goToPreviousDay() { _dateOffset.value-- }
-    fun goToNextDay() { if (_dateOffset.value < 0) _dateOffset.value++ }
+    fun goToPreviousDay() { _dateOffset.value--; loadHealthData() }
+    fun goToNextDay() { if (_dateOffset.value < 0) { _dateOffset.value++; loadHealthData() } }
 
     // ── Adaptive targets ───────────────────────────────────────────────────────
 
@@ -100,6 +100,7 @@ class LogViewModel @Inject constructor(
     val adaptiveState: StateFlow<AdaptiveState> = _adaptiveState
 
     fun loadHealthData() {
+        val offset = _dateOffset.value
         viewModelScope.launch {
             if (!healthManager.isAvailable) {
                 _adaptiveState.value = AdaptiveState.HcUnavailable
@@ -109,17 +110,27 @@ class LogViewModel @Inject constructor(
                 _adaptiveState.value = AdaptiveState.HcDisconnected
                 return@launch
             }
-            val steps        = healthManager.readTodaySteps()
-            val activeKcal   = healthManager.readTodayActiveCalories()
-            val weightHist   = healthManager.readWeightHistory(28)
-            val (adj, status, rate) = computeTrend(weightHist)
+            val steps        = healthManager.readSteps(offset)
+            val activeKcal   = healthManager.readActiveCalories(offset)
+            
+            // Weight trend is only relevant for "Today's" adaptive goal. 
+            // For past days, we might want to hide it or show what it was, 
+            // but for now let's only compute it for today.
+            val trend = if (offset == 0) {
+                val weightHist = healthManager.readWeightHistory(28)
+                computeTrend(weightHist)
+            } else {
+                TrendResult(0, AdaptiveState.TrendStatus.NoData, null)
+            }
+
             _adaptiveState.value = AdaptiveState.Active(
                 steps            = steps,
                 activeKcal       = activeKcal,
-                trendAdjustment  = adj,
-                trendStatus      = status,
-                weeklyRateKgPerWeek = rate
+                trendAdjustment  = trend.adjustment,
+                trendStatus      = trend.status,
+                weeklyRateKgPerWeek = trend.weeklyRate
             )
+            refreshTargets()
         }
     }
 
@@ -169,23 +180,30 @@ class LogViewModel @Inject constructor(
         val goalOffsetKcal: Int,
         val macros: MacroTargets,
         val goalIndex: Int,
-        val isAiComputed: Boolean
+        val isAiComputed: Boolean,
+        val bleedthroughKcal: Int = 0
     )
 
-    private fun buildTargetInfo() = TargetInfo(
-        caloriesKcal   = logRepository.dailyCalorieTarget(),
-        bmrKcal         = logRepository.bmr(),
-        goalOffsetKcal = logRepository.goalOffset(),
-        macros         = logRepository.macroTargets(),
-        goalIndex      = logRepository.goalIndex(),
-        isAiComputed   = logRepository.isAiComputed()
-    )
+    private suspend fun buildTargetInfo(): TargetInfo {
+        val bleedthrough = if (_dateOffset.value == 0) logRepository.getYesterdayBleedthrough() else 0
+        return TargetInfo(
+            caloriesKcal   = logRepository.dailyCalorieTarget(),
+            bmrKcal         = logRepository.bmr(),
+            goalOffsetKcal = logRepository.goalOffset(),
+            macros         = logRepository.macroTargets(),
+            goalIndex      = logRepository.goalIndex(),
+            isAiComputed   = logRepository.isAiComputed(),
+            bleedthroughKcal = bleedthrough
+        )
+    }
 
-    private val _targetInfo = MutableStateFlow(buildTargetInfo())
+    private val _targetInfo = MutableStateFlow(TargetInfo(2000, 1500, 0, MacroTargets(0,0,0), 1, false))
     val targetInfo: StateFlow<TargetInfo> = _targetInfo
 
     fun refreshTargets() {
-        _targetInfo.value = buildTargetInfo()
+        viewModelScope.launch {
+            _targetInfo.value = buildTargetInfo()
+        }
     }
 
     // ── Log entry operations ───────────────────────────────────────────────────
@@ -196,6 +214,7 @@ class LogViewModel @Inject constructor(
 
     sealed class FixState {
         object Idle : FixState()
+        object Loading : FixState()
         data class Success(val foodName: String) : FixState()
         data class Error(val message: String) : FixState()
     }
@@ -204,6 +223,7 @@ class LogViewModel @Inject constructor(
     val fixState: StateFlow<FixState> = _fixState
 
     fun fixEntry(entry: LogEntry, correction: String) {
+        _fixState.value = FixState.Loading
         viewModelScope.launch {
             nutritionRepository.fixEntry(entry.foodName, entry.servingSize, correction)
                 .onSuccess { facts ->

@@ -155,7 +155,16 @@ class NutritionRepository @Inject constructor(
     private fun parseResponse(text: String): NutritionFacts {
         val start = text.indexOf('{')
         val end   = text.lastIndexOf('}')
-        require(start != -1 && end != -1) { "No JSON found in AI response" }
-        return gson.fromJson(text.substring(start, end + 1), NutritionFacts::class.java)
+        if (start == -1 || end == -1) {
+            throw Exception("The AI response did not contain a valid JSON object. Please try again.")
+        }
+        val json = text.substring(start, end + 1)
+        return try {
+            gson.fromJson(json, NutritionFacts::class.java)
+        } catch (_: Exception) {
+            // If it's malformed JSON, sometimes Gemini leaves trailing commas or minor syntax errors.
+            // We'll throw a clean error message for the user.
+            throw Exception("The AI returned malformed nutritional data. Refine your prompt and try again.")
+        }
     }
 }

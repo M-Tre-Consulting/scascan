@@ -35,11 +35,17 @@ class FixEntryBottomSheetFragment : BottomSheetDialogFragment() {
                 binding.tilCorrection.error = getString(R.string.fix_entry_error_empty)
                 return@setOnClickListener
             }
+            
+            // Show loading state in the sheet
+            binding.btnApplyFix.isEnabled = false
+            binding.btnCancelFix.isEnabled = false
+            binding.progressFix.visibility = View.VISIBLE
+            binding.btnApplyFix.text = getString(R.string.analyzing)
+
             parentFragmentManager.setFragmentResult(
                 RESULT_KEY,
                 bundleOf(RESULT_ENTRY_ID to entryId, RESULT_CORRECTION to correction)
             )
-            dismiss()
         }
 
         binding.btnCancelFix.setOnClickListener { dismiss() }

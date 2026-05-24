@@ -13,7 +13,8 @@ import javax.inject.Singleton
 @Singleton
 class LogRepository @Inject constructor(
     private val dao: LogEntryDao,
-    private val profileStore: UserProfileStore
+    private val profileStore: UserProfileStore,
+    private val healthManager: com.scascan.app.data.health.HealthConnectManager
 ) {
     fun todayEntries(): Flow<List<LogEntry>> = entriesForDateOffset(0)
 
@@ -56,6 +57,41 @@ class LogRepository @Inject constructor(
     fun isAiComputed(): Boolean = profileStore.aiCalorieTarget > 0
 
     suspend fun getAllEntries(): List<LogEntry> = dao.getAllEntries()
+
+    suspend fun getYesterdayBleedthrough(): Int {
+        val cal = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_YEAR, -1)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        val startMs = cal.timeInMillis
+        val endMs = startMs + DAY_MS
+        
+        // 1. Consumed yesterday
+        val yesterdayEntries = dao.getEntriesForRangeSync(startMs, endMs)
+        val consumed = yesterdayEntries.sumOf { it.calories.toDouble() }
+        
+        // 2. Base Allowance yesterday
+        val baseTarget = dailyCalorieTarget().toDouble()
+        
+        // 3. Active Burn yesterday
+        val startInstant = java.time.Instant.ofEpochMilli(startMs)
+        val endInstant = java.time.Instant.ofEpochMilli(endMs)
+        val activeYesterday = healthManager.readActiveCaloriesRange(startInstant, endInstant)
+        
+        val totalAllowanceYesterday = baseTarget + activeYesterday
+        val rawBalance = totalAllowanceYesterday - consumed
+        
+        // 4. Smart Logic:
+        // - If saved (balance > 0): Use only 80% to account for body efficiency.
+        // - If overspent (balance < 0): Carry over 100% to keep you accountable.
+        // - Cap at ±500 kcal to keep today's target healthy and achievable.
+        val adjustedBalance = if (rawBalance > 0) rawBalance * 0.8 else rawBalance
+        
+        return adjustedBalance.toInt().coerceIn(-500, 500)
+    }
 
     suspend fun upsertEntries(entries: List<LogEntry>) = dao.upsertAll(entries)
 

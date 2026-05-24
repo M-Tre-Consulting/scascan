@@ -126,6 +126,38 @@ class ProfileFragment : Fragment() {
         observeModelState()
         observeAuthState()
         observeSyncState()
+        observeActionState()
+    }
+
+    private fun observeActionState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.actionState.collect { state ->
+                when (state) {
+                    is ProfileViewModel.ActionState.Idle -> {
+                        binding.btnSaveProfile.isEnabled = true
+                        binding.btnSaveKey.isEnabled = true
+                        binding.btnSaveProfile.text = getString(R.string.profile_save_info)
+                        binding.btnSaveKey.text = getString(R.string.profile_save_key)
+                    }
+                    is ProfileViewModel.ActionState.Loading -> {
+                        binding.btnSaveProfile.isEnabled = false
+                        binding.btnSaveKey.isEnabled = false
+                        // Use a generic "saving" text if possible, or just reuse analyzing
+                        binding.btnSaveProfile.text = getString(R.string.analyzing)
+                        binding.btnSaveKey.text = getString(R.string.analyzing)
+                    }
+                    is ProfileViewModel.ActionState.Success -> {
+                        Snackbar.make(binding.root, state.message, Snackbar.LENGTH_SHORT).show()
+                        viewModel.resetActionState()
+                        updateSetupReminder()
+                    }
+                    is ProfileViewModel.ActionState.Error -> {
+                        Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
+                        viewModel.resetActionState()
+                    }
+                }
+            }
+        }
     }
 
     private fun setupGoogleSync() {
@@ -331,21 +363,15 @@ class ProfileFragment : Fragment() {
         profile.weightKg = weight
         profile.isMale = binding.toggleGroupSex.checkedButtonId == R.id.btnSexMale
 
-        val actIdx = activityLabels.indexOf(binding.activitySelector.text.toString())
-        if (actIdx >= 0) profile.activityIndex = actIdx
-
-        val goalIdx = goalLabels.indexOf(binding.goalSelector.text.toString())
-        if (goalIdx >= 0) profile.goalIndex = goalIdx
+        val actIdx = activityLabels.indexOf(binding.activitySelector.text.toString()).coerceAtLeast(0)
+        val goalIdx = goalLabels.indexOf(binding.goalSelector.text.toString()).coerceAtLeast(0)
 
         requireContext().getSystemService<InputMethodManager>()
             ?.hideSoftInputFromWindow(binding.etWeight.windowToken, 0)
 
-        binding.cardSetupReminder.isVisible = false
         binding.btnSaveProfile.hapticConfirm()
-        Snackbar.make(binding.root, R.string.profile_info_saved, Snackbar.LENGTH_SHORT)
-            .setAnchorView(binding.btnSaveProfile)
-            .show()
-
+        viewModel.saveProfile(name, age, height, weight, actIdx, goalIdx)
+        
         if (viewModel.keyStore.hasKey()) {
             viewModel.computeTargets()
         }
@@ -442,10 +468,16 @@ class ProfileFragment : Fragment() {
     }
 
     private fun syncFromHc() {
+        binding.btnSyncWeight.isEnabled = false
+        binding.btnSyncWeight.text = getString(R.string.analyzing)
+        
         viewLifecycleOwner.lifecycleScope.launch {
             val kg = viewModel.healthManager.readLatestWeightKg()
             val cm = viewModel.healthManager.readLatestHeightCm()
             
+            binding.btnSyncWeight.isEnabled = true
+            binding.btnSyncWeight.text = getString(R.string.hc_sync_weight)
+
             if (kg == null && cm == null) {
                 Snackbar.make(binding.root, R.string.hc_weight_unavailable, Snackbar.LENGTH_SHORT)
                     .setAnchorView(binding.btnSyncWeight)
@@ -497,14 +529,12 @@ class ProfileFragment : Fragment() {
             return
         }
         binding.tilApiKey.error = null
-        viewModel.keyStore.apiKey = input
 
         requireContext().getSystemService<InputMethodManager>()
             ?.hideSoftInputFromWindow(binding.etApiKey.windowToken, 0)
 
-        Snackbar.make(binding.root, R.string.profile_key_saved, Snackbar.LENGTH_SHORT)
-            .setAnchorView(binding.btnSaveKey)
-            .show()
+        val selectedModel = viewModel.keyStore.selectedModel
+        viewModel.saveApiKey(input, selectedModel)
 
         viewModel.loadModels()
     }

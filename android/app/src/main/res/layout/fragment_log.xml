@@ -25,6 +25,14 @@
             android:textColor="?attr/colorPrimary"
             android:layout_marginBottom="4dp" />
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressGlobal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp" />
+
         <!-- Date navigation row -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -442,7 +450,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/coming_soon"
                         android:clickable="false"
-                        style="@style/Widget.Material3.Chip.Suggestion" />
+                        android:focusable="false"
+                        style="@style/Widget.Material3.Chip.Assist" />
                 </LinearLayout>
 
                 <!-- Hint text (shown when HC unavailable or disconnected) -->
@@ -496,6 +505,26 @@
                             android:textColor="?attr/colorOnTertiaryContainer" />
                         <TextView
                             android:id="@+id/tvAdaptiveActivity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:textColor="?attr/colorOnTertiaryContainer" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/log_adaptive_bleedthrough"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:textColor="?attr/colorOnTertiaryContainer" />
+                        <TextView
+                            android:id="@+id/tvAdaptiveBleedthrough"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/TextAppearance.Material3.BodySmall"

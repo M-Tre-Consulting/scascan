@@ -70,7 +70,18 @@ class UserProfileStore @Inject constructor(
         if (aiCalorieTarget > 0) return aiCalorieTarget
         if (!hasProfile()) return DEFAULT_CALORIES
         
-        val tdee = bmr() * ACTIVITY_MULTIPLIERS[activityIndex.coerceIn(0, 4)]
+        // Refined base multipliers for TDEE.
+        // We use slightly lower values because modern trackers (Health Connect) add "Active" calories on top.
+        val baseMultiplier = when (activityIndex.coerceIn(0, 4)) {
+            0 -> 1.1   // Sedentary (Minimal movement)
+            1 -> 1.2   // Lightly active (Office job + some walking)
+            2 -> 1.3   // Moderately active (Construction/Retail or daily exercise)
+            3 -> 1.45  // Very active (Heavy manual labor or 2h+ training)
+            4 -> 1.6   // Extra active (Athlete/Elite level)
+            else -> 1.2
+        }
+        
+        val tdee = bmr() * baseMultiplier
         val offset = when (goalIndex.coerceIn(0, 2)) {
             0 -> -500 // Lose weight: ~0.5kg/week deficit
             2 -> 250  // Build muscle: surplus
@@ -82,7 +93,9 @@ class UserProfileStore @Inject constructor(
 
     fun bmr(): Double {
         if (!hasProfile()) return 1700.0
-        // Mifflin-St Jeor Equation
+        // Mifflin-St Jeor Equation (Standard industry formula)
+        // For a 28y male, 180cm, 85kg -> (10*85) + (6.25*180) - (5*28) + 5 = 1840 kcal BMR
+        // TDEE (Moderate 1.3) = 2392. Deficit (-500) = 1892 kcal.
         return if (isMale) {
             (10.0 * weightKg) + (6.25 * heightCm) - (5.0 * age) + 5.0
         } else {
@@ -146,7 +159,6 @@ class UserProfileStore @Inject constructor(
         private const val KEY_NAME        = "user_name"
         private const val KEY_SYNC_EMAIL   = "sync_email"
         const val DEFAULT_CALORIES = 2_000
-        val ACTIVITY_MULTIPLIERS = doubleArrayOf(1.2, 1.375, 1.45, 1.6, 1.8)
         val GOAL_LABELS = arrayOf("Lose weight", "Maintain weight", "Build muscle")
     }
 }

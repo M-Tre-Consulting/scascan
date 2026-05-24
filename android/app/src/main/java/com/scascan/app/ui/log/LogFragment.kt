@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -105,7 +106,7 @@ class LogFragment : Fragment() {
             totalFat       = Math.round(entries.sumOf { it.fat }).toInt(),
             totalFiber     = entries.sumOf { it.fiber },
             totalSodiumMg  = entries.sumOf { it.sodium },
-            calorieTarget  = targetInfo.caloriesKcal + activeKcal + trendAdj,
+            calorieTarget  = targetInfo.caloriesKcal + activeKcal + trendAdj + targetInfo.bleedthroughKcal,
             proteinTarget  = targetInfo.macros.proteinG,
             carbsTarget    = targetInfo.macros.carbsG,
             fatTarget      = targetInfo.macros.fatG,
@@ -148,13 +149,28 @@ class LogFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.fixState.collect { state ->
                 when (state) {
-                    is LogViewModel.FixState.Idle    -> Unit
+                    is LogViewModel.FixState.Idle    -> {
+                        binding.progressGlobal.visibility = View.GONE
+                    }
+                    is LogViewModel.FixState.Loading -> {
+                        binding.progressGlobal.visibility = View.VISIBLE
+                    }
                     is LogViewModel.FixState.Success -> {
+                        binding.progressGlobal.visibility = View.GONE
                         binding.root.hapticConfirm()
+                        
+                        // Dismiss the fix entry bottom sheet if it's still showing
+                        (childFragmentManager.findFragmentByTag("fix_entry") as? FixEntryBottomSheetFragment)?.dismiss()
+                        
                         Snackbar.make(binding.root, R.string.fix_entry_fixed, Snackbar.LENGTH_SHORT).show()
                         viewModel.resetFixState()
                     }
                     is LogViewModel.FixState.Error   -> {
+                        binding.progressGlobal.visibility = View.GONE
+                        
+                        // Reset the fix entry bottom sheet if it's still showing
+                        (childFragmentManager.findFragmentByTag("fix_entry") as? FixEntryBottomSheetFragment)?.dismiss()
+
                         Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
                         viewModel.resetFixState()
                     }
@@ -172,7 +188,10 @@ class LogFragment : Fragment() {
     ) {
         val activeKcal = (adaptive as? LogViewModel.AdaptiveState.Active)?.activeKcal?.toInt() ?: 0
         val trendAdj   = (adaptive as? LogViewModel.AdaptiveState.Active)?.trendAdjustment ?: 0
-        renderEntries(entries, targetInfo.caloriesKcal + activeKcal + trendAdj, targetInfo.macros)
+        val bleedthrough = targetInfo.bleedthroughKcal
+        val totalTarget = targetInfo.caloriesKcal + activeKcal + trendAdj + bleedthrough
+        
+        renderEntries(entries, totalTarget, targetInfo.macros)
         renderHealthMetrics(adaptive)
         renderAdaptiveCard(adaptive, targetInfo)
     }
@@ -266,6 +285,7 @@ class LogFragment : Fragment() {
             }
             is LogViewModel.AdaptiveState.Active -> {
                 binding.chipAdaptiveStatus.isVisible = true
+                binding.chipAdaptiveStatus.setChipBackgroundColorResource(android.R.color.transparent)
                 binding.chipAdaptiveStatus.text = when (adaptive.trendStatus) {
                     LogViewModel.AdaptiveState.TrendStatus.OnTrack ->
                         getString(R.string.log_adaptive_status_on_track)
@@ -275,18 +295,33 @@ class LogFragment : Fragment() {
                     LogViewModel.AdaptiveState.TrendStatus.NoData ->
                         getString(R.string.log_adaptive_status_active)
                 }
-                binding.tvAdaptiveHint.isVisible = false
-                binding.layoutAdaptiveBreakdown.isVisible = true
+                
+                // Color the chip based on status
+                val color = when (adaptive.trendStatus) {
+                    LogViewModel.AdaptiveState.TrendStatus.OnTrack -> R.color.colorPrimary
+                    LogViewModel.AdaptiveState.TrendStatus.NoData -> R.color.colorSecondary
+                    else -> R.color.colorTertiary
+                }
+                binding.chipAdaptiveStatus.setTextColor(ContextCompat.getColor(requireContext(), color))
+                binding.chipAdaptiveStatus.chipStrokeColor = android.content.res.ColorStateList.valueOf(
+                    ContextCompat.getColor(requireContext(), color)
+                )
 
                 val baseTarget = targetInfo.caloriesKcal
                 val activeKcal = adaptive.activeKcal.toInt()
                 val trendAdj   = adaptive.trendAdjustment
+                val bleedthrough = targetInfo.bleedthroughKcal
 
                 binding.tvAdaptiveBase.text     = getString(R.string.log_adaptive_kcal, baseTarget)
                 binding.tvAdaptiveActivity.text = if (activeKcal > 0)
                     getString(R.string.log_adaptive_plus_kcal, activeKcal)
                 else
                     getString(R.string.log_adaptive_kcal, 0)
+
+                binding.tvAdaptiveBleedthrough.text = if (bleedthrough >= 0)
+                    getString(R.string.log_adaptive_plus_kcal, bleedthrough)
+                else
+                    getString(R.string.log_adaptive_minus_kcal, -bleedthrough)
 
                 binding.tvAdaptiveTrend.text = when (adaptive.trendStatus) {
                     LogViewModel.AdaptiveState.TrendStatus.NoData ->
@@ -303,7 +338,7 @@ class LogFragment : Fragment() {
                 }
 
                 binding.tvAdaptiveTotal.text = getString(
-                    R.string.log_adaptive_kcal, baseTarget + activeKcal + trendAdj
+                    R.string.log_adaptive_kcal, baseTarget + activeKcal + trendAdj + bleedthrough
                 )
 
                 val noData = adaptive.trendStatus == LogViewModel.AdaptiveState.TrendStatus.NoData

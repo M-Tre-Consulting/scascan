@@ -86,6 +86,14 @@
         android:text="@string/fix_entry_apply"
         android:layout_marginBottom="8dp" />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressFix"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:layout_marginBottom="16dp" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCancelFix"
         android:layout_width="match_parent"
