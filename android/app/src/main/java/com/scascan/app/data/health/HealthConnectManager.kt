@@ -42,7 +42,11 @@ class HealthConnectManager @Inject constructor(
     }
 
     val isAvailable: Boolean
-        get() = HealthConnectClient.getSdkStatus(context) == HealthConnectClient.SDK_AVAILABLE
+        get() {
+            val status = HealthConnectClient.getSdkStatus(context)
+            Log.d(TAG, "Health Connect SDK Status: $status")
+            return status == HealthConnectClient.SDK_AVAILABLE
+        }
 
     private val client: HealthConnectClient?
         get() = if (isAvailable) HealthConnectClient.getOrCreate(context) else null
