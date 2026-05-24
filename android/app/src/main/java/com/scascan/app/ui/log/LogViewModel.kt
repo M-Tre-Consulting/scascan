@@ -1,6 +1,7 @@
 package com.scascan.app.ui.log
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scascan.app.R
@@ -102,6 +103,7 @@ class LogViewModel @Inject constructor(
     fun loadHealthData() {
         val offset = _dateOffset.value
         viewModelScope.launch {
+            Log.d("LogViewModel", "loadHealthData called. Manager isAvailable: ${healthManager.isAvailable}")
             if (!healthManager.isAvailable) {
                 _adaptiveState.value = AdaptiveState.HcUnavailable
                 return@launch

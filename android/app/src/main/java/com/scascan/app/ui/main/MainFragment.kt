@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.color.MaterialColors
 import com.scascan.app.R
 import com.scascan.app.data.analysis.AnalysisManager
 import com.scascan.app.data.model.NutritionFacts
@@ -47,11 +48,6 @@ class MainFragment : Fragment() {
         setupViewPager()
         setupBottomNav()
         setupAnalysisObserver()
-        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNav) { v, insets ->
-            val navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-            v.updatePadding(bottom = navBars.bottom)
-            insets
-        }
     }
 
     private fun setupViewPager() {
@@ -60,23 +56,34 @@ class MainFragment : Fragment() {
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                binding.bottomNav.menu.getItem(position).isChecked = true
+                updateNavSelection(position)
             }
         })
     }
 
     private fun setupBottomNav() {
-        binding.bottomNav.setOnItemSelectedListener { item ->
-            val page = when (item.itemId) {
-                R.id.homeFragment -> 0
-                R.id.logFragment -> 1
-                R.id.profileFragment -> 2
-                else -> return@setOnItemSelectedListener false
-            }
-            binding.bottomNav.hapticTick()
-            binding.viewPager.setCurrentItem(page, true)
-            true
-        }
+        binding.navHome.setOnClickListener { onNavClicked(0) }
+        binding.navLog.setOnClickListener { onNavClicked(1) }
+        binding.navProfile.setOnClickListener { onNavClicked(2) }
+        updateNavSelection(0)
+    }
+
+    private fun onNavClicked(page: Int) {
+        binding.navCard.hapticTick()
+        binding.viewPager.setCurrentItem(page, true)
+    }
+
+    private fun updateNavSelection(position: Int) {
+        binding.indicatorHome.isVisible = position == 0
+        binding.indicatorLog.isVisible = position == 1
+        binding.indicatorProfile.isVisible = position == 2
+
+        val activeColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnPrimaryContainer, 0)
+        val inactiveColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnSurfaceVariant, 0)
+
+        binding.iconHome.setColorFilter(if (position == 0) activeColor else inactiveColor)
+        binding.iconLog.setColorFilter(if (position == 1) activeColor else inactiveColor)
+        binding.iconProfile.setColorFilter(if (position == 2) activeColor else inactiveColor)
     }
 
     private fun setupAnalysisObserver() {

@@ -115,5 +115,10 @@
         <item name="cardElevation">6dp</item>
         <item name="strokeWidth">0dp</item>
     </style>
+    <style name="Widget.App.Indicator.Pill" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">?attr/colorPrimaryContainer</item>
+        <item name="android:width">64dp</item>
+        <item name="android:height">32dp</item>
+    </style>
 
 </resources>
