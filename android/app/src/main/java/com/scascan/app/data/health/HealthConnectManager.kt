@@ -100,8 +100,6 @@ class HealthConnectManager @Inject constructor(
         return start to end
     }
 
-    suspend fun readTodaySteps(): Long = readSteps(0)
-
     /**
      * Returns ACTIVE calories burned for a specific time range.
      */
@@ -139,11 +137,6 @@ class HealthConnectManager @Inject constructor(
             Log.e(TAG, "readActiveCaloriesRange error: $e")
             0.0
         }
-    }
-
-    suspend fun readTodayActiveCalories(): Double {
-        val (start, end) = todayRange()
-        return readActiveCaloriesRange(start, end)
     }
 
     private fun estimateDailyBmr(): Double = profileStore.bmr()
@@ -205,12 +198,5 @@ class HealthConnectManager @Inject constructor(
             Log.e(TAG, "readLatestHeight error: $e")
             null
         }
-    }
-
-    private fun todayRange(): Pair<Instant, Instant> {
-        val zone = ZoneId.systemDefault()
-        val start = LocalDate.now(zone).atStartOfDay(zone).toInstant()
-        val end = Instant.now()
-        return start to end
     }
 }
