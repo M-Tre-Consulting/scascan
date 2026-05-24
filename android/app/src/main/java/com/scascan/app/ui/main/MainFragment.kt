@@ -74,16 +74,33 @@ class MainFragment : Fragment() {
     }
 
     private fun updateNavSelection(position: Int) {
-        binding.indicatorHome.isVisible = position == 0
-        binding.indicatorLog.isVisible = position == 1
-        binding.indicatorProfile.isVisible = position == 2
+        val containerWidth = 280 // dp
+        val itemWidth = containerWidth / 3.0
+        val indicatorWidth = 86 // dp
+        
+        // Convert dp to pixels for the translation
+        val density = resources.displayMetrics.density
+        val targetX = ((itemWidth * position) + (itemWidth / 2.0) - (indicatorWidth / 2.0)) * density
+
+        binding.navIndicator.animate()
+            .translationX(targetX.toFloat())
+            .setDuration(250)
+            .setInterpolator(android.view.animation.DecelerateInterpolator())
+            .start()
 
         val activeColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnPrimaryContainer, 0)
         val inactiveColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnSurfaceVariant, 0)
 
-        binding.iconHome.setColorFilter(if (position == 0) activeColor else inactiveColor)
-        binding.iconLog.setColorFilter(if (position == 1) activeColor else inactiveColor)
-        binding.iconProfile.setColorFilter(if (position == 2) activeColor else inactiveColor)
+        // Animate icons
+        listOf(binding.iconHome, binding.iconLog, binding.iconProfile).forEachIndexed { index, icon ->
+            val isActive = index == position
+            icon.setColorFilter(if (isActive) activeColor else inactiveColor)
+            icon.animate()
+                .scaleX(if (isActive) 1.2f else 1.0f)
+                .scaleY(if (isActive) 1.2f else 1.0f)
+                .setDuration(250)
+                .start()
+        }
     }
 
     private fun setupAnalysisObserver() {

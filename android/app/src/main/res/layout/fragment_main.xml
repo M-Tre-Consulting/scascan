@@ -38,91 +38,83 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="280dp"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_height="match_parent">
 
-            <FrameLayout
-                android:id="@+id/nav_home"
-                android:layout_width="0dp"
+            <!-- Animated Indicator -->
+            <View
+                android:id="@+id/nav_indicator"
+                android:layout_width="86dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/nav_indicator_background" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
-                <View
-                    android:id="@+id/indicator_home"
-                    android:layout_width="64dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/nav_indicator_background"
-                    android:visibility="invisible" />
+                <FrameLayout
+                    android:id="@+id/nav_home"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless">
 
-                <ImageView
-                    android:id="@+id/icon_home"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_camera"
-                    app:tint="@color/nav_item_tint" />
-            </FrameLayout>
+                    <ImageView
+                        android:id="@+id/icon_home"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_camera"
+                        app:tint="@color/nav_item_tint"
+                        android:contentDescription="@string/nav_scan" />
+                </FrameLayout>
 
-            <FrameLayout
-                android:id="@+id/nav_log"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless">
+                <FrameLayout
+                    android:id="@+id/nav_log"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless">
 
-                <View
-                    android:id="@+id/indicator_log"
-                    android:layout_width="64dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/nav_indicator_background"
-                    android:visibility="invisible" />
+                    <ImageView
+                        android:id="@+id/icon_log"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_log"
+                        app:tint="@color/nav_item_tint"
+                        android:contentDescription="@string/nav_log" />
+                </FrameLayout>
 
-                <ImageView
-                    android:id="@+id/icon_log"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_nav_log"
-                    app:tint="@color/nav_item_tint" />
-            </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/nav_profile"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless">
 
-            <FrameLayout
-                android:id="@+id/nav_profile"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless">
+                    <ImageView
+                        android:id="@+id/icon_profile"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_profile"
+                        app:tint="@color/nav_item_tint"
+                        android:contentDescription="@string/nav_profile" />
+                </FrameLayout>
 
-                <View
-                    android:id="@+id/indicator_profile"
-                    android:layout_width="64dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/nav_indicator_background"
-                    android:visibility="invisible" />
-
-                <ImageView
-                    android:id="@+id/icon_profile"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_nav_profile"
-                    app:tint="@color/nav_item_tint" />
-            </FrameLayout>
-
-        </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
