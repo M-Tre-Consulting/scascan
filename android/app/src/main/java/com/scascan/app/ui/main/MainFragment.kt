@@ -1,5 +1,6 @@
 package com.scascan.app.ui.main
 
+import android.view.MotionEvent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -62,13 +63,37 @@ class MainFragment : Fragment() {
     }
 
     private fun setupBottomNav() {
-        binding.navHome.setOnClickListener { onNavClicked(0) }
-        binding.navLog.setOnClickListener { onNavClicked(1) }
-        binding.navProfile.setOnClickListener { onNavClicked(2) }
+        listOf(
+            binding.navHome to 0,
+            binding.navLog to 1,
+            binding.navProfile to 2
+        ).forEach { (view, page) ->
+            view.setOnClickListener { onNavClicked(page) }
+            setupScaleTouchListener(view)
+        }
         updateNavSelection(0)
     }
 
+    private fun setupScaleTouchListener(view: View) {
+        view.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.animate().scaleX(0.92f).scaleY(0.92f).setDuration(100).start()
+                }
+                MotionEvent.ACTION_UP -> {
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
+                    v.performClick()
+                }
+                MotionEvent.ACTION_CANCEL -> {
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
+                }
+            }
+            true
+        }
+    }
+
     private fun onNavClicked(page: Int) {
+        if (binding.viewPager.currentItem == page) return
         binding.navCard.hapticTick()
         binding.viewPager.setCurrentItem(page, true)
     }
@@ -78,27 +103,25 @@ class MainFragment : Fragment() {
         val itemWidth = containerWidth / 3.0
         val indicatorWidth = 86 // dp
         
-        // Convert dp to pixels for the translation
         val density = resources.displayMetrics.density
         val targetX = ((itemWidth * position) + (itemWidth / 2.0) - (indicatorWidth / 2.0)) * density
 
         binding.navIndicator.animate()
             .translationX(targetX.toFloat())
-            .setDuration(250)
-            .setInterpolator(android.view.animation.DecelerateInterpolator())
+            .setDuration(300)
+            .setInterpolator(android.view.animation.OvershootInterpolator(0.8f))
             .start()
 
         val activeColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnPrimaryContainer, 0)
         val inactiveColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnSurfaceVariant, 0)
 
-        // Animate icons
         listOf(binding.iconHome, binding.iconLog, binding.iconProfile).forEachIndexed { index, icon ->
             val isActive = index == position
             icon.setColorFilter(if (isActive) activeColor else inactiveColor)
             icon.animate()
                 .scaleX(if (isActive) 1.2f else 1.0f)
                 .scaleY(if (isActive) 1.2f else 1.0f)
-                .setDuration(250)
+                .setDuration(300)
                 .start()
         }
     }
