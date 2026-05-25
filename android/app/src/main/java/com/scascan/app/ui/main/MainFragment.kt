@@ -57,10 +57,33 @@ class MainFragment : Fragment() {
         binding.viewPager.offscreenPageLimit = 2
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                updateIndicator(position, positionOffset)
+            }
             override fun onPageSelected(position: Int) {
                 updateNavSelection(position)
             }
         })
+    }
+
+    private fun updateIndicator(position: Int, offset: Float) {
+        binding.navCard.post {
+            val totalWidth = binding.navCard.width
+            val itemWidth = totalWidth / 3.0
+            
+            val indicatorWidth = binding.navIndicator.width.toDouble()
+            
+            // Linear interpolation of the center position
+            val currentCenterX = (itemWidth * position) + (itemWidth / 2.0)
+            val nextPosition = (position + 1).coerceAtMost(2)
+            val nextCenterX = (itemWidth * nextPosition) + (itemWidth / 2.0)
+            
+            val targetCenterX = currentCenterX + (nextCenterX - currentCenterX) * offset
+            
+            // Position the indicator so its center matches targetCenterX
+            val targetX = targetCenterX - (indicatorWidth / 2.0)
+            binding.navIndicator.translationX = targetX.toFloat()
+        }
     }
 
     private fun setupBottomNav() {
@@ -94,6 +117,7 @@ class MainFragment : Fragment() {
             }
         }
         updateNavSelection(0)
+        updateIndicator(0, 0f)
     }
 
     private fun onNavClicked(page: Int) {
@@ -103,35 +127,32 @@ class MainFragment : Fragment() {
 
     private fun updateNavSelection(position: Int) {
         binding.navCard.post {
-            val totalWidth = binding.navCard.width
-            val itemWidth = totalWidth / 3.0
-            val indicatorWidth = (itemWidth * 0.9).toInt()
+            val icons = listOf(binding.iconHome, binding.iconLog, binding.iconProfile)
             
-            val targetX = (itemWidth * position) + (itemWidth - indicatorWidth) / 2.0
-
-            val params = binding.navIndicator.layoutParams
-            if (params.width != indicatorWidth) {
-                params.width = indicatorWidth
-                binding.navIndicator.layoutParams = params
-            }
-
-            binding.navIndicator.animate()
-                .translationX(targetX.toFloat())
-                .setDuration(300)
-                .setInterpolator(android.view.animation.OvershootInterpolator(0.8f))
-                .start()
-
-            val activeColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnPrimaryContainer, 0)
+            val activeContentColor = android.graphics.Color.parseColor("#EADDFF")
             val inactiveColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnSurfaceVariant, 0)
 
-            listOf(binding.iconHome, binding.iconLog, binding.iconProfile).forEachIndexed { index, icon ->
+            icons.forEachIndexed { index, icon ->
                 val isActive = index == position
-                icon.setColorFilter(if (isActive) activeColor else inactiveColor)
-                icon.animate()
-                    .scaleX(if (isActive) 1.2f else 1.0f)
-                    .scaleY(if (isActive) 1.2f else 1.0f)
-                    .setDuration(300)
-                    .start()
+                icon.setColorFilter(if (isActive) activeContentColor else inactiveColor)
+                
+                // Active icon pop animation
+                if (isActive) {
+                    icon.scaleX = 0.8f
+                    icon.scaleY = 0.8f
+                    icon.animate()
+                        .scaleX(1.2f)
+                        .scaleY(1.2f)
+                        .setDuration(300)
+                        .setInterpolator(android.view.animation.OvershootInterpolator(1.2f))
+                        .start()
+                } else {
+                    icon.animate()
+                        .scaleX(1.0f)
+                        .scaleY(1.0f)
+                        .setDuration(200)
+                        .start()
+                }
             }
         }
     }

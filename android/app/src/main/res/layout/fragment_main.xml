@@ -27,12 +27,12 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/navCard"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="72dp"
         android:layout_marginBottom="32dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginEnd="88dp"
         android:hapticFeedbackEnabled="true"
-        app:cardCornerRadius="40dp"
+        app:cardCornerRadius="36dp"
         app:cardElevation="12dp"
         app:cardBackgroundColor="#1C1B1F"
         app:strokeWidth="0dp"
@@ -42,110 +42,68 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="12dp">
+            android:layout_height="match_parent">
+
+            <!-- Larger Animated Indicator -->
+            <View
+                android:id="@+id/navIndicator"
+                android:layout_width="72dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/nav_indicator_background" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:orientation="horizontal">
 
-                <!-- Home -->
-                <LinearLayout
+                <FrameLayout
                     android:id="@+id/nav_home"
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:gravity="center"
                     android:clickable="true"
-                    android:focusable="true"
-                    android:background="@drawable/nav_indicator_background">
-
+                    android:focusable="true">
                     <ImageView
                         android:id="@+id/icon_home"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:layout_gravity="center"
                         android:src="@drawable/ic_camera"
                         app:tint="@color/nav_item_tint" />
+                </FrameLayout>
 
-                    <TextView
-                        android:id="@+id/label_home"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/nav_scan"
-                        android:layout_marginStart="8dp"
-                        android:visibility="gone"
-                        style="@style/TextAppearance.Material3.LabelLarge"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnPrimaryContainer" />
-                </LinearLayout>
-
-                <!-- Log -->
-                <LinearLayout
+                <FrameLayout
                     android:id="@+id/nav_log"
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:gravity="center"
                     android:clickable="true"
-                    android:focusable="true"
-                    android:background="@drawable/nav_indicator_background">
-
+                    android:focusable="true">
                     <ImageView
                         android:id="@+id/icon_log"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:layout_gravity="center"
                         android:src="@drawable/ic_nav_log"
                         app:tint="@color/nav_item_tint" />
+                </FrameLayout>
 
-                    <TextView
-                        android:id="@+id/label_log"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/nav_log"
-                        android:layout_marginStart="8dp"
-                        android:visibility="gone"
-                        style="@style/TextAppearance.Material3.LabelLarge"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnPrimaryContainer" />
-                </LinearLayout>
-
-                <!-- Profile -->
-                <LinearLayout
+                <FrameLayout
                     android:id="@+id/nav_profile"
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:gravity="center"
                     android:clickable="true"
-                    android:focusable="true"
-                    android:background="@drawable/nav_indicator_background">
-
+                    android:focusable="true">
                     <ImageView
                         android:id="@+id/icon_profile"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:layout_gravity="center"
                         android:src="@drawable/ic_nav_profile"
                         app:tint="@color/nav_item_tint" />
-
-                    <TextView
-                        android:id="@+id/label_profile"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/nav_profile"
-                        android:layout_marginStart="8dp"
-                        android:visibility="gone"
-                        style="@style/TextAppearance.Material3.LabelLarge"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnPrimaryContainer" />
-                </LinearLayout>
+                </FrameLayout>
 
             </LinearLayout>
         </FrameLayout>
