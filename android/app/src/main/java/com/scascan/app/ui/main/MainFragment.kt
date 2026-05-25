@@ -68,61 +68,65 @@ class MainFragment : Fragment() {
             binding.navLog to 1,
             binding.navProfile to 2
         ).forEach { (view, page) ->
-            view.setOnClickListener { onNavClicked(page) }
-            setupScaleTouchListener(view)
+            view.setOnClickListener { 
+                view.hapticTick()
+                onNavClicked(page) 
+            }
+            view.setOnTouchListener { v, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        v.animate().scaleX(0.92f).scaleY(0.92f).setDuration(100).start()
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        v.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
+                        if (event.action == MotionEvent.ACTION_UP) {
+                            v.performClick()
+                        }
+                    }
+                }
+                true
+            }
         }
         updateNavSelection(0)
     }
 
-    private fun setupScaleTouchListener(view: View) {
-        view.setOnTouchListener { v, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    v.animate().scaleX(0.92f).scaleY(0.92f).setDuration(100).start()
-                }
-                MotionEvent.ACTION_UP -> {
-                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
-                    v.performClick()
-                }
-                MotionEvent.ACTION_CANCEL -> {
-                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
-                }
-            }
-            true
-        }
-    }
-
     private fun onNavClicked(page: Int) {
         if (binding.viewPager.currentItem == page) return
-        binding.navCard.hapticTick()
         binding.viewPager.setCurrentItem(page, true)
     }
 
     private fun updateNavSelection(position: Int) {
-        val containerWidth = 280 // dp
-        val itemWidth = containerWidth / 3.0
-        val indicatorWidth = 86 // dp
-        
-        val density = resources.displayMetrics.density
-        val targetX = ((itemWidth * position) + (itemWidth / 2.0) - (indicatorWidth / 2.0)) * density
+        binding.navCard.post {
+            val totalWidth = binding.navCard.width
+            val itemWidth = totalWidth / 3.0
+            val indicatorWidth = (itemWidth * 0.9).toInt()
+            
+            val targetX = (itemWidth * position) + (itemWidth - indicatorWidth) / 2.0
 
-        binding.navIndicator.animate()
-            .translationX(targetX.toFloat())
-            .setDuration(300)
-            .setInterpolator(android.view.animation.OvershootInterpolator(0.8f))
-            .start()
+            val params = binding.navIndicator.layoutParams
+            if (params.width != indicatorWidth) {
+                params.width = indicatorWidth
+                binding.navIndicator.layoutParams = params
+            }
 
-        val activeColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnPrimaryContainer, 0)
-        val inactiveColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnSurfaceVariant, 0)
-
-        listOf(binding.iconHome, binding.iconLog, binding.iconProfile).forEachIndexed { index, icon ->
-            val isActive = index == position
-            icon.setColorFilter(if (isActive) activeColor else inactiveColor)
-            icon.animate()
-                .scaleX(if (isActive) 1.2f else 1.0f)
-                .scaleY(if (isActive) 1.2f else 1.0f)
+            binding.navIndicator.animate()
+                .translationX(targetX.toFloat())
                 .setDuration(300)
+                .setInterpolator(android.view.animation.OvershootInterpolator(0.8f))
                 .start()
+
+            val activeColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnPrimaryContainer, 0)
+            val inactiveColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnSurfaceVariant, 0)
+
+            listOf(binding.iconHome, binding.iconLog, binding.iconProfile).forEachIndexed { index, icon ->
+                val isActive = index == position
+                icon.setColorFilter(if (isActive) activeColor else inactiveColor)
+                icon.animate()
+                    .scaleX(if (isActive) 1.2f else 1.0f)
+                    .scaleY(if (isActive) 1.2f else 1.0f)
+                    .setDuration(300)
+                    .start()
+            }
         }
     }
 

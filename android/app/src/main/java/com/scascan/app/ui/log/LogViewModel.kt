@@ -103,15 +103,20 @@ class LogViewModel @Inject constructor(
     fun loadHealthData() {
         val offset = _dateOffset.value
         viewModelScope.launch {
-            Log.d("LogViewModel", "loadHealthData called. Manager isAvailable: ${healthManager.isAvailable}")
-            if (!healthManager.isAvailable) {
+            val isAvailable = healthManager.isAvailable
+            val hasPermissions = healthManager.hasPermissions()
+            
+            Log.d("LogViewModel", "loadHealthData: available=$isAvailable, permissions=$hasPermissions")
+            
+            if (!isAvailable) {
                 _adaptiveState.value = AdaptiveState.HcUnavailable
                 return@launch
             }
-            if (!healthManager.hasPermissions()) {
+            if (!hasPermissions) {
                 _adaptiveState.value = AdaptiveState.HcDisconnected
                 return@launch
             }
+
             val steps        = healthManager.readSteps(offset)
             val activeKcal   = healthManager.readActiveCalories(offset)
             

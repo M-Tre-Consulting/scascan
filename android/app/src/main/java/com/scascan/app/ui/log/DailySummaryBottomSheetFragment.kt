@@ -50,19 +50,20 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
         val fatTarget     = a.getInt(KEY_FAT_TARGET)
         val activeKcal    = a.getInt(KEY_ACTIVE_KCAL)
         val steps         = a.getLong(KEY_STEPS)
+        val bleedthrough  = a.getInt(KEY_BLEEDTHROUGH)
         val goalIndex     = a.getInt(KEY_GOAL_INDEX)
         val isAiComputed  = a.getBoolean(KEY_IS_AI)
         val dateLabel     = a.getString(KEY_DATE_LABEL, "")
 
         binding.tvSummaryDate.text = dateLabel
 
-        renderCalories(totalCalories, calorieTarget, activeKcal, steps)
+        renderCalories(totalCalories, calorieTarget, activeKcal, steps, bleedthrough)
         renderMacros(totalProtein, totalCarbs, totalFat, proteinTarget, carbsTarget, fatTarget)
         renderOther(totalFiber, totalSodium)
         renderGoal(goalIndex, isAiComputed)
     }
 
-    private fun renderCalories(consumed: Int, target: Int, activeKcal: Int, steps: Long) {
+    private fun renderCalories(consumed: Int, target: Int, activeKcal: Int, steps: Long, bleedthrough: Int) {
         binding.tvSummaryConsumed.text = consumed.toString()
         binding.tvSummaryCalorieTarget.text = "/ $target kcal"
 
@@ -76,6 +77,14 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
             getString(R.string.log_summary_remaining, remaining)
         else
             getString(R.string.log_summary_over, -remaining)
+
+        if (bleedthrough != 0) {
+            binding.tvActivityContribution.isVisible = true
+            binding.tvActivityContribution.text = getString(
+                if (bleedthrough > 0) R.string.log_adaptive_plus_kcal else R.string.log_adaptive_minus_kcal,
+                Math.abs(bleedthrough)
+            ) + " from yesterday"
+        }
 
         val hasHealth = activeKcal > 0 || steps > 0
         binding.layoutHealthSummary.isVisible = hasHealth
@@ -163,6 +172,7 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
         private const val KEY_FAT_TARGET      = "f_target"
         private const val KEY_ACTIVE_KCAL     = "active_kcal"
         private const val KEY_STEPS           = "steps"
+        private const val KEY_BLEEDTHROUGH    = "bleedthrough"
         private const val KEY_GOAL_INDEX      = "goal_idx"
         private const val KEY_IS_AI           = "is_ai"
         private const val KEY_DATE_LABEL      = "date_label"
@@ -171,7 +181,7 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
             totalCalories: Int, totalProtein: Int, totalCarbs: Int,
             totalFat: Int, totalFiber: Double, totalSodiumMg: Double,
             calorieTarget: Int, proteinTarget: Int, carbsTarget: Int, fatTarget: Int,
-            activeKcal: Int, steps: Long,
+            activeKcal: Int, steps: Long, bleedthrough: Int,
             goalIndex: Int, isAiComputed: Boolean, dateLabel: String
         ) = DailySummaryBottomSheetFragment().apply {
             arguments = bundleOf(
@@ -187,6 +197,7 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
                 KEY_FAT_TARGET     to fatTarget,
                 KEY_ACTIVE_KCAL    to activeKcal,
                 KEY_STEPS          to steps,
+                KEY_BLEEDTHROUGH   to bleedthrough,
                 KEY_GOAL_INDEX     to goalIndex,
                 KEY_IS_AI          to isAiComputed,
                 KEY_DATE_LABEL     to dateLabel

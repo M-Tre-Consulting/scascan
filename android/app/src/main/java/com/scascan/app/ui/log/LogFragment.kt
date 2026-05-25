@@ -112,6 +112,7 @@ class LogFragment : Fragment() {
             fatTarget      = targetInfo.macros.fatG,
             activeKcal     = activeKcal,
             steps          = steps,
+            bleedthrough   = targetInfo.bleedthroughKcal,
             goalIndex      = targetInfo.goalIndex,
             isAiComputed   = targetInfo.isAiComputed,
             dateLabel      = viewModel.selectedDateLabel.value
@@ -274,6 +275,7 @@ class LogFragment : Fragment() {
                 binding.layoutAdaptiveBreakdown.isVisible = false
                 binding.tvAdaptiveHint.isVisible = true
                 binding.tvAdaptiveHint.text = getString(R.string.log_adaptive_hint_unavailable)
+                binding.tvAdaptiveHint.setOnClickListener { viewModel.loadHealthData() }
                 binding.tvAdaptiveWeightHint.isVisible = false
             }
             is LogViewModel.AdaptiveState.HcDisconnected -> {
@@ -281,6 +283,7 @@ class LogFragment : Fragment() {
                 binding.layoutAdaptiveBreakdown.isVisible = false
                 binding.tvAdaptiveHint.isVisible = true
                 binding.tvAdaptiveHint.text = getString(R.string.log_adaptive_hint_connect)
+                binding.tvAdaptiveHint.setOnClickListener { viewModel.loadHealthData() }
                 binding.tvAdaptiveWeightHint.isVisible = false
             }
             is LogViewModel.AdaptiveState.Active -> {

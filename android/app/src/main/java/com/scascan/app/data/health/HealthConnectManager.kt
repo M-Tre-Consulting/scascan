@@ -42,11 +42,7 @@ class HealthConnectManager @Inject constructor(
     }
 
     val isAvailable: Boolean
-        get() {
-            val status = HealthConnectClient.getSdkStatus(context)
-            Log.d(TAG, "Health Connect SDK Status: $status")
-            return status == HealthConnectClient.SDK_AVAILABLE
-        }
+        get() = HealthConnectClient.getSdkStatus(context) == HealthConnectClient.SDK_AVAILABLE
 
     private val client: HealthConnectClient?
         get() = if (isAvailable) HealthConnectClient.getOrCreate(context) else null
@@ -67,6 +63,27 @@ class HealthConnectManager @Inject constructor(
         } catch (e: Exception) {
             Log.e(TAG, "hasPermissions error: $e")
             false
+        }
+    }
+
+    /**
+     * Returns today's total step count, deduplicated via the aggregate API
+     * so multiple data sources (Fitbit, Samsung Health, etc.) don't double-count.
+     */
+    suspend fun readTodaySteps(): Long {
+        val c = client ?: return 0L
+        return try {
+            val (start, end) = todayRange()
+            val response = c.aggregate(
+                AggregateRequest(
+                    metrics = setOf(StepsRecord.COUNT_TOTAL),
+                    timeRangeFilter = TimeRangeFilter.between(start, end)
+                )
+            )
+            response[StepsRecord.COUNT_TOTAL] ?: 0L
+        } catch (e: Exception) {
+            Log.e(TAG, "readTodaySteps error: $e")
+            0L
         }
     }
 
@@ -101,12 +118,18 @@ class HealthConnectManager @Inject constructor(
     }
 
     /**
-     * Returns ACTIVE calories burned for a specific time range.
+     * Returns today's ACTIVE calories burned.
+     * Some apps (Samsung Health) only write TotalCaloriesBurnedRecord, so we fall back to (Total - BMR).
      */
+    suspend fun readTodayActiveCalories(): Double {
+        val (start, end) = todayRange()
+        return readActiveCaloriesRange(start, end)
+    }
+
     suspend fun readActiveCaloriesRange(start: Instant, end: Instant): Double {
         val c = client ?: return 0.0
         return try {
-            // 1. Try ActiveCaloriesBurnedRecord
+            // 1. Try ActiveCaloriesBurnedRecord first (Most accurate for "active" burn)
             val activeResponse = c.aggregate(
                 AggregateRequest(
                     metrics = setOf(ActiveCaloriesBurnedRecord.ACTIVE_CALORIES_TOTAL),
@@ -115,9 +138,12 @@ class HealthConnectManager @Inject constructor(
             )
             val activeKcal = activeResponse[ActiveCaloriesBurnedRecord.ACTIVE_CALORIES_TOTAL]?.inKilocalories ?: 0.0
             
+            Log.d(TAG, "Active Kcal from record: $activeKcal")
+            // If we have meaningful active calories, return them
             if (activeKcal > 1.0) return activeKcal
 
-            // 2. Fallback: (Total - BMR)
+            // 2. Fallback: (TotalCaloriesBurnedRecord - BMR)
+            // This is necessary because some platforms record everything as "Total"
             val totalResponse = c.aggregate(
                 AggregateRequest(
                     metrics = setOf(TotalCaloriesBurnedRecord.ENERGY_TOTAL),
@@ -128,10 +154,23 @@ class HealthConnectManager @Inject constructor(
             
             if (totalKcal <= 0.0) return 0.0
 
-            val dailyBmr = estimateDailyBmr()
-            val minutesPassed = Duration.between(start, end).toMinutes()
-            val bmrKcal = (dailyBmr / 1440.0) * minutesPassed
+            // Get BMR for the same period
+            val bmrResponse = c.aggregate(
+                AggregateRequest(
+                    metrics = setOf(BasalMetabolicRateRecord.BASAL_CALORIES_TOTAL),
+                    timeRangeFilter = TimeRangeFilter.between(start, end)
+                )
+            )
+            var bmrKcal = bmrResponse[BasalMetabolicRateRecord.BASAL_CALORIES_TOTAL]?.inKilocalories ?: 0.0
             
+            // If BMR is missing in HC (common), estimate it from profile to avoid huge numbers
+            if (bmrKcal <= 0.0) {
+                val dailyBmr = estimateDailyBmr()
+                val minutesPassed = Duration.between(start, end).toMinutes()
+                bmrKcal = (dailyBmr / 1440.0) * minutesPassed
+            }
+            
+            Log.d(TAG, "Total Kcal: $totalKcal, BMR Kcal: $bmrKcal, Diff: ${totalKcal - bmrKcal}")
             (totalKcal - bmrKcal).coerceAtLeast(0.0)
         } catch (e: Exception) {
             Log.e(TAG, "readActiveCaloriesRange error: $e")
@@ -198,5 +237,12 @@ class HealthConnectManager @Inject constructor(
             Log.e(TAG, "readLatestHeight error: $e")
             null
         }
+    }
+
+    private fun todayRange(): Pair<Instant, Instant> {
+        val zone = ZoneId.systemDefault()
+        val start = LocalDate.now(zone).atStartOfDay(zone).toInstant()
+        val end = Instant.now()
+        return start to end
     }
 }

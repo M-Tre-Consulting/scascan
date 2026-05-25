@@ -24,12 +24,14 @@
         app:trackCornerRadius="0dp"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Floating Navigation Pill -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/navCard"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="64dp"
         android:layout_marginBottom="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:hapticFeedbackEnabled="true"
         app:cardCornerRadius="32dp"
         app:cardElevation="8dp"
         app:cardBackgroundColor="?attr/colorSurfaceContainer"
@@ -39,13 +41,13 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <FrameLayout
-            android:layout_width="280dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <!-- Animated Indicator -->
             <View
                 android:id="@+id/nav_indicator"
-                android:layout_width="86dp"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/nav_indicator_background" />
@@ -62,7 +64,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:hapticFeedbackEnabled="true">
 
                     <ImageView
                         android:id="@+id/icon_home"
@@ -80,7 +83,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:hapticFeedbackEnabled="true">
 
                     <ImageView
                         android:id="@+id/icon_log"
@@ -98,7 +102,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:hapticFeedbackEnabled="true">
 
                     <ImageView
                         android:id="@+id/icon_profile"
