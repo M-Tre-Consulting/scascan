@@ -21,6 +21,7 @@ import com.scascan.app.data.model.NutritionFacts
 import com.scascan.app.data.repository.LogRepository
 import com.scascan.app.databinding.FragmentMainBinding
 import com.scascan.app.ui.result.AnalysisResultBottomSheetFragment
+import com.scascan.app.ui.util.hapticClick
 import com.scascan.app.ui.util.hapticTick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -68,13 +69,18 @@ class MainFragment : Fragment() {
             binding.navLog to 1,
             binding.navProfile to 2
         ).forEach { (view, page) ->
+            // Ensure the view is capable of haptics
+            view.isHapticFeedbackEnabled = true
+            
             view.setOnClickListener { 
-                view.hapticTick()
                 onNavClicked(page) 
             }
             view.setOnTouchListener { v, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
+                        // Switch to hapticClick (KEYBOARD_TAP) for more consistent feedback
+                        // and call it directly on the view that received the touch.
+                        v.hapticClick()
                         v.animate().scaleX(0.92f).scaleY(0.92f).setDuration(100).start()
                     }
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
