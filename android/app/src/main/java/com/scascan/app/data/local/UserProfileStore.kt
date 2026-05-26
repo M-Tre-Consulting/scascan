@@ -5,6 +5,7 @@ import com.scascan.app.data.model.MacroTargets
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import androidx.core.content.edit
 
 @Singleton
 class UserProfileStore @Inject constructor(
@@ -14,54 +15,54 @@ class UserProfileStore @Inject constructor(
 
     var name: String
         get() = prefs?.getString(KEY_NAME, "") ?: ""
-        set(v) { prefs?.edit()?.putString(KEY_NAME, v)?.apply() }
+        set(v) { prefs.edit(commit = true) { putString(KEY_NAME, v)} }
 
     var age: Int
         get() = prefs.getInt(KEY_AGE, 0)
-        set(v) { prefs.edit().putInt(KEY_AGE, v).commit() }
+        set(v) { prefs.edit(commit = true) { putInt(KEY_AGE, v) } }
 
     var isMale: Boolean
         get() = prefs.getBoolean(KEY_SEX_MALE, true)
-        set(v) { prefs.edit().putBoolean(KEY_SEX_MALE, v).commit() }
+        set(v) { prefs.edit(commit = true) { putBoolean(KEY_SEX_MALE, v) } }
 
     var heightCm: Int
         get() = prefs.getInt(KEY_HEIGHT, 0)
-        set(v) { prefs.edit().putInt(KEY_HEIGHT, v).commit() }
+        set(v) { prefs.edit(commit = true) { putInt(KEY_HEIGHT, v) } }
 
     var weightKg: Float
         get() = prefs.getFloat(KEY_WEIGHT, 0f)
-        set(v) { prefs.edit().putFloat(KEY_WEIGHT, v).commit() }
+        set(v) { prefs.edit(commit = true) { putFloat(KEY_WEIGHT, v) } }
 
     /** 0 = sedentary → 4 = extra active */
     var activityIndex: Int
         get() = prefs.getInt(KEY_ACTIVITY, 2)
-        set(v) { prefs.edit().putInt(KEY_ACTIVITY, v).commit() }
+        set(v) { prefs.edit(commit = true) { putInt(KEY_ACTIVITY, v) } }
 
     /** 0 = lose weight, 1 = maintain, 2 = build muscle */
     var goalIndex: Int
         get() = prefs.getInt(KEY_GOAL, 1)
-        set(v) { prefs.edit().putInt(KEY_GOAL, v).commit() }
+        set(v) { prefs.edit(commit = true) { putInt(KEY_GOAL, v) } }
 
     /** AI-computed daily calorie target. 0 = not computed yet. */
     var aiCalorieTarget: Int
         get() = prefs.getInt(KEY_AI_CALORIES, 0)
-        set(v) { prefs.edit().putInt(KEY_AI_CALORIES, v).commit() }
+        set(v) { prefs.edit(commit = true) { putInt(KEY_AI_CALORIES, v) } }
 
     var aiProteinTarget: Int
         get() = prefs.getInt(KEY_AI_PROTEIN, 0)
-        set(v) { prefs.edit().putInt(KEY_AI_PROTEIN, v).commit() }
+        set(v) { prefs.edit(commit = true) { putInt(KEY_AI_PROTEIN, v) } }
 
     var aiCarbsTarget: Int
         get() = prefs.getInt(KEY_AI_CARBS, 0)
-        set(v) { prefs.edit().putInt(KEY_AI_CARBS, v).commit() }
+        set(v) { prefs.edit(commit = true) { putInt(KEY_AI_CARBS, v) } }
 
     var aiFatTarget: Int
         get() = prefs.getInt(KEY_AI_FAT, 0)
-        set(v) { prefs.edit().putInt(KEY_AI_FAT, v).commit() }
+        set(v) { prefs.edit(commit = true) { putInt(KEY_AI_FAT, v) } }
 
     var syncEmail: String
         get() = prefs.getString(KEY_SYNC_EMAIL, "") ?: ""
-        set(v) { prefs.edit().putString(KEY_SYNC_EMAIL, v).commit() }
+        set(v) { prefs.edit(commit = true) { putString(KEY_SYNC_EMAIL, v) } }
 
     fun hasProfile(): Boolean = age > 0 && heightCm > 0 && weightKg > 0f
 
