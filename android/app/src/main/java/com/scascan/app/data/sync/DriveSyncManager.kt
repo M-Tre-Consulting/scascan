@@ -2,12 +2,10 @@ package com.scascan.app.data.sync
 
 import android.content.Context
 import android.util.Log
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.http.FileContent
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import com.google.gson.Gson
 import com.scascan.app.data.local.UserProfileStore
 import com.scascan.app.data.model.ProfileExport
@@ -28,7 +26,7 @@ class DriveSyncManager @Inject constructor(
     private val profileStore: UserProfileStore
 ) {
     private val gson = Gson()
-    private val SYNC_FILE_NAME = "scascan_sync.json"
+    private val syncFileName = "scascan_sync.json"
 
     suspend fun sync(accessToken: String): Result<Unit> = withContext(Dispatchers.IO) {
         Log.d("DriveSync", "Starting sync process...")
@@ -93,13 +91,13 @@ class DriveSyncManager @Inject constructor(
     private fun downloadData(drive: Drive): SyncData? {
         val files = drive.files().list()
             .setSpaces("appDataFolder")
-            .setQ("name = '$SYNC_FILE_NAME'")
+            .setQ("name = '$syncFileName'")
             .setFields("files(id, name)")
             .execute()
         
         val fileId = files.files.firstOrNull()?.id ?: return null
         
-        val tempFile = File(context.cacheDir, SYNC_FILE_NAME)
+        val tempFile = File(context.cacheDir, syncFileName)
         val outputStream = FileOutputStream(tempFile)
         drive.files().get(fileId).executeMediaAndDownloadTo(outputStream)
         outputStream.close()
@@ -112,11 +110,11 @@ class DriveSyncManager @Inject constructor(
     }
 
     private fun uploadData(drive: Drive, data: SyncData) {
-        val tempFile = File(context.cacheDir, SYNC_FILE_NAME)
+        val tempFile = File(context.cacheDir, syncFileName)
         tempFile.writeText(gson.toJson(data))
 
         val metadata = com.google.api.services.drive.model.File().apply {
-            name = SYNC_FILE_NAME
+            name = syncFileName
             parents = listOf("appDataFolder")
         }
         
@@ -124,7 +122,7 @@ class DriveSyncManager @Inject constructor(
         
         val existingFiles = drive.files().list()
             .setSpaces("appDataFolder")
-            .setQ("name = '$SYNC_FILE_NAME'")
+            .setQ("name = '$syncFileName'")
             .setFields("files(id)")
             .execute()
         
