@@ -20,8 +20,10 @@ import androidx.health.connect.client.PermissionController
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.identity.AuthorizationRequest
 import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.RevokeAccessRequest
 import com.google.android.gms.common.api.Scope
 import com.google.android.material.snackbar.Snackbar
+import com.google.api.services.drive.DriveScopes
 import com.scascan.app.R
 import com.scascan.app.data.health.HealthConnectManager
 import com.scascan.app.data.remote.ModelInfo
@@ -31,6 +33,7 @@ import com.scascan.app.ui.util.hapticConfirm
 import com.scascan.app.ui.util.hapticTick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -52,49 +55,55 @@ class ProfileFragment : Fragment() {
         ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
         Log.d("ProfileFragment", "requestDriveAuth result: ${result.resultCode}")
-        if (result.resultCode == Activity.RESULT_OK) {
-            try {
-                val authClient = Identity.getAuthorizationClient(requireActivity())
-                val authResult = authClient.getAuthorizationResultFromIntent(result.data)
-                
-                // 1. Extract the access token for Drive sync
-                val token = authResult.accessToken
-                
-                // 2. Try to extract account info (email/name) from the sign-in intent
+
+        when (result.resultCode) {
+            Activity.RESULT_OK -> {
                 try {
-                    val signInClient = Identity.getSignInClient(requireActivity())
-                    val credential = signInClient.getSignInCredentialFromIntent(result.data)
-                    
-                    Log.d("ProfileFragment", "Found credential info: ${credential.id}, ${credential.displayName}")
-                    
-                    if (!credential.id.isNullOrBlank()) {
-                        viewModel.profileStore.syncEmail = credential.id
+                    // Correctly extract the Drive Authorization result
+                    val authClient = Identity.getAuthorizationClient(requireActivity())
+                    val authResult = authClient.getAuthorizationResultFromIntent(result.data)
+                    val token = authResult.accessToken
+
+                    // Extract profile info via toGoogleSignInAccount()
+                    val googleAccount = authResult.toGoogleSignInAccount()
+                    val profileEmail = googleAccount?.email
+                    val profileName = googleAccount?.displayName
+
+                    Log.d(
+                        "ProfileFragment",
+                        "Extracted Auth Info - Email: $profileEmail, Name: $profileName"
+                    )
+
+                    if (!profileEmail.isNullOrBlank()) {
+                        viewModel.profileStore.syncEmail = profileEmail
+                    } else if (viewModel.profileStore.syncEmail.isBlank()) {
+                        viewModel.profileStore.syncEmail = "Connected"
                     }
-                    
-                    if (viewModel.profileStore.name.isBlank() && !credential.displayName.isNullOrBlank()) {
-                        viewModel.profileStore.name = credential.displayName!!
-                        binding.etName.setText(credential.displayName)
+
+                    if (viewModel.profileStore.name.isBlank() && !profileName.isNullOrBlank()) {
+                        viewModel.profileStore.name = profileName
+                        binding.etName.setText(profileName)
                     }
-                } catch (e: Exception) {
-                    Log.d("ProfileFragment", "Could not extract sign-in info: ${e.message}")
+
+                    // Trigger your Drive synchronization
+                    token?.let { viewModel.triggerSync(it) }
+
+                } catch (e: com.google.android.gms.common.api.ApiException) {
+                    Log.e("ProfileFragment", "ApiException in result handler: status=${e.statusCode}", e)
+                    Snackbar.make(binding.root, "Auth error: ${e.statusCode}", Snackbar.LENGTH_LONG).show()
                 }
-                
-                // Final fallback: if extraction failed but we have a token, just show "Connected"
-                if (viewModel.profileStore.syncEmail.isBlank()) {
-                    viewModel.profileStore.syncEmail = "Connected"
-                }
-                
-                token?.let { viewModel.triggerSync(it) }
-                
-            } catch (e: com.google.android.gms.common.api.ApiException) {
-                Log.e("ProfileFragment", "ApiException in result handler: status=${e.statusCode}", e)
-                Snackbar.make(binding.root, "Auth error: ${e.statusCode}", Snackbar.LENGTH_LONG).show()
             }
-        } else if (result.resultCode == Activity.RESULT_CANCELED) {
-            Log.e("ProfileFragment", "Auth CANCELED (code 0). Check SHA-1 and Package Name in Google Cloud Console.")
-            Snackbar.make(binding.root, "Auth canceled - check configuration", Snackbar.LENGTH_LONG).show()
-        } else {
-            Log.e("ProfileFragment", "Auth failed with result code: ${result.resultCode}")
+            Activity.RESULT_CANCELED -> {
+                Log.e(
+                    "ProfileFragment",
+                    "Auth CANCELED. Verify your SHA-1 and Package Name in Google Cloud Console."
+                )
+                Snackbar.make(binding.root, "Auth canceled - check configuration", Snackbar.LENGTH_LONG)
+                    .show()
+            }
+            else -> {
+                Log.e("ProfileFragment", "Auth failed with result code: ${result.resultCode}")
+            }
         }
     }
 
@@ -199,17 +208,29 @@ class ProfileFragment : Fragment() {
     private fun disconnectGoogle() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                // 1. Clear the local profile store
+                // Clear the local profile store
                 viewModel.profileStore.syncEmail = ""
-                
-                // 2. Clear the Credential Manager state (forces account picker next time)
+
+                // Clear the Credential Manager state (forces account picker next time)
                 val credManager = androidx.credentials.CredentialManager.create(requireContext())
                 credManager.clearCredentialState(androidx.credentials.ClearCredentialStateRequest())
-                
-                // 3. Sign out from Identity services
-                // This clears the "default" account so the picker shows up again
-                Identity.getSignInClient(requireActivity()).signOut()
-                
+
+                // Clear Google Drive Authorization grants cleanly
+                try {
+                    val authClient = Identity.getAuthorizationClient(requireActivity())
+
+                    // Construct the revoke request for your app's specific scope
+                    val revokeRequest = RevokeAccessRequest.builder()
+                        .setScopes(listOf(Scope(DriveScopes.DRIVE_FILE)))
+                        .build()
+
+                    // Clear the authorization cache asynchronously using await()
+                    authClient.revokeAccess(revokeRequest).await()
+                    Log.d("ProfileFragment", "Drive Authorization cache revoked successfully.")
+                } catch (authException: Exception) {
+                    Log.w("ProfileFragment", "Failed to clear Drive auth state: ${authException.message}")
+                }
+
                 updateSyncButton()
                 Snackbar.make(binding.root, R.string.profile_sync_disconnected, Snackbar.LENGTH_SHORT)
                     .setAnchorView(binding.btnGoogleSync)

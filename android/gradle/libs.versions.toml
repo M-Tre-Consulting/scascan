@@ -1,5 +1,6 @@
 [versions]
 agp = "9.2.1"
+androidxCredentials = "1.2.0"
 ksp = "2.3.8"
 coreKtx = "1.13.1"
 appcompat = "1.7.0"
@@ -27,6 +28,7 @@ okhttp = "4.12.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-credentials-v120 = { module = "androidx.credentials:credentials", version.ref = "androidxCredentials" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
