@@ -17,6 +17,7 @@ import com.scascan.app.data.model.NutritionFacts
 import com.scascan.app.databinding.FragmentNutritionResultBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class NutritionResultFragment : Fragment() {
@@ -76,7 +77,7 @@ class NutritionResultFragment : Fragment() {
     private fun bindFacts(facts: NutritionFacts) {
         binding.tvFoodName.text = facts.foodName
         binding.tvServingSize.text = facts.servingSize
-        binding.tvCaloriesValue.text = Math.round(facts.calories).toInt().toString()
+        binding.tvCaloriesValue.text = facts.calories.roundToInt().toString()
         binding.tvProteinValue.text = getString(R.string.value_grams, facts.protein)
         binding.tvCarbsValue.text = getString(R.string.value_grams, facts.carbohydrates)
         binding.tvFatValue.text = getString(R.string.value_grams, facts.fat)

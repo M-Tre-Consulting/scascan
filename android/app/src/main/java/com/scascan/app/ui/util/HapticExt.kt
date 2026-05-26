@@ -12,7 +12,7 @@ import android.view.View
 fun View.hapticTick() {
     val success = performHapticFeedback(
         HapticFeedbackConstants.CLOCK_TICK,
-        HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING or HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
+        HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
     )
     if (!success) {
         // Fallback to direct vibration if view-based haptics fail
@@ -24,7 +24,7 @@ fun View.hapticTick() {
 fun View.hapticClick() {
     val success = performHapticFeedback(
         HapticFeedbackConstants.KEYBOARD_TAP,
-        HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
+        HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
     )
     if (!success) {
         vibrateFallback(context, 30)

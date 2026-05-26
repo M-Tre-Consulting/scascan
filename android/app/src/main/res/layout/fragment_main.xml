@@ -24,90 +24,15 @@
         app:trackCornerRadius="0dp"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/navCard"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
         android:layout_width="0dp"
-        android:layout_height="72dp"
-        android:layout_marginBottom="32dp"
-        android:layout_marginStart="88dp"
-        android:layout_marginEnd="88dp"
-        android:hapticFeedbackEnabled="true"
-        app:cardCornerRadius="36dp"
-        app:cardElevation="12dp"
-        app:cardBackgroundColor="#1C1B1F"
-        app:strokeWidth="0dp"
+        android:layout_height="wrap_content"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <!-- Larger Animated Indicator -->
-            <View
-                android:id="@+id/navIndicator"
-                android:layout_width="72dp"
-                android:layout_height="56dp"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/nav_indicator_background" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <FrameLayout
-                    android:id="@+id/nav_home"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true">
-                    <ImageView
-                        android:id="@+id/icon_home"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_camera"
-                        app:tint="@color/nav_item_tint" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/nav_log"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true">
-                    <ImageView
-                        android:id="@+id/icon_log"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_nav_log"
-                        app:tint="@color/nav_item_tint" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/nav_profile"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true">
-                    <ImageView
-                        android:id="@+id/icon_profile"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_nav_profile"
-                        app:tint="@color/nav_item_tint" />
-                </FrameLayout>
-
-            </LinearLayout>
-        </FrameLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="?attr/colorSurfaceContainer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
