@@ -75,6 +75,7 @@
     <string name="log_summary_remaining">%1$d kcal remaining</string>
     <string name="log_summary_over">%1$d kcal over goal</string>
     <string name="log_summary_activity">+%1$d kcal active · %2$d steps</string>
+    <string name="log_summary_bleedthrough">%1$+d kcal from yesterday</string>
     <string name="log_summary_macros_section">Macros</string>
     <string name="log_summary_other_section">Other nutrients</string>
     <string name="log_summary_goal_section">Goal</string>

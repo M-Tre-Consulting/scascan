@@ -75,6 +75,7 @@
     <string name="log_summary_remaining">%1$d kcal rimanenti</string>
     <string name="log_summary_over">%1$d kcal in eccesso</string>
     <string name="log_summary_activity">+%1$d kcal attive · %2$d passi</string>
+    <string name="log_summary_bleedthrough">%1$+d kcal da ieri</string>
     <string name="log_summary_macros_section">Macronutrienti</string>
     <string name="log_summary_other_section">Altri nutrienti</string>
     <string name="log_summary_goal_section">Obiettivo</string>

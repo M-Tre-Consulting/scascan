@@ -80,10 +80,7 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
 
         if (bleedthrough != 0) {
             binding.tvActivityContribution.isVisible = true
-            binding.tvActivityContribution.text = getString(
-                if (bleedthrough > 0) R.string.log_adaptive_plus_kcal else R.string.log_adaptive_minus_kcal,
-                Math.abs(bleedthrough)
-            ) + " from yesterday"
+            binding.tvActivityContribution.text = getString(R.string.log_summary_bleedthrough, bleedthrough)
         }
 
         val hasHealth = activeKcal > 0 || steps > 0
