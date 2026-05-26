@@ -13,6 +13,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton
+import androidx.core.graphics.scale
 
 data class ModelInfo(val id: String, val displayName: String)
 
@@ -153,7 +154,7 @@ class GeminiRestClient @Inject constructor() {
         val w = src.width; val h = src.height
         if (w <= IMAGE_MAX_SIDE && h <= IMAGE_MAX_SIDE) return src
         val scale = IMAGE_MAX_SIDE.toFloat() / maxOf(w, h)
-        return Bitmap.createScaledBitmap(src, (w * scale).toInt(), (h * scale).toInt(), true)
+        return src.scale((w * scale).toInt(), (h * scale).toInt())
     }
 
     // Response parser
