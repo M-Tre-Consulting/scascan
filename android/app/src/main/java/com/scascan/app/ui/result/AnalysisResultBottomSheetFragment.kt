@@ -29,7 +29,12 @@ class AnalysisResultBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val facts = requireArguments().getParcelable<NutritionFacts>(ARG_FACTS)!!
+        val facts = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            requireArguments().getParcelable(ARG_FACTS, NutritionFacts::class.java)!!
+        } else {
+            @Suppress("DEPRECATION")
+            requireArguments().getParcelable<NutritionFacts>(ARG_FACTS)!!
+        }
 
         binding.tvFoodName.text = facts.foodName
         binding.tvCalories.text = "${Math.round(facts.calories).toInt()} kcal · ${facts.servingSize}"

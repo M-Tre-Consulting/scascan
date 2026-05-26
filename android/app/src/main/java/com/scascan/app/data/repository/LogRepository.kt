@@ -74,10 +74,10 @@ class LogRepository @Inject constructor(
         val consumed = yesterdayEntries.sumOf { it.calories.toDouble() }
         
         // 2. Base Allowance yesterday
-        // If Health Connect is active, we use BMR + goal offset as the base to avoid double-counting activity
+        // If Health Connect is active, we use a Sedentary (1.2x) base to avoid double-counting activity
         val hasHc = healthManager.hasPermissions()
         val baseTarget = if (hasHc) {
-            (bmr() + goalOffset()).toDouble()
+            (bmr() * 1.2) + goalOffset()
         } else {
             dailyCalorieTarget().toDouble()
         }

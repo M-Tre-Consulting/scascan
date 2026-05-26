@@ -63,6 +63,7 @@ class ProfileFragment : Fragment() {
                 // 2. Try to extract account info (email/name) from the sign-in intent
                 try {
                     val signInClient = Identity.getSignInClient(requireActivity())
+                    @Suppress("DEPRECATION")
                     val credential = signInClient.getSignInCredentialFromIntent(result.data)
                     
                     Log.d("ProfileFragment", "Found credential info: ${credential.id}, ${credential.displayName}")
@@ -208,6 +209,7 @@ class ProfileFragment : Fragment() {
                 
                 // 3. Sign out from Identity services
                 // This clears the "default" account so the picker shows up again
+                @Suppress("DEPRECATION")
                 Identity.getSignInClient(requireActivity()).signOut()
                 
                 updateSyncButton()
