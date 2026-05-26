@@ -301,8 +301,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    // ── Personal info ─────────────────────────────────────────────────────────
-
+    // Personal info
     private fun setupPersonalInfo() {
         val profile = viewModel.profileStore
         val activityLabels = resources.getStringArray(R.array.activity_levels)
@@ -434,8 +433,7 @@ class ProfileFragment : Fragment() {
         checkHcStatus()
     }
 
-    // ── Health Connect ────────────────────────────────────────────────────────
-
+    // Health Connect
     private fun setupHealthConnect() {
         val hm = viewModel.healthManager
         if (!hm.isAvailable) {
@@ -512,8 +510,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    // ── API key ───────────────────────────────────────────────────────────────
-
+    // API key
     private fun setupApiKey() {
         val keyStore = viewModel.keyStore
         if (keyStore.hasKey()) binding.etApiKey.setText(keyStore.apiKey)
@@ -539,8 +536,7 @@ class ProfileFragment : Fragment() {
         viewModel.loadModels()
     }
 
-    // ── Model selector ────────────────────────────────────────────────────────
-
+    // Model selector
     private fun setupModelSelector() {
         observeModelState()
         if (viewModel.keyStore.hasKey()) {

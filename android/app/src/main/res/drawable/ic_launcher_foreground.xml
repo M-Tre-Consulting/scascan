@@ -22,7 +22,7 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- ── Carrot / leaf body + foliage (rotated 45° CW) ───────────────────── -->
+    <!-- Carrot / leaf body + foliage (rotated 45° CW) -->
     <group
         android:rotation="45"
         android:pivotX="52"
@@ -56,8 +56,7 @@
 
     </group>
 
-    <!-- ── Magnifying glass (absolute coordinates) ─────────────────────────── -->
-
+    <!-- Magnifying glass (absolute coordinates) -->
     <!-- Lens — subtle frosted fill -->
     <path
         android:pathData="M61,54 m-13,0 a13,13,0,1,0,26,0 a13,13,0,1,0,-26,0"

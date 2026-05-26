@@ -121,8 +121,7 @@ class GeminiRestClient @Inject constructor() {
             }
         }
 
-    // ── Request builders ─────────────────────────────────────────────────────
-
+    // Request builders
     private fun textBody(prompt: String): String =
         JSONObject()
             .put("contents", JSONArray()
@@ -157,8 +156,7 @@ class GeminiRestClient @Inject constructor() {
         return Bitmap.createScaledBitmap(src, (w * scale).toInt(), (h * scale).toInt(), true)
     }
 
-    // ── Response parser ──────────────────────────────────────────────────────
-
+    // Response parser
     private fun extractText(json: String): String {
         return try {
             JSONObject(json)

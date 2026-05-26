@@ -5,7 +5,7 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/apiKeyFragment">
 
-    <!-- ── First-run setup ─────────────────────────────────────────────────── -->
+    <!-- First-run setup -->
     <fragment
         android:id="@+id/apiKeyFragment"
         android:name="com.scascan.app.ui.setup.ApiKeyFragment"
@@ -17,7 +17,7 @@
             app:popUpToInclusive="true" />
     </fragment>
 
-    <!-- ── Main tab host ──────────────────────────────────────────────────── -->
+    <!-- Main tab host -->
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.scascan.app.ui.main.MainFragment"
@@ -52,7 +52,7 @@
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
-    <!-- ── Detail screens ─────────────────────────────────────────────────── -->
+    <!-- Detail screens -->
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.scascan.app.ui.camera.CameraFragment"

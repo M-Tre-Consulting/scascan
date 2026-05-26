@@ -65,8 +65,7 @@ class LogFragment : Fragment() {
         viewModel.refreshTargets()
     }
 
-    // ── Date navigation ───────────────────────────────────────────────────────
-
+    // Date navigation
     private fun setupDateNavigation() {
         binding.btnPrevDay.setOnClickListener { it.hapticTick(); viewModel.goToPreviousDay() }
         binding.btnNextDay.setOnClickListener { it.hapticTick(); viewModel.goToNextDay() }
@@ -79,8 +78,7 @@ class LogFragment : Fragment() {
         }
     }
 
-    // ── Summary cards ─────────────────────────────────────────────────────────
-
+    // Summary cards
     private fun setupSummaryCards() {
         val openSummary = View.OnClickListener { v ->
             v.hapticClick()
@@ -119,8 +117,7 @@ class LogFragment : Fragment() {
         ).show(childFragmentManager, "daily_summary")
     }
 
-    // ── Fix entry ─────────────────────────────────────────────────────────────
-
+    // Fix entry
     private fun setupFixResultListener() {
         childFragmentManager.setFragmentResultListener(
             FixEntryBottomSheetFragment.RESULT_KEY,
@@ -133,8 +130,7 @@ class LogFragment : Fragment() {
         }
     }
 
-    // ── State observation ─────────────────────────────────────────────────────
-
+    // State observation
     private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
             combine(
@@ -180,8 +176,7 @@ class LogFragment : Fragment() {
         }
     }
 
-    // ── Rendering ─────────────────────────────────────────────────────────────
-
+    // Rendering
     private fun renderScreen(
         entries: List<LogEntry>,
         adaptive: LogViewModel.AdaptiveState,

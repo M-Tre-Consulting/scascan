@@ -33,8 +33,7 @@ class LogViewModel @Inject constructor(
     val healthManager: HealthConnectManager
 ) : ViewModel() {
 
-    // ── Date navigation ────────────────────────────────────────────────────────
-
+    // Date navigation
     private val _dateOffset = MutableStateFlow(0)
 
     val isToday: StateFlow<Boolean> = _dateOffset
@@ -62,8 +61,7 @@ class LogViewModel @Inject constructor(
     fun goToPreviousDay() { _dateOffset.value--; loadHealthData() }
     fun goToNextDay() { if (_dateOffset.value < 0) { _dateOffset.value++; loadHealthData() } }
 
-    // ── Adaptive targets ───────────────────────────────────────────────────────
-
+    // Adaptive targets
     /**
      * Unified Health Connect + adaptive-target state.
      *
@@ -179,8 +177,7 @@ class LogViewModel @Inject constructor(
         return TrendResult(adj, status, weeklyRate)
     }
 
-    // ── Targets ────────────────────────────────────────────────────────────────
-
+    // Targets
     data class TargetInfo(
         val caloriesKcal: Int,
         val bmrKcal: Int,
@@ -213,8 +210,7 @@ class LogViewModel @Inject constructor(
         }
     }
 
-    // ── Log entry operations ───────────────────────────────────────────────────
-
+    // Log entry operations
     fun deleteEntry(entry: LogEntry) {
         viewModelScope.launch { logRepository.deleteEntry(entry) }
     }
