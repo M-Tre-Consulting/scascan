@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.scascan.app.R
 import com.scascan.app.data.model.NutritionFacts
 import com.scascan.app.databinding.FragmentAnalysisResultBottomSheetBinding
 import com.scascan.app.ui.util.hapticClick
@@ -30,21 +32,25 @@ class AnalysisResultBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val facts = requireArguments().getParcelable<NutritionFacts>(ARG_FACTS)!!
+        val facts = BundleCompat.getParcelable<NutritionFacts>(
+            requireArguments(),
+            ARG_FACTS,
+            NutritionFacts::class.java
+        )
 
-        val caloriesInt = facts.calories.roundToInt()
-        val servingSizeStr = facts.servingSize
+        val caloriesInt = facts?.calories?.roundToInt()
+        val servingSizeStr = facts?.servingSize
 
-        binding.tvFoodName.text = facts.foodName
+        binding.tvFoodName.text = facts?.foodName
         binding.tvCalories.text = binding.root.context.getString(
             R.string.calorie_fact_format,
             caloriesInt,
             servingSizeStr
         )
         binding.tvMacros.text = buildString {
-            append("${facts.protein.roundToInt()}g protein")
-            append(" · ${facts.carbohydrates.roundToInt()}g carbs")
-            append(" · ${facts.fat.roundToInt()}g fat")
+            append("${facts?.protein?.roundToInt()}g protein")
+            append(" · ${facts?.carbohydrates?.roundToInt()}g carbs")
+            append(" · ${facts?.fat?.roundToInt()}g fat")
         }
 
         binding.btnAddToLog.setOnClickListener {
