@@ -1,5 +1,6 @@
 package com.scascan.app.ui.main
 
+import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ import com.scascan.app.ui.util.hapticTick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.core.graphics.toColorInt
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
@@ -98,6 +100,7 @@ class MainFragment : Fragment() {
             view.setOnClickListener { 
                 onNavClicked(page) 
             }
+            @SuppressLint("ClickableViewAccessibility")
             view.setOnTouchListener { v, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
@@ -129,7 +132,7 @@ class MainFragment : Fragment() {
         binding.navCard.post {
             val icons = listOf(binding.iconHome, binding.iconLog, binding.iconProfile)
             
-            val activeContentColor = android.graphics.Color.parseColor("#EADDFF")
+            val activeContentColor = "#EADDFF".toColorInt()
             val inactiveColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnSurfaceVariant, 0)
 
             icons.forEachIndexed { index, icon ->
