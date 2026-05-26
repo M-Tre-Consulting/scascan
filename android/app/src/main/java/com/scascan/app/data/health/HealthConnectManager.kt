@@ -66,27 +66,6 @@ class HealthConnectManager @Inject constructor(
         }
     }
 
-    /**
-     * Returns today's total step count, deduplicated via the aggregate API
-     * so multiple data sources (Fitbit, Samsung Health, etc.) don't double-count.
-     */
-    suspend fun readTodaySteps(): Long {
-        val c = client ?: return 0L
-        return try {
-            val (start, end) = todayRange()
-            val response = c.aggregate(
-                AggregateRequest(
-                    metrics = setOf(StepsRecord.COUNT_TOTAL),
-                    timeRangeFilter = TimeRangeFilter.between(start, end)
-                )
-            )
-            response[StepsRecord.COUNT_TOTAL] ?: 0L
-        } catch (e: Exception) {
-            Log.e(TAG, "readTodaySteps error: $e")
-            0L
-        }
-    }
-
     suspend fun readSteps(offset: Int): Long {
         val c = client ?: return 0L
         return try {
@@ -115,15 +94,6 @@ class HealthConnectManager @Inject constructor(
         val start = day.atStartOfDay(zone).toInstant()
         val end = if (offset == 0) Instant.now() else day.plusDays(1).atStartOfDay(zone).toInstant()
         return start to end
-    }
-
-    /**
-     * Returns today's ACTIVE calories burned.
-     * Some apps (Samsung Health) only write TotalCaloriesBurnedRecord, so we fall back to (Total - BMR).
-     */
-    suspend fun readTodayActiveCalories(): Double {
-        val (start, end) = todayRange()
-        return readActiveCaloriesRange(start, end)
     }
 
     suspend fun readActiveCaloriesRange(start: Instant, end: Instant): Double {
@@ -237,12 +207,5 @@ class HealthConnectManager @Inject constructor(
             Log.e(TAG, "readLatestHeight error: $e")
             null
         }
-    }
-
-    private fun todayRange(): Pair<Instant, Instant> {
-        val zone = ZoneId.systemDefault()
-        val start = LocalDate.now(zone).atStartOfDay(zone).toInstant()
-        val end = Instant.now()
-        return start to end
     }
 }
