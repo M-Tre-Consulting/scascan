@@ -25,6 +25,8 @@ import com.scascan.app.ui.util.hapticTick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import java.util.Locale
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class LogFragment : Fragment() {
@@ -98,10 +100,10 @@ class LogFragment : Fragment() {
         val steps       = (adaptive as? LogViewModel.AdaptiveState.Active)?.steps ?: 0L
 
         DailySummaryBottomSheetFragment.newInstance(
-            totalCalories  = Math.round(entries.sumOf { it.calories }).toInt(),
-            totalProtein   = Math.round(entries.sumOf { it.protein }).toInt(),
-            totalCarbs     = Math.round(entries.sumOf { it.carbohydrates }).toInt(),
-            totalFat       = Math.round(entries.sumOf { it.fat }).toInt(),
+            totalCalories  = entries.sumOf { it.calories }.roundToInt(),
+            totalProtein   = entries.sumOf { it.protein }.roundToInt(),
+            totalCarbs     = entries.sumOf { it.carbohydrates }.roundToInt(),
+            totalFat       = entries.sumOf { it.fat }.roundToInt(),
             totalFiber     = entries.sumOf { it.fiber },
             totalSodiumMg  = entries.sumOf { it.sodium },
             calorieTarget  = targetInfo.caloriesKcal + activeKcal + trendAdj + targetInfo.bleedthroughKcal,
@@ -193,10 +195,10 @@ class LogFragment : Fragment() {
     }
 
     private fun renderEntries(entries: List<LogEntry>, calorieTarget: Int, macros: MacroTargets) {
-        val totalCalories = Math.round(entries.sumOf { it.calories }).toInt()
-        val totalProtein  = Math.round(entries.sumOf { it.protein }).toInt()
-        val totalCarbs    = Math.round(entries.sumOf { it.carbohydrates }).toInt()
-        val totalFat      = Math.round(entries.sumOf { it.fat }).toInt()
+        val totalCalories = entries.sumOf { it.calories }.roundToInt()
+        val totalProtein  = entries.sumOf { it.protein }.roundToInt()
+        val totalCarbs    = entries.sumOf { it.carbohydrates }.roundToInt()
+        val totalFat      = entries.sumOf { it.fat }.roundToInt()
 
         binding.tvCalorieSummary.text = getString(R.string.log_kcal_of, totalCalories, calorieTarget)
         binding.progressCalories.max      = calorieTarget
@@ -233,10 +235,10 @@ class LogFragment : Fragment() {
             val item = ItemLogEntryBinding.inflate(layoutInflater, binding.entriesContainer, true)
             item.tvFoodName.text = entry.foodName
             item.tvNutrientSummary.text = buildString {
-                append("${Math.round(entry.calories).toInt()} kcal")
-                append(" · ${Math.round(entry.protein).toInt()}g protein")
-                append(" · ${Math.round(entry.carbohydrates).toInt()}g carbs")
-                append(" · ${Math.round(entry.fat).toInt()}g fat")
+                append("${entry.calories.roundToInt()} kcal")
+                append(" . ${entry.protein.roundToInt()}g protein")
+                append(" · ${entry.carbohydrates.roundToInt()}g carbs")
+                append(" · ${entry.fat.roundToInt()}g fat")
             }
             item.btnFix.setOnClickListener {
                 it.hapticClick()
@@ -253,7 +255,7 @@ class LogFragment : Fragment() {
         val active = adaptive as? LogViewModel.AdaptiveState.Active
         binding.cardHcMetrics.isVisible = active != null
         if (active != null) {
-            val km = String.format("%.1f km", active.steps * 0.0008)
+            val km = String.format(Locale.getDefault(), "%.1f km", active.steps * 0.0008)
             binding.tvHcSteps.text    = getString(R.string.hc_steps, active.steps)
             binding.tvHcCalories.text = getString(R.string.hc_active_kcal, active.activeKcal.toInt())
             binding.tvHcDistance.text = km
