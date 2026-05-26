@@ -25,8 +25,6 @@ class GeminiKeyStore @Inject constructor(
 
     fun hasKey(): Boolean = apiKey.isNotBlank()
 
-    fun clearKey() { prefs.edit(commit = true) { remove(KEY_API) } }
-
     companion object {
         private const val PREFS_NAME = "scascan_prefs"
         private const val KEY_API    = "gemini_api_key"
