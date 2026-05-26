@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import androidx.recyclerview.widget.RecyclerView
 import com.scascan.app.R
 import com.scascan.app.data.analysis.AnalysisManager
 import com.scascan.app.data.model.NutritionFacts
@@ -49,6 +50,9 @@ class MainFragment : Fragment() {
     private fun setupViewPager() {
         binding.viewPager.adapter = MainTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
         binding.viewPager.offscreenPageLimit = 2
+        
+        // Reduce swipe sensitivity (require more horizontal movement to start swiping)
+        reduceSwipeSensitivity()
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -62,6 +66,19 @@ class MainFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun reduceSwipeSensitivity() {
+        try {
+            val recyclerView = binding.viewPager.getChildAt(0) as? RecyclerView ?: return
+            val touchSlopField = RecyclerView::class.java.getDeclaredField("mTouchSlop")
+            touchSlopField.isAccessible = true
+            val currentTouchSlop = touchSlopField.get(recyclerView) as Int
+            // Increase the slop - higher value means lower sensitivity (requires more movement to trigger)
+            touchSlopField.set(recyclerView, (currentTouchSlop * 4)) 
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun setupBottomNav() {
