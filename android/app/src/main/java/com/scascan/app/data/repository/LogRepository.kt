@@ -74,12 +74,22 @@ class LogRepository @Inject constructor(
         val consumed = yesterdayEntries.sumOf { it.calories.toDouble() }
         
         // 2. Base Allowance yesterday
-        val baseTarget = dailyCalorieTarget().toDouble()
+        // If Health Connect is active, we use a Sedentary (1.2x) base to avoid double-counting activity
+        val hasHc = healthManager.hasPermissions()
+        val baseTarget = if (hasHc) {
+            (bmr() * 1.2) + goalOffset()
+        } else {
+            dailyCalorieTarget().toDouble()
+        }
         
         // 3. Active Burn yesterday
         val startInstant = java.time.Instant.ofEpochMilli(startMs)
         val endInstant = java.time.Instant.ofEpochMilli(endMs)
-        val activeYesterday = healthManager.readActiveCaloriesRange(startInstant, endInstant)
+        val activeYesterday = if (hasHc) {
+            healthManager.readActiveCaloriesRange(startInstant, endInstant)
+        } else {
+            0.0
+        }
         
         val totalAllowanceYesterday = baseTarget + activeYesterday
         val rawBalance = totalAllowanceYesterday - consumed

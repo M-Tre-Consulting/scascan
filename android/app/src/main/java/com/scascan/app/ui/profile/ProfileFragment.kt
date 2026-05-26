@@ -64,7 +64,7 @@ class ProfileFragment : Fragment() {
                     val authResult = authClient.getAuthorizationResultFromIntent(result.data)
                     val token = authResult.accessToken
 
-                    // Extract profile info via toGoogleSignInAccount()
+                    // Extract profile info safely via toGoogleSignInAccount()
                     val googleAccount = authResult.toGoogleSignInAccount()
                     val profileEmail = googleAccount?.email
                     val profileName = googleAccount?.displayName
@@ -151,7 +151,6 @@ class ProfileFragment : Fragment() {
                     is ProfileViewModel.ActionState.Loading -> {
                         binding.btnSaveProfile.isEnabled = false
                         binding.btnSaveKey.isEnabled = false
-                        // Use a generic "saving" text if possible, or just reuse analyzing
                         binding.btnSaveProfile.text = getString(R.string.analyzing)
                         binding.btnSaveKey.text = getString(R.string.analyzing)
                     }
@@ -201,7 +200,7 @@ class ProfileFragment : Fragment() {
         } else {
             getString(R.string.hc_disconnected)
         }
-        
+
         binding.btnDisconnectGoogle.isVisible = connected
     }
 
@@ -253,7 +252,7 @@ class ProfileFragment : Fragment() {
                 Scope("https://www.googleapis.com/auth/userinfo.profile")
             ))
             .build()
-        
+
         Identity.getAuthorizationClient(requireActivity())
             .authorize(request)
             .addOnSuccessListener { result ->
@@ -269,7 +268,7 @@ class ProfileFragment : Fragment() {
                         if (viewModel.profileStore.syncEmail.isBlank()) {
                             viewModel.profileStore.syncEmail = "Connected"
                         }
-                        viewModel.triggerSync(token) 
+                        viewModel.triggerSync(token)
                     }
                 }
             }
@@ -391,7 +390,7 @@ class ProfileFragment : Fragment() {
 
         binding.btnSaveProfile.hapticConfirm()
         viewModel.saveProfile(name, age, height, weight, actIdx, goalIdx)
-        
+
         if (viewModel.keyStore.hasKey()) {
             viewModel.computeTargets()
         }
@@ -489,11 +488,11 @@ class ProfileFragment : Fragment() {
     private fun syncFromHc() {
         binding.btnSyncWeight.isEnabled = false
         binding.btnSyncWeight.text = getString(R.string.analyzing)
-        
+
         viewLifecycleOwner.lifecycleScope.launch {
             val kg = viewModel.healthManager.readLatestWeightKg()
             val cm = viewModel.healthManager.readLatestHeightCm()
-            
+
             binding.btnSyncWeight.isEnabled = true
             binding.btnSyncWeight.text = getString(R.string.hc_sync_weight)
 
@@ -503,13 +502,13 @@ class ProfileFragment : Fragment() {
                     .show()
                 return@launch
             }
-            
+
             kg?.let {
                 val rounded = it.toFloat()
                 binding.etWeight.setText(rounded.toString())
                 viewModel.profileStore.weightKg = rounded
             }
-            
+
             cm?.let {
                 val rounded = it.toInt()
                 binding.etHeight.setText(rounded.toString())

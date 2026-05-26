@@ -32,25 +32,26 @@ class AnalysisResultBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val facts = BundleCompat.getParcelable<NutritionFacts>(
+        // Cleanly handled using BundleCompat to avoid explicit SDK version checking
+        val facts = BundleCompat.getParcelable(
             requireArguments(),
             ARG_FACTS,
             NutritionFacts::class.java
-        )
+        )!!
 
-        val caloriesInt = facts?.calories?.roundToInt()
-        val servingSizeStr = facts?.servingSize
+        val caloriesInt = facts.calories.roundToInt()
+        val servingSizeStr = facts.servingSize
 
-        binding.tvFoodName.text = facts?.foodName
+        binding.tvFoodName.text = facts.foodName
         binding.tvCalories.text = binding.root.context.getString(
             R.string.calorie_fact_format,
             caloriesInt,
             servingSizeStr
         )
         binding.tvMacros.text = buildString {
-            append("${facts?.protein?.roundToInt()}g protein")
-            append(" · ${facts?.carbohydrates?.roundToInt()}g carbs")
-            append(" · ${facts?.fat?.roundToInt()}g fat")
+            append("${facts.protein.roundToInt()}g protein")
+            append(" · ${facts.carbohydrates.roundToInt()}g carbs")
+            append(" · ${facts.fat.roundToInt()}g fat")
         }
 
         binding.btnAddToLog.setOnClickListener {
