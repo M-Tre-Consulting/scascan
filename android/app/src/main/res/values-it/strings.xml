@@ -67,6 +67,7 @@
     <string name="log_date_today">Oggi</string>
     <string name="log_date_yesterday">Ieri</string>
     <string name="log_macro_of">di %1$dg</string>
+    <string name="calorie_fact_format">%1$d kcal · %2$s</string>
 
     <!-- Daily summary bottom sheet -->
     <string name="log_summary_title">Riepilogo giornaliero</string>

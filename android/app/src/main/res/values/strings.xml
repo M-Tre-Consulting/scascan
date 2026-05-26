@@ -67,6 +67,7 @@
     <string name="log_date_today">Today</string>
     <string name="log_date_yesterday">Yesterday</string>
     <string name="log_macro_of">of %1$dg</string>
+    <string name="calorie_fact_format">%1$d kcal · %2$s</string>
 
     <!-- Daily summary bottom sheet -->
     <string name="log_summary_title">Daily Summary</string>

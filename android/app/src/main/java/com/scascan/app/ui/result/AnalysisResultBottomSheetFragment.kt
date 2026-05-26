@@ -11,6 +11,7 @@ import com.scascan.app.databinding.FragmentAnalysisResultBottomSheetBinding
 import com.scascan.app.ui.util.hapticClick
 import com.scascan.app.ui.util.hapticConfirm
 import com.scascan.app.ui.util.hapticTick
+import kotlin.math.roundToInt
 
 class AnalysisResultBottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -31,12 +32,19 @@ class AnalysisResultBottomSheetFragment : BottomSheetDialogFragment() {
 
         val facts = requireArguments().getParcelable<NutritionFacts>(ARG_FACTS)!!
 
+        val caloriesInt = facts.calories.roundToInt()
+        val servingSizeStr = facts.servingSize
+
         binding.tvFoodName.text = facts.foodName
-        binding.tvCalories.text = "${Math.round(facts.calories).toInt()} kcal · ${facts.servingSize}"
+        binding.tvCalories.text = binding.root.context.getString(
+            R.string.calorie_fact_format,
+            caloriesInt,
+            servingSizeStr
+        )
         binding.tvMacros.text = buildString {
-            append("${Math.round(facts.protein).toInt()}g protein")
-            append(" · ${Math.round(facts.carbohydrates).toInt()}g carbs")
-            append(" · ${Math.round(facts.fat).toInt()}g fat")
+            append("${facts.protein.roundToInt()}g protein")
+            append(" · ${facts.carbohydrates.roundToInt()}g carbs")
+            append(" · ${facts.fat.roundToInt()}g fat")
         }
 
         binding.btnAddToLog.setOnClickListener {
