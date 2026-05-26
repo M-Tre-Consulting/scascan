@@ -288,6 +288,8 @@ class LogFragment : Fragment() {
             }
             is LogViewModel.AdaptiveState.Active -> {
                 binding.chipAdaptiveStatus.isVisible = true
+                binding.layoutAdaptiveBreakdown.isVisible = true
+                binding.tvAdaptiveHint.isVisible = false
                 binding.chipAdaptiveStatus.setChipBackgroundColorResource(android.R.color.transparent)
                 binding.chipAdaptiveStatus.text = when (adaptive.trendStatus) {
                     LogViewModel.AdaptiveState.TrendStatus.OnTrack ->
