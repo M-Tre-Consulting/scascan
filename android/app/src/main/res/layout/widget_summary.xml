@@ -1,76 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_background"
-    android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Top Row: Consumed Large + Target Small -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/layout_header"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="bottom">
 
         <TextView
-            android:id="@+id/tv_widget_calories"
-            android:layout_width="0dp"
+            android:id="@+id/tv_widget_consumed"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="0 / 2000 kcal"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:text="0"
+            android:textColor="@color/widget_primary"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-black" />
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_launcher_foreground"
-            android:contentDescription="@string/app_name" />
+        <TextView
+            android:id="@+id/tv_widget_target"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="6dp"
+            android:text="/ 2000 kcal"
+            android:textColor="@color/widget_outline"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-medium" />
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/layout_header"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_launcher_foreground"
+        android:alpha="0.6"
+        android:contentDescription="ScaScan" />
+
+    <!-- Progress Bar -->
     <ProgressBar
         android:id="@+id/progress_widget_calories"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="8dp"
+        android:layout_height="12dp"
+        android:layout_below="@id/layout_header"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="12dp"
         android:progress="0"
         android:progressDrawable="@drawable/widget_progress_bar" />
 
+    <!-- Macros: High density summary -->
+    <TextView
+        android:id="@+id/tv_widget_macros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progress_widget_calories"
+        android:layout_marginTop="8dp"
+        android:text="P: 0g  ·  C: 0g  ·  F: 0g"
+        android:textColor="@color/widget_on_background"
+        android:textSize="13sp"
+        android:fontFamily="sans-serif-medium" />
+
+    <!-- Bottom Actions: Centered Tonal Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:gravity="center">
 
         <ImageButton
             android:id="@+id/btn_widget_scan"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginEnd="12dp"
             android:background="@drawable/widget_button_background"
             android:src="@drawable/ic_camera"
+            android:tint="@color/widget_on_secondary_container"
             android:contentDescription="@string/label_camera" />
 
         <ImageButton
             android:id="@+id/btn_widget_barcode"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginEnd="12dp"
             android:background="@drawable/widget_button_background"
             android:src="@drawable/ic_barcode"
+            android:tint="@color/widget_on_secondary_container"
             android:contentDescription="@string/label_barcode_scan" />
 
         <ImageButton
             android:id="@+id/btn_widget_search"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
             android:background="@drawable/widget_button_background"
             android:src="@drawable/ic_search"
+            android:tint="@color/widget_on_secondary_container"
             android:contentDescription="@string/label_search" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
