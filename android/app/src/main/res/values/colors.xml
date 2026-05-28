@@ -29,4 +29,12 @@
     <color name="colorOnSurfaceVariant">#424940</color>
     <color name="colorOutline">#72796A</color>
     <color name="colorOutlineVariant">#C2C9BA</color>
+
+    <!-- Widget Specific Fixed Colors (Fallbacks for below API 31) -->
+    <color name="widget_background">#1C1B1F</color>
+    <color name="widget_on_background">#E6E1E5</color>
+    <color name="widget_primary">#D0BCFF</color>
+    <color name="widget_secondary_container">#49454F</color>
+    <color name="widget_on_secondary_container">#E6E1E5</color>
+    <color name="widget_outline">#938F99</color>
 </resources>
