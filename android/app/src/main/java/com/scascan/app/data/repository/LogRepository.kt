@@ -68,6 +68,8 @@ class LogRepository @Inject constructor(
 
     suspend fun getAllEntries(): List<LogEntry> = dao.getAllEntries()
 
+    suspend fun getEntriesForRangeSync(start: Long, end: Long): List<LogEntry> = dao.getEntriesForRangeSync(start, end)
+
     suspend fun getYesterdayBleedthrough(): Int {
         val cal = Calendar.getInstance().apply {
             add(Calendar.DAY_OF_YEAR, -1)

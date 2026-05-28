@@ -50,14 +50,22 @@ class SummaryWidgetProvider : AppWidgetProvider() {
         val start = cal.timeInMillis
         val end = start + 24 * 60 * 60 * 1000L
         
-        val entries = logRepository.getAllEntries().filter { it.timestamp in start until end }
+        val entries = logRepository.getEntriesForRangeSync(start, end)
         val consumed = entries.sumOf { it.calories }.toInt()
         val target = logRepository.dailyCalorieTarget()
+        
+        val p = entries.sumOf { it.protein }.toInt()
+        val c = entries.sumOf { it.carbohydrates }.toInt()
+        val f = entries.sumOf { it.fat }.toInt()
 
         val views = RemoteViews(context.packageName, R.layout.widget_summary)
         
-        views.setTextViewText(R.id.tv_widget_calories, "$consumed / $target kcal")
+        views.setTextViewText(R.id.tv_widget_consumed, consumed.toString())
+        views.setTextViewText(R.id.tv_widget_target, "/ $target kcal")
         views.setProgressBar(R.id.progress_widget_calories, target, consumed, false)
+        
+        // Macro breakdown text
+        views.setTextViewText(R.id.tv_widget_macros, "P: ${p}g  ·  C: ${c}g  ·  F: ${f}g")
 
         // Setup Intents
         views.setOnClickPendingIntent(R.id.btn_widget_scan, getPendingIntent(context, MainActivity.ACTION_QUICK_SCAN))
@@ -73,9 +81,10 @@ class SummaryWidgetProvider : AppWidgetProvider() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             action?.let { this.action = it }
         }
+        val requestCode = action?.hashCode() ?: 0
         return PendingIntent.getActivity(
             context, 
-            action?.hashCode() ?: 0, 
+            requestCode,
             intent, 
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
