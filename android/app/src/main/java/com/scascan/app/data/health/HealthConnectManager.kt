@@ -67,9 +67,13 @@ class HealthConnectManager @Inject constructor(
     }
 
     suspend fun readSteps(offset: Int): Long {
+        val (start, end) = dateRange(offset)
+        return readSteps(start, end)
+    }
+
+    suspend fun readSteps(start: Instant, end: Instant): Long {
         val c = client ?: return 0L
         return try {
-            val (start, end) = dateRange(offset)
             val response = c.aggregate(
                 AggregateRequest(
                     metrics = setOf(StepsRecord.COUNT_TOTAL),
@@ -78,7 +82,7 @@ class HealthConnectManager @Inject constructor(
             )
             response[StepsRecord.COUNT_TOTAL] ?: 0L
         } catch (e: Exception) {
-            Log.e(TAG, "readSteps error: $e")
+            Log.e(TAG, "readSteps range error: $e")
             0L
         }
     }
@@ -141,7 +145,20 @@ class HealthConnectManager @Inject constructor(
             }
             
             Log.d(TAG, "Total Kcal: $totalKcal, BMR Kcal: $bmrKcal, Diff: ${totalKcal - bmrKcal}")
-            (totalKcal - bmrKcal).coerceAtLeast(0.0)
+            val activeFromTotal = (totalKcal - bmrKcal).coerceAtLeast(0.0)
+            if (activeFromTotal > 1.0) return activeFromTotal
+
+            // 3. Last Resort: Estimate from Steps
+            // If active calories are still ~0 but steps are > 0, estimate burn.
+            // Average person burns ~0.04 kcal per step.
+            val steps = readSteps(start, end)
+            if (steps > 0) {
+                val estimatedKcal = steps * 0.04
+                Log.d(TAG, "Estimated Active Kcal from $steps steps: $estimatedKcal")
+                return estimatedKcal
+            }
+
+            0.0
         } catch (e: Exception) {
             Log.e(TAG, "readActiveCaloriesRange error: $e")
             0.0

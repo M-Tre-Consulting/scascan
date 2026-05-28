@@ -95,7 +95,7 @@ class LogFragment : Fragment() {
         val entries     = viewModel.logEntries.value
         val targetInfo  = viewModel.targetInfo.value
         val adaptive    = viewModel.adaptiveState.value
-        val activeKcal  = (adaptive as? LogViewModel.AdaptiveState.Active)?.activeKcal?.toInt() ?: 0
+        val activeKcal  = (adaptive as? LogViewModel.AdaptiveState.Active)?.activeKcal?.roundToInt() ?: 0
         val trendAdj    = (adaptive as? LogViewModel.AdaptiveState.Active)?.trendAdjustment ?: 0
         val steps       = (adaptive as? LogViewModel.AdaptiveState.Active)?.steps ?: 0L
 
@@ -184,7 +184,7 @@ class LogFragment : Fragment() {
         adaptive: LogViewModel.AdaptiveState,
         targetInfo: LogViewModel.TargetInfo
     ) {
-        val activeKcal = (adaptive as? LogViewModel.AdaptiveState.Active)?.activeKcal?.toInt() ?: 0
+        val activeKcal = (adaptive as? LogViewModel.AdaptiveState.Active)?.activeKcal?.roundToInt() ?: 0
         val trendAdj   = (adaptive as? LogViewModel.AdaptiveState.Active)?.trendAdjustment ?: 0
         val bleedthrough = targetInfo.bleedthroughKcal
         val totalTarget = targetInfo.caloriesKcal + activeKcal + trendAdj + bleedthrough
@@ -257,7 +257,7 @@ class LogFragment : Fragment() {
         if (active != null) {
             val km = String.format(Locale.getDefault(), "%.1f km", active.steps * 0.0008)
             binding.tvHcSteps.text    = getString(R.string.hc_steps, active.steps)
-            binding.tvHcCalories.text = getString(R.string.hc_active_kcal, active.activeKcal.toInt())
+            binding.tvHcCalories.text = getString(R.string.hc_active_kcal, active.activeKcal.roundToInt())
             binding.tvHcDistance.text = km
         }
     }
@@ -310,7 +310,7 @@ class LogFragment : Fragment() {
                 )
 
                 val baseTarget = targetInfo.caloriesKcal
-                val activeKcal = adaptive.activeKcal.toInt()
+                val activeKcal = adaptive.activeKcal.roundToInt()
                 val trendAdj   = adaptive.trendAdjustment
                 val bleedthrough = targetInfo.bleedthroughKcal
 
