@@ -10,6 +10,8 @@ import com.scascan.app.data.remote.ModelInfo
 import com.scascan.app.data.repository.NutritionRepository
 import com.scascan.app.data.sync.DriveSyncManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -17,6 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     val keyStore: GeminiKeyStore,
     val profileStore: UserProfileStore,
     val healthManager: HealthConnectManager,
@@ -87,6 +90,7 @@ class ProfileViewModel @Inject constructor(
                     profileStore.aiProteinTarget = targets.proteinGrams
                     profileStore.aiCarbsTarget   = targets.carbsGrams
                     profileStore.aiFatTarget      = targets.fatGrams
+                    com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
                     _targetState.value = TargetState.Done(targets.dailyCalories)
                 }
                 .onFailure { e ->
@@ -135,6 +139,7 @@ class ProfileViewModel @Inject constructor(
                 profileStore.weightKg = weight
                 profileStore.activityIndex = activityIdx
                 profileStore.goalIndex = goalIdx
+                com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
                 _actionState.value = ActionState.Success("Profile saved successfully")
             } catch (e: Exception) {
                 _actionState.value = ActionState.Error(e.message ?: "Failed to save profile")

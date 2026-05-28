@@ -12,6 +12,7 @@ import javax.inject.Singleton
 
 @Singleton
 class LogRepository @Inject constructor(
+    @dagger.hilt.android.qualifiers.ApplicationContext private val context: android.content.Context,
     private val dao: LogEntryDao,
     private val profileStore: UserProfileStore,
     private val healthManager: com.scascan.app.data.health.HealthConnectManager
@@ -31,23 +32,32 @@ class LogRepository @Inject constructor(
         return dao.getEntriesForRange(start, end)
     }
 
-    suspend fun addEntry(facts: NutritionFacts) = dao.insert(
-        LogEntry(
-            foodName = facts.foodName,
-            servingSize = facts.servingSize,
-            calories = facts.calories,
-            protein = facts.protein,
-            carbohydrates = facts.carbohydrates,
-            fat = facts.fat,
-            fiber = facts.fiber,
-            sugar = facts.sugar,
-            sodium = facts.sodium
+    suspend fun addEntry(facts: NutritionFacts) {
+        dao.insert(
+            LogEntry(
+                foodName = facts.foodName,
+                servingSize = facts.servingSize,
+                calories = facts.calories,
+                protein = facts.protein,
+                carbohydrates = facts.carbohydrates,
+                fat = facts.fat,
+                fiber = facts.fiber,
+                sugar = facts.sugar,
+                sodium = facts.sodium
+            )
         )
-    )
+        com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
+    }
 
-    suspend fun updateEntry(entry: LogEntry) = dao.update(entry)
+    suspend fun updateEntry(entry: LogEntry) {
+        dao.update(entry)
+        com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
+    }
 
-    suspend fun deleteEntry(entry: LogEntry) = dao.delete(entry)
+    suspend fun deleteEntry(entry: LogEntry) {
+        dao.delete(entry)
+        com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
+    }
 
     fun dailyCalorieTarget(): Int = profileStore.dailyCalorieTarget()
     fun bmr(): Int = profileStore.bmr().toInt()
