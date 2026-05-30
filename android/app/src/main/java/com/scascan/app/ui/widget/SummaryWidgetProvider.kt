@@ -35,7 +35,7 @@ class SummaryWidgetProvider : AppWidgetProvider() {
                     updateAppWidget(context, appWidgetManager, appWidgetId)
                 }
             } finally {
-                pendingResult.finish()
+                pendingResult?.finish()
             }
         }
     }
@@ -92,7 +92,7 @@ class SummaryWidgetProvider : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE || intent.action == ACTION_DATA_CHANGED) {
+        if (intent.action == ACTION_DATA_CHANGED) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val componentName = ComponentName(context, SummaryWidgetProvider::class.java)
             onUpdate(context, appWidgetManager, appWidgetManager.getAppWidgetIds(componentName))
