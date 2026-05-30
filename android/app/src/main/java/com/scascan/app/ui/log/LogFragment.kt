@@ -236,9 +236,9 @@ class LogFragment : Fragment() {
             item.tvFoodName.text = entry.foodName
             item.tvNutrientSummary.text = buildString {
                 append("${entry.calories.roundToInt()} kcal")
-                append(" . ${entry.protein.roundToInt()}g protein")
-                append(" · ${entry.carbohydrates.roundToInt()}g carbs")
-                append(" · ${entry.fat.roundToInt()}g fat")
+                append(" • ${entry.protein.roundToInt()}g P")
+                append(" • ${entry.carbohydrates.roundToInt()}g C")
+                append(" • ${entry.fat.roundToInt()}g F")
             }
             item.btnFix.setOnClickListener {
                 it.hapticClick()
@@ -329,7 +329,7 @@ class LogFragment : Fragment() {
                     LogViewModel.AdaptiveState.TrendStatus.NoData ->
                         getString(R.string.log_adaptive_trend_collecting)
                     else -> {
-                        val adjStr = if (trendAdj >= 0) "+$trendAdj" else "$trendAdj"
+                        val adjStr = if (trendAdj >= 0) "+$trendAdj" else trendAdj.toString()
                         val rate = adaptive.weeklyRateKgPerWeek
                         if (rate != null) {
                             getString(R.string.log_adaptive_trend_rate, adjStr, rate)
