@@ -70,8 +70,10 @@
     <string name="log_macro_of">of %1$dg</string>
     <string name="log_water_total">%1$d ml</string>
     <string name="log_water_label">Water today</string>
+    <string name="log_water_add_100">+100ml</string>
     <string name="log_water_add_250">+250ml</string>
     <string name="log_water_add_500">+500ml</string>
+    <string name="log_water_undo">Undo last entry</string>
     <string name="calorie_fact_format">%1$d kcal · %2$s</string>
 
     <!-- Daily summary bottom sheet -->

@@ -93,6 +93,10 @@ class LogFragment : Fragment() {
     }
 
     private fun setupWaterTracking() {
+        binding.btnAddWater100.setOnClickListener {
+            it.hapticClick()
+            viewModel.addWater(100)
+        }
         binding.btnAddWater250.setOnClickListener {
             it.hapticClick()
             viewModel.addWater(250)
@@ -100,6 +104,10 @@ class LogFragment : Fragment() {
         binding.btnAddWater500.setOnClickListener {
             it.hapticClick()
             viewModel.addWater(500)
+        }
+        binding.btnRemoveWater.setOnClickListener {
+            it.hapticTick()
+            viewModel.removeLastWater()
         }
     }
 
@@ -218,6 +226,7 @@ class LogFragment : Fragment() {
     private fun renderWater(water: List<WaterLog>) {
         val totalMl = water.sumOf { it.amountMl }
         binding.tvWaterTotal.text = getString(R.string.log_water_total, totalMl)
+        binding.btnRemoveWater.isVisible = water.isNotEmpty()
     }
 
     private fun renderEntries(entries: List<LogEntry>, calorieTarget: Int, macros: MacroTargets) {

@@ -332,22 +332,47 @@
                 </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRemoveWater"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:icon="@drawable/ic_remove"
+                    app:iconSize="20dp"
+                    app:iconTint="?attr/colorOnSecondaryContainer"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/log_water_undo"
+                    android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddWater100"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/log_water_add_100"
+                    android:layout_marginEnd="4dp"
+                    android:paddingHorizontal="8dp"
+                    android:textSize="11sp"
+                    app:cornerRadius="12dp" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAddWater250"
                     style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:text="@string/log_water_add_250"
-                    android:layout_marginEnd="8dp"
-                    android:textSize="12sp"
+                    android:layout_marginEnd="4dp"
+                    android:paddingHorizontal="8dp"
+                    android:textSize="11sp"
                     app:cornerRadius="12dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAddWater500"
                     style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:text="@string/log_water_add_500"
-                    android:textSize="12sp"
+                    android:paddingHorizontal="8dp"
+                    android:textSize="11sp"
                     app:cornerRadius="12dp" />
 
             </LinearLayout>
