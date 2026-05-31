@@ -144,6 +144,13 @@ class LogRepository @Inject constructor(
         com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
     }
 
+    suspend fun removeLastWater() {
+        waterDao.getLatest()?.let {
+            waterDao.delete(it)
+            com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
+        }
+    }
+
     companion object {
         private const val DAY_MS = 24 * 60 * 60 * 1000L
     }

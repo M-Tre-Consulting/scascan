@@ -74,6 +74,10 @@ class LogViewModel @Inject constructor(
         viewModelScope.launch { logRepository.deleteWater(entry) }
     }
 
+    fun removeLastWater() {
+        viewModelScope.launch { logRepository.removeLastWater() }
+    }
+
     // Adaptive targets
     /**
      * Unified Health Connect + adaptive-target state.
