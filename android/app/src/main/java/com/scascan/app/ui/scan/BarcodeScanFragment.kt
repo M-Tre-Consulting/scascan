@@ -124,6 +124,7 @@ class BarcodeScanFragment : Fragment() {
                     val bitmap = image.toBitmap()
                     image.close()
                     viewModel.onShutterClicked(bitmap)
+                    findNavController().popBackStack()
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -134,42 +135,16 @@ class BarcodeScanFragment : Fragment() {
     }
 
     private fun observeUiState() {
+        // ViewModel uiState is no longer used for Loading/Success since we use AnalysisManager + popBackStack
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collect { state ->
-                when (state) {
-                    is BarcodeScanUiState.Scanning -> {
-                        binding.layoutThinking.visibility = View.GONE
-                        binding.viewFinder.visibility = View.VISIBLE
-                        binding.ivReticle.visibility = View.VISIBLE
-                        binding.btnScanShutter.visibility = View.VISIBLE
-                        binding.progressBar.visibility = View.GONE
-                        binding.tvStatus.text = getString(R.string.barcode_scan_prompt)
-                        binding.btnScanShutter.isEnabled = true
-                        binding.btnScanShutter.alpha = 1.0f
-                        binding.ivReticle.imageTintList = android.content.res.ColorStateList.valueOf(
-                            ContextCompat.getColor(requireContext(), R.color.colorTertiary)
-                        )
-                    }
-                    is BarcodeScanUiState.Loading -> {
-                        binding.layoutThinking.visibility = View.VISIBLE
-                        binding.viewFinder.visibility = View.GONE
-                        binding.ivReticle.visibility = View.GONE
-                        binding.btnScanShutter.visibility = View.GONE
-                        binding.topBar.isEnabled = false
-                    }
-                    is BarcodeScanUiState.Success -> {
-                        findNavController().navigate(
-                            R.id.action_barcodeScanFragment_to_nutritionResultFragment,
-                            bundleOf("nutritionFacts" to state.nutritionFacts)
-                        )
-                        viewModel.resetToScanning()
-                    }
-                    is BarcodeScanUiState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.topBar.isEnabled = true
-                        Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
-                        viewModel.resetToScanning()
-                    }
+                if (state is BarcodeScanUiState.Scanning) {
+                    binding.viewFinder.visibility = View.VISIBLE
+                    binding.ivReticle.visibility = View.VISIBLE
+                    binding.btnScanShutter.visibility = View.VISIBLE
+                    binding.statusBar.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    binding.tvStatus.text = getString(R.string.barcode_scan_prompt)
                 }
             }
         }

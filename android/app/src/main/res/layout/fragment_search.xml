@@ -95,7 +95,7 @@
                 android:layout_height="44dp"
                 android:src="@drawable/ic_arrow_back"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:tint="?attr/colorOnSurface"
+                app:tint="?attr/colorOnSurface"
                 android:padding="10dp"
                 android:contentDescription="@string/label_search" />
 

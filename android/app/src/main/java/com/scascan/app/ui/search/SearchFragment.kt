@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -60,37 +59,11 @@ class SearchFragment : Fragment() {
     private fun submitSearch() {
         val query = binding.etSearch.text?.toString() ?: return
         viewModel.searchFood(query)
+        findNavController().popBackStack()
     }
 
     private fun observeUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiState.collect { state ->
-                when (state) {
-                    is SearchUiState.Idle -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.btnAnalyze.isEnabled = true
-                    }
-                    is SearchUiState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.btnAnalyze.isEnabled = false
-                    }
-                    is SearchUiState.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        findNavController().navigate(
-                            R.id.action_searchFragment_to_nutritionResultFragment,
-                            bundleOf("nutritionFacts" to state.nutritionFacts)
-                        )
-                        viewModel.resetToIdle()
-                    }
-                    is SearchUiState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.btnAnalyze.isEnabled = true
-                        Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
-                        viewModel.resetToIdle()
-                    }
-                }
-            }
-        }
+        // ViewModel uiState is no longer used for Loading/Success since we use AnalysisManager + popBackStack
     }
 
     override fun onDestroyView() {
