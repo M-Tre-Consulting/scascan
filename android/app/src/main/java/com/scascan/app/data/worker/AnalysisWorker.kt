@@ -21,16 +21,29 @@ class AnalysisWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-        val imagePath = inputData.getString(KEY_IMAGE_PATH) ?: return Result.failure()
-        val file = File(imagePath)
-        if (!file.exists()) return Result.failure()
+        val imagePath = inputData.getString(KEY_IMAGE_PATH)
+        val query = inputData.getString(KEY_SEARCH_QUERY)
+        val isBarcode = inputData.getBoolean(KEY_IS_BARCODE, false)
 
         return try {
-            val bitmap = BitmapFactory.decodeFile(imagePath)
-            val factsResult = nutritionRepository.analyzeImage(bitmap)
-            
-            // Clean up temporary image
-            file.delete()
+            val factsResult = when {
+                imagePath != null -> {
+                    val file = File(imagePath)
+                    if (!file.exists()) return Result.failure()
+                    val bitmap = BitmapFactory.decodeFile(imagePath)
+                    val result = if (isBarcode) {
+                        nutritionRepository.analyzeBarcodeImage(bitmap)
+                    } else {
+                        nutritionRepository.analyzeImage(bitmap)
+                    }
+                    file.delete()
+                    result
+                }
+                query != null -> {
+                    nutritionRepository.searchFood(query)
+                }
+                else -> return Result.failure()
+            }
             
             factsResult.fold(
                 onSuccess = { facts ->
@@ -55,5 +68,7 @@ class AnalysisWorker @AssistedInject constructor(
 
     companion object {
         const val KEY_IMAGE_PATH = "image_path"
+        const val KEY_SEARCH_QUERY = "search_query"
+        const val KEY_IS_BARCODE = "is_barcode"
     }
 }

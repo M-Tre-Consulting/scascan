@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val searchFoodUseCase: SearchFoodUseCase
+    private val analysisManager: com.scascan.app.data.analysis.AnalysisManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Idle)
@@ -20,12 +20,7 @@ class SearchViewModel @Inject constructor(
 
     fun searchFood(query: String) {
         if (query.isBlank()) return
-        _uiState.value = SearchUiState.Loading
-        viewModelScope.launch {
-            searchFoodUseCase(query)
-                .onSuccess { _uiState.value = SearchUiState.Success(it) }
-                .onFailure { _uiState.value = SearchUiState.Error(it.message ?: "Unknown error") }
-        }
+        analysisManager.analyzeSearch(query)
     }
 
     fun resetToIdle() {

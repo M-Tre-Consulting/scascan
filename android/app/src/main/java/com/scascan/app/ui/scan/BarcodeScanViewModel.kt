@@ -15,22 +15,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BarcodeScanViewModel @Inject constructor(
-    private val scanBarcodeUseCase: ScanBarcodeUseCase,
-    private val nutritionRepository: NutritionRepository
+    private val analysisManager: com.scascan.app.data.analysis.AnalysisManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<BarcodeScanUiState>(BarcodeScanUiState.Scanning)
     val uiState: StateFlow<BarcodeScanUiState> = _uiState
 
     fun onShutterClicked(bitmap: Bitmap) {
-        if (_uiState.value is BarcodeScanUiState.Loading) return
-        _uiState.value = BarcodeScanUiState.Loading
-        
-        viewModelScope.launch {
-            nutritionRepository.analyzeBarcodeImage(bitmap)
-                .onSuccess { _uiState.value = BarcodeScanUiState.Success(it) }
-                .onFailure { _uiState.value = BarcodeScanUiState.Error(it.message ?: "Unknown error") }
-        }
+        analysisManager.analyzeBarcode(bitmap)
     }
 
     fun resetToScanning() {

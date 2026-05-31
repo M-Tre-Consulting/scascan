@@ -40,19 +40,41 @@ class AnalysisManager @Inject constructor(
     val state: StateFlow<State> = _state
 
     fun analyze(bitmap: Bitmap) {
+        startWorker(bitmap = bitmap, isBarcode = false)
+    }
+
+    fun analyzeBarcode(bitmap: Bitmap) {
+        startWorker(bitmap = bitmap, isBarcode = true)
+    }
+
+    fun analyzeSearch(query: String) {
+        startWorker(query = query)
+    }
+
+    private fun startWorker(bitmap: Bitmap? = null, query: String? = null, isBarcode: Boolean = false) {
         if (_state.value is State.Processing) return
         _state.value = State.Processing
         
         scope.launch {
             try {
-                // Save bitmap to temp file for worker
-                val tempFile = File(context.cacheDir, "analysis_${UUID.randomUUID()}.jpg")
-                FileOutputStream(tempFile).use { out ->
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                val builder = Data.Builder()
+                
+                bitmap?.let {
+                    // Save bitmap to temp file for worker
+                    val tempFile = File(context.cacheDir, "analysis_${UUID.randomUUID()}.jpg")
+                    FileOutputStream(tempFile).use { out ->
+                        it.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                    }
+                    builder.putString(AnalysisWorker.KEY_IMAGE_PATH, tempFile.absolutePath)
+                    builder.putBoolean(AnalysisWorker.KEY_IS_BARCODE, isBarcode)
+                }
+
+                query?.let {
+                    builder.putString(AnalysisWorker.KEY_SEARCH_QUERY, it)
                 }
 
                 val workRequest = OneTimeWorkRequestBuilder<AnalysisWorker>()
-                    .setInputData(Data.Builder().putString(AnalysisWorker.KEY_IMAGE_PATH, tempFile.absolutePath).build())
+                    .setInputData(builder.build())
                     .build()
 
                 workManager.enqueue(workRequest)
