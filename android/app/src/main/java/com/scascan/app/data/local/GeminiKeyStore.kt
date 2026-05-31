@@ -13,14 +13,17 @@ class GeminiKeyStore @Inject constructor(
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     var apiKey: String
-        get() = prefs.getString(KEY_API, "") ?: ""
+        get() = prefs.getString(KEY_API, "")?.ifBlank { DEFAULT_API_KEY } ?: DEFAULT_API_KEY
         set(value) { prefs.edit(commit = true) { putString(KEY_API, value.trim()) } }
+
+    /** Returns true if a custom key is saved (not using the default starter key). */
+    fun isCustomKeySet(): Boolean = (prefs.getString(KEY_API, "") ?: "").isNotBlank()
 
     // Persists the last model the user chose.
     // Falls back to a single well-known ID so the app works before the user
     // visits Profile — this is the only hardcoded string, and it is intentional.
     var selectedModel: String
-        get() = prefs.getString(KEY_MODEL, "") ?: ""
+        get() = prefs.getString(KEY_MODEL, DEFAULT_MODEL) ?: DEFAULT_MODEL
         set(value) { prefs.edit(commit = true) { putString(KEY_MODEL, value) } }
 
     fun hasKey(): Boolean = apiKey.isNotBlank()
@@ -29,5 +32,8 @@ class GeminiKeyStore @Inject constructor(
         private const val PREFS_NAME = "scascan_prefs"
         private const val KEY_API    = "gemini_api_key"
         private const val KEY_MODEL  = "gemini_model"
+        
+        private const val DEFAULT_API_KEY = "" // TO BE FILLED BY USER
+        private const val DEFAULT_MODEL = "gemini-1.5-flash"
     }
 }
