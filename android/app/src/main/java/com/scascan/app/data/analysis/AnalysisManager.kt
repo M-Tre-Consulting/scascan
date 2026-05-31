@@ -1,21 +1,14 @@
 package com.scascan.app.data.analysis
 
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.scascan.app.MainActivity
 import com.scascan.app.R
-import com.scascan.app.ScaScanApplication
 import com.scascan.app.data.model.NutritionFacts
-import com.scascan.app.data.repository.NutritionRepository
 import com.scascan.app.data.worker.AnalysisWorker
-import com.scascan.app.ui.util.NotificationHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,8 +24,6 @@ import javax.inject.Singleton
 
 @Singleton
 class AnalysisManager @Inject constructor(
-    private val nutritionRepository: NutritionRepository,
-    private val notificationHelper: NotificationHelper,
     @param:ApplicationContext private val context: Context
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -66,22 +57,26 @@ class AnalysisManager @Inject constructor(
 
                 workManager.enqueue(workRequest)
 
-                // Track work state (optional, for UI feedback)
-                // Note: AnalysisWorker current implementation also does direct analysis for in-app flow
-                // For immediate UI, we can still run it here or observe workManager
-                
-                // Let's keep the immediate flow for foreground and use worker for robustness/background
-                nutritionRepository.analyzeImage(bitmap)
-                    .onSuccess { facts ->
-                        _state.value = State.Complete(facts)
-                        val app = context.applicationContext as ScaScanApplication
-                        if (!app.isForeground) {
-                            notificationHelper.postAnalysisComplete(facts)
+                // Observe work to update state in the foreground
+                scope.launch(Dispatchers.Main) {
+                    workManager.getWorkInfoByIdFlow(workRequest.id).collect { workInfo ->
+                        when (workInfo?.state) {
+                            WorkInfo.State.SUCCEEDED -> {
+                                val json = workInfo.outputData.getString("facts_json")
+                                if (json != null) {
+                                    val facts = com.google.gson.Gson().fromJson(json, NutritionFacts::class.java)
+                                    _state.value = State.Complete(facts)
+                                } else {
+                                    _state.value = State.Error("Failed to parse analysis result")
+                                }
+                            }
+                            WorkInfo.State.FAILED -> {
+                                _state.value = State.Error(context.getString(R.string.analysis_error_generic))
+                            }
+                            else -> { /* Stay in processing */ }
                         }
                     }
-                    .onFailure { e ->
-                        _state.value = State.Error(e.message ?: context.getString(R.string.analysis_error_generic))
-                    }
+                }
             } catch (e: Exception) {
                 _state.value = State.Error(e.message ?: "Failed to start analysis")
             }

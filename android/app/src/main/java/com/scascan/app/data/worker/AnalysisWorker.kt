@@ -27,19 +27,27 @@ class AnalysisWorker @AssistedInject constructor(
 
         return try {
             val bitmap = BitmapFactory.decodeFile(imagePath)
-            nutritionRepository.analyzeImage(bitmap)
-                .onSuccess { facts ->
+            val factsResult = nutritionRepository.analyzeImage(bitmap)
+            
+            // Clean up temporary image
+            file.delete()
+            
+            factsResult.fold(
+                onSuccess = { facts ->
                     val app = applicationContext as ScaScanApplication
                     if (!app.isForeground) {
                         notificationHelper.postAnalysisComplete(facts)
                     }
-                    // Results could be passed back via Result.success(data) 
-                    // or handled globally by AnalysisManager
+                    
+                    val outputData = androidx.work.workDataOf(
+                        "facts_json" to com.google.gson.Gson().toJson(facts)
+                    )
+                    Result.success(outputData)
+                },
+                onFailure = { 
+                    Result.failure()
                 }
-            
-            // Clean up temporary image
-            file.delete()
-            Result.success()
+            )
         } catch (e: Exception) {
             Result.retry()
         }
