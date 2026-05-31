@@ -5,11 +5,22 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Bundle
-import com.scascan.app.data.analysis.AnalysisManager
+import androidx.work.Configuration
+import com.scascan.app.ui.util.NotificationHelper
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
+import androidx.hilt.work.HiltWorkerFactory
 
 @HiltAndroidApp
-class ScaScanApplication : Application() {
+class ScaScanApplication : Application(), Configuration.Provider {
+
+    @Inject lateinit var notificationHelper: NotificationHelper
+    @Inject lateinit var workerFactory: HiltWorkerFactory
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
 
     var isForeground = false
         private set
@@ -17,18 +28,7 @@ class ScaScanApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         registerActivityLifecycleCallbacks(ForegroundTracker())
-        createNotificationChannel()
-    }
-
-    private fun createNotificationChannel() {
-        val channel = NotificationChannel(
-            AnalysisManager.CHANNEL_ID,
-            getString(R.string.notif_channel_name),
-            NotificationManager.IMPORTANCE_DEFAULT
-        ).apply {
-            description = getString(R.string.notif_channel_desc)
-        }
-        getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
+        notificationHelper.createChannels()
     }
 
     private inner class ForegroundTracker : ActivityLifecycleCallbacks {
