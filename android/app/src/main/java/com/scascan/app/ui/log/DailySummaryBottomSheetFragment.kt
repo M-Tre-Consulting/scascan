@@ -44,6 +44,7 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
         val totalFat      = a.getInt(KEY_TOTAL_FAT)
         val totalFiber    = a.getDouble(KEY_TOTAL_FIBER)
         val totalSodium   = a.getDouble(KEY_TOTAL_SODIUM)
+        val totalWater    = a.getInt(KEY_TOTAL_WATER)
         val calorieTarget = a.getInt(KEY_CALORIE_TARGET)
         val proteinTarget = a.getInt(KEY_PROTEIN_TARGET)
         val carbsTarget   = a.getInt(KEY_CARBS_TARGET)
@@ -59,7 +60,7 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
 
         renderCalories(totalCalories, calorieTarget, activeKcal, steps, bleedthrough)
         renderMacros(totalProtein, totalCarbs, totalFat, proteinTarget, carbsTarget, fatTarget)
-        renderOther(totalFiber, totalSodium)
+        renderOther(totalFiber, totalSodium, totalWater)
         renderGoal(goalIndex, isAiComputed)
     }
 
@@ -135,9 +136,10 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
         binding.tvFatStatus.isVisible     = hasTargets
     }
 
-    private fun renderOther(fiberG: Double, sodiumMg: Double) {
+    private fun renderOther(fiberG: Double, sodiumMg: Double, waterMl: Int) {
         binding.tvSummaryFiber.text = getString(R.string.value_grams, fiberG)
         binding.tvSummarySodium.text = getString(R.string.value_milligrams, sodiumMg)
+        binding.tvSummaryWater.text = getString(R.string.log_water_total, waterMl)
     }
 
     private fun renderGoal(goalIndex: Int, isAiComputed: Boolean) {
@@ -163,6 +165,7 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
         private const val KEY_TOTAL_FAT       = "total_f"
         private const val KEY_TOTAL_FIBER     = "total_fiber"
         private const val KEY_TOTAL_SODIUM    = "total_sodium"
+        private const val KEY_TOTAL_WATER     = "total_water"
         private const val KEY_CALORIE_TARGET  = "cal_target"
         private const val KEY_PROTEIN_TARGET  = "p_target"
         private const val KEY_CARBS_TARGET    = "c_target"
@@ -177,6 +180,7 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
         fun newInstance(
             totalCalories: Int, totalProtein: Int, totalCarbs: Int,
             totalFat: Int, totalFiber: Double, totalSodiumMg: Double,
+            totalWater: Int,
             calorieTarget: Int, proteinTarget: Int, carbsTarget: Int, fatTarget: Int,
             activeKcal: Int, steps: Long, bleedthrough: Int,
             goalIndex: Int, isAiComputed: Boolean, dateLabel: String
@@ -188,6 +192,7 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
                 KEY_TOTAL_FAT      to totalFat,
                 KEY_TOTAL_FIBER    to totalFiber,
                 KEY_TOTAL_SODIUM   to totalSodiumMg,
+                KEY_TOTAL_WATER    to totalWater,
                 KEY_CALORIE_TARGET to calorieTarget,
                 KEY_PROTEIN_TARGET to proteinTarget,
                 KEY_CARBS_TARGET   to carbsTarget,

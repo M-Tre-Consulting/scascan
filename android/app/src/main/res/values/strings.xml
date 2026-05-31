@@ -28,6 +28,7 @@
     <string name="nutrient_fiber">Fiber</string>
     <string name="nutrient_sugar">Sugar</string>
     <string name="nutrient_sodium">Sodium</string>
+    <string name="nutrient_water">Water</string>
     <string name="value_grams">%.1f g</string>
     <string name="value_milligrams">%.0f mg</string>
     <string name="ai_disclaimer">Values are AI-estimated and may vary. Always verify with official food labels.</string>
@@ -67,6 +68,10 @@
     <string name="log_date_today">Today</string>
     <string name="log_date_yesterday">Yesterday</string>
     <string name="log_macro_of">of %1$dg</string>
+    <string name="log_water_total">%1$d ml</string>
+    <string name="log_water_label">Water today</string>
+    <string name="log_water_add_250">+250ml</string>
+    <string name="log_water_add_500">+500ml</string>
     <string name="calorie_fact_format">%1$d kcal · %2$s</string>
 
     <!-- Daily summary bottom sheet -->

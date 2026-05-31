@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.scascan.app.R
 import com.scascan.app.data.local.LogEntry
+import com.scascan.app.data.local.WaterLog
 import com.scascan.app.data.model.MacroTargets
 import com.scascan.app.databinding.FragmentLogBinding
 import com.scascan.app.databinding.ItemLogEntryBinding
@@ -57,6 +58,7 @@ class LogFragment : Fragment() {
         setupDateNavigation()
         setupFixResultListener()
         setupSummaryCards()
+        setupWaterTracking()
         observeState()
         viewModel.loadHealthData()
     }
@@ -90,9 +92,21 @@ class LogFragment : Fragment() {
         binding.cardMacros.setOnClickListener(openSummary)
     }
 
+    private fun setupWaterTracking() {
+        binding.btnAddWater250.setOnClickListener {
+            it.hapticClick()
+            viewModel.addWater(250)
+        }
+        binding.btnAddWater500.setOnClickListener {
+            it.hapticClick()
+            viewModel.addWater(500)
+        }
+    }
+
     private fun showDailySummary() {
         if (childFragmentManager.findFragmentByTag("daily_summary") != null) return
         val entries     = viewModel.logEntries.value
+        val water       = viewModel.waterEntries.value
         val targetInfo  = viewModel.targetInfo.value
         val adaptive    = viewModel.adaptiveState.value
         val activeKcal  = (adaptive as? LogViewModel.AdaptiveState.Active)?.activeKcal?.roundToInt() ?: 0
@@ -106,6 +120,7 @@ class LogFragment : Fragment() {
             totalFat       = entries.sumOf { it.fat }.roundToInt(),
             totalFiber     = entries.sumOf { it.fiber },
             totalSodiumMg  = entries.sumOf { it.sodium },
+            totalWater     = water.sumOf { it.amountMl },
             calorieTarget  = targetInfo.caloriesKcal + activeKcal + trendAdj + targetInfo.bleedthroughKcal,
             proteinTarget  = targetInfo.macros.proteinG,
             carbsTarget    = targetInfo.macros.carbsG,
@@ -137,12 +152,14 @@ class LogFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             combine(
                 viewModel.logEntries,
+                viewModel.waterEntries,
                 viewModel.adaptiveState,
                 viewModel.targetInfo
-            ) { entries, adaptive, targetInfo -> Triple(entries, adaptive, targetInfo) }
-                .collect { (entries, adaptive, targetInfo) ->
-                    renderScreen(entries, adaptive, targetInfo)
-                }
+            ) { entries: List<LogEntry>, water: List<WaterLog>, adaptive: LogViewModel.AdaptiveState, targetInfo: LogViewModel.TargetInfo ->
+                RenderState(entries, water, adaptive, targetInfo)
+            }.collect { state ->
+                renderScreen(state)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -178,20 +195,29 @@ class LogFragment : Fragment() {
         }
     }
 
+    private data class RenderState(
+        val entries: List<LogEntry>,
+        val water: List<WaterLog>,
+        val adaptive: LogViewModel.AdaptiveState,
+        val targetInfo: LogViewModel.TargetInfo
+    )
+
     // Rendering
-    private fun renderScreen(
-        entries: List<LogEntry>,
-        adaptive: LogViewModel.AdaptiveState,
-        targetInfo: LogViewModel.TargetInfo
-    ) {
-        val activeKcal = (adaptive as? LogViewModel.AdaptiveState.Active)?.activeKcal?.roundToInt() ?: 0
-        val trendAdj   = (adaptive as? LogViewModel.AdaptiveState.Active)?.trendAdjustment ?: 0
-        val bleedthrough = targetInfo.bleedthroughKcal
-        val totalTarget = targetInfo.caloriesKcal + activeKcal + trendAdj + bleedthrough
+    private fun renderScreen(state: RenderState) {
+        val activeKcal = (state.adaptive as? LogViewModel.AdaptiveState.Active)?.activeKcal?.roundToInt() ?: 0
+        val trendAdj   = (state.adaptive as? LogViewModel.AdaptiveState.Active)?.trendAdjustment ?: 0
+        val bleedthrough = state.targetInfo.bleedthroughKcal
+        val totalTarget = state.targetInfo.caloriesKcal + activeKcal + trendAdj + bleedthrough
         
-        renderEntries(entries, totalTarget, targetInfo.macros)
-        renderHealthMetrics(adaptive)
-        renderAdaptiveCard(adaptive, targetInfo)
+        renderEntries(state.entries, totalTarget, state.targetInfo.macros)
+        renderWater(state.water)
+        renderHealthMetrics(state.adaptive)
+        renderAdaptiveCard(state.adaptive, state.targetInfo)
+    }
+
+    private fun renderWater(water: List<WaterLog>) {
+        val totalMl = water.sumOf { it.amountMl }
+        binding.tvWaterTotal.text = getString(R.string.log_water_total, totalMl)
     }
 
     private fun renderEntries(entries: List<LogEntry>, calorieTarget: Int, macros: MacroTargets) {

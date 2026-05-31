@@ -58,8 +58,21 @@ class LogViewModel @Inject constructor(
         .flatMapLatest { offset -> logRepository.entriesForDateOffset(offset) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val waterEntries: StateFlow<List<com.scascan.app.data.local.WaterLog>> = _dateOffset
+        .flatMapLatest { offset -> logRepository.waterLogsForDateOffset(offset) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
     fun goToPreviousDay() { _dateOffset.value--; loadHealthData() }
     fun goToNextDay() { if (_dateOffset.value < 0) { _dateOffset.value++; loadHealthData() } }
+
+    fun addWater(ml: Int) {
+        viewModelScope.launch { logRepository.addWater(ml) }
+    }
+
+    fun deleteWater(entry: com.scascan.app.data.local.WaterLog) {
+        viewModelScope.launch { logRepository.deleteWater(entry) }
+    }
 
     // Adaptive targets
     /**
