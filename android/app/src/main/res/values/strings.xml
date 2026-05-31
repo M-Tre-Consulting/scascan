@@ -42,7 +42,6 @@
     <string name="setup_key_error">Please enter a valid API key</string>
     <string name="setup_btn_save">Save and continue</string>
     <string name="setup_btn_get_key">Get my free key</string>
-    <string name="setup_btn_skip">Continue with starter key</string>
     <string name="setup_key_detected">Gemini key detected in clipboard! Paste it?</string>
     <string name="setup_model_title">Choose a model</string>
     <string name="setup_model_desc">Select the Gemini model that will analyse your food.</string>
@@ -190,8 +189,6 @@
     <string name="profile_api_key_title">Gemini API Key</string>
     <string name="profile_api_key_desc">ScaScan uses Google Gemini to analyse food. Get your key at aistudio.google.com.</string>
     <string name="profile_save_key">Save key</string>
-    <string name="profile_key_status_starter">Starter key in use (shared limits)</string>
-    <string name="profile_key_status_custom">Your custom API key is active</string>
     <string name="profile_key_saved">API key saved</string>
     <string name="profile_health_title">Health Connect</string>
     <string name="profile_health_desc">Connect your Google Health data to enable calorie tracking and adaptive daily goals.</string>

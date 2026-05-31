@@ -353,21 +353,10 @@ class AppSettingsFragment : Fragment() {
 
     private fun setupApiKey() {
         val keyStore = viewModel.keyStore
-        if (keyStore.isCustomKeySet()) {
-            binding.etApiKey.setText(keyStore.apiKey)
-        }
-        updateKeyStatus()
+        if (keyStore.hasKey()) binding.etApiKey.setText(keyStore.apiKey)
 
         binding.btnSaveKey.setOnClickListener { it.hapticClick(); saveKey() }
         binding.etApiKey.setOnEditorActionListener { _, _, _ -> saveKey(); true }
-    }
-
-    private fun updateKeyStatus() {
-        val isCustom = viewModel.keyStore.isCustomKeySet()
-        binding.tvKeyStatus.text = getString(
-            if (isCustom) R.string.profile_key_status_custom 
-            else R.string.profile_key_status_starter
-        )
     }
 
     private fun saveKey() {
@@ -384,7 +373,6 @@ class AppSettingsFragment : Fragment() {
         val selectedModel = viewModel.keyStore.selectedModel
         viewModel.saveApiKey(input, selectedModel)
         viewModel.loadModels()
-        updateKeyStatus()
     }
 
     private fun setupModelSelector() {
