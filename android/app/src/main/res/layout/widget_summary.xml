@@ -64,9 +64,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/progress_widget_calories"
         android:layout_marginTop="8dp"
-        android:text="P: 0g  ·  C: 0g  ·  F: 0g"
+        android:text="P: 0g · C: 0g · F: 0g · 0ml"
         android:textColor="@color/widget_on_background"
-        android:textSize="13sp"
+        android:textSize="12sp"
         android:fontFamily="sans-serif-medium" />
 
     <!-- Bottom Actions: Centered Tonal Buttons -->

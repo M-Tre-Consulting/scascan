@@ -2,6 +2,7 @@ package com.scascan.app
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.core.os.bundleOf
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.material.color.DynamicColors
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         const val ACTION_QUICK_SCAN = "com.scascan.app.ACTION_QUICK_SCAN"
         const val ACTION_QUICK_BARCODE = "com.scascan.app.ACTION_QUICK_BARCODE"
         const val ACTION_QUICK_SEARCH = "com.scascan.app.ACTION_QUICK_SEARCH"
+        const val ACTION_OPEN_LOG = "com.scascan.app.ACTION_OPEN_LOG"
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity() {
                     ACTION_QUICK_SCAN -> navController.navigate(R.id.cameraFragment)
                     ACTION_QUICK_BARCODE -> navController.navigate(R.id.barcodeScanFragment)
                     ACTION_QUICK_SEARCH -> navController.navigate(R.id.searchFragment)
+                    ACTION_OPEN_LOG -> navController.navigate(R.id.mainFragment, bundleOf("start_tab" to 1))
                 }
             } catch (e: Exception) {
                 // NavController might not be initialized yet or destination not reachable

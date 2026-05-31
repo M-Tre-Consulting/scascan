@@ -45,6 +45,14 @@ class MainFragment : Fragment() {
         setupViewPager()
         setupBottomNav()
         setupAnalysisObserver()
+
+        arguments?.getInt("start_tab")?.let { tab ->
+            if (tab != 0) {
+                binding.viewPager.post {
+                    binding.viewPager.setCurrentItem(tab, false)
+                }
+            }
+        }
     }
 
     private fun setupViewPager() {

@@ -57,6 +57,8 @@ class SummaryWidgetProvider : AppWidgetProvider() {
         val p = entries.sumOf { it.protein }.toInt()
         val c = entries.sumOf { it.carbohydrates }.toInt()
         val f = entries.sumOf { it.fat }.toInt()
+        
+        val water = logRepository.getWaterTotalForRangeSync(start, end)
 
         val views = RemoteViews(context.packageName, R.layout.widget_summary)
         
@@ -64,14 +66,14 @@ class SummaryWidgetProvider : AppWidgetProvider() {
         views.setTextViewText(R.id.tv_widget_target, "/ $target kcal")
         views.setProgressBar(R.id.progress_widget_calories, target, consumed, false)
         
-        // Macro breakdown text
-        views.setTextViewText(R.id.tv_widget_macros, "P: ${p}g  ·  C: ${c}g  ·  F: ${f}g")
+        // Macro + Water breakdown text
+        views.setTextViewText(R.id.tv_widget_macros, "P: ${p}g · C: ${c}g · F: ${f}g · ${water}ml")
 
         // Setup Intents
         views.setOnClickPendingIntent(R.id.btn_widget_scan, getPendingIntent(context, MainActivity.ACTION_QUICK_SCAN))
         views.setOnClickPendingIntent(R.id.btn_widget_barcode, getPendingIntent(context, MainActivity.ACTION_QUICK_BARCODE))
         views.setOnClickPendingIntent(R.id.btn_widget_search, getPendingIntent(context, MainActivity.ACTION_QUICK_SEARCH))
-        views.setOnClickPendingIntent(R.id.widget_root, getPendingIntent(context, null))
+        views.setOnClickPendingIntent(R.id.widget_root, getPendingIntent(context, MainActivity.ACTION_OPEN_LOG))
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
