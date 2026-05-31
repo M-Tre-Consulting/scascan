@@ -41,6 +41,9 @@
     <string name="setup_key_hint">Chiave API Gemini</string>
     <string name="setup_key_error">Inserisci una chiave API valida</string>
     <string name="setup_btn_save">Salva e continua</string>
+    <string name="setup_btn_get_key">Ottieni chiave gratuita</string>
+    <string name="setup_btn_skip">Usa chiave iniziale</string>
+    <string name="setup_key_detected">Chiave Gemini rilevata negli appunti! Incollarla?</string>
     <string name="setup_model_title">Scegli un modello</string>
     <string name="setup_model_desc">Seleziona il modello Gemini per l\'analisi degli alimenti.</string>
     <string name="setup_model_hint">Modello Gemini</string>
@@ -187,6 +190,8 @@
     <string name="profile_api_key_title">Chiave API Gemini</string>
     <string name="profile_api_key_desc">ScaScan usa Google Gemini per analizzare il cibo. Ottieni la tua chiave su aistudio.google.com.</string>
     <string name="profile_save_key">Salva chiave</string>
+    <string name="profile_key_status_starter">Chiave iniziale in uso (limiti condivisi)</string>
+    <string name="profile_key_status_custom">La tua chiave API personalizzata è attiva</string>
     <string name="profile_key_saved">Chiave API salvata</string>
     <string name="profile_health_title">Health Connect</string>
     <string name="profile_health_desc">Collega i tuoi dati Google Health per abilitare il monitoraggio calorico e gli obiettivi giornalieri adattativi.</string>

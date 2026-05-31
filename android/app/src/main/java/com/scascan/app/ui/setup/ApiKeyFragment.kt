@@ -78,9 +78,38 @@ class ApiKeyFragment : Fragment() {
         binding.btnSave.setOnClickListener { attemptSaveKey() }
         binding.btnGetStarted.setOnClickListener { finish() }
         binding.btnStartupSync.setOnClickListener { startDriveSync() }
+        
+        binding.btnGetKey.setOnClickListener {
+            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://aistudio.google.com/app/apikey"))
+            startActivity(intent)
+        }
+        
+        binding.btnSkip.setOnClickListener { navigateToHome() }
 
         observeModelState()
         observeSyncState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkClipboardForKey()
+    }
+
+    private fun checkClipboardForKey() {
+        val clipboard = requireContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+        val clipData = clipboard.primaryClip ?: return
+        if (clipData.itemCount > 0) {
+            val text = clipData.getItemAt(0).text?.toString() ?: return
+            // Typical Gemini key pattern
+            if (text.length > 30 && text.startsWith("AIza")) {
+                Snackbar.make(binding.root, R.string.setup_key_detected, Snackbar.LENGTH_LONG)
+                    .setAction("Paste") {
+                        binding.etApiKey.setText(text)
+                        attemptSaveKey()
+                    }
+                    .show()
+            }
+        }
     }
 
     private fun startDriveSync() {
