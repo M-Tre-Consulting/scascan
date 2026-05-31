@@ -122,7 +122,10 @@ class MainFragment : Fragment() {
             analysisManager.state.collect { state ->
                 binding.analysisProgress.isVisible = state is AnalysisManager.State.Processing
                 if (state is AnalysisManager.State.Complete) {
-                    showResultSheet(state.facts)
+                    // Safety check to avoid IllegalStateException
+                    if (isResumed && !childFragmentManager.isStateSaved) {
+                        showResultSheet(state.facts)
+                    }
                 }
             }
         }

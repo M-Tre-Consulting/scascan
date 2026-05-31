@@ -21,6 +21,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private val requestNotificationPermission = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
+    ) { }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         DynamicColors.applyToActivityIfAvailable(this)
         super.onCreate(savedInstanceState)
@@ -29,6 +33,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         
         handleIntent(intent)
+        requestNotificationPermissionIfNeeded()
+    }
+
+    private fun requestNotificationPermissionIfNeeded() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            val permission = android.Manifest.permission.POST_NOTIFICATIONS
+            if (androidx.core.content.ContextCompat.checkSelfPermission(
+                    this,
+                    permission
+                ) != android.content.pm.PackageManager.PERMISSION_GRANTED
+            ) {
+                requestNotificationPermission.launch(permission)
+            }
+        }
     }
 
     override fun onNewIntent(intent: android.content.Intent) {
