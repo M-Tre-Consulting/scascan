@@ -53,6 +53,13 @@ class MainFragment : Fragment() {
                 }
             }
         }
+
+        @Suppress("DEPRECATION")
+        arguments?.getParcelable<NutritionFacts>("pending_facts")?.let { facts ->
+            binding.root.post {
+                showResultSheet(facts)
+            }
+        }
     }
 
     private fun setupViewPager() {

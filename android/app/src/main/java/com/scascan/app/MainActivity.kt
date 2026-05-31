@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
         const val ACTION_QUICK_BARCODE = "com.scascan.app.ACTION_QUICK_BARCODE"
         const val ACTION_QUICK_SEARCH = "com.scascan.app.ACTION_QUICK_SEARCH"
         const val ACTION_OPEN_LOG = "com.scascan.app.ACTION_OPEN_LOG"
+        const val ACTION_SHOW_ANALYSIS = "com.scascan.app.ACTION_SHOW_ANALYSIS"
+        const val EXTRA_FACTS_JSON = "extra_facts_json"
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -69,6 +71,13 @@ class MainActivity : AppCompatActivity() {
                     ACTION_QUICK_BARCODE -> navController.navigate(R.id.barcodeScanFragment)
                     ACTION_QUICK_SEARCH -> navController.navigate(R.id.searchFragment)
                     ACTION_OPEN_LOG -> navController.navigate(R.id.mainFragment, bundleOf("start_tab" to 1))
+                    ACTION_SHOW_ANALYSIS -> {
+                        val json = intent.getStringExtra(EXTRA_FACTS_JSON)
+                        if (json != null) {
+                            val facts = com.google.gson.Gson().fromJson(json, com.scascan.app.data.model.NutritionFacts::class.java)
+                            navController.navigate(R.id.mainFragment, bundleOf("pending_facts" to facts))
+                        }
+                    }
                 }
             } catch (e: Exception) {
                 // NavController might not be initialized yet or destination not reachable
