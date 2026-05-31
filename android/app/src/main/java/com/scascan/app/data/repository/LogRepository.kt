@@ -14,6 +14,7 @@ import javax.inject.Singleton
 class LogRepository @Inject constructor(
     @dagger.hilt.android.qualifiers.ApplicationContext private val context: android.content.Context,
     private val dao: LogEntryDao,
+    private val waterDao: com.scascan.app.data.local.WaterLogDao,
     private val profileStore: UserProfileStore,
     private val healthManager: com.scascan.app.data.health.HealthConnectManager
 ) {
@@ -70,6 +71,8 @@ class LogRepository @Inject constructor(
 
     suspend fun getEntriesForRangeSync(start: Long, end: Long): List<LogEntry> = dao.getEntriesForRangeSync(start, end)
 
+    suspend fun getWaterTotalForRangeSync(start: Long, end: Long): Int = waterDao.getTotalForRangeSync(start, end) ?: 0
+
     suspend fun getYesterdayBleedthrough(): Int {
         val cal = Calendar.getInstance().apply {
             add(Calendar.DAY_OF_YEAR, -1)
@@ -116,6 +119,30 @@ class LogRepository @Inject constructor(
     }
 
     suspend fun upsertEntries(entries: List<LogEntry>) = dao.upsertAll(entries)
+
+    // Water tracking
+    fun waterLogsForDateOffset(offsetDays: Int): Flow<List<com.scascan.app.data.local.WaterLog>> {
+        val cal = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_YEAR, offsetDays)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        val start = cal.timeInMillis
+        val end = start + DAY_MS
+        return waterDao.getLogsForRange(start, end)
+    }
+
+    suspend fun addWater(amountMl: Int) {
+        waterDao.insert(com.scascan.app.data.local.WaterLog(amountMl = amountMl))
+        com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
+    }
+
+    suspend fun deleteWater(entry: com.scascan.app.data.local.WaterLog) {
+        waterDao.delete(entry)
+        com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
+    }
 
     companion object {
         private const val DAY_MS = 24 * 60 * 60 * 1000L

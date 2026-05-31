@@ -23,9 +23,15 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase =
-        Room.databaseBuilder(context, AppDatabase::class.java, "scascan.db").build()
+        Room.databaseBuilder(context, AppDatabase::class.java, "scascan.db")
+            .fallbackToDestructiveMigration()
+            .build()
 
     @Provides
     @Singleton
     fun provideLogEntryDao(db: AppDatabase): LogEntryDao = db.logEntryDao()
+
+    @Provides
+    @Singleton
+    fun provideWaterLogDao(db: AppDatabase): com.scascan.app.data.local.WaterLogDao = db.waterLogDao()
 }
