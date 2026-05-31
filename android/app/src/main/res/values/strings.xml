@@ -175,6 +175,7 @@
     <string name="profile_section_goals">Activity &amp; Goals</string>
     <string name="profile_section_sync">Sync &amp; Backup</string>
     <string name="profile_section_settings">App Settings</string>
+    <string name="profile_section_notifications">Notifications</string>
     <string name="profile_sync_title">Cloud Sync</string>
     <string name="profile_sync_desc">Keep your logs and profile in sync across your devices using Google Drive.</string>
     <string name="profile_sync_btn_google">Sign in &amp; Sync</string>
@@ -188,6 +189,8 @@
     <string name="profile_key_saved">API key saved</string>
     <string name="profile_health_title">Health Connect</string>
     <string name="profile_health_desc">Connect your Google Health data to enable calorie tracking and adaptive daily goals.</string>
+    <string name="profile_notif_water_title">Hydration reminder</string>
+    <string name="profile_notif_water_desc">Receive periodic notifications to remind you to drink water during the day.</string>
     <string name="profile_about_desc">Uses Gemini AI for nutritional analysis · Built with Material 3 Expressive</string>
     <string name="profile_model_title">AI Model</string>
     <string name="profile_model_desc">Select the Gemini model used for food analysis. Models are fetched live from your API key.</string>

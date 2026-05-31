@@ -64,6 +64,10 @@ class UserProfileStore @Inject constructor(
         get() = prefs.getString(KEY_SYNC_EMAIL, "") ?: ""
         set(v) { prefs.edit(commit = true) { putString(KEY_SYNC_EMAIL, v) } }
 
+    var waterRemindersEnabled: Boolean
+        get() = prefs.getBoolean(KEY_WATER_REMINDERS, false)
+        set(v) { prefs.edit(commit = true) { putBoolean(KEY_WATER_REMINDERS, v) } }
+
     fun hasProfile(): Boolean = age > 0 && heightCm > 0 && weightKg > 0f
 
     /** Returns the AI-computed target if available, otherwise falls back to Mifflin-St Jeor TDEE with goal adjustment. */
@@ -159,6 +163,7 @@ class UserProfileStore @Inject constructor(
         private const val KEY_AI_FAT      = "ai_fat"
         private const val KEY_NAME        = "user_name"
         private const val KEY_SYNC_EMAIL   = "sync_email"
+        private const val KEY_WATER_REMINDERS = "water_reminders"
         const val DEFAULT_CALORIES = 2_000
         val GOAL_LABELS = arrayOf("Lose weight", "Maintain weight", "Build muscle")
     }

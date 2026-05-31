@@ -130,12 +130,21 @@ class ProfileFragment : Fragment() {
         setupModelSelector()
         setupHealthConnect()
         setupGoogleSync()
+        setupNotifications()
         updateSetupReminder()
         observeTargetState()
         observeModelState()
         observeAuthState()
         observeSyncState()
         observeActionState()
+    }
+
+    private fun setupNotifications() {
+        binding.switchWaterReminder.isChecked = viewModel.profileStore.waterRemindersEnabled
+        binding.switchWaterReminder.setOnCheckedChangeListener { _, isChecked ->
+            binding.switchWaterReminder.hapticTick()
+            viewModel.setWaterRemindersEnabled(isChecked)
+        }
     }
 
     private fun observeActionState() {

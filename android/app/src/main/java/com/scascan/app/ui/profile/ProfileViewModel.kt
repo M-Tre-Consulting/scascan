@@ -25,7 +25,8 @@ class ProfileViewModel @Inject constructor(
     val healthManager: HealthConnectManager,
     private val client: GeminiRestClient,
     private val nutritionRepository: NutritionRepository,
-    private val syncManager: DriveSyncManager
+    private val syncManager: DriveSyncManager,
+    private val reminderManager: com.scascan.app.data.reminder.ReminderManager
 ) : ViewModel() {
 
     sealed class ModelState {
@@ -162,5 +163,15 @@ class ProfileViewModel @Inject constructor(
 
     fun resetActionState() {
         _actionState.value = ActionState.Idle
+    }
+
+    fun setWaterRemindersEnabled(enabled: Boolean) {
+        profileStore.waterRemindersEnabled = enabled
+        if (enabled) {
+            // Schedule every 3 hours during typical awake time (9am - 9pm logic simplified for now)
+            reminderManager.scheduleHydrationReminder(3 * 60 * 60 * 1000L)
+        } else {
+            reminderManager.cancelHydrationReminder()
+        }
     }
 }
