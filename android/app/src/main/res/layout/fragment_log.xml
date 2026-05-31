@@ -304,76 +304,108 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
+                android:orientation="vertical"
                 android:padding="20dp">
 
+                <!-- Info Row -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
 
-                    <TextView
-                        android:id="@+id/tvWaterTotal"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/log_water_total"
-                        style="@style/TextAppearance.Material3.TitleLarge"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnSecondaryContainer" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/log_water_label"
-                        style="@style/TextAppearance.Material3.BodySmall"
-                        android:textColor="?attr/colorOnSecondaryContainer" />
+                        <TextView
+                            android:id="@+id/tvWaterTotal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/log_water_total"
+                            style="@style/TextAppearance.Material3.TitleLarge"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorOnSecondaryContainer" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/log_water_label"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:textColor="?attr/colorOnSecondaryContainer"
+                            android:alpha="0.8" />
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRemoveWater"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        app:icon="@drawable/ic_remove"
+                        app:iconSize="20dp"
+                        app:iconGravity="textStart"
+                        app:iconTint="?attr/colorOnSecondaryContainer"
+                        android:contentDescription="@string/log_water_undo"
+                        android:visibility="gone" />
                 </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnRemoveWater"
-                    style="@style/Widget.Material3.Button.IconButton"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    app:icon="@drawable/ic_remove"
-                    app:iconSize="20dp"
-                    app:iconTint="?attr/colorOnSecondaryContainer"
-                    android:layout_marginEnd="8dp"
-                    android:contentDescription="@string/log_water_undo"
-                    android:visibility="gone" />
+                <!-- Actions Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAddWater100"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:text="@string/log_water_add_100"
-                    android:layout_marginEnd="4dp"
-                    android:paddingHorizontal="8dp"
-                    android:textSize="11sp"
-                    app:cornerRadius="12dp" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddWater100"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="@string/log_water_add_100"
+                        android:layout_marginEnd="8dp"
+                        android:paddingHorizontal="0dp"
+                        android:textSize="12sp"
+                        app:cornerRadius="16dp"
+                        app:backgroundTint="?attr/colorSurface"
+                        android:textColor="?attr/colorOnSurface" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAddWater250"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:text="@string/log_water_add_250"
-                    android:layout_marginEnd="4dp"
-                    android:paddingHorizontal="8dp"
-                    android:textSize="11sp"
-                    app:cornerRadius="12dp" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddWater250"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="@string/log_water_add_250"
+                        android:layout_marginEnd="8dp"
+                        android:paddingHorizontal="0dp"
+                        android:textSize="12sp"
+                        app:cornerRadius="16dp"
+                        app:backgroundTint="?attr/colorSurface"
+                        android:textColor="?attr/colorOnSurface" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAddWater500"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:text="@string/log_water_add_500"
-                    android:paddingHorizontal="8dp"
-                    android:textSize="11sp"
-                    app:cornerRadius="12dp" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddWater500"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="@string/log_water_add_500"
+                        android:paddingHorizontal="0dp"
+                        android:textSize="12sp"
+                        app:cornerRadius="16dp"
+                        app:backgroundTint="?attr/colorSurface"
+                        android:textColor="?attr/colorOnSurface" />
+
+                </LinearLayout>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
