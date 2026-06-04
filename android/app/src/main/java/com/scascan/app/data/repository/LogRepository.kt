@@ -7,6 +7,7 @@ import com.scascan.app.data.model.MacroTargets
 import com.scascan.app.data.model.NutritionFacts
 import kotlinx.coroutines.flow.Flow
 import java.util.Calendar
+import kotlin.math.roundToInt
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -69,6 +70,55 @@ class LogRepository @Inject constructor(
 
     suspend fun getAllEntries(): List<LogEntry> = dao.getAllEntries()
 
+    suspend fun getLiveTarget(): Int {
+        val hasHc = healthManager.hasPermissions()
+        val bleedthrough = getYesterdayBleedthrough()
+        
+        val baseTarget = if (hasHc) {
+            (bmr() * 1.2).toInt() + goalOffset()
+        } else {
+            dailyCalorieTarget()
+        }
+        
+        val activeKcal = if (hasHc) {
+            healthManager.readActiveCalories(0)
+        } else {
+            0.0
+        }
+        
+        val trendAdjustment = if (hasHc) {
+            val weightHist = healthManager.readWeightHistory(28)
+            calculateTrendAdjustment(weightHist)
+        } else {
+            0
+        }
+        
+        return baseTarget + bleedthrough + activeKcal.roundToInt() + trendAdjustment
+    }
+
+    private fun calculateTrendAdjustment(readings: List<Pair<Long, Double>>): Int {
+        if (readings.size < 2) return 0
+        val sorted = readings.sortedBy { it.first }
+        val daysDiff = (sorted.last().first - sorted.first().first) / 86_400_000.0
+        if (daysDiff < 5) return 0
+
+        val weeklyRate = (sorted.last().second - sorted.first().second) / (daysDiff / 7.0)
+
+        return when (goalIndex()) {
+            0 -> when {  // lose weight
+                weeklyRate < -0.75 -> +200
+                weeklyRate > -0.20 -> -200
+                else               ->    0
+            }
+            2 -> when {  // build muscle
+                weeklyRate > 0.45 -> -200
+                weeklyRate < 0.10 -> +200
+                else              ->    0
+            }
+            else -> 0
+        }
+    }
+
     suspend fun getEntriesForRangeSync(start: Long, end: Long): List<LogEntry> = dao.getEntriesForRangeSync(start, end)
 
     suspend fun getWaterTotalForRangeSync(start: Long, end: Long): Int = waterDao.getTotalForRangeSync(start, end) ?: 0
@@ -115,7 +165,7 @@ class LogRepository @Inject constructor(
         // - Cap at ±500 kcal to keep today's target healthy and achievable.
         val adjustedBalance = if (rawBalance > 0) rawBalance * 0.8 else rawBalance
         
-        return adjustedBalance.toInt().coerceIn(-500, 500)
+        return adjustedBalance.roundToInt().coerceIn(-500, 500)
     }
 
     suspend fun upsertEntries(entries: List<LogEntry>) = dao.upsertAll(entries)
