@@ -86,7 +86,7 @@ class LogRepository @Inject constructor(
         
         // 1. Consumed yesterday
         val yesterdayEntries = dao.getEntriesForRangeSync(startMs, endMs)
-        val consumed = yesterdayEntries.sumOf { it.calories.toDouble() }
+        val consumed = yesterdayEntries.sumOf { it.calories }
         
         // 2. Base Allowance yesterday
         // If Health Connect is active, we use a Sedentary (1.2x) base to avoid double-counting activity
