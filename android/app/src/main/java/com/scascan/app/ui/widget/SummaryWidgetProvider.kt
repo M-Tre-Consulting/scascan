@@ -17,6 +17,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class SummaryWidgetProvider : AppWidgetProvider() {
@@ -51,12 +52,12 @@ class SummaryWidgetProvider : AppWidgetProvider() {
         val end = start + 24 * 60 * 60 * 1000L
         
         val entries = logRepository.getEntriesForRangeSync(start, end)
-        val consumed = entries.sumOf { it.calories }.toInt()
-        val target = logRepository.dailyCalorieTarget()
+        val consumed = entries.sumOf { it.calories }.roundToInt()
+        val target = logRepository.getLiveTarget()
         
-        val p = entries.sumOf { it.protein }.toInt()
-        val c = entries.sumOf { it.carbohydrates }.toInt()
-        val f = entries.sumOf { it.fat }.toInt()
+        val p = entries.sumOf { it.protein }.roundToInt()
+        val c = entries.sumOf { it.carbohydrates }.roundToInt()
+        val f = entries.sumOf { it.fat }.roundToInt()
         
         val water = logRepository.getWaterTotalForRangeSync(start, end)
 
