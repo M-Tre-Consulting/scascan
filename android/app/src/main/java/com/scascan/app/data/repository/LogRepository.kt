@@ -75,7 +75,11 @@ class LogRepository @Inject constructor(
         val bleedthrough = getYesterdayBleedthrough()
         
         val baseTarget = if (hasHc) {
-            (bmr() * 1.2).toInt() + goalOffset()
+            if (isAiComputed()) {
+                dailyCalorieTarget()
+            } else {
+                (bmr() * 1.2).toInt() + goalOffset()
+            }
         } else {
             dailyCalorieTarget()
         }
@@ -93,7 +97,9 @@ class LogRepository @Inject constructor(
             0
         }
         
-        return baseTarget + bleedthrough + activeKcal.roundToInt() + trendAdjustment
+        val total = baseTarget + bleedthrough + activeKcal.roundToInt() + trendAdjustment
+        // Ensure a healthy minimum target (at least 80% of BMR)
+        return total.coerceAtLeast((bmr() * 0.8).toInt())
     }
 
     private fun calculateTrendAdjustment(readings: List<Pair<Long, Double>>): Int {
