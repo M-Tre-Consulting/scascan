@@ -49,12 +49,11 @@
                 android:layout_width="64dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless">
+                android:focusable="true">
                 <View
                     android:id="@+id/bgNavHome"
-                    android:layout_width="48dp"
-                    android:layout_height="32dp"
+                    android:layout_width="56dp"
+                    android:layout_height="36dp"
                     android:layout_gravity="center"
                     android:background="@drawable/nav_indicator_background"
                     android:alpha="0"
@@ -77,12 +76,11 @@
                 android:layout_height="match_parent"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_marginHorizontal="4dp"
-                android:background="?attr/selectableItemBackgroundBorderless">
+                android:layout_marginHorizontal="4dp">
                 <View
                     android:id="@+id/bgNavLog"
-                    android:layout_width="48dp"
-                    android:layout_height="32dp"
+                    android:layout_width="56dp"
+                    android:layout_height="36dp"
                     android:layout_gravity="center"
                     android:background="@drawable/nav_indicator_background"
                     android:alpha="0"
@@ -104,12 +102,11 @@
                 android:layout_width="64dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless">
+                android:focusable="true">
                 <View
                     android:id="@+id/bgNavProfile"
-                    android:layout_width="48dp"
-                    android:layout_height="32dp"
+                    android:layout_width="56dp"
+                    android:layout_height="36dp"
                     android:layout_gravity="center"
                     android:background="@drawable/nav_indicator_background"
                     android:alpha="0"
