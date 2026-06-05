@@ -24,15 +24,30 @@
         app:trackCornerRadius="0dp"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        android:layout_width="0dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/navCard"
+        style="@style/Widget.App.PillBar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:menu="@menu/bottom_nav_menu"
-        app:labelVisibilityMode="labeled"
+        android:layout_marginBottom="32dp"
+        app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="?attr/colorSurfaceContainer" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
+            android:layout_width="wrap_content"
+            android:layout_height="64dp"
+            android:paddingHorizontal="12dp"
+            android:background="@android:color/transparent"
+            app:elevation="0dp"
+            app:itemIconSize="24dp"
+            app:itemRippleColor="@null"
+            app:itemActiveIndicatorColor="@android:color/transparent"
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/bottom_nav_menu" />
+
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
