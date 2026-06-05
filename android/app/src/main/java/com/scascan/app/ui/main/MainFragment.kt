@@ -90,9 +90,12 @@ class MainFragment : Fragment() {
     }
 
     private fun setupBottomNav() {
-        binding.navHome.setOnClickListener { updateSelection(0) }
-        binding.navLog.setOnClickListener { updateSelection(1) }
-        binding.navProfile.setOnClickListener { updateSelection(2) }
+        binding.btnNavHome.setOnClickListener { updateSelection(0) }
+        binding.btnNavLog.setOnClickListener { updateSelection(1) }
+        binding.btnNavProfile.setOnClickListener { updateSelection(2) }
+        
+        // Initial state
+        updateNavIcons(0)
     }
 
     private fun updateSelection(position: Int) {
@@ -100,16 +103,40 @@ class MainFragment : Fragment() {
         if (binding.viewPager.currentItem != position) {
             binding.viewPager.setCurrentItem(position, true)
         }
-        updateNavIcons(position)
     }
 
     private fun updateNavIcons(position: Int) {
         val activeColor = com.google.android.material.color.MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorPrimary)
         val inactiveColor = com.google.android.material.color.MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorOnSurfaceVariant)
 
-        binding.navHome.setColorFilter(if (position == 0) activeColor else inactiveColor)
-        binding.navLog.setColorFilter(if (position == 1) activeColor else inactiveColor)
-        binding.navProfile.setColorFilter(if (position == 2) activeColor else inactiveColor)
+        animateNavButton(binding.bgNavHome, binding.ivNavHome, position == 0, activeColor, inactiveColor)
+        animateNavButton(binding.bgNavLog, binding.ivNavLog, position == 1, activeColor, inactiveColor)
+        animateNavButton(binding.bgNavProfile, binding.ivNavProfile, position == 2, activeColor, inactiveColor)
+    }
+
+    private fun animateNavButton(bg: View, iv: android.widget.ImageView, isSelected: Boolean, activeColor: Int, inactiveColor: Int) {
+        val duration = 250L
+        val targetAlpha = if (isSelected) 1f else 0f
+        val targetScale = if (isSelected) 1f else 0.8f
+        val targetColor = if (isSelected) activeColor else inactiveColor
+
+        bg.animate()
+            .alpha(targetAlpha)
+            .scaleX(targetScale)
+            .scaleY(targetScale)
+            .setDuration(duration)
+            .setInterpolator(android.view.animation.DecelerateInterpolator())
+            .start()
+
+        // Icon color transition
+        val currentColor = iv.tag as? Int ?: inactiveColor
+        iv.tag = targetColor
+        
+        android.animation.ValueAnimator.ofArgb(currentColor, targetColor).apply {
+            setDuration(duration)
+            addUpdateListener { iv.setColorFilter(it.animatedValue as Int) }
+            start()
+        }
     }
 
     private fun setupAnalysisObserver() {

@@ -40,35 +40,90 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingHorizontal="12dp"
+            android:paddingHorizontal="8dp"
             android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/nav_home"
-                android:layout_width="56dp"
+            <!-- Home -->
+            <FrameLayout
+                android:id="@+id/btnNavHome"
+                android:layout_width="64dp"
                 android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_camera"
-                android:contentDescription="@string/nav_scan"
-                app:tint="?attr/colorPrimary" />
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless">
+                <View
+                    android:id="@+id/bgNavHome"
+                    android:layout_width="48dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/nav_indicator_background"
+                    android:alpha="0"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8" />
+                <ImageView
+                    android:id="@+id/ivNavHome"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_camera"
+                    android:contentDescription="@string/nav_scan"
+                    app:tint="?attr/colorOnSurfaceVariant" />
+            </FrameLayout>
 
-            <ImageButton
-                android:id="@+id/nav_log"
-                android:layout_width="56dp"
+            <!-- Log -->
+            <FrameLayout
+                android:id="@+id/btnNavLog"
+                android:layout_width="64dp"
                 android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_nav_log"
-                android:contentDescription="@string/nav_log"
-                app:tint="?attr/colorOnSurfaceVariant" />
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginHorizontal="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless">
+                <View
+                    android:id="@+id/bgNavLog"
+                    android:layout_width="48dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/nav_indicator_background"
+                    android:alpha="0"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8" />
+                <ImageView
+                    android:id="@+id/ivNavLog"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_nav_log"
+                    android:contentDescription="@string/nav_log"
+                    app:tint="?attr/colorOnSurfaceVariant" />
+            </FrameLayout>
 
-            <ImageButton
-                android:id="@+id/nav_profile"
-                android:layout_width="56dp"
+            <!-- Profile -->
+            <FrameLayout
+                android:id="@+id/btnNavProfile"
+                android:layout_width="64dp"
                 android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_nav_profile"
-                android:contentDescription="@string/nav_profile"
-                app:tint="?attr/colorOnSurfaceVariant" />
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless">
+                <View
+                    android:id="@+id/bgNavProfile"
+                    android:layout_width="48dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/nav_indicator_background"
+                    android:alpha="0"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8" />
+                <ImageView
+                    android:id="@+id/ivNavProfile"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_nav_profile"
+                    android:contentDescription="@string/nav_profile"
+                    app:tint="?attr/colorOnSurfaceVariant" />
+            </FrameLayout>
 
         </LinearLayout>
 
