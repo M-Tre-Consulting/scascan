@@ -71,14 +71,7 @@ class MainFragment : Fragment() {
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                val menuId = when (position) {
-                    0 -> R.id.homeFragment
-                    1 -> R.id.logFragment
-                    else -> R.id.profileFragment
-                }
-                if (binding.bottomNav.selectedItemId != menuId) {
-                    binding.bottomNav.selectedItemId = menuId
-                }
+                updateNavIcons(position)
             }
         })
     }
@@ -97,22 +90,26 @@ class MainFragment : Fragment() {
     }
 
     private fun setupBottomNav() {
-        binding.bottomNav.setOnItemSelectedListener { item ->
-            val page = when (item.itemId) {
-                R.id.homeFragment -> 0
-                R.id.logFragment -> 1
-                R.id.profileFragment -> 2
-                else -> 0
-            }
-            
-            // Trigger haptics on selection
-            binding.bottomNav.hapticClick()
-            
-            if (binding.viewPager.currentItem != page) {
-                binding.viewPager.setCurrentItem(page, true)
-            }
-            true
+        binding.navHome.setOnClickListener { updateSelection(0) }
+        binding.navLog.setOnClickListener { updateSelection(1) }
+        binding.navProfile.setOnClickListener { updateSelection(2) }
+    }
+
+    private fun updateSelection(position: Int) {
+        binding.navCard.hapticClick()
+        if (binding.viewPager.currentItem != position) {
+            binding.viewPager.setCurrentItem(position, true)
         }
+        updateNavIcons(position)
+    }
+
+    private fun updateNavIcons(position: Int) {
+        val activeColor = com.google.android.material.color.MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorPrimary)
+        val inactiveColor = com.google.android.material.color.MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorOnSurfaceVariant)
+
+        binding.navHome.setColorFilter(if (position == 0) activeColor else inactiveColor)
+        binding.navLog.setColorFilter(if (position == 1) activeColor else inactiveColor)
+        binding.navProfile.setColorFilter(if (position == 2) activeColor else inactiveColor)
     }
 
     private fun setupAnalysisObserver() {

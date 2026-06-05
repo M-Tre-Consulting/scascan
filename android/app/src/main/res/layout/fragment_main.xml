@@ -28,25 +28,49 @@
         android:id="@+id/navCard"
         style="@style/Widget.App.PillBar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_marginBottom="32dp"
         app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNav"
+        <LinearLayout
+            android:id="@+id/customNav"
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
             android:paddingHorizontal="12dp"
-            android:background="@android:color/transparent"
-            app:elevation="0dp"
-            app:itemIconSize="24dp"
-            app:itemRippleColor="@null"
-            app:itemActiveIndicatorColor="@android:color/transparent"
-            app:labelVisibilityMode="unlabeled"
-            app:menu="@menu/bottom_nav_menu" />
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/nav_home"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_camera"
+                android:contentDescription="@string/nav_scan"
+                app:tint="?attr/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/nav_log"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_nav_log"
+                android:contentDescription="@string/nav_log"
+                app:tint="?attr/colorOnSurfaceVariant" />
+
+            <ImageButton
+                android:id="@+id/nav_profile"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_nav_profile"
+                android:contentDescription="@string/nav_profile"
+                app:tint="?attr/colorOnSurfaceVariant" />
+
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
