@@ -93,7 +93,9 @@ class AnalysisManager @Inject constructor(
                                 }
                             }
                             WorkInfo.State.FAILED -> {
-                                _state.value = State.Error(context.getString(R.string.analysis_error_generic))
+                                val error = workInfo.outputData.getString("error_message")
+                                    ?: context.getString(R.string.analysis_error_generic)
+                                _state.value = State.Error(error)
                             }
                             else -> { /* Stay in processing */ }
                         }

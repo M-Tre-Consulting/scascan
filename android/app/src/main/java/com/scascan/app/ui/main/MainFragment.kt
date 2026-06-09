@@ -152,11 +152,23 @@ class MainFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             analysisManager.state.collect { state ->
                 binding.analysisProgress.isVisible = state is AnalysisManager.State.Processing
-                if (state is AnalysisManager.State.Complete) {
-                    // Safety check to avoid IllegalStateException
-                    if (isResumed && !childFragmentManager.isStateSaved) {
-                        showResultSheet(state.facts)
+
+                when (state) {
+                    is AnalysisManager.State.Complete -> {
+                        // Safety check to avoid IllegalStateException
+                        if (isResumed && !childFragmentManager.isStateSaved) {
+                            showResultSheet(state.facts)
+                        }
                     }
+                    is AnalysisManager.State.Error -> {
+                        com.google.android.material.snackbar.Snackbar.make(
+                            binding.root,
+                            state.message,
+                            com.google.android.material.snackbar.Snackbar.LENGTH_LONG
+                        ).show()
+                        analysisManager.dismiss()
+                    }
+                    else -> {}
                 }
             }
         }
