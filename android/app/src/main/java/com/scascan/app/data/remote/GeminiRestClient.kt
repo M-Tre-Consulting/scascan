@@ -75,7 +75,7 @@ class GeminiRestClient @Inject constructor() {
 
     suspend fun generateText(model: String, apiKey: String, prompt: String): String {
         Log.d(TAG, "generateText() model=$model")
-        return post(model, apiKey, textBody(prompt))
+        return postWithRetry(model, apiKey, textBody(prompt))
     }
 
     suspend fun generateWithImage(
@@ -85,7 +85,34 @@ class GeminiRestClient @Inject constructor() {
         prompt: String
     ): String {
         Log.d(TAG, "generateWithImage() model=$model bitmap=${bitmap.width}x${bitmap.height}")
-        return post(model, apiKey, imageBody(bitmap, prompt))
+        return postWithRetry(model, apiKey, imageBody(bitmap, prompt))
+    }
+
+    private suspend fun postWithRetry(model: String, apiKey: String, body: String): String {
+        var retryCount = 0
+        val maxRetries = 3
+        var lastException: Exception? = null
+
+        while (retryCount <= maxRetries) {
+            try {
+                return post(model, apiKey, body)
+            } catch (e: IOException) {
+                lastException = e
+                val message = e.message ?: ""
+                val isRetryable = message.contains("503") || message.contains("429") || 
+                                 e is java.net.ConnectException || e is java.net.SocketTimeoutException
+
+                if (isRetryable && retryCount < maxRetries) {
+                    retryCount++
+                    val delayMs = (2000L * Math.pow(2.0, (retryCount - 1).toDouble())).toLong()
+                    Log.w(TAG, "Retryable error: $message. Retrying in $delayMs ms... ($retryCount/$maxRetries)")
+                    kotlinx.coroutines.delay(delayMs)
+                } else {
+                    throw e
+                }
+            }
+        }
+        throw lastException ?: IOException("Failed after retries")
     }
 
     private suspend fun post(model: String, apiKey: String, body: String): String =

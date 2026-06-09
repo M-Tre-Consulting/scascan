@@ -57,12 +57,18 @@ class AnalysisWorker @AssistedInject constructor(
                     )
                     Result.success(outputData)
                 },
-                onFailure = { 
-                    Result.failure()
+                onFailure = { throwable ->
+                    val errorData = androidx.work.workDataOf(
+                        "error_message" to (throwable.message ?: "Analysis failed")
+                    )
+                    Result.failure(errorData)
                 }
             )
         } catch (e: Exception) {
-            Result.retry()
+            val errorData = androidx.work.workDataOf(
+                "error_message" to (e.message ?: "Unexpected error during analysis")
+            )
+            Result.failure(errorData)
         }
     }
 
