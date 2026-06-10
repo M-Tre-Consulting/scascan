@@ -66,6 +66,23 @@ class MainFragment : Fragment() {
         binding.viewPager.adapter = MainTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
         binding.viewPager.offscreenPageLimit = 2
         
+        // Nice iOS/Pixel-inspired PageTransformer: Fade + Scale + Slight Parallax
+        binding.viewPager.setPageTransformer { page, position ->
+            page.apply {
+                val absPos = Math.abs(position)
+                // Fade out as it moves away
+                alpha = (1f - absPos).coerceIn(0f, 1f)
+                
+                // Scale down slightly
+                val scale = 0.95f + (1f - absPos).coerceIn(0f, 1f) * 0.05f
+                scaleX = scale
+                scaleY = scale
+                
+                // Slight parallax effect
+                translationX = -position * (width / 4f)
+            }
+        }
+        
         // Reduce swipe sensitivity (require more horizontal movement to start swiping)
         reduceSwipeSensitivity()
 
