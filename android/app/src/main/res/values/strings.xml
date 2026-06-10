@@ -15,6 +15,7 @@
     <string name="barcode_scan_prompt">Point camera at a barcode</string>
     <string name="barcode_detected">Barcode detected! Tap to analyze</string>
     <string name="analyzing">Analyzing…</string>
+    <string name="camera_frame_hint">Frame the food within the square</string>
     <string name="permission_camera_denied">Camera permission is required to use this feature</string>
     <string name="label_camera">Take Photo</string>
     <string name="label_barcode_scan">Scan Barcode</string>

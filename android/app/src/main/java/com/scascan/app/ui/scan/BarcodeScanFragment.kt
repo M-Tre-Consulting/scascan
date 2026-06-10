@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import android.view.ScaleGestureDetector
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -41,6 +43,7 @@ class BarcodeScanFragment : Fragment() {
     private val viewModel: BarcodeScanViewModel by viewModels()
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
+    private var camera: Camera? = null
 
     private val cameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -65,6 +68,8 @@ class BarcodeScanFragment : Fragment() {
         // Whole pill bar is the back target
         binding.topBar.setOnClickListener { findNavController().navigateUp() }
 
+        setupZoom()
+
         // Push the floating bar below the status bar (camera preview stays full-screen)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
@@ -88,6 +93,27 @@ class BarcodeScanFragment : Fragment() {
         observeUiState()
     }
 
+    private fun setupZoom() {
+        val listener = object : android.view.ScaleGestureDetector.OnScaleGestureListener {
+            override fun onScale(detector: android.view.ScaleGestureDetector): Boolean {
+                val currentZoomRatio = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 1f
+                val delta = detector.scaleFactor
+                camera?.cameraControl?.setZoomRatio(currentZoomRatio * delta)
+                return true
+            }
+            override fun onScaleBegin(detector: android.view.ScaleGestureDetector): Boolean = true
+            override fun onScaleEnd(detector: android.view.ScaleGestureDetector) {}
+        }
+        val scaleGestureDetector = android.view.ScaleGestureDetector(requireContext(), listener)
+        binding.viewFinder.setOnTouchListener { v, event ->
+            scaleGestureDetector.onTouchEvent(event)
+            if (event.action == android.view.MotionEvent.ACTION_UP) {
+                v.performClick()
+            }
+            return@setOnTouchListener true
+        }
+    }
+
     private fun startScanner() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         cameraProviderFuture.addListener({
@@ -102,7 +128,7 @@ class BarcodeScanFragment : Fragment() {
 
             try {
                 cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
+                camera = cameraProvider.bindToLifecycle(
                     viewLifecycleOwner,
                     CameraSelector.DEFAULT_BACK_CAMERA,
                     preview,

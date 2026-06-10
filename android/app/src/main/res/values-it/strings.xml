@@ -15,6 +15,7 @@
     <string name="barcode_scan_prompt">Inquadra il codice a barre</string>
     <string name="barcode_detected">Codice rilevato! Tocca per analizzare</string>
     <string name="analyzing">Analisi in corso…</string>
+    <string name="camera_frame_hint">Inquadra il cibo all\'interno del quadrato</string>
     <string name="permission_camera_denied">Il permesso alla fotocamera è necessario per questa funzione</string>
     <string name="label_camera">Scatta foto</string>
     <string name="label_barcode_scan">Scansiona</string>
