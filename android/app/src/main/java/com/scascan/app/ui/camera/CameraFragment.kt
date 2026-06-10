@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import android.view.ScaleGestureDetector
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -39,6 +41,7 @@ class CameraFragment : Fragment() {
 
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
+    private var camera: Camera? = null
 
     private val cameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -63,6 +66,8 @@ class CameraFragment : Fragment() {
         binding.topBar.setOnClickListener { findNavController().navigateUp() }
         binding.captureButton.setOnClickListener { it.hapticClick(); takePhoto() }
 
+        setupZoom()
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
             binding.topBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -78,6 +83,27 @@ class CameraFragment : Fragment() {
         }
     }
 
+    private fun setupZoom() {
+        val listener = object : android.view.ScaleGestureDetector.OnScaleGestureListener {
+            override fun onScale(detector: android.view.ScaleGestureDetector): Boolean {
+                val currentZoomRatio = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 1f
+                val delta = detector.scaleFactor
+                camera?.cameraControl?.setZoomRatio(currentZoomRatio * delta)
+                return true
+            }
+            override fun onScaleBegin(detector: android.view.ScaleGestureDetector): Boolean = true
+            override fun onScaleEnd(detector: android.view.ScaleGestureDetector) {}
+        }
+        val scaleGestureDetector = android.view.ScaleGestureDetector(requireContext(), listener)
+        binding.viewFinder.setOnTouchListener { v, event ->
+            scaleGestureDetector.onTouchEvent(event)
+            if (event.action == android.view.MotionEvent.ACTION_UP) {
+                v.performClick()
+            }
+            return@setOnTouchListener true
+        }
+    }
+
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         cameraProviderFuture.addListener({
@@ -90,7 +116,7 @@ class CameraFragment : Fragment() {
                 .build()
             try {
                 cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
+                camera = cameraProvider.bindToLifecycle(
                     viewLifecycleOwner,
                     CameraSelector.DEFAULT_BACK_CAMERA,
                     preview,
