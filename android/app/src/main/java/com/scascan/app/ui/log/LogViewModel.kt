@@ -157,6 +157,12 @@ class LogViewModel @Inject constructor(
                 trendStatus      = trend.status,
                 weeklyRateKgPerWeek = trend.weeklyRate
             )
+            
+            // Sync cache for the widget
+            if (offset == 0 && activeKcal > 0) {
+                logRepository.syncActiveCalories(activeKcal)
+            }
+
             refreshTargets()
         }
     }

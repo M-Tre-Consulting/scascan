@@ -68,6 +68,11 @@ class LogRepository @Inject constructor(
     fun goalIndex(): Int = profileStore.goalIndex
     fun isAiComputed(): Boolean = profileStore.aiCalorieTarget > 0
 
+    fun syncActiveCalories(kcal: Double) {
+        profileStore.lastActiveCalories = kcal.toFloat()
+        com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
+    }
+
     suspend fun getAllEntries(): List<LogEntry> = dao.getAllEntries()
 
     suspend fun getLiveTarget(): Int {
@@ -76,10 +81,19 @@ class LogRepository @Inject constructor(
         
         val baseTarget = getBaseTarget(hasHc)
         
-        val activeKcal = if (hasHc) {
+        var activeKcal = if (hasHc) {
             healthManager.readActiveCalories(0)
         } else {
             0.0
+        }
+        
+        // Background restriction fallback: if live read returns 0 but we have a cached value, use it.
+        // This is primarily for the home screen widget which can't always read HC data in the background.
+        if (hasHc && activeKcal <= 0.1 && profileStore.lastActiveCalories > 0) {
+            activeKcal = profileStore.lastActiveCalories.toDouble()
+        } else if (hasHc && activeKcal > 0.1) {
+            // Update cache when we have a fresh reading
+            profileStore.lastActiveCalories = activeKcal.toFloat()
         }
         
         val trendAdjustment = if (hasHc) {
