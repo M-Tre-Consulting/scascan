@@ -74,15 +74,7 @@ class LogRepository @Inject constructor(
         val hasHc = healthManager.hasPermissions()
         val bleedthrough = getYesterdayBleedthrough()
         
-        val baseTarget = if (hasHc) {
-            if (isAiComputed()) {
-                dailyCalorieTarget()
-            } else {
-                (bmr() * 1.2).toInt() + goalOffset()
-            }
-        } else {
-            dailyCalorieTarget()
-        }
+        val baseTarget = getBaseTarget(hasHc)
         
         val activeKcal = if (hasHc) {
             healthManager.readActiveCalories(0)
@@ -97,7 +89,23 @@ class LogRepository @Inject constructor(
             0
         }
         
-        val total = baseTarget + bleedthrough + activeKcal.roundToInt() + trendAdjustment
+        return computeFinalTarget(baseTarget, bleedthrough, activeKcal, trendAdjustment)
+    }
+
+    fun getBaseTarget(hasHc: Boolean): Int {
+        return if (hasHc) {
+            if (isAiComputed()) {
+                dailyCalorieTarget()
+            } else {
+                (bmr() * 1.2).toInt() + goalOffset()
+            }
+        } else {
+            dailyCalorieTarget()
+        }
+    }
+
+    fun computeFinalTarget(base: Int, bleedthrough: Int, active: Double, trend: Int): Int {
+        val total = base + bleedthrough + active.roundToInt() + trend
         // Ensure a healthy minimum target (at least 80% of BMR)
         return total.coerceAtLeast((bmr() * 0.8).toInt())
     }
@@ -148,7 +156,11 @@ class LogRepository @Inject constructor(
         // If Health Connect is active, we use a Sedentary (1.2x) base to avoid double-counting activity
         val hasHc = healthManager.hasPermissions()
         val baseTarget = if (hasHc) {
-            (bmr() * 1.2) + goalOffset()
+            if (isAiComputed()) {
+                dailyCalorieTarget().toDouble()
+            } else {
+                (bmr() * 1.2) + goalOffset()
+            }
         } else {
             dailyCalorieTarget().toDouble()
         }

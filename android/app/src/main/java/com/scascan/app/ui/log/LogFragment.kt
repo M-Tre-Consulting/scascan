@@ -212,10 +212,16 @@ class LogFragment : Fragment() {
 
     // Rendering
     private fun renderScreen(state: RenderState) {
-        val activeKcal = (state.adaptive as? LogViewModel.AdaptiveState.Active)?.activeKcal?.roundToInt() ?: 0
+        val activeKcal = (state.adaptive as? LogViewModel.AdaptiveState.Active)?.activeKcal ?: 0.0
         val trendAdj   = (state.adaptive as? LogViewModel.AdaptiveState.Active)?.trendAdjustment ?: 0
         val bleedthrough = state.targetInfo.bleedthroughKcal
-        val totalTarget = state.targetInfo.caloriesKcal + activeKcal + trendAdj + bleedthrough
+        
+        // Use repository to compute final target with health floors (coercion)
+        val totalTarget = if (viewModel.isToday.value) {
+            viewModel.getFinalTarget(state.targetInfo.caloriesKcal, bleedthrough, activeKcal, trendAdj)
+        } else {
+            state.targetInfo.caloriesKcal
+        }
         
         renderEntries(state.entries, totalTarget, state.targetInfo.macros)
         renderWater(state.water)

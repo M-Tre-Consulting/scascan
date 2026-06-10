@@ -209,18 +209,8 @@ class LogViewModel @Inject constructor(
         val hasHc = healthManager.isAvailable && healthManager.hasPermissions()
         val bleedthrough = if (_dateOffset.value == 0) logRepository.getYesterdayBleedthrough() else 0
         
-        // When using Health Connect adaptive targets, the "Base" should be a 
-        // Sedentary TDEE (BMR * 1.2) plus their goal offset, or their AI target.
-        // We then add active calories from the tracker on top. 
-        val baseTarget = if (hasHc) {
-            if (logRepository.isAiComputed()) {
-                logRepository.dailyCalorieTarget()
-            } else {
-                (logRepository.bmr() * 1.2).toInt() + logRepository.goalOffset()
-            }
-        } else {
-            logRepository.dailyCalorieTarget()
-        }
+        // Use repository to get the correct base target (respects AI targets + HC)
+        val baseTarget = logRepository.getBaseTarget(hasHc)
 
         return TargetInfo(
             caloriesKcal   = baseTarget,
@@ -240,6 +230,10 @@ class LogViewModel @Inject constructor(
         viewModelScope.launch {
             _targetInfo.value = buildTargetInfo()
         }
+    }
+
+    fun getFinalTarget(base: Int, bleedthrough: Int, active: Double, trend: Int): Int {
+        return logRepository.computeFinalTarget(base, bleedthrough, active, trend)
     }
 
     // Log entry operations
