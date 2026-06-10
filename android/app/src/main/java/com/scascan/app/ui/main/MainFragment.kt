@@ -45,11 +45,20 @@ class MainFragment : Fragment() {
         setupViewPager()
         setupBottomNav()
         setupAnalysisObserver()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        checkPendingActions()
+    }
+
+    private fun checkPendingActions() {
         arguments?.getInt("start_tab")?.let { tab ->
-            if (tab != 0) {
+            if (tab != binding.viewPager.currentItem) {
                 binding.viewPager.post {
                     binding.viewPager.setCurrentItem(tab, false)
+                    // Clear the argument so it doesn't jump again on next resume
+                    arguments?.remove("start_tab")
                 }
             }
         }
@@ -58,6 +67,8 @@ class MainFragment : Fragment() {
         arguments?.getParcelable<NutritionFacts>("pending_facts")?.let { facts ->
             binding.root.post {
                 showResultSheet(facts)
+                // Clear the argument
+                arguments?.remove("pending_facts")
             }
         }
     }
@@ -66,22 +77,7 @@ class MainFragment : Fragment() {
         binding.viewPager.adapter = MainTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
         binding.viewPager.offscreenPageLimit = 2
         
-        // Nice iOS/Pixel-inspired PageTransformer: Fade + Scale + Slight Parallax
-        binding.viewPager.setPageTransformer { page, position ->
-            page.apply {
-                val absPos = Math.abs(position)
-                // Fade out as it moves away
-                alpha = (1f - absPos).coerceIn(0f, 1f)
-                
-                // Scale down slightly
-                val scale = 0.95f + (1f - absPos).coerceIn(0f, 1f) * 0.05f
-                scaleX = scale
-                scaleY = scale
-                
-                // Slight parallax effect
-                translationX = -position * (width / 4f)
-            }
-        }
+        // Use default PageTransformer for a clean, Google-standard horizontal slide.
         
         // Reduce swipe sensitivity (require more horizontal movement to start swiping)
         reduceSwipeSensitivity()
