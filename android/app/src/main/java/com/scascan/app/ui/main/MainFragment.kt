@@ -106,16 +106,15 @@ class MainFragment : Fragment() {
     }
 
     private fun setupBottomNav() {
-        binding.btnNavHome.setOnClickListener { updateSelection(0) }
-        binding.btnNavLog.setOnClickListener { updateSelection(1) }
-        binding.btnNavProfile.setOnClickListener { updateSelection(2) }
+        binding.btnNavHome.setOnClickListener { it.hapticClick(); updateSelection(0) }
+        binding.btnNavLog.setOnClickListener { it.hapticClick(); updateSelection(1) }
+        binding.btnNavProfile.setOnClickListener { it.hapticClick(); updateSelection(2) }
         
         // Initial state
         updateNavIcons(0)
     }
 
     private fun updateSelection(position: Int) {
-        binding.navCard.hapticClick()
         if (binding.viewPager.currentItem != position) {
             binding.viewPager.setCurrentItem(position, true)
         }
@@ -131,17 +130,18 @@ class MainFragment : Fragment() {
     }
 
     private fun animateNavButton(bg: View, iv: android.widget.ImageView, isSelected: Boolean, activeColor: Int, inactiveColor: Int) {
-        val duration = 250L
+        val duration = 350L
         val targetAlpha = if (isSelected) 1f else 0f
-        val targetScale = if (isSelected) 1f else 0.8f
+        val targetScale = if (isSelected) 1f else 0.4f
         val targetColor = if (isSelected) activeColor else inactiveColor
 
+        // Pixel-like spring animation for the indicator
         bg.animate()
             .alpha(targetAlpha)
             .scaleX(targetScale)
             .scaleY(targetScale)
             .setDuration(duration)
-            .setInterpolator(android.view.animation.DecelerateInterpolator())
+            .setInterpolator(android.view.animation.OvershootInterpolator(1.2f))
             .start()
 
         // Icon color transition
