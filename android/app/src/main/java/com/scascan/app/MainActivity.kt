@@ -67,7 +67,6 @@ class MainActivity : AppCompatActivity() {
                 
                 val navOptions = androidx.navigation.NavOptions.Builder()
                     .setLaunchSingleTop(true)
-                    .setPopUpTo(R.id.mainFragment, false)
                     .build()
 
                 when (action) {

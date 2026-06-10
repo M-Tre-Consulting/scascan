@@ -33,13 +33,13 @@ class LogViewModel @Inject constructor(
     val healthManager: HealthConnectManager
 ) : ViewModel() {
 
+    // Date navigation
+    private val _dateOffset = MutableStateFlow(0)
+
     init {
         loadHealthData()
         refreshTargets()
     }
-
-    // Date navigation
-    private val _dateOffset = MutableStateFlow(0)
 
     val isToday: StateFlow<Boolean> = _dateOffset
         .map { it == 0 }

@@ -53,23 +53,26 @@ class MainFragment : Fragment() {
     }
 
     private fun checkPendingActions() {
-        arguments?.getInt("start_tab")?.let { tab ->
+        val args = arguments ?: return
+        
+        if (args.containsKey("start_tab")) {
+            val tab = args.getInt("start_tab")
             if (tab != binding.viewPager.currentItem) {
                 binding.viewPager.post {
                     binding.viewPager.setCurrentItem(tab, false)
-                    // Clear the argument so it doesn't jump again on next resume
-                    arguments?.remove("start_tab")
                 }
             }
+            args.remove("start_tab")
         }
 
-        @Suppress("DEPRECATION")
-        arguments?.getParcelable<NutritionFacts>("pending_facts")?.let { facts ->
-            binding.root.post {
-                showResultSheet(facts)
-                // Clear the argument
-                arguments?.remove("pending_facts")
+        if (args.containsKey("pending_facts")) {
+            @Suppress("DEPRECATION")
+            args.getParcelable<NutritionFacts>("pending_facts")?.let { facts ->
+                binding.root.post {
+                    showResultSheet(facts)
+                }
             }
+            args.remove("pending_facts")
         }
     }
 
