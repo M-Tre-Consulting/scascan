@@ -64,18 +64,22 @@ class MainActivity : AppCompatActivity() {
         binding.root.post {
             try {
                 val navController = findNavController(R.id.nav_host_fragment)
-                // If we are at apiKeyFragment, we might need to wait or navigate to main first
-                // but assuming the user has already set it up.
+                
+                val navOptions = androidx.navigation.NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setPopUpTo(R.id.mainFragment, false)
+                    .build()
+
                 when (action) {
                     ACTION_QUICK_SCAN -> navController.navigate(R.id.cameraFragment)
                     ACTION_QUICK_BARCODE -> navController.navigate(R.id.barcodeScanFragment)
                     ACTION_QUICK_SEARCH -> navController.navigate(R.id.searchFragment)
-                    ACTION_OPEN_LOG -> navController.navigate(R.id.mainFragment, bundleOf("start_tab" to 1))
+                    ACTION_OPEN_LOG -> navController.navigate(R.id.mainFragment, bundleOf("start_tab" to 1), navOptions)
                     ACTION_SHOW_ANALYSIS -> {
                         val json = intent.getStringExtra(EXTRA_FACTS_JSON)
                         if (json != null) {
                             val facts = com.google.gson.Gson().fromJson(json, com.scascan.app.data.model.NutritionFacts::class.java)
-                            navController.navigate(R.id.mainFragment, bundleOf("pending_facts" to facts))
+                            navController.navigate(R.id.mainFragment, bundleOf("pending_facts" to facts), navOptions)
                         }
                     }
                 }
