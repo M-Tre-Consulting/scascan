@@ -57,6 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:text="@string/btn_add_to_log"
+        style="@style/Widget.Material3.Button.TonalButton"
         android:layout_marginBottom="8dp" />
 
     <com.google.android.material.button.MaterialButton
