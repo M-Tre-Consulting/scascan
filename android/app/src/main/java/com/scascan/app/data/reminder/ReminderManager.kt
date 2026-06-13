@@ -1,11 +1,12 @@
 package com.scascan.app.data.reminder
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import com.scascan.app.data.receiver.ReminderReceiver
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.scascan.app.data.worker.HydrationReminderWorker
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,34 +14,25 @@ import javax.inject.Singleton
 class ReminderManager @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    private val alarmManager = context.getSystemService(AlarmManager::class.java)
+    private val workManager = WorkManager.getInstance(context)
 
     fun scheduleHydrationReminder(intervalMillis: Long) {
-        val intent = Intent(context, ReminderReceiver::class.java).apply {
-            action = ReminderReceiver.ACTION_WATER_REMINDER
-        }
-        val pendingIntent = PendingIntent.getBroadcast(
-            context, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val workRequest = PeriodicWorkRequestBuilder<HydrationReminderWorker>(
+            intervalMillis, TimeUnit.MILLISECONDS
+        ).build()
 
-        // Set repeating alarm
-        alarmManager.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            System.currentTimeMillis() + intervalMillis,
-            intervalMillis,
-            pendingIntent
+        workManager.enqueueUniquePeriodicWork(
+            WORK_NAME_HYDRATION,
+            ExistingPeriodicWorkPolicy.UPDATE,
+            workRequest
         )
     }
 
     fun cancelHydrationReminder() {
-        val intent = Intent(context, ReminderReceiver::class.java).apply {
-            action = ReminderReceiver.ACTION_WATER_REMINDER
-        }
-        val pendingIntent = PendingIntent.getBroadcast(
-            context, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        alarmManager.cancel(pendingIntent)
+        workManager.cancelUniqueWork(WORK_NAME_HYDRATION)
+    }
+
+    companion object {
+        private const val WORK_NAME_HYDRATION = "hydration_reminder"
     }
 }

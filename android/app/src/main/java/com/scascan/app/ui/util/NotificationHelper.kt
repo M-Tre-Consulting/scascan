@@ -35,7 +35,7 @@ class NotificationHelper @Inject constructor(
         val reminderChannel = NotificationChannel(
             CHANNEL_REMINDERS,
             "Reminders",
-            NotificationManager.IMPORTANCE_DEFAULT
+            NotificationManager.IMPORTANCE_HIGH
         ).apply {
             description = "Hydration and daily logging reminders"
         }
@@ -88,6 +88,8 @@ class NotificationHelper @Inject constructor(
             .setContentText("Stay on track with your water goal. Log a glass now.")
             .setContentIntent(pending)
             .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .build()
 
         notifySafely(NOTIF_ID_REMINDER, notification)
