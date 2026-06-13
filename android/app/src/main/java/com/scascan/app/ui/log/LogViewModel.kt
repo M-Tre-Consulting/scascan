@@ -75,10 +75,6 @@ class LogViewModel @Inject constructor(
         viewModelScope.launch { logRepository.addWater(ml) }
     }
 
-    fun deleteWater(entry: com.scascan.app.data.local.WaterLog) {
-        viewModelScope.launch { logRepository.deleteWater(entry) }
-    }
-
     fun removeLastWater() {
         viewModelScope.launch { logRepository.removeLastWater() }
     }

@@ -51,7 +51,7 @@ class NutritionResultFragment : Fragment() {
             requireArguments().getParcelable("nutritionFacts", NutritionFacts::class.java)!!
         } else {
             @Suppress("DEPRECATION")
-            requireArguments().getParcelable<NutritionFacts>("nutritionFacts")!!
+            requireArguments().getParcelable("nutritionFacts")!!
         }
 
         bindFacts(facts)

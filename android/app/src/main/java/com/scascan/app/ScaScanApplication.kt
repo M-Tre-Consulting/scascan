@@ -2,8 +2,6 @@ package com.scascan.app
 
 import android.app.Activity
 import android.app.Application
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.os.Bundle
 import androidx.work.Configuration
 import com.scascan.app.ui.util.NotificationHelper

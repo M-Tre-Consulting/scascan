@@ -59,18 +59,6 @@ class ProfileViewModel @Inject constructor(
     private val _targetState = MutableStateFlow<TargetState>(TargetState.Idle)
     val targetState: StateFlow<TargetState> = _targetState
 
-    data class AuthState(
-        val name: String? = null,
-        val email: String? = null,
-        val photoUrl: String? = null,
-        val isError: Boolean = false
-    )
-
-    private val _authState = MutableStateFlow<AuthState>(
-        AuthState(name = profileStore.name.ifBlank { null })
-    )
-    val authState: StateFlow<AuthState> = _authState
-
     sealed class SyncState {
         object Idle : SyncState()
         object Syncing : SyncState()

@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 // NavController might not be initialized yet or destination not reachable
             }
         }

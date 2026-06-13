@@ -1,5 +1,6 @@
 package com.scascan.app.ui.log
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -64,6 +65,7 @@ class DailySummaryBottomSheetFragment : BottomSheetDialogFragment() {
         renderGoal(goalIndex, isAiComputed)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun renderCalories(consumed: Int, target: Int, activeKcal: Int, steps: Long, bleedthrough: Int) {
         binding.tvSummaryConsumed.text = consumed.toString()
         binding.tvSummaryCalorieTarget.text = "/ $target kcal"

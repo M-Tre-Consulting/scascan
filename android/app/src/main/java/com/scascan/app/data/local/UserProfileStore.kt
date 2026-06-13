@@ -171,6 +171,5 @@ class UserProfileStore @Inject constructor(
         private const val KEY_WATER_REMINDERS = "water_reminders"
         private const val KEY_LAST_ACTIVE_CALORIES = "last_active_kcal"
         const val DEFAULT_CALORIES = 2_000
-        val GOAL_LABELS = arrayOf("Lose weight", "Maintain weight", "Build muscle")
     }
 }

@@ -214,7 +214,7 @@ class AppSettingsFragment : Fragment() {
                 Snackbar.make(binding.root, R.string.profile_sync_disconnected, Snackbar.LENGTH_SHORT)
                     .setAnchorView(binding.btnGoogleSync)
                     .show()
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 viewModel.profileStore.syncEmail = ""
                 updateSyncButton()
             }

@@ -14,6 +14,8 @@ import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton
 import androidx.core.graphics.scale
+import kotlin.math.pow
+import kotlin.time.Duration.Companion.milliseconds
 
 data class ModelInfo(val id: String, val displayName: String)
 
@@ -104,9 +106,9 @@ class GeminiRestClient @Inject constructor() {
 
                 if (isRetryable && retryCount < maxRetries) {
                     retryCount++
-                    val delayMs = (2000L * Math.pow(2.0, (retryCount - 1).toDouble())).toLong()
+                    val delayMs = (2000L * 2.0.pow((retryCount - 1).toDouble())).toLong()
                     Log.w(TAG, "Retryable error: $message. Retrying in $delayMs ms... ($retryCount/$maxRetries)")
-                    kotlinx.coroutines.delay(delayMs)
+                    kotlinx.coroutines.delay(delayMs.milliseconds)
                 } else {
                     throw e
                 }

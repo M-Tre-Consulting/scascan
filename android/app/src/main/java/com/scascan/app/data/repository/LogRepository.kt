@@ -19,8 +19,6 @@ class LogRepository @Inject constructor(
     private val profileStore: UserProfileStore,
     private val healthManager: com.scascan.app.data.health.HealthConnectManager
 ) {
-    fun todayEntries(): Flow<List<LogEntry>> = entriesForDateOffset(0)
-
     fun entriesForDateOffset(offsetDays: Int): Flow<List<LogEntry>> {
         val cal = Calendar.getInstance().apply {
             add(Calendar.DAY_OF_YEAR, offsetDays)
@@ -87,7 +85,7 @@ class LogRepository @Inject constructor(
             0.0
         }
         
-        // Background restriction fallback: if live read returns 0 but we have a cached value, use it.
+        // Background restriction fallback: if live read returns 0, but we have a cached value, use it.
         // This is primarily for the home screen widget which can't always read HC data in the background.
         if (hasHc && activeKcal <= 0.1 && profileStore.lastActiveCalories > 0) {
             activeKcal = profileStore.lastActiveCalories.toDouble()

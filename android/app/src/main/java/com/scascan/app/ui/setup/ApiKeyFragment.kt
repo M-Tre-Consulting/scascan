@@ -25,6 +25,7 @@ import com.scascan.app.ui.profile.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 @AndroidEntryPoint
 class ApiKeyFragment : Fragment() {
@@ -80,7 +81,8 @@ class ApiKeyFragment : Fragment() {
         binding.btnStartupSync.setOnClickListener { startDriveSync() }
         
         binding.btnGetKey.setOnClickListener {
-            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://aistudio.google.com/app/apikey"))
+            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW,
+                "https://aistudio.google.com/app/apikey".toUri())
             startActivity(intent)
         }
 

@@ -83,9 +83,8 @@ class DriveSyncManager @Inject constructor(
     private fun getDriveService(accessToken: String): Drive {
         return Drive.Builder(
             NetHttpTransport(),
-            GsonFactory.getDefaultInstance(),
-            { request -> request.headers.authorization = "Bearer $accessToken" }
-        ).setApplicationName("ScaScan").build()
+            GsonFactory.getDefaultInstance()
+        ) { request -> request.headers.authorization = "Bearer $accessToken" }.setApplicationName("ScaScan").build()
     }
 
     private fun downloadData(drive: Drive): SyncData? {
@@ -104,7 +103,7 @@ class DriveSyncManager @Inject constructor(
         
         return try {
             gson.fromJson(tempFile.readText(), SyncData::class.java)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }
