@@ -219,11 +219,6 @@ class LogRepository @Inject constructor(
         com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
     }
 
-    suspend fun deleteWater(entry: com.scascan.app.data.local.WaterLog) {
-        waterDao.delete(entry)
-        com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
-    }
-
     suspend fun removeLastWater() {
         waterDao.getLatest()?.let {
             waterDao.delete(it)
