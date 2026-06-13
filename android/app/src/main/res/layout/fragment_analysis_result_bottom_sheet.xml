@@ -59,6 +59,14 @@
         android:text="@string/btn_add_to_log"
         android:layout_marginBottom="8dp" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFix"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="@string/log_entry_fix"
+        style="@style/Widget.Material3.Button.TonalButton"
+        android:layout_marginBottom="8dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

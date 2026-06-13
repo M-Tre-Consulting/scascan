@@ -58,6 +58,10 @@ class AnalysisResultBottomSheetFragment : BottomSheetDialogFragment() {
             it.hapticConfirm()
             sendResult(ACTION_ADD)
         }
+        binding.btnFix.setOnClickListener {
+            it.hapticClick()
+            sendResult(ACTION_FIX)
+        }
         binding.btnViewDetails.setOnClickListener {
             it.hapticClick()
             sendResult(ACTION_DETAILS)
@@ -83,6 +87,7 @@ class AnalysisResultBottomSheetFragment : BottomSheetDialogFragment() {
         const val KEY_ACTION = "action"
         const val ACTION_ADD = "add_to_log"
         const val ACTION_DETAILS = "view_details"
+        const val ACTION_FIX = "fix"
         const val ACTION_DISMISS = "dismiss"
         private const val ARG_FACTS = "nutrition_facts"
 

@@ -51,6 +51,29 @@ class AnalysisManager @Inject constructor(
         startWorker(query = query)
     }
 
+    fun fixPending(originalFacts: NutritionFacts, correction: String) {
+        if (_state.value is State.Processing) return
+        _state.value = State.Processing
+        
+        scope.launch {
+            try {
+                val builder = Data.Builder()
+                    .putString(AnalysisWorker.KEY_FIX_ORIGINAL_NAME, originalFacts.foodName)
+                    .putString(AnalysisWorker.KEY_FIX_ORIGINAL_SIZE, originalFacts.servingSize)
+                    .putString(AnalysisWorker.KEY_FIX_CORRECTION, correction)
+
+                val workRequest = OneTimeWorkRequestBuilder<AnalysisWorker>()
+                    .setInputData(builder.build())
+                    .build()
+
+                workManager.enqueue(workRequest)
+                observeWork(workRequest.id)
+            } catch (e: Exception) {
+                _state.value = State.Error(e.message ?: "Failed to start analysis")
+            }
+        }
+    }
+
     private fun startWorker(bitmap: Bitmap? = null, query: String? = null, isBarcode: Boolean = false) {
         if (_state.value is State.Processing) return
         _state.value = State.Processing
@@ -78,31 +101,34 @@ class AnalysisManager @Inject constructor(
                     .build()
 
                 workManager.enqueue(workRequest)
-
-                // Observe work to update state in the foreground
-                scope.launch(Dispatchers.Main) {
-                    workManager.getWorkInfoByIdFlow(workRequest.id).collect { workInfo ->
-                        when (workInfo?.state) {
-                            WorkInfo.State.SUCCEEDED -> {
-                                val json = workInfo.outputData.getString("facts_json")
-                                if (json != null) {
-                                    val facts = com.google.gson.Gson().fromJson(json, NutritionFacts::class.java)
-                                    _state.value = State.Complete(facts)
-                                } else {
-                                    _state.value = State.Error("Failed to parse analysis result")
-                                }
-                            }
-                            WorkInfo.State.FAILED -> {
-                                val error = workInfo.outputData.getString("error_message")
-                                    ?: context.getString(R.string.analysis_error_generic)
-                                _state.value = State.Error(error)
-                            }
-                            else -> { /* Stay in processing */ }
-                        }
-                    }
-                }
+                observeWork(workRequest.id)
             } catch (e: Exception) {
                 _state.value = State.Error(e.message ?: "Failed to start analysis")
+            }
+        }
+    }
+
+    private fun observeWork(workId: UUID) {
+        // Observe work to update state in the foreground
+        scope.launch(Dispatchers.Main) {
+            workManager.getWorkInfoByIdFlow(workId).collect { workInfo ->
+                when (workInfo?.state) {
+                    WorkInfo.State.SUCCEEDED -> {
+                        val json = workInfo.outputData.getString("facts_json")
+                        if (json != null) {
+                            val facts = com.google.gson.Gson().fromJson(json, NutritionFacts::class.java)
+                            _state.value = State.Complete(facts)
+                        } else {
+                            _state.value = State.Error("Failed to parse analysis result")
+                        }
+                    }
+                    WorkInfo.State.FAILED -> {
+                        val error = workInfo.outputData.getString("error_message")
+                            ?: context.getString(R.string.analysis_error_generic)
+                        _state.value = State.Error(error)
+                    }
+                    else -> { /* Stay in processing */ }
+                }
             }
         }
     }

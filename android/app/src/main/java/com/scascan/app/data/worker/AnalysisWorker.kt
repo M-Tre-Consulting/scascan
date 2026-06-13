@@ -24,9 +24,17 @@ class AnalysisWorker @AssistedInject constructor(
         val imagePath = inputData.getString(KEY_IMAGE_PATH)
         val query = inputData.getString(KEY_SEARCH_QUERY)
         val isBarcode = inputData.getBoolean(KEY_IS_BARCODE, false)
+        
+        // Fix params
+        val fixName = inputData.getString(KEY_FIX_ORIGINAL_NAME)
+        val fixSize = inputData.getString(KEY_FIX_ORIGINAL_SIZE)
+        val fixCorrection = inputData.getString(KEY_FIX_CORRECTION)
 
         return try {
             val factsResult = when {
+                fixName != null && fixSize != null && fixCorrection != null -> {
+                    nutritionRepository.fixEntry(fixName, fixSize, fixCorrection)
+                }
                 imagePath != null -> {
                     val file = File(imagePath)
                     if (!file.exists()) return Result.failure()
@@ -76,5 +84,9 @@ class AnalysisWorker @AssistedInject constructor(
         const val KEY_IMAGE_PATH = "image_path"
         const val KEY_SEARCH_QUERY = "search_query"
         const val KEY_IS_BARCODE = "is_barcode"
+        
+        const val KEY_FIX_ORIGINAL_NAME = "fix_original_name"
+        const val KEY_FIX_ORIGINAL_SIZE = "fix_original_size"
+        const val KEY_FIX_CORRECTION = "fix_correction"
     }
 }

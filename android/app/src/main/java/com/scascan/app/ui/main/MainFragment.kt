@@ -45,6 +45,7 @@ class MainFragment : Fragment() {
         setupViewPager()
         setupBottomNav()
         setupAnalysisObserver()
+        setupFixResultListener()
     }
 
     override fun onResume() {
@@ -196,11 +197,35 @@ class MainFragment : Fragment() {
             .show(childFragmentManager, RESULT_SHEET_TAG)
     }
 
+    private fun setupFixResultListener() {
+        childFragmentManager.setFragmentResultListener(
+            com.scascan.app.ui.log.FixEntryBottomSheetFragment.RESULT_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val entryId = bundle.getLong(com.scascan.app.ui.log.FixEntryBottomSheetFragment.RESULT_ENTRY_ID)
+            val correction = bundle.getString(com.scascan.app.ui.log.FixEntryBottomSheetFragment.RESULT_CORRECTION) ?: return@setFragmentResultListener
+            
+            // If entryId is -1, it's a pre-log fix
+            if (entryId == -1L) {
+                val currentFacts = (analysisManager.state.value as? AnalysisManager.State.Complete)?.facts
+                if (currentFacts != null) {
+                    analysisManager.fixPending(currentFacts, correction)
+                }
+                // Dismiss the fix sheet
+                (childFragmentManager.findFragmentByTag("fix_pending") as? com.scascan.app.ui.log.FixEntryBottomSheetFragment)?.dismiss()
+            }
+        }
+    }
+
     private fun handleAnalysisAction(action: String, facts: NutritionFacts) {
         when (action) {
             AnalysisResultBottomSheetFragment.ACTION_ADD -> {
                 viewLifecycleOwner.lifecycleScope.launch { logRepository.addEntry(facts) }
                 analysisManager.dismiss()
+            }
+            AnalysisResultBottomSheetFragment.ACTION_FIX -> {
+                com.scascan.app.ui.log.FixEntryBottomSheetFragment.newInstance(-1L, facts.foodName)
+                    .show(childFragmentManager, "fix_pending")
             }
             AnalysisResultBottomSheetFragment.ACTION_DETAILS -> {
                 analysisManager.dismiss()
