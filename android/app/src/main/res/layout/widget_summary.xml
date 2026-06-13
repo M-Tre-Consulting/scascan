@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_background"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:ignore="UseAppTint">
 
     <!-- Top Row: Consumed Large + Target Small -->
     <LinearLayout
@@ -18,7 +20,7 @@
             android:id="@+id/tv_widget_consumed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:text="@string/widget_placeholder_consumed"
             android:textColor="@color/widget_primary"
             android:textSize="32sp"
             android:textStyle="bold"
@@ -30,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginBottom="6dp"
-            android:text="/ 2000 kcal"
+            android:text="@string/widget_placeholder_target"
             android:textColor="@color/widget_outline"
             android:textSize="14sp"
             android:fontFamily="sans-serif-medium" />
@@ -44,7 +46,7 @@
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_launcher_foreground"
         android:alpha="0.6"
-        android:contentDescription="ScaScan" />
+        android:contentDescription="@string/app_name" />
 
     <!-- Progress Bar -->
     <ProgressBar
@@ -64,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/progress_widget_calories"
         android:layout_marginTop="8dp"
-        android:text="P: 0g · C: 0g · F: 0g · 0ml"
+        android:text="@string/widget_placeholder_macros"
         android:textColor="@color/widget_on_background"
         android:textSize="12sp"
         android:fontFamily="sans-serif-medium" />
