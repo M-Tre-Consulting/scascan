@@ -75,6 +75,26 @@ class SummaryWidgetProvider : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.btn_widget_barcode, getPendingIntent(context, MainActivity.ACTION_QUICK_BARCODE))
         views.setOnClickPendingIntent(R.id.btn_widget_search, getPendingIntent(context, MainActivity.ACTION_QUICK_SEARCH))
         views.setOnClickPendingIntent(R.id.widget_root, getPendingIntent(context, MainActivity.ACTION_OPEN_LOG))
+        
+        // Water Shortcut: Broadcast to self
+        val waterIntent = Intent(context, SummaryWidgetProvider::class.java).apply {
+            action = ACTION_ADD_WATER
+        }
+        val waterPending = PendingIntent.getBroadcast(
+            context, 200, waterIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        views.setOnClickPendingIntent(R.id.btn_widget_water, waterPending)
+        
+        // Undo WaterShortcut: Broadcast to self
+        val undoIntent = Intent(context, SummaryWidgetProvider::class.java).apply {
+            action = ACTION_UNDO_WATER
+        }
+        val undoPending = PendingIntent.getBroadcast(
+            context, 201, undoIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        views.setOnClickPendingIntent(R.id.btn_widget_undo_water, undoPending)
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
@@ -95,15 +115,34 @@ class SummaryWidgetProvider : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == ACTION_DATA_CHANGED) {
-            val appWidgetManager = AppWidgetManager.getInstance(context)
-            val componentName = ComponentName(context, SummaryWidgetProvider::class.java)
-            onUpdate(context, appWidgetManager, appWidgetManager.getAppWidgetIds(componentName))
+        when (intent.action) {
+            ACTION_DATA_CHANGED -> {
+                updateAllWidgets(context)
+            }
+            ACTION_ADD_WATER -> {
+                scope.launch {
+                    logRepository.addWater(250)
+                }
+            }
+            ACTION_UNDO_WATER -> {
+                scope.launch {
+                    logRepository.removeLastWater()
+                }
+            }
         }
+    }
+
+    private fun updateAllWidgets(context: Context) {
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        val componentName = ComponentName(context, SummaryWidgetProvider::class.java)
+        val ids = appWidgetManager.getAppWidgetIds(componentName)
+        onUpdate(context, appWidgetManager, ids)
     }
 
     companion object {
         const val ACTION_DATA_CHANGED = "com.scascan.app.ACTION_WIDGET_DATA_CHANGED"
+        const val ACTION_ADD_WATER = "com.scascan.app.ACTION_WIDGET_ADD_WATER"
+        const val ACTION_UNDO_WATER = "com.scascan.app.ACTION_WIDGET_UNDO_WATER"
 
         fun triggerUpdate(context: Context) {
             val intent = Intent(context, SummaryWidgetProvider::class.java).apply {
