@@ -60,7 +60,8 @@ public final class GeminiRestClient: Sendable {
         return Self.parseModelList(data)
     }
 
-    private static func parseModelList(_ data: Data) -> [ModelInfo] {
+    /// `internal` (not `private`) so it's directly unit-testable via `@testable import`.
+    static func parseModelList(_ data: Data) -> [ModelInfo] {
         guard
             let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
             let models = json["models"] as? [[String: Any]]

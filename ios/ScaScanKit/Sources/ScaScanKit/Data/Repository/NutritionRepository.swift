@@ -148,11 +148,7 @@ public final class NutritionRepository: Sendable {
         {"dailyCalories":0,"proteinGrams":0,"carbsGrams":0,"fatGrams":0}
         """
         let json = try await client.generateText(model: model(), apiKey: apiKey(), prompt: prompt)
-        guard let start = json.firstIndex(of: "{"), let end = json.lastIndex(of: "}") else {
-            throw NutritionRepositoryError.noJSONInResponse
-        }
-        let slice = Data(json[start...end].utf8)
-        return try decoder.decode(NutritionTargets.self, from: slice)
+        return try JSONExtraction.decodeFirstObject(NutritionTargets.self, from: json, decoder: decoder)
     }
 
     public func fixEntry(foodName: String, servingSize: String, correction: String) async throws -> NutritionFacts {
@@ -167,16 +163,6 @@ public final class NutritionRepository: Sendable {
     }
 
     private static func parseResponse(_ text: String, decoder: JSONDecoder) throws -> NutritionFacts {
-        guard let start = text.firstIndex(of: "{"), let end = text.lastIndex(of: "}") else {
-            throw NutritionRepositoryError.noJSONInResponse
-        }
-        let slice = Data(text[start...end].utf8)
-        do {
-            return try decoder.decode(NutritionFacts.self, from: slice)
-        } catch {
-            // Gemini occasionally leaves trailing commas or minor syntax errors —
-            // surface a clean error message instead of the raw decoding failure.
-            throw NutritionRepositoryError.malformedJSON
-        }
+        try JSONExtraction.decodeFirstObject(NutritionFacts.self, from: text, decoder: decoder)
     }
 }

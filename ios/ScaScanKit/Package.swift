@@ -13,6 +13,11 @@ let package = Package(
         .target(
             name: "ScaScanKit",
             swiftSettings: [.swiftLanguageMode(.v6)]
+        ),
+        .testTarget(
+            name: "ScaScanKitTests",
+            dependencies: ["ScaScanKit"],
+            swiftSettings: [.swiftLanguageMode(.v6)]
         )
     ]
 )
