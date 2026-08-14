@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/apiKeyFragment">
+
+    <!-- First-run setup -->
+    <fragment
+        android:id="@+id/apiKeyFragment"
+        android:name="com.scascan.app.ui.setup.ApiKeyFragment"
+        android:label="@string/setup_title">
+        <action
+            android:id="@+id/action_apiKeyFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/apiKeyFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Main tab host -->
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.scascan.app.ui.main.MainFragment"
+        android:label="ScaScan">
+        <action
+            android:id="@+id/action_main_to_camera"
+            app:destination="@id/cameraFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
+        <action
+            android:id="@+id/action_main_to_barcode"
+            app:destination="@id/barcodeScanFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
+        <action
+            android:id="@+id/action_main_to_search"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
+        <action
+            android:id="@+id/action_main_to_result"
+            app:destination="@id/nutritionResultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_main_to_settings"
+            app:destination="@id/appSettingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/appSettingsFragment"
+        android:name="com.scascan.app.ui.profile.AppSettingsFragment"
+        android:label="@string/settings_title" />
+
+    <!-- Detail screens -->
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.scascan.app.ui.camera.CameraFragment"
+        android:label="@string/label_camera">
+        <action
+            android:id="@+id/action_cameraFragment_to_nutritionResultFragment"
+            app:destination="@id/nutritionResultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/barcodeScanFragment"
+        android:name="com.scascan.app.ui.scan.BarcodeScanFragment"
+        android:label="@string/label_barcode_scan">
+        <action
+            android:id="@+id/action_barcodeScanFragment_to_nutritionResultFragment"
+            app:destination="@id/nutritionResultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.scascan.app.ui.search.SearchFragment"
+        android:label="@string/label_search">
+        <action
+            android:id="@+id/action_searchFragment_to_nutritionResultFragment"
+            app:destination="@id/nutritionResultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nutritionResultFragment"
+        android:name="com.scascan.app.ui.result.NutritionResultFragment"
+        android:label="@string/label_result">
+        <argument
+            android:name="nutritionFacts"
+            app:argType="com.scascan.app.data.model.NutritionFacts" />
+    </fragment>
+
+</navigation>

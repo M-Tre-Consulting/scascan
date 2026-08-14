@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/analysisProgress"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:trackCornerRadius="0dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/navCard"
+        style="@style/Widget.App.PillBar"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_marginBottom="32dp"
+        app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/customNav"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingHorizontal="4dp"
+            android:gravity="center">
+
+            <!-- Home -->
+            <FrameLayout
+                android:id="@+id/btnNavHome"
+                android:layout_width="64dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true">
+                <View
+                    android:id="@+id/bgNavHome"
+                    android:layout_width="60dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/nav_indicator_background"
+                    android:alpha="0"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8" />
+                <ImageView
+                    android:id="@+id/ivNavHome"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_camera"
+                    android:contentDescription="@string/nav_scan"
+                    app:tint="?attr/colorOnSurfaceVariant" />
+            </FrameLayout>
+
+            <!-- Log -->
+            <FrameLayout
+                android:id="@+id/btnNavLog"
+                android:layout_width="64dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true">
+                <View
+                    android:id="@+id/bgNavLog"
+                    android:layout_width="60dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/nav_indicator_background"
+                    android:alpha="0"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8" />
+                <ImageView
+                    android:id="@+id/ivNavLog"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_nav_log"
+                    android:contentDescription="@string/nav_log"
+                    app:tint="?attr/colorOnSurfaceVariant" />
+            </FrameLayout>
+
+            <!-- Profile -->
+            <FrameLayout
+                android:id="@+id/btnNavProfile"
+                android:layout_width="64dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true">
+                <View
+                    android:id="@+id/bgNavProfile"
+                    android:layout_width="60dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/nav_indicator_background"
+                    android:alpha="0"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8" />
+                <ImageView
+                    android:id="@+id/ivNavProfile"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_nav_profile"
+                    android:contentDescription="@string/nav_profile"
+                    app:tint="?attr/colorOnSurfaceVariant" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

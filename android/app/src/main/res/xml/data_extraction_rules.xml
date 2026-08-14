@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Data extraction rules for API 31+.
+    cloud-backup  → Google Drive Auto Backup (encrypted with the user's Google account).
+    device-transfer → Restore when the user sets up a new Android device.
+    Referenced by android:dataExtractionRules in the manifest.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <include domain="sharedpref" path="scascan_prefs" />
+        <include domain="sharedpref" path="scascan_profile" />
+        <include domain="database"   path="scascan.db" />
+        <include domain="database"   path="scascan.db-wal" />
+        <include domain="database"   path="scascan.db-shm" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="sharedpref" path="scascan_prefs" />
+        <include domain="sharedpref" path="scascan_profile" />
+        <include domain="database"   path="scascan.db" />
+        <include domain="database"   path="scascan.db-wal" />
+        <include domain="database"   path="scascan.db-shm" />
+    </device-transfer>
+</data-extraction-rules>

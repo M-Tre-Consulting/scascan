@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_background"
+    android:padding="16dp"
+    tools:ignore="UseAppTint">
+
+    <!-- Top Row: Consumed Large + Target Small -->
+    <LinearLayout
+        android:id="@+id/layout_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/widget_logo"
+        android:orientation="horizontal"
+        android:gravity="bottom">
+
+        <TextView
+            android:id="@+id/tv_widget_consumed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/widget_placeholder_consumed"
+            android:textColor="@color/widget_primary"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-black" />
+
+        <TextView
+            android:id="@+id/tv_widget_target"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="6dp"
+            android:text="@string/widget_placeholder_target"
+            android:textColor="@color/widget_outline"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-medium" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/widget_logo"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/layout_header"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_launcher_foreground"
+        android:alpha="0.6"
+        android:contentDescription="@string/app_name" />
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progress_widget_calories"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:layout_below="@id/layout_header"
+        android:layout_marginTop="8dp"
+        android:progress="0"
+        android:progressDrawable="@drawable/widget_progress_bar" />
+
+    <!-- Macros: High density summary -->
+    <TextView
+        android:id="@+id/tv_widget_macros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progress_widget_calories"
+        android:layout_marginTop="8dp"
+        android:text="@string/widget_placeholder_macros"
+        android:textColor="@color/widget_on_background"
+        android:textSize="12sp"
+        android:fontFamily="sans-serif-medium" />
+
+    <!-- Bottom Actions -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/btn_widget_scan"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/widget_button_background"
+            android:src="@drawable/ic_camera"
+            android:tint="@color/widget_on_secondary_container"
+            android:contentDescription="@string/label_camera" />
+
+        <ImageButton
+            android:id="@+id/btn_widget_barcode"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/widget_button_background"
+            android:src="@drawable/ic_barcode"
+            android:tint="@color/widget_on_secondary_container"
+            android:contentDescription="@string/label_barcode_scan" />
+
+        <ImageButton
+            android:id="@+id/btn_widget_search"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/widget_button_background"
+            android:src="@drawable/ic_search"
+            android:tint="@color/widget_on_secondary_container"
+            android:contentDescription="@string/label_search" />
+
+        <ImageButton
+            android:id="@+id/btn_widget_water"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/widget_button_background"
+            android:src="@drawable/ic_water"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:tint="@color/widget_on_secondary_container"
+            android:contentDescription="@string/log_water_label" />
+
+        <ImageButton
+            android:id="@+id/btn_widget_undo_water"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/widget_button_background"
+            android:src="@drawable/ic_remove"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            android:tint="@color/widget_on_secondary_container"
+            android:contentDescription="@string/log_water_undo" />
+    </LinearLayout>
+
+</RelativeLayout>

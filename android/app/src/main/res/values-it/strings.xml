@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ScaScan</string>
+    <string name="home_subtitle">Analisi nutrizionale con intelligenza artificiale</string>
+    <string name="btn_take_photo">Scatta una foto</string>
+    <string name="btn_scan_barcode">Scansiona codice a barre</string>
+    <string name="btn_search_food">Cerca alimento</string>
+    <string name="btn_analyze">Analizza</string>
+    <string name="card_camera_desc">Identifica il cibo da qualsiasi immagine</string>
+    <string name="card_barcode_desc">Cerca un prodotto tramite codice a barre</string>
+    <string name="card_search_desc">Digita un alimento o una descrizione del pasto</string>
+    <string name="search_title">Cerca alimento</string>
+    <string name="search_description">Descrivi un alimento o un pasto per ottenere i valori nutrizionali.</string>
+    <string name="search_hint">es. Petto di pollo, 100g</string>
+    <string name="barcode_scan_prompt">Inquadra il codice a barre</string>
+    <string name="barcode_detected">Codice rilevato! Tocca per analizzare</string>
+    <string name="analyzing">Analisi in corso…</string>
+    <string name="camera_frame_hint">Inquadra il cibo all\'interno del quadrato</string>
+    <string name="permission_camera_denied">Il permesso alla fotocamera è necessario per questa funzione</string>
+    <string name="label_camera">Scatta foto</string>
+    <string name="label_barcode_scan">Scansiona</string>
+    <string name="label_search">Cerca alimento</string>
+    <string name="label_result">Valori nutrizionali</string>
+    <string name="per_serving">Per porzione</string>
+    <string name="nutrient_calories">Calorie</string>
+    <string name="nutrient_protein">Proteine</string>
+    <string name="nutrient_carbs">Carboidrati</string>
+    <string name="nutrient_fat">Grassi</string>
+    <string name="nutrient_fiber">Fibre</string>
+    <string name="nutrient_sugar">Zuccheri</string>
+    <string name="nutrient_sodium">Sodio</string>
+    <string name="nutrient_water">Acqua</string>
+    <string name="value_grams">%.1f g</string>
+    <string name="value_milligrams">%.0f mg</string>
+    <string name="ai_disclaimer">I valori sono stimati dall\'IA e possono variare. Verifica sempre con le etichette ufficiali.</string>
+    <string name="btn_add_to_log">Aggiungi al diario</string>
+    <string name="log_added">Aggiunto al diario di oggi</string>
+
+    <!-- API key setup -->
+    <string name="setup_title">Configura la tua chiave API</string>
+    <string name="setup_description">ScaScan usa Google Gemini per analizzare il cibo. Incolla la tua chiave API Gemini per iniziare.</string>
+    <string name="setup_key_hint">Chiave API Gemini</string>
+    <string name="setup_key_error">Inserisci una chiave API valida</string>
+    <string name="setup_btn_save">Salva e continua</string>
+    <string name="setup_btn_get_key">Ottieni chiave gratuita</string>
+    <string name="setup_key_detected">Chiave Gemini rilevata negli appunti! Incollarla?</string>
+    <string name="setup_model_title">Scegli un modello</string>
+    <string name="setup_model_desc">Seleziona il modello Gemini per l\'analisi degli alimenti.</string>
+    <string name="setup_model_hint">Modello Gemini</string>
+    <string name="setup_btn_get_started">Inizia</string>
+    <string name="setup_info_title">Dove trovo la mia chiave?</string>
+    <string name="setup_info_body">Vai su aistudio.google.com → Ottieni chiave API. La chiave è memorizzata solo su questo dispositivo e non viene inviata altrove se non all\'API Gemini.</string>
+    <string name="menu_update_key">Aggiorna chiave API</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_scan">Scansiona</string>
+    <string name="nav_log">Diario</string>
+    <string name="nav_profile">Profilo</string>
+    <string name="settings_title">Impostazioni</string>
+
+    <!-- Log screen -->
+    <string name="log_subtitle">Monitora la tua nutrizione giornaliera</string>
+    <string name="log_today_intake">Assunzione di oggi</string>
+    <string name="log_no_data">—</string>
+    <string name="log_of_target">/ 2.000 kcal</string>
+    <string name="log_kcal_of">%1$d / %2$d kcal</string>
+    <string name="log_entries_today">Pasti di oggi</string>
+    <string name="log_empty">Nessuna voce ancora — scansiona o cerca un alimento per iniziare.</string>
+    <string name="log_entry_remove">Rimuovi</string>
+    <string name="log_entry_fix">Correggi</string>
+    <string name="hc_label_distance">Distanza</string>
+    <string name="log_date_today">Oggi</string>
+    <string name="log_date_yesterday">Ieri</string>
+    <string name="log_macro_of">di %1$dg</string>
+    <string name="log_water_total">%1$d ml</string>
+    <string name="log_water_label">Idratazione oggi</string>
+    <string name="log_water_add_100">+100ml</string>
+    <string name="log_water_add_250">+250ml</string>
+    <string name="log_water_add_500">+500ml</string>
+    <string name="log_water_undo">Annulla ultima voce</string>
+    <string name="calorie_fact_format">%1$d kcal · %2$s</string>
+
+    <!-- Daily summary bottom sheet -->
+    <string name="log_summary_title">Riepilogo giornaliero</string>
+    <string name="log_summary_calories_section">Calorie</string>
+    <string name="log_summary_remaining">%1$d kcal rimanenti</string>
+    <string name="log_summary_over">%1$d kcal in eccesso</string>
+    <string name="log_summary_activity">+%1$d kcal attive · %2$d passi</string>
+    <string name="log_summary_bleedthrough">%1$+d kcal da ieri</string>
+    <string name="log_summary_macros_section">Macronutrienti</string>
+    <string name="log_summary_other_section">Altri nutrienti</string>
+    <string name="log_summary_goal_section">Obiettivo</string>
+    <string name="log_summary_target_ai">Obiettivi calcolati dall\'IA</string>
+    <string name="log_summary_target_est">Obiettivi stimati dal profilo</string>
+    <string name="log_summary_target_none">Salva il profilo per calcolare gli obiettivi</string>
+    <string name="log_summary_macro_remaining">%1$dg rimanenti</string>
+    <string name="log_summary_macro_over">%1$dg in eccesso</string>
+    <string name="log_summary_consumed_of">%1$dg / %2$dg</string>
+
+    <!-- Adaptive targets card -->
+    <string name="log_adaptive_status_active">Attivo</string>
+    <string name="log_adaptive_status_on_track">In target</string>
+    <string name="log_adaptive_status_adjusting">Adattamento</string>
+    <string name="log_adaptive_breakdown_base">Obiettivo base</string>
+    <string name="log_adaptive_breakdown_activity">Attività di oggi</string>
+    <string name="log_adaptive_breakdown_trend">Trend del peso</string>
+    <string name="log_adaptive_breakdown_total">Obiettivo di oggi</string>
+    <string name="log_adaptive_kcal">%1$d kcal</string>
+    <string name="log_adaptive_plus_kcal">+%1$d kcal</string>
+    <string name="log_adaptive_minus_kcal">-%1$d kcal</string>
+    <string name="log_adaptive_bleedthrough">Bilancio giorno precedente</string>
+    <string name="log_adaptive_trend_rate">%1$s kcal (%2$.2f kg/sett)</string>
+    <string name="log_adaptive_trend_collecting">Raccolta dati…</string>
+    <string name="log_adaptive_hint_unavailable">Health Connect non è disponibile su questo dispositivo.</string>
+    <string name="log_adaptive_hint_connect">Collega Health Connect nel Profilo per abilitare gli obiettivi adattativi.</string>
+    <string name="log_adaptive_hint_weight">Aggiungi misurazioni del peso in Health Connect per abilitare la correzione basata sul trend.</string>
+
+    <string name="widget_placeholder_consumed">0</string>
+    <string name="widget_placeholder_target">/ 2.000 kcal</string>
+    <string name="widget_placeholder_macros">P: 0g · C: 0g · F: 0g · 0ml</string>
+
+    <!-- Goal & AI targets -->
+    <string name="profile_goal_hint">Obiettivo fitness</string>
+    <string name="profile_target_computing">Calcolo obiettivi personalizzati…</string>
+    <string name="profile_target_computed">Obiettivo giornaliero: %1$d kcal (calcolato dall\'IA)</string>
+    <string name="profile_recompute">Ricalcola</string>
+    <string name="profile_setup_reminder_title">Obiettivi personalizzati non impostati</string>
+    <string name="profile_setup_reminder_body">Il tuo obiettivo calorico giornaliero è attualmente stimato. Seleziona un obiettivo fitness qui sotto e salva il profilo per ottenere un obiettivo personalizzato calcolato dall\'IA.</string>
+
+    <!-- Background analysis -->
+    <string name="analysis_ready_title">Analisi pronta</string>
+    <string name="analysis_view_details">Dettagli</string>
+    <string name="analysis_dismiss">Ignora</string>
+    <string name="analysis_error_generic">Analisi non riuscita</string>
+    <string name="notif_channel_name">Analisi alimenti</string>
+    <string name="notif_channel_desc">Notifica quando l\'analisi in background è completata</string>
+    <string name="notif_analysis_title">Analisi completata</string>
+    <string name="notif_analysis_text">%1$s · %2$d kcal — tocca per aggiungere al diario</string>
+
+    <!-- Fix entry bottom sheet -->
+    <string name="fix_entry_title">Correggi questa voce</string>
+    <string name="fix_entry_desc">Descrivi l\'alimento corretto e ScaScan ricalcolerà i valori nutrizionali.</string>
+    <string name="fix_entry_current_label">Identificato come:</string>
+    <string name="fix_entry_hint">Alimento corretto (es. Petto di tacchino, 150g)</string>
+    <string name="fix_entry_apply">Applica correzione</string>
+    <string name="fix_entry_cancel">Annulla</string>
+    <string name="fix_entry_error_empty">Descrivi l\'alimento corretto</string>
+    <string name="fix_entry_fixed">Voce aggiornata</string>
+    <string name="log_connect_title">Health Connect</string>
+    <string name="log_connect_body">Sincronizza passi e allenamenti per adattare automaticamente il tuo obiettivo calorico giornaliero.</string>
+    <string name="log_adaptive_title">Obiettivi adattativi</string>
+    <string name="log_adaptive_body">Il tuo obiettivo calorico si adatterà quotidianamente in base all\'attività, agli allenamenti e alle tendenze del peso da Health Connect.</string>
+    <string name="coming_soon">Prossimamente</string>
+    <string name="hc_connect">Connetti Health Connect</string>
+    <string name="hc_connected">Connesso</string>
+    <string name="hc_disconnected">Disconnesso</string>
+    <string name="hc_not_available">Non disponibile</string>
+    <string name="hc_disconnect">Disconnetti</string>
+    <string name="hc_sync_weight">Sincronizza peso e altezza</string>
+    <string name="hc_weight_synced">Peso e altezza sincronizzati</string>
+    <string name="profile_sync_error">Sincronizzazione fallita: %s</string>
+    <string name="profile_sync_disconnect">Disconnetti Google Drive</string>
+    <string name="profile_sync_disconnected">Disconnesso da Google Drive</string>
+    <string name="hc_weight_unavailable">Nessun dato di peso trovato in Health Connect</string>
+    <string name="hc_steps">%d passi</string>
+    <string name="hc_active_kcal">%d kcal</string>
+    <string name="hc_label_steps">Passi oggi</string>
+    <string name="hc_label_active">Bruciati oggi</string>
+
+    <!-- Profile screen -->
+    <string name="profile_info_title">Informazioni personali</string>
+    <string name="profile_info_desc">Usate per calcolare il tuo obiettivo calorico giornaliero.</string>
+    <string name="profile_age_hint">Età</string>
+    <string name="profile_height_hint">Altezza (cm)</string>
+    <string name="profile_weight_hint">Peso (kg)</string>
+    <string name="profile_sex_male">Maschio</string>
+    <string name="profile_sex_female">Femmina</string>
+    <string name="profile_activity_hint">Livello di attività</string>
+    <string name="profile_save_info">Salva profilo</string>
+    <string name="profile_info_saved">Profilo salvato</string>
+    <string name="profile_name_hint">Nome</string>
+    <string name="profile_section_personal">Dati Personali</string>
+    <string name="profile_section_goals">Attività e Obiettivi</string>
+    <string name="profile_section_sync">Sincronizzazione e Backup</string>
+    <string name="profile_section_settings">Impostazioni App</string>
+    <string name="profile_section_notifications">Notifiche</string>
+    <string name="profile_sync_title">Sincronizzazione Cloud</string>
+    <string name="profile_sync_desc">Sincronizza il tuo diario e profilo su tutti i tuoi dispositivi tramite Google Drive.</string>
+    <string name="profile_sync_btn_google">Accedi e Sincronizza</string>
+    <string name="profile_sync_now">Sincronizza ora</string>
+    <string name="profile_sync_status_connected">Connesso come %s</string>
+    <string name="profile_sync_status_syncing">Sincronizzazione in corso…</string>
+    <string name="profile_sync_status_complete">Sincronizzazione completata</string>
+    <string name="profile_api_key_title">Chiave API Gemini</string>
+    <string name="profile_api_key_desc">ScaScan usa Google Gemini per analizzare il cibo. Ottieni la tua chiave su aistudio.google.com.</string>
+    <string name="profile_save_key">Salva chiave</string>
+    <string name="profile_key_saved">Chiave API salvata</string>
+    <string name="profile_health_title">Health Connect</string>
+    <string name="profile_health_desc">Collega i tuoi dati Google Health per abilitare il monitoraggio calorico e gli obiettivi giornalieri adattativi.</string>
+    <string name="profile_notif_water_title">Promemoria idratazione</string>
+    <string name="profile_notif_water_desc">Ricevi notifiche periodiche per ricordarti di bere acqua durante il giorno.</string>
+    <string name="profile_about_desc">Usa Gemini AI per l\'analisi nutrizionale · Realizzato con Material 3 Expressive</string>
+    <string name="profile_model_title">Modello IA</string>
+    <string name="profile_model_desc">Seleziona il modello Gemini per l\'analisi degli alimenti. I modelli vengono caricati in tempo reale dalla tua chiave API.</string>
+    <string name="profile_model_hint">Seleziona modello</string>
+    <string name="profile_model_loading">Caricamento modelli…</string>
+    <string name="profile_model_need_key">Salva prima la chiave API per caricare i modelli disponibili</string>
+    <string name="profile_model_empty">Nessun modello trovato per questa chiave API</string>
+    <string name="profile_model_saved">Modello salvato</string>
+
+    <!-- Goal options (index matches UserProfileStore.GOAL_LABELS) -->
+    <string-array name="goal_levels">
+        <item>Perdere peso</item>
+        <item>Mantenere il peso</item>
+        <item>Costruire muscolo</item>
+    </string-array>
+
+    <!-- Activity level options (index matches UserProfileStore.ACTIVITY_MULTIPLIERS) -->
+    <string-array name="activity_levels">
+        <item>Sedentario</item>
+        <item>Leggermente attivo</item>
+        <item>Moderatamente attivo</item>
+        <item>Molto attivo</item>
+        <item>Estremamente attivo</item>
+    </string-array>
+</resources>

@@ -9,7 +9,39 @@ xcuserdata/
 .swiftpm/
 .build/
 
-# Android (kept for reference alongside android/ upstream sources)
+# --- Android (upstream, kept for reference under android/) ---
+
+# Gradle files
 android/.gradle/
-android/local.properties
 android/**/build/
+
+# Local configuration file (sdk path, etc)
+android/local.properties
+
+# Log/OS Files
+*.log
+
+# Android Studio generated files and folders
+android/**/captures/
+android/**/.externalNativeBuild/
+android/**/.cxx/
+*.aab
+*.apk
+output-metadata.json
+
+# IntelliJ
+*.iml
+android/.idea/
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google Services (e.g. APIs or Firebase)
+google-services.json
+
+# Android Profiling
+*.hprof

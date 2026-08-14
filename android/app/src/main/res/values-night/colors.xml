@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive dark — green seed palette -->
+    <color name="colorPrimary">#9CD67A</color>
+    <color name="colorOnPrimary">#0E3900</color>
+    <color name="colorPrimaryContainer">#235209</color>
+    <color name="colorOnPrimaryContainer">#B7F397</color>
+
+    <color name="colorSecondary">#BDC9B0</color>
+    <color name="colorOnSecondary">#283420</color>
+    <color name="colorSecondaryContainer">#3E4A35</color>
+    <color name="colorOnSecondaryContainer">#D9E8CB</color>
+
+    <color name="colorTertiary">#A0D0CC</color>
+    <color name="colorOnTertiary">#003735</color>
+    <color name="colorTertiaryContainer">#1F4E4B</color>
+    <color name="colorOnTertiaryContainer">#BCECE8</color>
+
+    <color name="colorError">#FFB4AB</color>
+    <color name="colorOnError">#690005</color>
+    <color name="colorErrorContainer">#93000A</color>
+    <color name="colorOnErrorContainer">#FFDAD6</color>
+
+    <color name="colorBackground">#1A1C18</color>
+    <color name="colorOnBackground">#E3E4DC</color>
+    <color name="colorSurface">#1A1C18</color>
+    <color name="colorOnSurface">#E3E4DC</color>
+    <color name="colorSurfaceVariant">#424940</color>
+    <color name="colorOnSurfaceVariant">#C2C9BA</color>
+    <color name="colorOutline">#8C9387</color>
+    <color name="colorOutlineVariant">#424940</color>
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Corner brackets -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M2,2v6h1.5V3.5H8V2H2z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M22,2h-6v1.5h4.5V8H22V2z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M2,22v-6h1.5v4.5H8V22H2z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M22,22h-6v-1.5h4.5V16H22V22z" />
+    <!-- Barcode lines -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M5,6h1.5v12H5V6z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M8,6H9v12H8V6z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M10.5,6h1.5v12h-1.5V6z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M13.5,6H15v12h-1.5V6z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M16.5,6H18v12h-1.5V6z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M19,6h0.5v12H19V6z" />
+</vector>
