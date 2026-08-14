@@ -17,7 +17,6 @@ final class AppContainer {
     let nutritionRepository: NutritionRepository
     let logRepository: LogRepository
     let analysisManager: AnalysisManager
-    let syncManager: CloudKitSyncManager
 
     /// The active "fix this entry" target, if any. Set from Log, Search, or
     /// the analysis result sheet; presented once at the `MainTabView` level.
@@ -46,6 +45,5 @@ final class AppContainer {
         )
 
         self.analysisManager = AnalysisManager(repository: nutritionRepository)
-        self.syncManager = CloudKitSyncManager(logRepository: self.logRepository)
     }
 }

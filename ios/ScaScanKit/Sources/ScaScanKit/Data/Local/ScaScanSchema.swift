@@ -12,13 +12,13 @@ public enum ScaScanSchema {
 
     /// Creates the shared `ModelContainer`. Use `inMemory: true` for previews and tests.
     ///
-    /// `cloudKitDatabase: .none` is required, not cosmetic: once the app
-    /// carries the CloudKit entitlement (for `CloudKitSyncManager`'s own,
-    /// manual sync), `ModelConfiguration` otherwise auto-detects it and turns
-    /// on SwiftData's *own* CloudKit mirroring — a separate mechanism that
-    /// demands every attribute be optional or defaulted, which crashes this
-    /// schema at launch. We're syncing by hand, so that automatic mirroring
-    /// is explicitly opted out of.
+    /// `cloudKitDatabase: .none` is explicit rather than left to the default:
+    /// this app carries no CloudKit entitlement (it requires a paid Apple
+    /// Developer Program membership to provision a container, which isn't
+    /// assumed here), so SwiftData's automatic CloudKit mirroring — which
+    /// demands every attribute be optional or defaulted — must never
+    /// activate. Local-only storage, shared with the widget extension via
+    /// the App Group below.
     public static func makeContainer(inMemory: Bool = false) -> ModelContainer {
         let schema = Schema(models)
         let configuration: ModelConfiguration

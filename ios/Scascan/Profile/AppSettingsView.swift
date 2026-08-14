@@ -1,9 +1,12 @@
 import SwiftUI
-import CloudKit
 import ScaScanKit
 
 /// Mirrors Android's `AppSettingsFragment` — API key editing, AI model
-/// selection, Health/iCloud connections, and the hydration reminder toggle.
+/// selection, the Apple Health connection, and the hydration reminder toggle.
+///
+/// No cloud sync section: Android's Google Drive backup would map to
+/// CloudKit here, but CloudKit containers require a paid Apple Developer
+/// Program membership to provision — not available on a free personal team.
 struct AppSettingsView: View {
     @Environment(AppContainer.self) private var container
     @State private var picker = GeminiModelPickerState()
@@ -16,17 +19,12 @@ struct AppSettingsView: View {
     @State private var isSyncingWeight = false
     @State private var healthMessage: String?
 
-    @State private var isSyncing = false
-    @State private var syncMessage: String?
-    @State private var iCloudAvailable = false
-
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 apiKeySection
                 modelSection
                 healthSection
-                syncSection
                 notificationsSection
             }
             .padding(20)
@@ -38,7 +36,6 @@ struct AppSettingsView: View {
             waterRemindersEnabled = container.profileStore.waterRemindersEnabled
             if container.keyStore.hasKey() { picker.loadModels() }
             Task { healthConnected = await container.healthManager.hasPermissions() }
-            Task { iCloudAvailable = await container.syncManager.accountStatus() == .available }
         }
     }
 
@@ -124,25 +121,6 @@ struct AppSettingsView: View {
         }
     }
 
-    private var syncSection: some View {
-        SectionCard(title: "Cloud Sync", subtitle: "Keep your logs and profile in sync across your devices using iCloud.") {
-            VStack(alignment: .leading, spacing: 10) {
-                if iCloudAvailable {
-                    Button(isSyncing ? "Syncing…" : "Sync now", action: startSync)
-                        .buttonStyle(.borderedProminent)
-                        .disabled(isSyncing)
-                } else {
-                    Text("Sign in to iCloud in Settings to enable sync.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-                if let syncMessage {
-                    Text(syncMessage).font(.caption).foregroundStyle(.secondary)
-                }
-            }
-        }
-    }
-
     private var notificationsSection: some View {
         SectionCard(title: "Notifications") {
             Toggle(isOn: Binding(
@@ -207,20 +185,6 @@ struct AppSettingsView: View {
             if let kg { container.profileStore.weightKg = kg }
             if let cm { container.profileStore.heightCm = Int(cm) }
             healthMessage = "Weight & height synced"
-        }
-    }
-
-    private func startSync() {
-        isSyncing = true
-        syncMessage = nil
-        Task {
-            do {
-                try await container.syncManager.sync()
-                syncMessage = "Sync complete"
-            } catch {
-                syncMessage = error.localizedDescription
-            }
-            isSyncing = false
         }
     }
 
