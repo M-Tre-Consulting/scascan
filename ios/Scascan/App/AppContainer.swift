@@ -12,9 +12,11 @@ final class AppContainer {
 
     let keyStore: GeminiKeyStore
     let profileStore: UserProfileStore
+    let healthManager: HealthKitManager
     let nutritionRepository: NutritionRepository
     let logRepository: LogRepository
     let analysisManager: AnalysisManager
+    let syncManager: CloudKitSyncManager
 
     /// The active "fix this entry" target, if any. Set from Log, Search, or
     /// the analysis result sheet; presented once at the `MainTabView` level.
@@ -24,14 +26,20 @@ final class AppContainer {
         self.modelContainer = modelContainer
         self.keyStore = .shared
         self.profileStore = .shared
+        self.healthManager = .shared
 
         let nutritionRepository = NutritionRepository()
         self.nutritionRepository = nutritionRepository
 
         // TODO(Phase 5): hook this up to a WidgetKit timeline reload, mirroring
         // Android's SummaryWidgetProvider.triggerUpdate(context) broadcast.
-        self.logRepository = LogRepository(modelContainer: modelContainer, onDataChanged: {})
+        self.logRepository = LogRepository(
+            modelContainer: modelContainer,
+            health: HealthKitManager.shared,
+            onDataChanged: {}
+        )
 
         self.analysisManager = AnalysisManager(repository: nutritionRepository)
+        self.syncManager = CloudKitSyncManager(logRepository: self.logRepository)
     }
 }

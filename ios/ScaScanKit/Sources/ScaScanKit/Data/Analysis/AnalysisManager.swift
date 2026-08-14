@@ -75,6 +75,9 @@ public final class AnalysisManager {
                 let facts = try await operation()
                 guard !Task.isCancelled else { return }
                 state = .complete(facts)
+                // Mirrors Android's NotificationHelper.postAnalysisComplete(),
+                // posted whether or not the app happens to be foregrounded.
+                NotificationHelper.postAnalysisComplete(foodName: facts.foodName, calories: Int(facts.calories.rounded()))
             } catch {
                 guard !Task.isCancelled else { return }
                 state = .error(error.localizedDescription)

@@ -1,13 +1,9 @@
 import SwiftUI
-import UserNotifications
+import CloudKit
 import ScaScanKit
 
 /// Mirrors Android's `AppSettingsFragment` — API key editing, AI model
 /// selection, Health/iCloud connections, and the hydration reminder toggle.
-///
-/// Health Connect → HealthKit and Google Drive → CloudKit both show as
-/// "coming in Phase 4" here: their real UI shape is already in place so
-/// wiring the actual frameworks later doesn't require restructuring the screen.
 struct AppSettingsView: View {
     @Environment(AppContainer.self) private var container
     @State private var picker = GeminiModelPickerState()
@@ -15,6 +11,14 @@ struct AppSettingsView: View {
     @State private var keyError: String?
     @State private var waterRemindersEnabled = false
     @State private var keySavedMessage: String?
+
+    @State private var healthConnected = false
+    @State private var isSyncingWeight = false
+    @State private var healthMessage: String?
+
+    @State private var isSyncing = false
+    @State private var syncMessage: String?
+    @State private var iCloudAvailable = false
 
     var body: some View {
         ScrollView {
@@ -33,6 +37,8 @@ struct AppSettingsView: View {
             apiKeyInput = container.keyStore.apiKey
             waterRemindersEnabled = container.profileStore.waterRemindersEnabled
             if container.keyStore.hasKey() { picker.loadModels() }
+            Task { healthConnected = await container.healthManager.hasPermissions() }
+            Task { iCloudAvailable = await container.syncManager.accountStatus() == .available }
         }
     }
 
@@ -90,22 +96,49 @@ struct AppSettingsView: View {
 
     private var healthSection: some View {
         SectionCard(title: "Apple Health", subtitle: "Connect Health data to enable calorie tracking and adaptive daily goals.") {
-            HStack {
-                Image(systemName: "heart.fill").foregroundStyle(.pink)
-                Text("Coming in Phase 4")
-                    .foregroundStyle(.secondary)
-                Spacer()
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Image(systemName: "heart.fill").foregroundStyle(.pink)
+                    Text(healthConnected ? "Connected" : "Disconnected")
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                }
+
+                if let healthMessage {
+                    Text(healthMessage).font(.caption).foregroundStyle(.secondary)
+                }
+
+                if healthConnected {
+                    HStack(spacing: 10) {
+                        Button(isSyncingWeight ? "Syncing…" : "Sync weight & height", action: syncFromHealth)
+                            .buttonStyle(.bordered)
+                            .disabled(isSyncingWeight)
+                        Button("Disconnect", role: .destructive, action: disconnectHealth)
+                            .buttonStyle(.bordered)
+                    }
+                } else {
+                    Button("Connect Apple Health", action: connectHealth)
+                        .buttonStyle(.borderedProminent)
+                }
             }
         }
     }
 
     private var syncSection: some View {
         SectionCard(title: "Cloud Sync", subtitle: "Keep your logs and profile in sync across your devices using iCloud.") {
-            HStack {
-                Image(systemName: "icloud")
-                Text("Coming in Phase 4")
-                    .foregroundStyle(.secondary)
-                Spacer()
+            VStack(alignment: .leading, spacing: 10) {
+                if iCloudAvailable {
+                    Button(isSyncing ? "Syncing…" : "Sync now", action: startSync)
+                        .buttonStyle(.borderedProminent)
+                        .disabled(isSyncing)
+                } else {
+                    Text("Sign in to iCloud in Settings to enable sync.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+                if let syncMessage {
+                    Text(syncMessage).font(.caption).foregroundStyle(.secondary)
+                }
             }
         }
     }
@@ -138,20 +171,76 @@ struct AppSettingsView: View {
         picker.loadModels()
     }
 
+    private func connectHealth() {
+        guard container.healthManager.isAvailable else {
+            healthMessage = "Health data isn't available on this device."
+            return
+        }
+        Task {
+            do {
+                try await container.healthManager.requestAuthorization()
+                healthConnected = true
+                healthMessage = nil
+            } catch {
+                healthMessage = error.localizedDescription
+            }
+        }
+    }
+
+    private func disconnectHealth() {
+        container.healthManager.disconnect()
+        healthConnected = false
+        healthMessage = "Disconnected locally — to fully revoke access, open Health ▸ Data Access & Devices."
+    }
+
+    private func syncFromHealth() {
+        isSyncingWeight = true
+        Task {
+            let kg = await container.healthManager.readLatestWeightKg()
+            let cm = await container.healthManager.readLatestHeightCm()
+            isSyncingWeight = false
+
+            guard kg != nil || cm != nil else {
+                healthMessage = "No weight data found in Health"
+                return
+            }
+            if let kg { container.profileStore.weightKg = kg }
+            if let cm { container.profileStore.heightCm = Int(cm) }
+            healthMessage = "Weight & height synced"
+        }
+    }
+
+    private func startSync() {
+        isSyncing = true
+        syncMessage = nil
+        Task {
+            do {
+                try await container.syncManager.sync()
+                syncMessage = "Sync complete"
+            } catch {
+                syncMessage = error.localizedDescription
+            }
+            isSyncing = false
+        }
+    }
+
     private func setWaterRemindersEnabled(_ enabled: Bool) {
         waterRemindersEnabled = enabled
         container.profileStore.waterRemindersEnabled = enabled
 
-        guard enabled else { return }
+        guard enabled else {
+            NotificationHelper.cancelHydrationReminder()
+            return
+        }
         Task {
-            let center = UNUserNotificationCenter.current()
-            let granted = (try? await center.requestAuthorization(options: [.alert, .sound, .badge])) ?? false
-            if !granted {
+            let granted = await NotificationHelper.requestAuthorization()
+            if granted {
+                // Every 3 hours, matching Android's ReminderManager interval.
+                NotificationHelper.scheduleHydrationReminder(interval: 3 * 60 * 60)
+            } else {
                 waterRemindersEnabled = false
                 container.profileStore.waterRemindersEnabled = false
             }
-            // TODO(Phase 4): schedule the recurring reminder via BGTaskScheduler,
-            // mirroring Android's WorkManager-backed HydrationReminderWorker.
         }
     }
 }

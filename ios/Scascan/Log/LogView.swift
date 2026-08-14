@@ -20,9 +20,16 @@ struct LogView: View {
         .navigationTitle("Log")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            if state == nil { state = LogViewState(repository: container.logRepository) }
+            if state == nil {
+                state = LogViewState(repository: container.logRepository, health: container.healthManager)
+            }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { state?.reload() }
         }
     }
+
+    @Environment(\.scenePhase) private var scenePhase
 
     @ViewBuilder
     private func content(_ state: LogViewState) -> some View {
@@ -140,9 +147,12 @@ struct LogView: View {
             switch state.adaptiveState {
             case .disconnected:
                 Button {
-                    // HealthKit connection lands in Phase 4; for now this deep-links to Settings.
+                    Task {
+                        try? await container.healthManager.requestAuthorization()
+                        state.reload()
+                    }
                 } label: {
-                    Text("Connect Apple Health in Profile to enable adaptive targets.")
+                    Text("Connect Apple Health to enable adaptive targets.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
