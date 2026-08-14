@@ -1,0 +1,15 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.DS_Store
+
+# Swift Package Manager
+.swiftpm/
+.build/
+
+# Android (kept for reference alongside android/ upstream sources)
+android/.gradle/
+android/local.properties
+android/**/build/
