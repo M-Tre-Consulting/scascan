@@ -1,0 +1,8 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Daily Summary" : { "localizations" : { "it" : { "stringUnit" : { "state" : "translated", "value" : "Riepilogo giornaliero" } } } },
+    "Track today's calories, macros, and water at a glance." : { "localizations" : { "it" : { "stringUnit" : { "state" : "translated", "value" : "Monitora calorie, macronutrienti e acqua di oggi con un'occhiata." } } } }
+  },
+  "version" : "1.0"
+}
