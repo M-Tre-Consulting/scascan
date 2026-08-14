@@ -153,12 +153,12 @@ public final class LogRepository {
         return finalTarget(base: base, bleedthrough: bleedthrough, active: activeKcal, trend: trend)
     }
 
-    private func baseTarget(hasHealth: Bool) -> Int {
+    public func baseTarget(hasHealth: Bool) -> Int {
         guard hasHealth else { return dailyCalorieTarget() }
         return isAiComputed() ? dailyCalorieTarget() : Int(Double(bmr()) * 1.2) + goalOffset()
     }
 
-    private func finalTarget(base: Int, bleedthrough: Int, active: Double, trend: Int) -> Int {
+    public func finalTarget(base: Int, bleedthrough: Int, active: Double, trend: Int) -> Int {
         let total = base + bleedthrough + Int(active.rounded()) + trend
         // Ensure a healthy minimum target (at least 80% of BMR).
         return max(total, Int(Double(bmr()) * 0.8))
