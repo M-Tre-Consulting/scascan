@@ -10,7 +10,7 @@ public final class UserProfileStore: @unchecked Sendable {
 
     private let d: UserDefaults
 
-    public init(defaults: UserDefaults = .standard) {
+    public init(defaults: UserDefaults = AppGroup.sharedDefaults) {
         self.d = defaults
     }
 

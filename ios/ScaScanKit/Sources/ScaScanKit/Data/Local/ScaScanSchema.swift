@@ -1,3 +1,4 @@
+import Foundation
 import SwiftData
 
 /// Central SwiftData schema definition, shared by the app target, the widget
@@ -20,7 +21,17 @@ public enum ScaScanSchema {
     /// is explicitly opted out of.
     public static func makeContainer(inMemory: Bool = false) -> ModelContainer {
         let schema = Schema(models)
-        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory, cloudKitDatabase: .none)
+        let configuration: ModelConfiguration
+        if inMemory {
+            configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+        } else if let groupURL = AppGroup.sharedContainerURL {
+            // Shared with the widget extension — falls back to the app's own
+            // sandboxed default location if the App Group isn't configured.
+            let storeURL = groupURL.appending(path: "ScaScan.sqlite")
+            configuration = ModelConfiguration(schema: schema, url: storeURL, cloudKitDatabase: .none)
+        } else {
+            configuration = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
+        }
         do {
             return try ModelContainer(for: schema, configurations: [configuration])
         } catch {
