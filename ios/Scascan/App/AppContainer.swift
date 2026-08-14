@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import WidgetKit
 import ScaScanKit
 
 /// Composition root. Replaces Android's Hilt `AppModule` — plain manual
@@ -22,6 +23,12 @@ final class AppContainer {
     /// the analysis result sheet; presented once at the `MainTabView` level.
     var fixTarget: FixEntryTarget?
 
+    /// Set from `scascan://` URL handling (widget taps, quick actions) —
+    /// `MainTabView` observes this to switch tabs / push a route. Mirrors
+    /// Android's `MainActivity.handleIntent` bundling `start_tab`.
+    var deepLinkTab: Int?
+    var deepLinkRoute: Route?
+
     init(modelContainer: ModelContainer = ScaScanSchema.makeContainer()) {
         self.modelContainer = modelContainer
         self.keyStore = .shared
@@ -31,12 +38,11 @@ final class AppContainer {
         let nutritionRepository = NutritionRepository()
         self.nutritionRepository = nutritionRepository
 
-        // TODO(Phase 5): hook this up to a WidgetKit timeline reload, mirroring
-        // Android's SummaryWidgetProvider.triggerUpdate(context) broadcast.
+        // Mirrors Android's SummaryWidgetProvider.triggerUpdate(context) broadcast.
         self.logRepository = LogRepository(
             modelContainer: modelContainer,
             health: HealthKitManager.shared,
-            onDataChanged: {}
+            onDataChanged: { WidgetCenter.shared.reloadAllTimelines() }
         )
 
         self.analysisManager = AnalysisManager(repository: nutritionRepository)

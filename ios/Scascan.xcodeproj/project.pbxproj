@@ -22,6 +22,9 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Scascan;
 			sourceTree = "<group>";
+			exceptions = (
+				3B5E7C6DE029A3ACCA0D47AC /* Exceptions for "Scascan" folder in "Scascan" target */,
+			);
 		};
 		1D8A9C3FCC24C7E93A56C39F /* ScaScanWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -34,6 +37,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3B5E7C6DE029A3ACCA0D47AC /* Exceptions for "Scascan" folder in "Scascan" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				InfoPlist-URLTypes.plist,
+			);
+			target = 5FC7400E302F9A30005E0FEF /* Scascan */;
+		};
 		AE5A3CEE7145DA348DEE5EE7 /* Exceptions for "ScaScanWidget" folder in "ScaScanWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -372,6 +382,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Scascan/InfoPlist-URLTypes.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "ScaScan uses the camera to identify food and scan barcodes for nutritional analysis.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "ScaScan reads your steps, active energy, and weight to compute an adaptive daily calorie target.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -409,6 +420,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Scascan/InfoPlist-URLTypes.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "ScaScan uses the camera to identify food and scan barcodes for nutritional analysis.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "ScaScan reads your steps, active energy, and weight to compute an adaptive daily calorie target.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

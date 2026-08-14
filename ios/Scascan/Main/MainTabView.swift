@@ -62,6 +62,16 @@ struct MainTabView: View {
             }
             .presentationDetents([.medium])
         }
+        .onChange(of: container.deepLinkTab) { _, tab in
+            guard let tab else { return }
+            selection = tab
+            container.deepLinkTab = nil
+        }
+        .onChange(of: container.deepLinkRoute) { _, route in
+            guard let route else { return }
+            path.append(route)
+            container.deepLinkRoute = nil
+        }
     }
 
     /// Bridges `AnalysisManager.State.complete` to a `.sheet(item:)` binding.

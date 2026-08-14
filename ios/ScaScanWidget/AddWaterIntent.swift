@@ -18,3 +18,18 @@ struct AddWaterIntent: AppIntent {
         return .result()
     }
 }
+
+/// The widget's "undo last water entry" tap target — mirrors Android's
+/// `SummaryWidgetProvider.ACTION_UNDO_WATER` broadcast receiver.
+struct UndoWaterIntent: AppIntent {
+    static var title: LocalizedStringResource { "Undo Water" }
+    static var description: IntentDescription { IntentDescription("Removes the most recently logged water entry.") }
+
+    @MainActor
+    func perform() async throws -> some IntentResult {
+        let container = ScaScanSchema.makeContainer()
+        let repository = LogRepository(modelContainer: container)
+        try? repository.removeLastWater()
+        return .result()
+    }
+}

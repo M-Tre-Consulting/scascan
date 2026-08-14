@@ -10,11 +10,12 @@ struct SummaryEntry: TimelineEntry {
     let carbs: Int
     let fat: Int
     let waterMl: Int
+    let hasWaterToday: Bool
 }
 
 struct SummaryProvider: TimelineProvider {
     func placeholder(in context: Context) -> SummaryEntry {
-        SummaryEntry(date: .now, consumed: 1200, target: 2000, protein: 80, carbs: 140, fat: 40, waterMl: 750)
+        SummaryEntry(date: .now, consumed: 1200, target: 2000, protein: 80, carbs: 140, fat: 40, waterMl: 750, hasWaterToday: true)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SummaryEntry) -> Void) {
@@ -49,13 +50,15 @@ struct SummaryProvider: TimelineProvider {
             protein: Int(entries.reduce(0) { $0 + $1.protein }.rounded()),
             carbs: Int(entries.reduce(0) { $0 + $1.carbohydrates }.rounded()),
             fat: Int(entries.reduce(0) { $0 + $1.fat }.rounded()),
-            waterMl: water.reduce(0) { $0 + $1.amountMl }
+            waterMl: water.reduce(0) { $0 + $1.amountMl },
+            hasWaterToday: !water.isEmpty
         )
     }
 }
 
 struct SummaryWidgetView: View {
     let entry: SummaryEntry
+    @Environment(\.widgetFamily) private var family
 
     private var fraction: Double {
         entry.target > 0 ? min(Double(entry.consumed) / Double(entry.target), 1) : 0
@@ -84,14 +87,43 @@ struct SummaryWidgetView: View {
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                 Spacer()
+                if entry.hasWaterToday {
+                    Button(intent: UndoWaterIntent()) {
+                        Image(systemName: "arrow.uturn.backward.circle")
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.secondary)
+                }
                 Button(intent: AddWaterIntent()) {
                     Image(systemName: "plus.circle.fill")
                         .font(.title3)
                 }
                 .buttonStyle(.plain)
             }
+
+            // Quick-scan shortcuts only fit comfortably at .systemMedium+;
+            // .systemSmall stays to the condensed summary + water controls above.
+            if family == .systemMedium {
+                Divider()
+                HStack(spacing: 14) {
+                    quickLink(system: "camera.fill", url: "scascan://camera")
+                    quickLink(system: "barcode.viewfinder", url: "scascan://barcode")
+                    quickLink(system: "magnifyingglass", url: "scascan://search")
+                    Spacer()
+                }
+            }
         }
         .padding(12)
+    }
+
+    private func quickLink(system: String, url: String) -> some View {
+        Link(destination: URL(string: url)!) {
+            Image(systemName: system)
+                .font(.body)
+                .frame(width: 30, height: 30)
+                .background(.tint.opacity(0.15), in: Circle())
+                .foregroundStyle(.tint)
+        }
     }
 }
 
@@ -102,6 +134,7 @@ struct SummaryWidget: Widget {
         StaticConfiguration(kind: kind, provider: SummaryProvider()) { entry in
             SummaryWidgetView(entry: entry)
                 .containerBackground(.background, for: .widget)
+                .widgetURL(URL(string: "scascan://log"))
         }
         .configurationDisplayName("Daily Summary")
         .description("Track today's calories, macros, and water at a glance.")
@@ -109,8 +142,8 @@ struct SummaryWidget: Widget {
     }
 }
 
-#Preview(as: .systemSmall) {
+#Preview(as: .systemMedium) {
     SummaryWidget()
 } timeline: {
-    SummaryEntry(date: .now, consumed: 1200, target: 2000, protein: 80, carbs: 140, fat: 40, waterMl: 750)
+    SummaryEntry(date: .now, consumed: 1200, target: 2000, protein: 80, carbs: 140, fat: 40, waterMl: 750, hasWaterToday: true)
 }
