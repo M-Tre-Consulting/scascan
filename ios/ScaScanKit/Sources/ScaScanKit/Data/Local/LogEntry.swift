@@ -10,7 +10,16 @@ public final class LogEntry {
     /// matching HealthKit nutrition correlation for this entry, so it can be
     /// found again and deleted/replaced when the entry is edited or removed —
     /// see `HealthKitManager.writeDietaryEntry`.
-    public var id: UUID
+    ///
+    /// The `= UUID()` default has to live right here, not just on the `init`
+    /// parameter below: SwiftData's lightweight migration reads the default
+    /// from the property declaration itself to backfill this column on rows
+    /// that already exist on disk from before this field existed. A default
+    /// that only exists on the initializer is invisible to the migrator —
+    /// it'd see a new non-optional column with no way to fill existing rows
+    /// and fail to open the store (crashing at launch for any upgrading
+    /// install, before this default was added here).
+    public var id: UUID = UUID()
     public var timestamp: Date
     public var foodName: String
     public var servingSize: String
