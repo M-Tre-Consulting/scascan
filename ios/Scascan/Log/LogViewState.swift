@@ -131,7 +131,12 @@ final class LogViewState {
         guard await health.hasPermissions() else { adaptiveState = .disconnected; workoutsToday = []; return }
 
         let steps = await health.readSteps(offsetDays: dateOffset)
-        let activeKcal = await health.readActiveCalories(offsetDays: dateOffset)
+        // Raw reading is what gets cached below (so the background-refresh
+        // fallback cache always holds a real value, never the substitute);
+        // `effectiveActiveCalories` is what's actually shown/used for the
+        // target — see its doc comment for the "Watch wasn't worn" rule.
+        let rawActiveKcal = await health.readActiveCalories(offsetDays: dateOffset)
+        let activeKcal = repository.effectiveActiveCalories(rawActiveKcal)
         workoutsToday = isToday ? await health.readWorkoutsToday() : []
 
         // Weight trend is only meaningful for today's adaptive goal.
@@ -151,8 +156,8 @@ final class LogViewState {
             weeklyRateKgPerWeek: trend.weeklyRate
         ))
 
-        if isToday, activeKcal > 0 {
-            repository.syncActiveCalories(activeKcal)
+        if isToday, rawActiveKcal > 0 {
+            repository.syncActiveCalories(rawActiveKcal)
         }
     }
 

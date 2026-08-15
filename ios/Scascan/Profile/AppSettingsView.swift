@@ -23,6 +23,7 @@ struct AppSettingsView: View {
     @State private var waterButton2 = 250
     @State private var waterButton3 = 500
     @State private var widgetWaterAmount = 250
+    @State private var fitnessBaseFallback = 500
 
     var body: some View {
         ScrollView {
@@ -30,6 +31,7 @@ struct AppSettingsView: View {
                 apiKeySection
                 modelSection
                 healthSection
+                fitnessFallbackSection
                 waterSection
                 notificationsSection
             }
@@ -44,6 +46,7 @@ struct AppSettingsView: View {
             waterButton2 = container.profileStore.waterButton2Ml
             waterButton3 = container.profileStore.waterButton3Ml
             widgetWaterAmount = container.profileStore.widgetWaterAmountMl
+            fitnessBaseFallback = container.profileStore.fitnessBaseFallbackKcal
             if container.keyStore.hasKey() { picker.loadModels() }
             Task { healthConnected = await container.healthManager.hasPermissions() }
         }
@@ -131,6 +134,22 @@ struct AppSettingsView: View {
                         .buttonStyle(.borderedProminent)
                 }
             }
+        }
+    }
+
+    private var fitnessFallbackSection: some View {
+        SectionCard(
+            title: "Fitness base fallback",
+            subtitle: "If Health reports under 100 kcal burned for a day, ScaScan assumes the Apple Watch wasn't worn and adds this flat amount to the target instead — otherwise it uses whatever Fitness/Watch actually reports."
+        ) {
+            Stepper(value: $fitnessBaseFallback, in: 0...2_000, step: 50) {
+                HStack {
+                    Text("Amount")
+                    Spacer()
+                    Text("\(fitnessBaseFallback) kcal").foregroundStyle(.secondary)
+                }
+            }
+            .onChange(of: fitnessBaseFallback) { _, newValue in container.profileStore.fitnessBaseFallbackKcal = newValue }
         }
     }
 

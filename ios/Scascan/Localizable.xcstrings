@@ -302,6 +302,16 @@
         }
       }
     },
+    "Amount": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quantità"
+          }
+        }
+      }
+    },
     "Analyze": {
       "localizations": {
         "it": {
@@ -813,6 +823,16 @@
         }
       }
     },
+    "Fitness base fallback": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiunta base da Fitness"
+          }
+        }
+      }
+    },
     "Fitness goal": {
       "localizations": {
         "it": {
@@ -1023,6 +1043,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Identifica il cibo da qualsiasi immagine"
+          }
+        }
+      }
+    },
+    "If Health reports under 100 kcal burned for a day, ScaScan assumes the Apple Watch wasn't worn and adds this flat amount to the target instead — otherwise it uses whatever Fitness/Watch actually reports.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se Salute registra meno di 100 kcal bruciate in un giorno, ScaScan presume che l'Apple Watch non sia stato indossato e aggiunge questa quantità fissa all'obiettivo — altrimenti usa quanto riportato realmente da Fitness/Watch."
           }
         }
       }

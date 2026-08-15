@@ -103,4 +103,16 @@ struct LogRepositoryTests {
         let bleedthrough = try await repo.yesterdayBleedthrough()
         #expect(bleedthrough <= 500 && bleedthrough >= -500)
     }
+
+    @Test("effectiveActiveCalories substitutes the configured base when the reading looks like a missed Watch day")
+    func effectiveActiveCaloriesFallsBackBelowThreshold() {
+        let repo = makeRepository()
+        // Under 100kcal for a whole day reads as "Watch wasn't worn" -> the
+        // user's configured flat fallback (500kcal by default) is used instead.
+        #expect(repo.effectiveActiveCalories(30) == 500)
+        #expect(repo.effectiveActiveCalories(0) == 500)
+        // At/above the threshold, the real reading passes through untouched.
+        #expect(repo.effectiveActiveCalories(150) == 150)
+        #expect(repo.effectiveActiveCalories(600) == 600)
+    }
 }

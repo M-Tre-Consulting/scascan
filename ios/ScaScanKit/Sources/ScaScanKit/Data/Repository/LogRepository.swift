@@ -158,6 +158,7 @@ public final class LogRepository {
         } else if hasHealth, activeKcal > 0.1 {
             profileStore.lastActiveCalories = activeKcal
         }
+        if hasHealth { activeKcal = effectiveActiveCalories(activeKcal) }
 
         let trend: Int
         if hasHealth {
@@ -179,6 +180,27 @@ public final class LogRepository {
         let total = base + bleedthrough + Int(active.rounded()) + trend
         // Ensure a healthy minimum target (at least 80% of BMR).
         return max(total, Int(Double(bmr()) * 0.8))
+    }
+
+    /// Below `activeCaloriesWornThreshold` kcal for a whole day is treated as
+    /// "the Apple Watch wasn't worn that day" rather than "a genuinely very
+    /// low-activity day" — a worn Watch/iPhone almost always accumulates well
+    /// over 100kcal of background + incidental activity alone, so a reading
+    /// under that is far more likely a missing device than real behavior.
+    /// In that case, the real (misleadingly low) reading is swapped for the
+    /// user's configured flat estimate (Settings ▸ "Fitness base fallback",
+    /// default 500kcal) instead of quietly undercounting the day's burn.
+    /// Used both for today's live target and for yesterday's bleedthrough,
+    /// since both represent "how much did Health report for that day".
+    private static let activeCaloriesWornThreshold = 100.0
+
+    /// Public: `LogViewState` (the app target) reads its own active-calories
+    /// value directly from `HealthProviding` for the breakdown UI rather than
+    /// through `liveTarget()` below, so it needs this same adjustment applied
+    /// to what it displays — otherwise the visible "Activity today" number
+    /// and the actual target it feeds into would silently disagree.
+    public func effectiveActiveCalories(_ raw: Double) -> Double {
+        raw < Self.activeCaloriesWornThreshold ? Double(profileStore.fitnessBaseFallbackKcal) : raw
     }
 
     private func trendAdjustment(_ readings: [(Date, Double)]) -> Int {
@@ -212,7 +234,9 @@ public final class LogRepository {
 
         let hasHealth = await health.hasPermissions()
         let base = baseTarget(hasHealth: hasHealth)
-        let activeYesterday = hasHealth ? await health.readActiveCaloriesRange(start: start, end: end) : 0
+        let activeYesterday = hasHealth
+            ? effectiveActiveCalories(await health.readActiveCaloriesRange(start: start, end: end))
+            : 0
 
         let totalAllowance = Double(base) + activeYesterday
         let rawBalance = totalAllowance - consumed

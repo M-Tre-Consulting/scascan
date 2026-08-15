@@ -33,6 +33,7 @@ public final class UserProfileStore: @unchecked Sendable {
         static let waterButton2 = "water_quick_add_2_ml"
         static let waterButton3 = "water_quick_add_3_ml"
         static let widgetWaterAmount = "widget_water_add_ml"
+        static let fitnessBaseFallback = "fitness_base_fallback_kcal"
     }
 
     public var name: String {
@@ -134,6 +135,15 @@ public final class UserProfileStore: @unchecked Sendable {
     public var widgetWaterAmountMl: Int {
         get { let v = d.integer(forKey: Keys.widgetWaterAmount); return v > 0 ? v : 250 }
         set { d.set(newValue, forKey: Keys.widgetWaterAmount) }
+    }
+
+    /// Flat calorie estimate `LogRepository` substitutes for a day's active-
+    /// energy reading when that reading is under ~100kcal — a strong signal
+    /// the Apple Watch simply wasn't worn that day, rather than a genuinely
+    /// near-zero-activity day. See `LogRepository.effectiveActiveCalories`.
+    public var fitnessBaseFallbackKcal: Int {
+        get { let v = d.integer(forKey: Keys.fitnessBaseFallback); return v > 0 ? v : 500 }
+        set { d.set(newValue, forKey: Keys.fitnessBaseFallback) }
     }
 
     public func hasProfile() -> Bool { age > 0 && heightCm > 0 && weightKg > 0 }
