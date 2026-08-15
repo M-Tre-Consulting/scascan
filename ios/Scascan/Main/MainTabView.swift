@@ -52,15 +52,14 @@ struct MainTabView: View {
         }
         .sheet(item: fixTargetBinding) { target in
             FixEntrySheet(target: target) { correction in
-                switch target {
-                case .pending(let facts):
-                    container.analysisManager.fixPending(facts, correction: correction)
-                case .logged(let entry):
-                    fixLoggedEntry(entry, correction: correction)
-                }
-                container.fixTarget = nil
+                await applyFix(target, correction: correction)
             }
             .presentationDetents([.medium])
+        }
+        .alert("Something went wrong", isPresented: analysisErrorPresented) {
+            Button("OK", role: .cancel) { container.analysisManager.dismiss() }
+        } message: {
+            Text(analysisErrorMessage)
         }
         .onChange(of: container.deepLinkTab) { _, tab in
             guard let tab else { return }
@@ -89,8 +88,31 @@ struct MainTabView: View {
         Binding(get: { container.fixTarget }, set: { container.fixTarget = $0 })
     }
 
-    private func fixLoggedEntry(_ entry: LogEntry, correction: String) {
-        Task {
+    /// Bridges `AnalysisManager.State.error` to an `.alert` — previously this
+    /// state existed but nothing ever displayed it, so a failed scan/search/
+    /// pending-item fix looked exactly like a silent no-op.
+    private var analysisErrorPresented: Binding<Bool> {
+        Binding(
+            get: { if case .error = container.analysisManager.state { return true }; return false },
+            set: { if !$0 { container.analysisManager.dismiss() } }
+        )
+    }
+
+    private var analysisErrorMessage: String {
+        if case .error(let message) = container.analysisManager.state { return message }
+        return ""
+    }
+
+    private func applyFix(_ target: FixEntryTarget, correction: String) async -> FixOutcome {
+        switch target {
+        case .pending(let facts):
+            // Fire-and-forget into the shared AnalysisManager: it owns the
+            // global processing state (AnalysisProgressBar + the error alert
+            // above), and on success re-opens the result sheet with the
+            // corrected facts — so this sheet can close right away.
+            container.analysisManager.fixPending(facts, correction: correction)
+            return .success
+        case .logged(let entry):
             do {
                 let facts = try await container.nutritionRepository.fixEntry(
                     foodName: entry.foodName, servingSize: entry.servingSize, correction: correction
@@ -105,8 +127,9 @@ struct MainTabView: View {
                 entry.sugar = facts.sugar
                 entry.sodium = facts.sodium
                 try container.logRepository.updateEntry(entry)
+                return .success
             } catch {
-                // Surfaced via LogView's own error handling in a future pass.
+                return .failure(error.localizedDescription)
             }
         }
     }

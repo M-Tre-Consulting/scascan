@@ -1,7 +1,162 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@%lld kcal from yesterday": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@%2$lld kcal from yesterday"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@%2$lld kcal da ieri"
+          }
+        }
+      }
+    },
+    "%lld": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld"
+          }
+        }
+      }
+    },
+    "%lld kcal": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld kcal"
+          }
+        }
+      }
+    },
+    "%lld kcal over goal": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld kcal oltre l'obiettivo"
+          }
+        }
+      }
+    },
+    "%lld kcal remaining": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld kcal rimanenti"
+          }
+        }
+      }
+    },
+    "%lld kcal · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld kcal · %2$@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld kcal · %2$@"
+          }
+        }
+      }
+    },
+    "%lld kcal • %lldg P • %lldg C • %lldg F": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld kcal • %2$lldg P • %3$lldg C • %4$lldg F"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld kcal • %2$lldg P • %3$lldg C • %4$lldg G"
+          }
+        }
+      }
+    },
+    "%lld ml": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ml"
+          }
+        }
+      }
+    },
+    "%lld steps": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld passi"
+          }
+        }
+      }
+    },
+    "%lldg protein · %lldg carbs · %lldg fat": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lldg protein · %2$lldg carbs · %3$lldg fat"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lldg proteine · %2$lldg carboidrati · %3$lldg grassi"
+          }
+        }
+      }
+    },
+    "+%lldml": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%lldml"
+          }
+        }
+      }
+    },
+    "/ %lld kcal": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/ %lld kcal"
+          }
+        }
+      }
+    },
+    "100/250/500ml won't fit everyone's glass or bottle — set your own quick-add amounts here, for both the Log tab and the home screen widget.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "100/250/500ml non vanno bene per il bicchiere o la bottiglia di tutti: imposta qui le tue quantità rapide, sia per la scheda Diario che per il widget nella schermata Home."
+          }
+        }
+      }
+    },
     "AI Model": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -12,6 +167,7 @@
       }
     },
     "AI-computed target": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -32,6 +188,7 @@
       }
     },
     "API key saved": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -42,6 +199,7 @@
       }
     },
     "Active": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -62,6 +220,7 @@
       }
     },
     "Adaptive targets": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -102,6 +261,7 @@
       }
     },
     "Adjusting": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -122,11 +282,22 @@
       }
     },
     "Age is required": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "L'età è obbligatoria"
+          }
+        }
+      }
+    },
+    "American Football": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Football americano"
           }
         }
       }
@@ -152,6 +323,7 @@
       }
     },
     "Apple Health": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -171,7 +343,38 @@
         }
       }
     },
+    "Archery": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiro con l'arco"
+          }
+        }
+      }
+    },
+    "Badminton": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Badminton"
+          }
+        }
+      }
+    },
+    "Barcode scanning unavailable": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scansione codice a barre non disponibile"
+          }
+        }
+      }
+    },
     "Base target": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -181,7 +384,38 @@
         }
       }
     },
+    "Baseball": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baseball"
+          }
+        }
+      }
+    },
+    "Basketball": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basket"
+          }
+        }
+      }
+    },
+    "Boxing": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boxe"
+          }
+        }
+      }
+    },
     "Build muscle": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -192,6 +426,7 @@
       }
     },
     "Calories": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -252,6 +487,7 @@
       }
     },
     "Carbohydrates": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -262,6 +498,7 @@
       }
     },
     "Carbs": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -271,7 +508,18 @@
         }
       }
     },
+    "Carbs %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carboidrati %@"
+          }
+        }
+      }
+    },
     "Choose a model": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -281,7 +529,18 @@
         }
       }
     },
+    "Climbing": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrampicata"
+          }
+        }
+      }
+    },
     "Collecting data…": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -321,22 +580,32 @@
         }
       }
     },
-    "Connect Health data to enable calorie tracking and adaptive daily goals.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Collega i dati di Salute per abilitare il monitoraggio calorico e gli obiettivi giornalieri adattativi."
-          }
-        }
-      }
-    },
     "Connected": {
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Connesso"
+          }
+        }
+      }
+    },
+    "Cooldown": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Defaticamento"
+          }
+        }
+      }
+    },
+    "Core Training": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allenamento core"
           }
         }
       }
@@ -351,12 +620,62 @@
         }
       }
     },
+    "Cricket": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cricket"
+          }
+        }
+      }
+    },
+    "Cross Training": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cross training"
+          }
+        }
+      }
+    },
     "Currently identified as:": {
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Attualmente identificato come:"
+          }
+        }
+      }
+    },
+    "Cycling": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ciclismo"
+          }
+        }
+      }
+    },
+    "Daily target: %lld kcal (AI-computed)": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obiettivo giornaliero: %lld kcal (calcolato dall'IA)"
+          }
+        }
+      }
+    },
+    "Dance": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Danza"
           }
         }
       }
@@ -402,6 +721,7 @@
       }
     },
     "Disconnected locally — to fully revoke access, open Health ▸ Data Access & Devices.": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -421,7 +741,18 @@
         }
       }
     },
+    "Elliptical": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ellittica"
+          }
+        }
+      }
+    },
     "Extra active": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -432,11 +763,22 @@
       }
     },
     "Fat": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Grassi"
+          }
+        }
+      }
+    },
+    "Fat %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grassi %@"
           }
         }
       }
@@ -447,6 +789,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Femmina"
+          }
+        }
+      }
+    },
+    "Fencing": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scherma"
           }
         }
       }
@@ -487,6 +839,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Correggi questa voce"
+          }
+        }
+      }
+    },
+    "Flexibility": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flessibilità"
+          }
+        }
+      }
+    },
+    "From Apple Watch / Fitness — already counted in \"Activity today\" above.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Da Apple Watch / Fitness — già conteggiati in \"Attività di oggi\" qui sopra."
+          }
+        }
+      }
+    },
+    "Functional Strength Training": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allenamento funzionale"
           }
         }
       }
@@ -532,6 +914,7 @@
       }
     },
     "Goal": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -541,7 +924,38 @@
         }
       }
     },
+    "Golf": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Golf"
+          }
+        }
+      }
+    },
+    "Gymnastics": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ginnastica"
+          }
+        }
+      }
+    },
+    "HIIT": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HIIT"
+          }
+        }
+      }
+    },
     "Health data isn't available on this device.": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -562,11 +976,32 @@
       }
     },
     "Height is required": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "L'altezza è obbligatoria"
+          }
+        }
+      }
+    },
+    "Hiking": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escursionismo"
+          }
+        }
+      }
+    },
+    "Hockey": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hockey"
           }
         }
       }
@@ -582,6 +1017,7 @@
       }
     },
     "Identify food from any image": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -592,6 +1028,7 @@
       }
     },
     "Lightly active": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -622,6 +1059,7 @@
       }
     },
     "Look up any product by barcode": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -632,6 +1070,7 @@
       }
     },
     "Lose weight": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -642,6 +1081,7 @@
       }
     },
     "Macros": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -652,6 +1092,7 @@
       }
     },
     "Maintain weight": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -671,7 +1112,28 @@
         }
       }
     },
+    "Martial Arts": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arti marziali"
+          }
+        }
+      }
+    },
+    "Mixed Cardio": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cardio misto"
+          }
+        }
+      }
+    },
     "Moderately active": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -692,6 +1154,7 @@
       }
     },
     "Name is required": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -732,6 +1195,7 @@
       }
     },
     "No weight data found in Health": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -742,6 +1206,7 @@
       }
     },
     "Notifications": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -772,6 +1237,7 @@
       }
     },
     "On track": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -782,11 +1248,22 @@
       }
     },
     "Other nutrients": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Altri nutrienti"
+          }
+        }
+      }
+    },
+    "Paddle Sports": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sport con la pagaia"
           }
         }
       }
@@ -802,6 +1279,7 @@
       }
     },
     "Personal Details": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -821,7 +1299,18 @@
         }
       }
     },
+    "Pilates": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilates"
+          }
+        }
+      }
+    },
     "Please describe the correct food": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -832,6 +1321,7 @@
       }
     },
     "Please enter a valid API key": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -852,6 +1342,7 @@
       }
     },
     "Previous day balance": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -872,11 +1363,62 @@
       }
     },
     "Protein": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Proteine"
+          }
+        }
+      }
+    },
+    "Protein %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proteine %@"
+          }
+        }
+      }
+    },
+    "Quick-add button 1": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pulsante rapido 1"
+          }
+        }
+      }
+    },
+    "Quick-add button 2": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pulsante rapido 2"
+          }
+        }
+      }
+    },
+    "Quick-add button 3": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pulsante rapido 3"
+          }
+        }
+      }
+    },
+    "Reads steps, active calories, weight, height, and Apple Watch/Fitness workouts to power adaptive daily goals. Writes every meal and glass of water you log here back to Health, so your intake shows up in Health's Nutrition tab too and workout calories count toward today's target automatically.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Legge passi, calorie attive, peso, altezza e gli allenamenti di Apple Watch/Fitness per calcolare gli obiettivi giornalieri adattivi. Scrive ogni pasto e bicchiere d'acqua registrato qui su Salute, così i tuoi consumi compaiono anche nella scheda Nutrizione di Salute e le calorie bruciate negli allenamenti si sommano automaticamente all'obiettivo di oggi."
           }
         }
       }
@@ -897,6 +1439,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ricalcola"
+          }
+        }
+      }
+    },
+    "Rowing": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canottaggio"
+          }
+        }
+      }
+    },
+    "Rugby": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rugby"
+          }
+        }
+      }
+    },
+    "Running": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corsa"
+          }
+        }
+      }
+    },
+    "Sailing": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vela"
           }
         }
       }
@@ -941,7 +1523,18 @@
         }
       }
     },
+    "ScaScan": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ScaScan"
+          }
+        }
+      }
+    },
     "ScaScan uses Google Gemini to analyse food. Get your key at aistudio.google.com.": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -972,6 +1565,7 @@
       }
     },
     "Scan Barcode": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -992,6 +1586,7 @@
       }
     },
     "Sedentary": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1012,6 +1607,7 @@
       }
     },
     "Select the Gemini model that will analyse your food.": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1022,6 +1618,7 @@
       }
     },
     "Select the Gemini model used for food analysis. Models are fetched live from your API key.": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1061,6 +1658,36 @@
         }
       }
     },
+    "Skating": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pattinaggio"
+          }
+        }
+      }
+    },
+    "Snow Sports": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sport sulla neve"
+          }
+        }
+      }
+    },
+    "Soccer": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calcio"
+          }
+        }
+      }
+    },
     "Sodium": {
       "localizations": {
         "it": {
@@ -1071,12 +1698,83 @@
         }
       }
     },
+    "Softball": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Softball"
+          }
+        }
+      }
+    },
+    "Something went wrong": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qualcosa è andato storto"
+          }
+        }
+      }
+    },
+    "Squash": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Squash"
+          }
+        }
+      }
+    },
+    "Stair Climbing": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salita scale"
+          }
+        }
+      }
+    },
+    "Strength Training": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allenamento di forza"
+          }
+        }
+      }
+    },
     "Sugar": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Zuccheri"
+          }
+        }
+      }
+    },
+    "Surfing": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surf"
+          }
+        }
+      }
+    },
+    "Swimming": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuoto"
           }
         }
       }
@@ -1101,7 +1799,18 @@
         }
       }
     },
+    "Table Tennis": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ping pong"
+          }
+        }
+      }
+    },
     "Take a Photo": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1131,6 +1840,16 @@
         }
       }
     },
+    "Tennis": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tennis"
+          }
+        }
+      }
+    },
     "This device (or the Simulator) doesn't expose a camera.": {
       "localizations": {
         "it": {
@@ -1152,6 +1871,7 @@
       }
     },
     "Today's intake": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1172,6 +1892,7 @@
       }
     },
     "Today's target": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1181,7 +1902,28 @@
         }
       }
     },
+    "Today's workouts": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allenamenti di oggi"
+          }
+        }
+      }
+    },
+    "Track & Field": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atletica leggera"
+          }
+        }
+      }
+    },
     "Type any food or meal description": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1202,6 +1944,7 @@
       }
     },
     "Used to calculate your daily calorie goal.": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1222,6 +1965,7 @@
       }
     },
     "Very active": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1241,6 +1985,26 @@
         }
       }
     },
+    "Volleyball": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pallavolo"
+          }
+        }
+      }
+    },
+    "Walking": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camminata"
+          }
+        }
+      }
+    },
     "Water": {
       "localizations": {
         "it": {
@@ -1251,7 +2015,28 @@
         }
       }
     },
+    "Water Fitness": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fitness in acqua"
+          }
+        }
+      }
+    },
+    "Water amounts": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quantità d'acqua"
+          }
+        }
+      }
+    },
     "Water today": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1262,6 +2047,7 @@
       }
     },
     "Weight & height synced": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1282,6 +2068,7 @@
       }
     },
     "Weight is required": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1292,6 +2079,7 @@
       }
     },
     "Weight trend": {
+      "extractionState": "stale",
       "localizations": {
         "it": {
           "stringUnit": {
@@ -1307,6 +2095,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dove trovo la mia chiave? Vai su aistudio.google.com → Ottieni chiave API. La chiave è memorizzata solo su questo dispositivo e non viene inviata altrove se non all'API Gemini."
+          }
+        }
+      }
+    },
+    "Widget quick-add": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiunta rapida widget"
+          }
+        }
+      }
+    },
+    "Workout": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allenamento"
+          }
+        }
+      }
+    },
+    "Wrestling": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lotta"
+          }
+        }
+      }
+    },
+    "Yoga": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yoga"
           }
         }
       }
@@ -1327,6 +2155,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "es. Petto di pollo, 100g"
+          }
+        }
+      }
+    },
+    "kcal": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kcal"
           }
         }
       }

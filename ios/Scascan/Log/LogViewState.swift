@@ -45,6 +45,10 @@ final class LogViewState {
     private(set) var water: [WaterLog] = []
     private(set) var adaptiveState: AdaptiveState = .disconnected
     private(set) var targetInfo = TargetInfo()
+    /// Today's Apple Watch / Fitness app sessions — empty on past days (and
+    /// when Health isn't connected), since it's only meaningful as "what's
+    /// feeding into today's live target".
+    private(set) var workoutsToday: [WorkoutSummary] = []
 
     /// Base target + today's active burn + weight-trend correction + yesterday's
     /// bleedthrough — the number actually shown as "today's target".
@@ -123,11 +127,12 @@ final class LogViewState {
     }
 
     func loadHealthData() async {
-        guard health.isAvailable else { adaptiveState = .disconnected; return }
-        guard await health.hasPermissions() else { adaptiveState = .disconnected; return }
+        guard health.isAvailable else { adaptiveState = .disconnected; workoutsToday = []; return }
+        guard await health.hasPermissions() else { adaptiveState = .disconnected; workoutsToday = []; return }
 
         let steps = await health.readSteps(offsetDays: dateOffset)
         let activeKcal = await health.readActiveCalories(offsetDays: dateOffset)
+        workoutsToday = isToday ? await health.readWorkoutsToday() : []
 
         // Weight trend is only meaningful for today's adaptive goal.
         let trend: TrendResult

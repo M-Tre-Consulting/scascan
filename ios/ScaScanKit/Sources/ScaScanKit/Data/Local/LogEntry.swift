@@ -5,6 +5,12 @@ import SwiftData
 /// SwiftData synthesizes the primary key, replacing Room's `autoGenerate id`.
 @Model
 public final class LogEntry {
+    /// A stable identity independent of SwiftData's own `persistentModelID`
+    /// (which isn't meant to be persisted outside the store). Used to tag the
+    /// matching HealthKit nutrition correlation for this entry, so it can be
+    /// found again and deleted/replaced when the entry is edited or removed —
+    /// see `HealthKitManager.writeDietaryEntry`.
+    public var id: UUID
     public var timestamp: Date
     public var foodName: String
     public var servingSize: String
@@ -17,6 +23,7 @@ public final class LogEntry {
     public var sodium: Double
 
     public init(
+        id: UUID = UUID(),
         timestamp: Date = .now,
         foodName: String,
         servingSize: String,
@@ -28,6 +35,7 @@ public final class LogEntry {
         sugar: Double,
         sodium: Double
     ) {
+        self.id = id
         self.timestamp = timestamp
         self.foodName = foodName
         self.servingSize = servingSize

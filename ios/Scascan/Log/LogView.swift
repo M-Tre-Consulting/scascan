@@ -40,6 +40,7 @@ struct LogView: View {
                 macroSummary(state)
                 waterSection(state)
                 adaptiveCard(state)
+                workoutsSection(state)
                 entriesSection(state)
             }
             .padding(20)
@@ -126,7 +127,7 @@ struct LogView: View {
                     .font(.title2.bold())
 
                 HStack(spacing: 10) {
-                    ForEach([100, 250, 500], id: \.self) { amount in
+                    ForEach(container.profileStore.waterQuickAddAmountsMl, id: \.self) { amount in
                         Button("+\(amount)ml") { state.addWater(amount) }
                             .buttonStyle(.bordered)
                     }
@@ -135,6 +136,31 @@ struct LogView: View {
                         Button("Undo last entry") { state.removeLastWater() }
                             .font(.caption)
                             .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func workoutsSection(_ state: LogViewState) -> some View {
+        if !state.workoutsToday.isEmpty {
+            SectionCard(title: "Today's workouts", subtitle: "From Apple Watch / Fitness — already counted in \"Activity today\" above.") {
+                VStack(spacing: 10) {
+                    ForEach(state.workoutsToday) { workout in
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(workout.activityName)
+                                    .font(.subheadline.weight(.medium))
+                                Text(workout.start, style: .time)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Text("\(Int(workout.kcal.rounded())) kcal")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
             }

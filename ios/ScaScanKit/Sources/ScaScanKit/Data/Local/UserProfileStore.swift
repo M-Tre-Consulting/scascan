@@ -29,6 +29,10 @@ public final class UserProfileStore: @unchecked Sendable {
         static let syncEmail = "sync_email"
         static let waterReminders = "water_reminders"
         static let lastActiveCalories = "last_active_kcal"
+        static let waterButton1 = "water_quick_add_1_ml"
+        static let waterButton2 = "water_quick_add_2_ml"
+        static let waterButton3 = "water_quick_add_3_ml"
+        static let widgetWaterAmount = "widget_water_add_ml"
     }
 
     public var name: String {
@@ -104,6 +108,32 @@ public final class UserProfileStore: @unchecked Sendable {
     public var lastActiveCalories: Double {
         get { d.double(forKey: Keys.lastActiveCalories) }
         set { d.set(newValue, forKey: Keys.lastActiveCalories) }
+    }
+
+    /// The three quick-add amounts shown as buttons under "Water today" in
+    /// the Log tab. Android hardcodes 100/250/500ml too, but those aren't a
+    /// precise fit for everyone's actual glass/bottle sizes, so — unlike
+    /// Android — these are user-editable from Settings.
+    public var waterButton1Ml: Int {
+        get { let v = d.integer(forKey: Keys.waterButton1); return v > 0 ? v : 100 }
+        set { d.set(newValue, forKey: Keys.waterButton1) }
+    }
+    public var waterButton2Ml: Int {
+        get { let v = d.integer(forKey: Keys.waterButton2); return v > 0 ? v : 250 }
+        set { d.set(newValue, forKey: Keys.waterButton2) }
+    }
+    public var waterButton3Ml: Int {
+        get { let v = d.integer(forKey: Keys.waterButton3); return v > 0 ? v : 500 }
+        set { d.set(newValue, forKey: Keys.waterButton3) }
+    }
+    public var waterQuickAddAmountsMl: [Int] { [waterButton1Ml, waterButton2Ml, waterButton3Ml] }
+
+    /// The amount logged by the widget's single one-tap "+" button — also
+    /// user-editable, separately from the three in-app buttons above since
+    /// the widget only has room for one.
+    public var widgetWaterAmountMl: Int {
+        get { let v = d.integer(forKey: Keys.widgetWaterAmount); return v > 0 ? v : 250 }
+        set { d.set(newValue, forKey: Keys.widgetWaterAmount) }
     }
 
     public func hasProfile() -> Bool { age > 0 && heightCm > 0 && weightKg > 0 }

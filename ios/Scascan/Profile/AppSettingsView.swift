@@ -19,12 +19,18 @@ struct AppSettingsView: View {
     @State private var isSyncingWeight = false
     @State private var healthMessage: String?
 
+    @State private var waterButton1 = 100
+    @State private var waterButton2 = 250
+    @State private var waterButton3 = 500
+    @State private var widgetWaterAmount = 250
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 apiKeySection
                 modelSection
                 healthSection
+                waterSection
                 notificationsSection
             }
             .padding(20)
@@ -34,6 +40,10 @@ struct AppSettingsView: View {
         .onAppear {
             apiKeyInput = container.keyStore.apiKey
             waterRemindersEnabled = container.profileStore.waterRemindersEnabled
+            waterButton1 = container.profileStore.waterButton1Ml
+            waterButton2 = container.profileStore.waterButton2Ml
+            waterButton3 = container.profileStore.waterButton3Ml
+            widgetWaterAmount = container.profileStore.widgetWaterAmountMl
             if container.keyStore.hasKey() { picker.loadModels() }
             Task { healthConnected = await container.healthManager.hasPermissions() }
         }
@@ -92,7 +102,10 @@ struct AppSettingsView: View {
     }
 
     private var healthSection: some View {
-        SectionCard(title: "Apple Health", subtitle: "Connect Health data to enable calorie tracking and adaptive daily goals.") {
+        SectionCard(
+            title: "Apple Health",
+            subtitle: "Reads steps, active calories, weight, height, and Apple Watch/Fitness workouts to power adaptive daily goals. Writes every meal and glass of water you log here back to Health, so your intake shows up in Health's Nutrition tab too and workout calories count toward today's target automatically."
+        ) {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
                     Image(systemName: "heart.fill").foregroundStyle(.pink)
@@ -119,6 +132,29 @@ struct AppSettingsView: View {
                 }
             }
         }
+    }
+
+    private var waterSection: some View {
+        SectionCard(title: "Water amounts", subtitle: "100/250/500ml won't fit everyone's glass or bottle — set your own quick-add amounts here, for both the Log tab and the home screen widget.") {
+            VStack(alignment: .leading, spacing: 4) {
+                waterStepper("Quick-add button 1", value: $waterButton1) { container.profileStore.waterButton1Ml = $0 }
+                waterStepper("Quick-add button 2", value: $waterButton2) { container.profileStore.waterButton2Ml = $0 }
+                waterStepper("Quick-add button 3", value: $waterButton3) { container.profileStore.waterButton3Ml = $0 }
+                Divider().padding(.vertical, 4)
+                waterStepper("Widget quick-add", value: $widgetWaterAmount) { container.profileStore.widgetWaterAmountMl = $0 }
+            }
+        }
+    }
+
+    private func waterStepper(_ label: String, value: Binding<Int>, onChange: @escaping (Int) -> Void) -> some View {
+        Stepper(value: value, in: 25...2_000, step: 25) {
+            HStack {
+                Text(label)
+                Spacer()
+                Text("\(value.wrappedValue) ml").foregroundStyle(.secondary)
+            }
+        }
+        .onChange(of: value.wrappedValue) { _, newValue in onChange(newValue) }
     }
 
     private var notificationsSection: some View {

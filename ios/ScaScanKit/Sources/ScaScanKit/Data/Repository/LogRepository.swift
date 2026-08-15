@@ -54,20 +54,33 @@ public final class LogRepository {
     }
 
     public func addEntry(_ facts: NutritionFacts) throws {
-        context.insert(LogEntry(from: facts))
+        let entry = LogEntry(from: facts)
+        context.insert(entry)
         try context.save()
         onDataChanged()
+        Task { await health.writeDietaryEntry(entry) }
     }
 
     public func updateEntry(_ entry: LogEntry) throws {
         try context.save()
         onDataChanged()
+        // HealthKit has no "update in place" — replace the old correlation
+        // (found via the entry's own stable id) with a freshly written one.
+        let entryID = entry.id
+        Task {
+            await health.deleteDietaryEntry(id: entryID)
+            await health.writeDietaryEntry(entry)
+        }
     }
 
     public func deleteEntry(_ entry: LogEntry) throws {
+        // Capture before `context.delete` — a SwiftData model can fault once
+        // it's been deleted from its context, so read what's needed first.
+        let entryID = entry.id
         context.delete(entry)
         try context.save()
         onDataChanged()
+        Task { await health.deleteDietaryEntry(id: entryID) }
     }
 
     public func allEntries() throws -> [LogEntry] {
@@ -91,18 +104,22 @@ public final class LogRepository {
     }
 
     public func addWater(_ amountMl: Int) throws {
-        context.insert(WaterLog(amountMl: amountMl))
+        let log = WaterLog(amountMl: amountMl)
+        context.insert(log)
         try context.save()
         onDataChanged()
+        Task { await health.writeWater(log) }
     }
 
     public func removeLastWater() throws {
         var descriptor = FetchDescriptor<WaterLog>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
         descriptor.fetchLimit = 1
         guard let latest = try context.fetch(descriptor).first else { return }
+        let logID = latest.id
         context.delete(latest)
         try context.save()
         onDataChanged()
+        Task { await health.deleteWater(id: logID) }
     }
 
     public func waterTotal(from start: Date, to end: Date) throws -> Int {
