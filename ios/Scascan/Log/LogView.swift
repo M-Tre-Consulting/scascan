@@ -126,16 +126,26 @@ struct LogView: View {
                 Text("\(state.water.reduce(0) { $0 + $1.amountMl }) ml")
                     .font(.title2.bold())
 
-                HStack(spacing: 10) {
+                HStack(spacing: 8) {
                     ForEach(container.profileStore.waterQuickAddAmountsMl, id: \.self) { amount in
+                        // Amounts are user-configurable (Settings ▸ Water
+                        // amounts) and can run to 4 digits, so the label needs
+                        // to shrink to fit rather than wrap mid-word onto a
+                        // second line inside the button.
                         Button("+\(amount)ml") { state.addWater(amount) }
                             .buttonStyle(.bordered)
+                            .controlSize(.small)
+                            .font(.footnote)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                     }
-                    Spacer()
+                    Spacer(minLength: 4)
                     if !state.water.isEmpty {
                         Button("Undo last entry") { state.removeLastWater() }
-                            .font(.caption)
+                            .font(.caption2)
                             .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                     }
                 }
             }
