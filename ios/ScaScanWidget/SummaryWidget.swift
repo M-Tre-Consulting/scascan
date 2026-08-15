@@ -74,7 +74,7 @@ struct SummaryWidgetView: View {
                     .foregroundStyle(.secondary)
             }
             ProgressView(value: fraction)
-                .tint(.accentColor)
+                .tint(.scascanBrand)
 
             Text("P \(entry.protein)g · C \(entry.carbs)g · F \(entry.fat)g")
                 .font(.caption2)
@@ -99,6 +99,7 @@ struct SummaryWidgetView: View {
                         .font(.title3)
                 }
                 .buttonStyle(.plain)
+                .foregroundStyle(Color.scascanBrand)
             }
 
             // Quick-scan shortcuts only fit comfortably at .systemMedium+;
@@ -114,6 +115,11 @@ struct SummaryWidgetView: View {
             }
         }
         .padding(12)
+        // Sets the environment tint so quickLink's `.tint`-based styling
+        // below (and anything else reading the ambient tint) resolves to the
+        // brand green — the widget process can't read the app target's own
+        // AccentColor asset, see Color.scascanBrand's doc comment.
+        .tint(.scascanBrand)
     }
 
     private func quickLink(system: String, url: String) -> some View {
