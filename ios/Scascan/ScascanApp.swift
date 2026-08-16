@@ -22,7 +22,7 @@ struct ScascanApp: App {
                 .onOpenURL(perform: handle)
                 .task {
                     NotificationHelper.refreshHydrationScheduleIfNeeded()
-                    consumePendingVoiceLogRequest()
+                    pollForPendingVoiceLogRequest()
                 }
         }
         .onChange(of: scenePhase) { _, phase in
@@ -33,20 +33,38 @@ struct ScascanApp: App {
             // pushing reminders back when water gets logged.
             if phase == .active {
                 NotificationHelper.refreshHydrationScheduleIfNeeded()
-                consumePendingVoiceLogRequest()
+                pollForPendingVoiceLogRequest()
             }
         }
     }
 
     /// Checks the flag `StartVoiceLogIntent` (the Control Center button)
-    /// leaves behind in the shared App Group store, since it runs in the
-    /// widget extension's own process and can't reach this app's live
+    /// leaves behind in the shared App Group store, since it runs in a
+    /// separate extension process and can't reach this app's live
     /// `AppContainer` directly. If set, opens straight into voice logging.
-    private func consumePendingVoiceLogRequest() {
-        guard container.profileStore.pendingVoiceLogRequest else { return }
+    @discardableResult
+    private func consumePendingVoiceLogRequest() -> Bool {
+        guard container.profileStore.pendingVoiceLogRequest else { return false }
         container.profileStore.pendingVoiceLogRequest = false
         container.deepLinkTab = 0
         container.deepLinkRoute = .voice
+        return true
+    }
+
+    /// A single check right on launch/foreground isn't reliable: the system
+    /// can finish bringing this app to `.active` before (or while)
+    /// `StartVoiceLogIntent.perform()` has actually written the flag in the
+    /// other process — there's no ordering guarantee between "app becomes
+    /// active" and "the intent that caused it finishes running" — and since
+    /// there's no further scenePhase change to catch a late write, a single
+    /// check can silently miss the request entirely. Poll briefly instead.
+    private func pollForPendingVoiceLogRequest() {
+        Task {
+            for _ in 0..<15 {
+                if consumePendingVoiceLogRequest() { return }
+                try? await Task.sleep(for: .milliseconds(200))
+            }
+        }
     }
 
     /// Handles `scascan://log`, `scascan://camera`, `scascan://barcode`,
