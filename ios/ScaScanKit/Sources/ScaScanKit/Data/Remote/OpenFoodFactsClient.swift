@@ -17,7 +17,12 @@ public final class OpenFoodFactsClient: Sendable {
             return nil
         }
         var request = URLRequest(url: url)
-        request.setValue("ScaScan - iOS - Version 1.0", forHTTPHeaderField: "User-Agent")
+        // Read from the bundle rather than hardcoded, so it can't silently go
+        // stale against the app's real version on every release (it already
+        // had, sitting at 1.0). OpenFoodFacts asks API clients to identify
+        // themselves with an accurate app name + version.
+        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
+        request.setValue("ScaScan - iOS - Version \(appVersion)", forHTTPHeaderField: "User-Agent")
 
         do {
             let (data, response) = try await session.data(for: request)

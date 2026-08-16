@@ -2,6 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "Log a meal with ${applicationName}" : {
+      "extractionState" : "stale",
       "localizations" : {
         "it" : {
           "stringUnit" : {
@@ -12,16 +13,30 @@
       }
     },
     "Log by voice with ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
       "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Log by voice with ${applicationName}",
+              "Log food with ${applicationName}",
+              "Log a meal with ${applicationName}",
+              "Voice log with ${applicationName}",
+              "Track food with ${applicationName}"
+            ]
+          }
+        },
         "it" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Registra a voce con ${applicationName}"
           }
         }
       }
     },
     "Log food with ${applicationName}" : {
+      "extractionState" : "stale",
       "localizations" : {
         "it" : {
           "stringUnit" : {
@@ -32,6 +47,7 @@
       }
     },
     "Track food with ${applicationName}" : {
+      "extractionState" : "stale",
       "localizations" : {
         "it" : {
           "stringUnit" : {
@@ -42,6 +58,7 @@
       }
     },
     "Voice log with ${applicationName}" : {
+      "extractionState" : "stale",
       "localizations" : {
         "it" : {
           "stringUnit" : {

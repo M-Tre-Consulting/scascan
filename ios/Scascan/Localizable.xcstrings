@@ -1388,6 +1388,9 @@
         }
       }
     },
+    "Opens ScaScan and starts listening so you can describe what you're eating." : {
+
+    },
     "Other nutrients" : {
       "extractionState" : "stale",
       "localizations" : {
