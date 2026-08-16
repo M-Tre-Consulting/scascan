@@ -50,28 +50,18 @@ final class VoiceLogController: NSObject {
             return
         }
 
+        // `@Sendable` for the same reason as the two callbacks in
+        // `startListening()` below: this target defaults closures to
+        // `@MainActor`, and Speech calls this handler on an arbitrary queue.
         let speechStatus = await withCheckedContinuation { (continuation: CheckedContinuation<SFSpeechRecognizerAuthorizationStatus, Never>) in
-            SFSpeechRecognizer.requestAuthorization { continuation.resume(returning: $0) }
+            SFSpeechRecognizer.requestAuthorization { @Sendable in continuation.resume(returning: $0) }
         }
         guard speechStatus == .authorized else {
             status = .denied
             return
         }
 
-        // Wrapped explicitly (not via the auto-bridged `async` overload):
-        // that overload's completion doesn't reliably hop back onto the
-        // MainActor on this toolchain, leaving `startListening()` below to
-        // run on whatever background dispatch thread the ObjC completion
-        // fired on — AVAudioSession/AVAudioEngine assert they're being
-        // driven from the main thread and trap (`_dispatch_assert_queue_fail`)
-        // when they're not. A manual `CheckedContinuation`, same as the
-        // speech-authorization request above, makes Swift's own actor-hop
-        // machinery respect the MainActor isolation this class declares.
-        let micGranted = await withCheckedContinuation { (continuation: CheckedContinuation<Bool, Never>) in
-            AVAudioApplication.requestRecordPermission { granted in
-                continuation.resume(returning: granted)
-            }
-        }
+        let micGranted = await AVAudioApplication.requestRecordPermission()
         guard micGranted else {
             status = .denied
             return
@@ -108,7 +98,18 @@ final class VoiceLogController: NSObject {
         try session.setCategory(.record, mode: .measurement, options: .duckOthers)
         try session.setActive(true, options: .notifyOthersOnDeactivation)
 
-        let req = SFSpeechAudioBufferRecognitionRequest()
+        // `nonisolated(unsafe)`, and both callbacks below marked `@Sendable`,
+        // for one specific reason: this target builds with
+        // SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor, so *any* closure literal
+        // without explicit isolation — including ones handed to AVFoundation
+        // and Speech — is inferred `@MainActor`. Both of these are invoked by
+        // the frameworks on their own background threads (the realtime audio
+        // render thread, and a Speech dispatch queue), so the Swift runtime's
+        // main-queue assertion fires and traps: `_dispatch_assert_queue_fail`,
+        // EXC_BREAKPOINT, on a `_pthread_wqthread`. `@Sendable` opts the
+        // closures back out to `nonisolated`, which is what they must be —
+        // and they hop to the main actor explicitly instead.
+        nonisolated(unsafe) let req = SFSpeechAudioBufferRecognitionRequest()
         req.shouldReportPartialResults = true
         req.requiresOnDeviceRecognition = false // fall back to server if on-device isn't available for this locale
         request = req
@@ -116,27 +117,35 @@ final class VoiceLogController: NSObject {
         let inputNode = audioEngine.inputNode
         let format = inputNode.outputFormat(forBus: 0)
         inputNode.removeTap(onBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1_024, format: format) { [weak req] buffer, _ in
-            req?.append(buffer)
+        inputNode.installTap(onBus: 0, bufferSize: 1_024, format: format) { @Sendable buffer, _ in
+            req.append(buffer)
         }
 
         audioEngine.prepare()
         try audioEngine.start()
 
-        task = recognizer?.recognitionTask(with: req) { [weak self] result, error in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                if let result {
-                    self.transcript = result.bestTranscription.formattedString
-                    self.lastTranscriptChange = .now
-                    if result.isFinal { self.finish() }
-                } else if error != nil {
-                    self.finish()
-                }
+        task = recognizer?.recognitionTask(with: req) { @Sendable [weak self] result, error in
+            // `result`/`error` aren't Sendable, so pull the plain values out
+            // here, on the framework's own thread, and send only those across.
+            let text = result?.bestTranscription.formattedString
+            let isFinal = result?.isFinal ?? false
+            let failed = error != nil
+            Task { @MainActor in
+                self?.handleRecognition(text: text, isFinal: isFinal, failed: failed)
             }
         }
 
         watchForSilence()
+    }
+
+    private func handleRecognition(text: String?, isFinal: Bool, failed: Bool) {
+        if let text {
+            transcript = text
+            lastTranscriptChange = .now
+            if isFinal { finish() }
+        } else if failed {
+            finish()
+        }
     }
 
     private func watchForSilence() {

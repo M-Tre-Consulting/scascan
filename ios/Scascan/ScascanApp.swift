@@ -66,6 +66,9 @@ struct ScascanApp: App {
         case "search":
             container.deepLinkTab = 0
             container.deepLinkRoute = .search
+        case "voice":
+            container.deepLinkTab = 0
+            container.deepLinkRoute = .voice
         default:
             break
         }
