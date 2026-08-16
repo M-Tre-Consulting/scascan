@@ -56,11 +56,11 @@ final class AppContainer {
 
         self.analysisManager = AnalysisManager(repository: nutritionRepository)
 
-        // See `VoiceLogSignal`'s doc comment: this fires immediately whenever
-        // the Control Center "Log by Voice" button is tapped, from any app
-        // state — including while this app is already active in the
-        // foreground, when a scenePhase transition alone wouldn't happen and
-        // ScascanApp's own checks would never get a reason to re-run.
+        // See `VoiceLogSignal`'s doc comment: fires the moment Siri (or the
+        // Shortcuts app) runs `StartVoiceLogIntent`, from any app state —
+        // including while this app is already active in the foreground, when
+        // a scenePhase transition alone wouldn't happen and ScascanApp's own
+        // checks would never get a reason to re-run.
         VoiceLogSignal.observe { [weak self] in
             Task { @MainActor in
                 self?.consumePendingVoiceLogRequestIfNeeded()
@@ -68,11 +68,10 @@ final class AppContainer {
         }
     }
 
-    /// Checks the flag `StartVoiceLogIntent` (the Control Center button)
-    /// leaves behind in the shared App Group store. If set, opens straight
-    /// into voice logging. Called from `ScascanApp` on launch/foreground, and
-    /// from the `VoiceLogSignal` observer above for the case where this app
-    /// was already in the foreground when the button was tapped.
+    /// Checks the flag `StartVoiceLogIntent` (Siri / Shortcuts) leaves behind.
+    /// If set, opens straight into voice logging. Called from `ScascanApp` on
+    /// launch/foreground, and from the `VoiceLogSignal` observer above for the
+    /// case where the app was already foregrounded when the intent ran.
     @discardableResult
     func consumePendingVoiceLogRequestIfNeeded() -> Bool {
         guard profileStore.pendingVoiceLogRequest else { return false }

@@ -159,12 +159,12 @@ public final class UserProfileStore: @unchecked Sendable {
         set { d.set(newValue, forKey: Keys.hydrationScheduleTimes) }
     }
 
-    /// Set by the Control Center "Log by voice" button (which runs in the
-    /// widget extension's own process and can't reach the app's live
-    /// `AppContainer` directly) — the app checks this on every foreground and,
-    /// if set, clears it and opens straight into `VoiceSearchView`, already
-    /// listening. Same shared-flag-on-foreground pattern as the hydration
-    /// schedule refresh.
+    /// Set by `StartVoiceLogIntent` (Siri / Shortcuts) to ask the app to open
+    /// straight into `VoiceSearchView`, already listening. The app clears it
+    /// as soon as it acts on it — on launch, on foreground, and immediately
+    /// on `VoiceLogSignal`. Kept in App Group storage rather than plain
+    /// in-memory state so it survives the app being cold-launched by the
+    /// intent.
     public var pendingVoiceLogRequest: Bool {
         get { d.bool(forKey: Keys.pendingVoiceLogRequest) }
         set { d.set(newValue, forKey: Keys.pendingVoiceLogRequest) }

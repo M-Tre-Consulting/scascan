@@ -2,8 +2,8 @@ import SwiftUI
 import ScaScanKit
 
 /// The voice food-logging screen — reachable from Home's "Log by voice" card,
-/// or opened straight into listening by the Control Center action (see
-/// `ScascanApp`'s pending-voice-request check on foreground). Unlike
+/// from Siri / the Shortcuts app (see `StartVoiceLogIntent`), or via the
+/// `scascan://voice` deep link. Unlike
 /// Camera/Barcode/Search, this doesn't show a confirmation sheet: the result
 /// is added to the log immediately, with a brief "Added — Undo" banner as the
 /// safety net (`AppContainer.pendingUndo`, rendered in `MainTabView`) — the

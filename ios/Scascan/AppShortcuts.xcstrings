@@ -1,0 +1,56 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Log a meal with ${applicationName}" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra un pasto con ${applicationName}"
+          }
+        }
+      }
+    },
+    "Log by voice with ${applicationName}" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra a voce con ${applicationName}"
+          }
+        }
+      }
+    },
+    "Log food with ${applicationName}" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra cibo con ${applicationName}"
+          }
+        }
+      }
+    },
+    "Track food with ${applicationName}" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traccia il cibo con ${applicationName}"
+          }
+        }
+      }
+    },
+    "Voice log with ${applicationName}" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diario vocale con ${applicationName}"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

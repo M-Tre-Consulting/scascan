@@ -1,17 +1,15 @@
 import Foundation
 
-/// A cross-process "wake up and check now" signal for the Control Center →
-/// app hand-off (`StartVoiceLogIntent` posts, `AppContainer` observes).
+/// A "check the voice-log request flag right now" signal
+/// (`StartVoiceLogIntent` posts, `AppContainer` observes).
 ///
-/// The actual request is carried by `UserProfileStore.pendingVoiceLogRequest`
-/// (an App Group UserDefaults flag) — this signal exists only because
-/// UserDefaults gives no delivery-timing guarantee, and SwiftUI's
-/// `scenePhase` doesn't necessarily change at all if the app was already
-/// active in the foreground underneath Control Center's overlay when the
-/// button was tapped (in which case nothing would ever prompt the app to
-/// re-check the flag). A Darwin notification is the one mechanism on iOS
-/// that reliably and immediately crosses processes regardless of either of
-/// those, so it's used purely as the "go look at the flag now" nudge.
+/// The request itself is carried by `UserProfileStore.pendingVoiceLogRequest`;
+/// this exists only to prompt an immediate re-read of it. Needed because
+/// SwiftUI's `scenePhase` doesn't necessarily change at all when the intent
+/// runs while the app is already active in the foreground — with nothing else
+/// to react to, the flag could sit unnoticed. A Darwin notification is
+/// delivered immediately regardless of app lifecycle state (and regardless of
+/// which process posts it), so it covers that case cleanly.
 public enum VoiceLogSignal {
     private static var name: CFString { "com.nicoloperri.Scascan.voiceLogRequested" as CFString }
 
