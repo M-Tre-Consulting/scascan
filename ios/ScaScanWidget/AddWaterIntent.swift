@@ -16,7 +16,14 @@ struct AddWaterIntent: AppIntent {
         let repository = LogRepository(modelContainer: container)
         // User-configurable (Settings ▸ Water amounts), defaults to 250ml —
         // was hardcoded before, matching Android's old fixed +250ml action.
-        try? repository.addWater(UserProfileStore.shared.widgetWaterAmountMl)
+        let amount = UserProfileStore.shared.widgetWaterAmountMl
+        try? repository.addWater(amount)
+        // App extensions share the containing app's notification
+        // authorization (no separate prompt/entry in Settings), so this
+        // works the same as logging from the Log tab — the widget is most
+        // people's main way of logging water, so this can't only apply
+        // in-app.
+        NotificationHelper.delayHydrationReminders(afterAddingMl: amount)
         return .result()
     }
 }
