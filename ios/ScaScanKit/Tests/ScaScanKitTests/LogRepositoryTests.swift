@@ -104,6 +104,32 @@ struct LogRepositoryTests {
         #expect(bleedthrough <= 500 && bleedthrough >= -500)
     }
 
+    @Test("liveTarget reconstructs the adaptive target from the shared cache when this process has no direct Health access (the widget's situation)")
+    func liveTargetUsesSharedCacheWithoutDirectHealthAccess() async throws {
+        let container = ScaScanSchema.makeContainer(inMemory: true)
+        let suiteName = "test.\(UUID().uuidString)"
+        let profileStore = UserProfileStore(defaults: UserDefaults(suiteName: suiteName)!)
+        profileStore.age = 28
+        profileStore.heightCm = 180
+        profileStore.weightKg = 85
+        profileStore.isMale = true
+        profileStore.activityIndex = 2
+        profileStore.goalIndex = 1
+
+        // Simulates the app itself having confirmed Health authorization and
+        // cached today's active-calorie reading, then a second, HealthKit-less
+        // reader (the widget) coming along afterwards.
+        profileStore.isHealthConnected = true
+        profileStore.lastActiveCalories = 300
+
+        let repo = LogRepository(modelContainer: container, profileStore: profileStore, health: NoopHealthProvider(), onDataChanged: {})
+        let target = try await repo.liveTarget()
+        let adaptiveBase = repo.baseTarget(hasHealth: true)
+        // No log entries yesterday -> bleedthrough is 0, so the only
+        // adjustment is the cached active calories being subtracted.
+        #expect(target == adaptiveBase - 300)
+    }
+
     @Test("effectiveActiveCalories substitutes the configured base when the reading looks like a missed Watch day")
     func effectiveActiveCaloriesFallsBackBelowThreshold() {
         let repo = makeRepository()

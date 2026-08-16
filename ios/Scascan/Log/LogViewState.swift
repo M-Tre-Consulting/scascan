@@ -129,6 +129,7 @@ final class LogViewState {
     func loadHealthData() async {
         guard health.isAvailable else { adaptiveState = .disconnected; workoutsToday = []; return }
         guard await health.hasPermissions() else { adaptiveState = .disconnected; workoutsToday = []; return }
+        repository.markHealthConnected()
 
         let steps = await health.readSteps(offsetDays: dateOffset)
         // Raw reading is what gets cached below (so the background-refresh

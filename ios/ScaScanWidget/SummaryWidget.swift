@@ -19,12 +19,12 @@ struct SummaryProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SummaryEntry) -> Void) {
-        Task { @MainActor in completion(Self.currentEntry()) }
+        Task { @MainActor in completion(await Self.currentEntry()) }
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<SummaryEntry>) -> Void) {
         Task { @MainActor in
-            let entry = Self.currentEntry()
+            let entry = await Self.currentEntry()
             // The numbers only meaningfully change as often as the user logs
             // something — 30 minutes keeps the widget fresh without wasting
             // refresh budget, matching Android's on-demand `triggerUpdate`
@@ -35,18 +35,21 @@ struct SummaryProvider: TimelineProvider {
     }
 
     @MainActor
-    private static func currentEntry() -> SummaryEntry {
+    private static func currentEntry() async -> SummaryEntry {
         let container = ScaScanSchema.makeContainer()
         let repository = LogRepository(modelContainer: container)
         let entries = (try? repository.entries(forDateOffset: 0)) ?? []
         let water = (try? repository.waterLogs(forDateOffset: 0)) ?? []
+        // The widget process has no HealthKit access of its own — `liveTarget()`
+        // reconstructs the same adaptive (bleedthrough + active-burn-adjusted)
+        // target the app shows using only local data and the shared cache the
+        // app leaves behind (see `UserProfileStore.isHealthConnected` /
+        // `lastActiveCalories`), instead of the plain, unadjusted base.
+        let target = (try? await repository.liveTarget()) ?? repository.dailyCalorieTarget()
         return SummaryEntry(
             date: .now,
             consumed: Int(entries.reduce(0) { $0 + $1.calories }.rounded()),
-            // Uses the profile/AI base target rather than the full adaptive
-            // (HealthKit-aware) target — matches Android's own background
-            // fallback path for when the widget can't reliably reach Health.
-            target: repository.dailyCalorieTarget(),
+            target: target,
             protein: Int(entries.reduce(0) { $0 + $1.protein }.rounded()),
             carbs: Int(entries.reduce(0) { $0 + $1.carbohydrates }.rounded()),
             fat: Int(entries.reduce(0) { $0 + $1.fat }.rounded()),

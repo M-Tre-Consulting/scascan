@@ -144,19 +144,35 @@ public final class LogRepository {
         onDataChanged()
     }
 
+    /// Called once the app confirms Health is authorized, so out-of-process
+    /// readers with no HealthKit access of their own (the widget extension)
+    /// can still reconstruct an adaptive target instead of the plain base —
+    /// see `UserProfileStore.isHealthConnected`.
+    public func markHealthConnected() {
+        profileStore.isHealthConnected = true
+    }
+
     // MARK: - Adaptive daily target
 
     public func liveTarget() async throws -> Int {
-        let hasHealth = await health.hasPermissions()
+        let liveHealth = await health.hasPermissions()
+        // The widget extension has no HealthKit access of its own (it runs on
+        // `NoopHealthProvider`, so `liveHealth` is always false there) — fall
+        // back to the shared flag the app itself set once it confirmed
+        // authorization, so the widget still computes the adaptive target
+        // instead of the plain, unadjusted base.
+        let hasHealth = liveHealth || profileStore.isHealthConnected
         let bleedthrough = try await yesterdayBleedthrough()
         let base = baseTarget(hasHealth: hasHealth)
 
-        var activeKcal = hasHealth ? await health.readActiveCalories(offsetDays: 0) : 0
-        // Background restriction fallback: if the live read comes back empty but we
-        // have a cached value (e.g. from the widget's last successful refresh), use it.
+        var activeKcal = liveHealth ? await health.readActiveCalories(offsetDays: 0) : 0
+        // Background restriction fallback: if the live read comes back empty
+        // (or this process can't read Health at all, e.g. the widget) but we
+        // have a cached value (e.g. from the widget's last successful
+        // refresh), use it.
         if hasHealth, activeKcal <= 0.1, profileStore.lastActiveCalories > 0 {
             activeKcal = profileStore.lastActiveCalories
-        } else if hasHealth, activeKcal > 0.1 {
+        } else if liveHealth, activeKcal > 0.1 {
             profileStore.lastActiveCalories = activeKcal
         }
         if hasHealth { activeKcal = effectiveActiveCalories(activeKcal) }
@@ -237,9 +253,13 @@ public final class LogRepository {
         let yesterdayEntries = try entries(from: start, to: end)
         let consumed = yesterdayEntries.reduce(0.0) { $0 + $1.calories }
 
-        let hasHealth = await health.hasPermissions()
+        let liveHealth = await health.hasPermissions()
+        let hasHealth = liveHealth || profileStore.isHealthConnected
         let base = baseTarget(hasHealth: hasHealth)
-        let activeYesterday = hasHealth
+        // Yesterday's specific active-burn figure has no cached fallback (only
+        // "today so far" is cached) — an out-of-process reader without live
+        // Health access just omits this term rather than approximating it.
+        let activeYesterday = liveHealth
             ? effectiveActiveCalories(await health.readActiveCaloriesRange(start: start, end: end))
             : 0
 

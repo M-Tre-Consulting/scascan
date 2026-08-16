@@ -29,6 +29,7 @@ public final class UserProfileStore: @unchecked Sendable {
         static let syncEmail = "sync_email"
         static let waterReminders = "water_reminders"
         static let lastActiveCalories = "last_active_kcal"
+        static let healthConnected = "health_connected"
         static let waterButton1 = "water_quick_add_1_ml"
         static let waterButton2 = "water_quick_add_2_ml"
         static let waterButton3 = "water_quick_add_3_ml"
@@ -109,6 +110,16 @@ public final class UserProfileStore: @unchecked Sendable {
     public var lastActiveCalories: Double {
         get { d.double(forKey: Keys.lastActiveCalories) }
         set { d.set(newValue, forKey: Keys.lastActiveCalories) }
+    }
+
+    /// Set once the app itself confirms Health is authorized. The widget
+    /// extension runs its own process with no HealthKit access of its own
+    /// (`NoopHealthProvider`), so it reads this shared flag — plus
+    /// `lastActiveCalories` above — to reconstruct the same adaptive target
+    /// the app shows, instead of falling back to the plain, unadjusted base.
+    public var isHealthConnected: Bool {
+        get { d.bool(forKey: Keys.healthConnected) }
+        set { d.set(newValue, forKey: Keys.healthConnected) }
     }
 
     /// The three quick-add amounts shown as buttons under "Water today" in
