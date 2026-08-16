@@ -1,2363 +1,2369 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "%@%lld kcal from yesterday": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@%2$lld kcal from yesterday"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "/ %lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/ %lld kcal"
+          }
+        }
+      }
+    },
+    "%@%lld kcal from yesterday" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$lld kcal from yesterday"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@%2$lld kcal da ieri"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@%2$lld kcal da ieri"
           }
         }
       }
     },
-    "%lld": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
+    "%lld" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
           }
         }
       }
     },
-    "%lld kcal": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld kcal"
+    "%lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal"
           }
         }
       }
     },
-    "%lld kcal over goal": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld kcal oltre l'obiettivo"
-          }
-        }
-      }
-    },
-    "%lld kcal remaining": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld kcal rimanenti"
-          }
-        }
-      }
-    },
-    "%lld kcal · %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld kcal · %2$@"
+    "%lld kcal · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld kcal · %2$@"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld kcal · %2$@"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld kcal · %2$@"
           }
         }
       }
     },
-    "%lld kcal • %lldg P • %lldg C • %lldg F": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld kcal • %2$lldg P • %3$lldg C • %4$lldg F"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld kcal • %2$lldg P • %3$lldg C • %4$lldg G"
-          }
-        }
-      }
-    },
-    "%lld ml": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld ml"
-          }
-        }
-      }
-    },
-    "%lld steps": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld passi"
-          }
-        }
-      }
-    },
-    "%lldg protein · %lldg carbs · %lldg fat": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lldg protein · %2$lldg carbs · %3$lldg fat"
+    "%lld kcal • %lldg P • %lldg C • %lldg F" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld kcal • %2$lldg P • %3$lldg C • %4$lldg F"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lldg proteine · %2$lldg carboidrati · %3$lldg grassi"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld kcal • %2$lldg P • %3$lldg C • %4$lldg G"
           }
         }
       }
     },
-    "+%lldml": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+%lldml"
+    "%lld kcal over goal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal oltre l'obiettivo"
           }
         }
       }
     },
-    "/ %lld kcal": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "/ %lld kcal"
+    "%lld kcal remaining" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal rimanenti"
           }
         }
       }
     },
-    "100/250/500ml won't fit everyone's glass or bottle — set your own quick-add amounts here, for both the Log tab and the home screen widget.": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "100/250/500ml non vanno bene per il bicchiere o la bottiglia di tutti: imposta qui le tue quantità rapide, sia per la scheda Diario che per il widget nella schermata Home."
+    "%lld ml" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ml"
           }
         }
       }
     },
-    "AI Model": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Modello IA"
+    "%lld steps" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld passi"
           }
         }
       }
     },
-    "AI-computed target": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obiettivo calcolato dall'IA"
+    "%lldg protein · %lldg carbs · %lldg fat" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lldg protein · %2$lldg carbs · %3$lldg fat"
           }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lldg proteine · %2$lldg carboidrati · %3$lldg grassi"
+          }
+        }
+      }
+    },
+    "+%lldml" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%lldml"
+          }
+        }
+      }
+    },
+    "3 reminders spread evenly across 10:00–20:00. Logging water pushes the next one back — the more you drink, the longer the pause." : {
+
+    },
+    "100/250/500ml won't fit everyone's glass or bottle — set your own quick-add amounts here, for both the Log tab and the home screen widget." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100/250/500ml non vanno bene per il bicchiere o la bottiglia di tutti: imposta qui le tue quantità rapide, sia per la scheda Diario che per il widget nella schermata Home."
+          }
+        }
+      }
+    },
+    "Active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attivo"
+          }
+        }
+      }
+    },
+    "Activity level" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Livello di attività"
+          }
         }
       }
     },
-    "AI-powered nutritional analysis": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analisi nutrizionale con intelligenza artificiale"
+    "Adaptive targets" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivi adattativi"
           }
         }
       }
     },
-    "API key saved": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chiave API salvata"
+    "Add to log" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi al diario"
           }
         }
       }
     },
-    "Active": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Attivo"
+    "Add weight readings in Health to enable trend-based fine-tuning." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi misurazioni del peso in Salute per abilitare la correzione basata sul trend."
           }
         }
       }
     },
-    "Activity level": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Livello di attività"
+    "Added %@ · %lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunto %1$@ · %2$lld kcal"
           }
         }
       }
     },
-    "Adaptive targets": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obiettivi adattativi"
+    "Added to today's log" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunto al diario di oggi"
           }
         }
       }
     },
-    "Add to log": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aggiungi al diario"
+    "Adding to your log…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunta al diario…"
           }
         }
       }
     },
-    "Add weight readings in Health to enable trend-based fine-tuning.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aggiungi misurazioni del peso in Salute per abilitare la correzione basata sul trend."
+    "Adjusting" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adattamento"
           }
         }
       }
     },
-    "Added %@ · %lld kcal": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aggiunto %1$@ · %2$lld kcal"
+    "Age" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Età"
           }
         }
       }
     },
-    "Added to today's log": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aggiunto al diario di oggi"
+    "Age is required" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'età è obbligatoria"
           }
         }
       }
     },
-    "Adding to your log…": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aggiunta al diario…"
+    "AI Model" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modello IA"
           }
         }
       }
     },
-    "Adjusting": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adattamento"
+    "AI-computed target" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo calcolato dall'IA"
           }
         }
       }
     },
-    "Age": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Età"
+    "AI-powered nutritional analysis" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analisi nutrizionale con intelligenza artificiale"
           }
         }
       }
     },
-    "Age is required": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L'età è obbligatoria"
+    "American Football" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Football americano"
           }
         }
       }
     },
-    "American Football": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Football americano"
+    "Amount" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quantità"
           }
         }
       }
     },
-    "Amount": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quantità"
+    "Analyze" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analizza"
           }
         }
       }
     },
-    "Analyze": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analizza"
+    "Analyzing…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analisi in corso…"
           }
         }
       }
     },
-    "Analyzing…": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analisi in corso…"
+    "API key saved" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiave API salvata"
           }
         }
       }
     },
-    "Apple Health": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apple Salute"
+    "Apple Health" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Salute"
           }
         }
       }
     },
-    "Apply fix": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Applica correzione"
+    "Apply fix" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Applica correzione"
           }
         }
       }
     },
-    "Archery": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tiro con l'arco"
+    "Archery" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiro con l'arco"
           }
         }
       }
     },
-    "Badminton": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Badminton"
+    "Badminton" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Badminton"
           }
         }
       }
     },
-    "Barcode scanning unavailable": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scansione codice a barre non disponibile"
+    "Barcode scanning unavailable" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scansione codice a barre non disponibile"
           }
         }
       }
     },
-    "Base target": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obiettivo base"
+    "Base target" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo base"
           }
         }
       }
     },
-    "Baseball": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Baseball"
+    "Baseball" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baseball"
           }
         }
       }
     },
-    "Basketball": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Basket"
+    "Basketball" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basket"
           }
         }
       }
     },
-    "Boxing": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Boxe"
+    "Boxing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boxe"
           }
         }
       }
     },
-    "Build muscle": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Costruire muscolo"
+    "Build muscle" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Costruire muscolo"
           }
         }
       }
     },
-    "Calories": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calorie"
+    "Calories" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calorie"
           }
         }
       }
     },
-    "Camera access needed": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accesso alla fotocamera necessario"
+    "Camera access needed" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accesso alla fotocamera necessario"
           }
         }
       }
     },
-    "Camera permission is required to scan barcodes.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il permesso alla fotocamera è necessario per scansionare i codici a barre."
+    "Camera permission is required to scan barcodes." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il permesso alla fotocamera è necessario per scansionare i codici a barre."
           }
         }
       }
     },
-    "Camera permission is required to use this feature.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il permesso alla fotocamera è necessario per usare questa funzione."
+    "Camera permission is required to use this feature." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il permesso alla fotocamera è necessario per usare questa funzione."
           }
         }
       }
     },
-    "Cancel": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annulla"
+    "Cancel" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulla"
           }
         }
       }
     },
-    "Capture failed": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cattura non riuscita"
+    "Capture failed" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cattura non riuscita"
           }
         }
       }
     },
-    "Carbohydrates": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Carboidrati"
+    "Carbohydrates" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carboidrati"
           }
         }
       }
     },
-    "Carbs": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Carboidrati"
+    "Carbs" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carboidrati"
           }
         }
       }
     },
-    "Carbs %@": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Carboidrati %@"
+    "Carbs %@" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carboidrati %@"
           }
         }
       }
     },
-    "Choose a model": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scegli un modello"
+    "Choose a model" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli un modello"
           }
         }
       }
     },
-    "Climbing": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Arrampicata"
+    "Climbing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrampicata"
           }
         }
       }
     },
-    "Close": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chiudi"
+    "Close" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiudi"
           }
         }
       }
     },
-    "Collecting data…": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Raccolta dati…"
+    "Collecting data…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raccolta dati…"
           }
         }
       }
     },
-    "Computing your personalized targets…": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calcolo obiettivi personalizzati…"
+    "Computing your personalized targets…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calcolo obiettivi personalizzati…"
           }
         }
       }
     },
-    "Connect Apple Health": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Collega Apple Salute"
+    "Connect Apple Health" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collega Apple Salute"
           }
         }
       }
     },
-    "Connect Apple Health to enable adaptive targets.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Collega Apple Salute per abilitare gli obiettivi adattativi."
+    "Connect Apple Health to enable adaptive targets." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collega Apple Salute per abilitare gli obiettivi adattativi."
           }
         }
       }
     },
-    "Connected": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connesso"
+    "Connected" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connesso"
           }
         }
       }
     },
-    "Cooldown": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Defaticamento"
+    "Cooldown" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Defaticamento"
           }
         }
       }
     },
-    "Core Training": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Allenamento core"
+    "Core Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allenamento core"
           }
         }
       }
     },
-    "Correct food (e.g. Turkey breast, 150g)": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alimento corretto (es. Petto di tacchino, 150g)"
+    "Correct food (e.g. Turkey breast, 150g)" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alimento corretto (es. Petto di tacchino, 150g)"
           }
         }
       }
     },
-    "Cricket": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cricket"
+    "Cricket" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cricket"
           }
         }
       }
     },
-    "Cross Training": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cross training"
+    "Cross Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cross training"
           }
         }
       }
     },
-    "Currently identified as:": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Attualmente identificato come:"
+    "Currently identified as:" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attualmente identificato come:"
           }
         }
       }
     },
-    "Cycling": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ciclismo"
+    "Cycling" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ciclismo"
           }
         }
       }
     },
-    "Daily target: %lld kcal (AI-computed)": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obiettivo giornaliero: %lld kcal (calcolato dall'IA)"
+    "Daily target: %lld kcal (AI-computed)" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo giornaliero: %lld kcal (calcolato dall'IA)"
           }
         }
       }
     },
-    "Dance": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Danza"
+    "Dance" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Danza"
           }
         }
       }
     },
-    "Describe a food or meal to get its nutritional facts.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Descrivi un alimento o un pasto per ottenere i valori nutrizionali."
+    "Describe a food or meal to get its nutritional facts." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descrivi un alimento o un pasto per ottenere i valori nutrizionali."
           }
         }
       }
     },
-    "Describe the correct food and ScaScan will recalculate the nutritional values.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Descrivi l'alimento corretto e ScaScan ricalcolerà i valori nutrizionali."
+    "Describe the correct food and ScaScan will recalculate the nutritional values." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descrivi l'alimento corretto e ScaScan ricalcolerà i valori nutrizionali."
           }
         }
       }
     },
-    "Disconnect": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Disconnetti"
+    "Disconnect" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnetti"
           }
         }
       }
     },
-    "Disconnected": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Disconnesso"
+    "Disconnected" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnesso"
           }
         }
       }
     },
-    "Disconnected locally — to fully revoke access, open Health ▸ Data Access & Devices.": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Disconnesso localmente — per revocare completamente l'accesso, apri Salute ▸ Accesso ai dati e dispositivi."
+    "Disconnected locally — to fully revoke access, open Health ▸ Data Access & Devices." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnesso localmente — per revocare completamente l'accesso, apri Salute ▸ Accesso ai dati e dispositivi."
           }
         }
       }
     },
-    "Dismiss": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ignora"
+    "Dismiss" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignora"
           }
         }
       }
     },
-    "Done": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fatto"
+    "Done" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fatto"
           }
         }
       }
     },
-    "Elliptical": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ellittica"
+    "e.g. Chicken breast, 100g" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "es. Petto di pollo, 100g"
           }
         }
       }
     },
-    "Extra active": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estremamente attivo"
+    "Elliptical" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ellittica"
           }
         }
       }
     },
-    "Fat": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Grassi"
+    "Extra active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estremamente attivo"
           }
         }
       }
     },
-    "Fat %@": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Grassi %@"
+    "Fat" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grassi"
           }
         }
       }
     },
-    "Female": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Femmina"
+    "Fat %@" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grassi %@"
           }
         }
       }
     },
-    "Fencing": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scherma"
+    "Female" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Femmina"
           }
         }
       }
     },
-    "Fiber": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fibre"
+    "Fencing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scherma"
           }
         }
       }
     },
-    "Fitness base fallback": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aggiunta base da Fitness"
+    "Fiber" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fibre"
           }
         }
       }
     },
-    "Fitness goal": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obiettivo fitness"
+    "Fitness base fallback" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunta base da Fitness"
           }
         }
       }
     },
-    "Fix": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Correggi"
+    "Fitness goal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo fitness"
           }
         }
       }
     },
-    "Fix this entry": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Correggi questa voce"
+    "Fix" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correggi"
           }
         }
       }
     },
-    "Flexibility": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Flessibilità"
+    "Fix this entry" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correggi questa voce"
           }
         }
       }
     },
-    "From Apple Watch / Fitness — already counted in \"Activity today\" above.": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Da Apple Watch / Fitness — già conteggiati in \"Attività di oggi\" qui sopra."
+    "Flexibility" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flessibilità"
           }
         }
       }
     },
-    "Functional Strength Training": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Allenamento funzionale"
+    "From Apple Watch / Fitness — already counted in \"Activity today\" above." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Da Apple Watch / Fitness — già conteggiati in \"Attività di oggi\" qui sopra."
           }
         }
       }
     },
-    "Gemini API key": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chiave API Gemini"
+    "Functional Strength Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allenamento funzionale"
           }
         }
       }
     },
-    "Gemini model": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Modello Gemini"
+    "Gemini API key" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiave API Gemini"
           }
         }
       }
     },
-    "Get my free key": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ottieni chiave gratuita"
+    "Gemini model" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modello Gemini"
           }
         }
       }
     },
-    "Get started": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inizia"
+    "Get my free key" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ottieni chiave gratuita"
           }
         }
       }
     },
-    "Goal": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obiettivo"
+    "Get started" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inizia"
           }
         }
       }
     },
-    "Golf": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Golf"
+    "Goal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo"
           }
         }
       }
     },
-    "Gymnastics": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ginnastica"
+    "Golf" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Golf"
           }
         }
       }
     },
-    "HIIT": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "HIIT"
+    "Gymnastics" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ginnastica"
           }
         }
       }
     },
-    "Health data isn't available on this device.": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "I dati di Salute non sono disponibili su questo dispositivo."
+    "Health data isn't available on this device." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I dati di Salute non sono disponibili su questo dispositivo."
           }
         }
       }
     },
-    "Height (cm)": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Altezza (cm)"
+    "Height (cm)" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altezza (cm)"
           }
         }
       }
     },
-    "Height is required": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L'altezza è obbligatoria"
+    "Height is required" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'altezza è obbligatoria"
           }
         }
       }
     },
-    "Hiking": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Escursionismo"
+    "HIIT" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HIIT"
           }
         }
       }
     },
-    "Hockey": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hockey"
+    "Hiking" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escursionismo"
           }
         }
       }
     },
-    "Hydration reminder": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Promemoria idratazione"
+    "Hockey" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hockey"
           }
         }
       }
     },
-    "Identify food from any image": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Identifica il cibo da qualsiasi immagine"
+    "Hydration reminder" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Promemoria idratazione"
           }
         }
       }
     },
-    "If Health reports under 100 kcal burned for a day, ScaScan assumes the Apple Watch wasn't worn and adds this flat amount to the target instead — otherwise it uses whatever Fitness/Watch actually reports.": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Se Salute registra meno di 100 kcal bruciate in un giorno, ScaScan presume che l'Apple Watch non sia stato indossato e aggiunge questa quantità fissa all'obiettivo — altrimenti usa quanto riportato realmente da Fitness/Watch."
+    "Identify food from any image" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Identifica il cibo da qualsiasi immagine"
           }
         }
       }
     },
-    "Lightly active": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leggermente attivo"
+    "If Health reports under 100 kcal burned for a day, ScaScan assumes the Apple Watch wasn't worn and adds this flat amount to the target instead — otherwise it uses whatever Fitness/Watch actually reports." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se Salute registra meno di 100 kcal bruciate in un giorno, ScaScan presume che l'Apple Watch non sia stato indossato e aggiunge questa quantità fissa all'obiettivo — altrimenti usa quanto riportato realmente da Fitness/Watch."
           }
         }
       }
     },
-    "Loading available models…": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Caricamento modelli disponibili…"
+    "kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kcal"
           }
         }
       }
     },
-    "Log": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diario"
+    "Lightly active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leggermente attivo"
           }
         }
       }
     },
-    "Log by Voice": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registra a voce"
+    "Loading available models…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caricamento modelli disponibili…"
           }
         }
       }
     },
-    "Look up any product by barcode": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cerca un prodotto tramite codice a barre"
+    "Log" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diario"
           }
         }
       }
     },
-    "Lose weight": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Perdere peso"
+    "Log by Voice" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra a voce"
           }
         }
       }
     },
-    "Macros": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Macronutrienti"
+    "Look up any product by barcode" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca un prodotto tramite codice a barre"
           }
         }
       }
     },
-    "Maintain weight": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mantenere il peso"
+    "Lose weight" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perdere peso"
           }
         }
       }
     },
-    "Male": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maschio"
+    "Macros" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Macronutrienti"
           }
         }
       }
     },
-    "Martial Arts": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Arti marziali"
+    "Maintain weight" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenere il peso"
           }
         }
       }
     },
-    "Microphone and Speech Recognition access are needed for voice logging — enable them in Settings ▸ ScaScan.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Servono i permessi per Microfono e Riconoscimento vocale per la registrazione a voce — attivali in Impostazioni ▸ ScaScan."
+    "Male" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maschio"
           }
         }
       }
     },
-    "Mixed Cardio": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cardio misto"
+    "Martial Arts" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arti marziali"
           }
         }
       }
     },
-    "Moderately active": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Moderatamente attivo"
+    "Microphone and Speech Recognition access are needed for voice logging — enable them in Settings ▸ ScaScan." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Servono i permessi per Microfono e Riconoscimento vocale per la registrazione a voce — attivali in Impostazioni ▸ ScaScan."
           }
         }
       }
     },
-    "Name": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nome"
+    "Mixed Cardio" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cardio misto"
           }
         }
       }
     },
-    "Name is required": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il nome è obbligatorio"
+    "Moderately active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moderatamente attivo"
           }
         }
       }
     },
-    "No camera available": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nessuna fotocamera disponibile"
+    "Name" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nome"
           }
         }
       }
     },
-    "No entries yet — scan or search a food to get started.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nessuna voce ancora — scansiona o cerca un alimento per iniziare."
+    "Name is required" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il nome è obbligatorio"
           }
         }
       }
     },
-    "No models found for this API key": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nessun modello trovato per questa chiave API"
+    "No camera available" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna fotocamera disponibile"
           }
         }
       }
     },
-    "No weight data found in Health": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nessun dato di peso trovato in Salute"
+    "No entries yet — scan or search a food to get started." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna voce ancora — scansiona o cerca un alimento per iniziare."
           }
         }
       }
     },
-    "Notifications": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notifiche"
+    "No models found for this API key" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun modello trovato per questa chiave API"
           }
         }
       }
     },
-    "Nutritional Facts": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Valori nutrizionali"
+    "No weight data found in Health" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun dato di peso trovato in Salute"
           }
         }
       }
     },
-    "OK": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+    "Notifications" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifiche"
           }
         }
       }
     },
-    "On track": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In target"
+    "Nutritional Facts" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valori nutrizionali"
           }
         }
       }
     },
-    "Other nutrients": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Altri nutrienti"
+    "OK" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         }
       }
     },
-    "Paddle Sports": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sport con la pagaia"
+    "On track" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In target"
           }
         }
       }
     },
-    "Per serving": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Per porzione"
+    "Other nutrients" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altri nutrienti"
           }
         }
       }
     },
-    "Personal Details": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dati personali"
+    "Paddle Sports" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sport con la pagaia"
           }
         }
       }
     },
-    "Personalized targets not set": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obiettivi personalizzati non impostati"
+    "Per serving" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per porzione"
           }
         }
       }
     },
-    "Pilates": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pilates"
+    "Personal Details" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dati personali"
           }
         }
       }
     },
-    "Please describe the correct food": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Descrivi l'alimento corretto"
+    "Personalized targets not set" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivi personalizzati non impostati"
           }
         }
       }
     },
-    "Please enter a valid API key": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inserisci una chiave API valida"
+    "Pilates" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pilates"
           }
         }
       }
     },
-    "Point camera at a barcode": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inquadra il codice a barre"
+    "Please describe the correct food" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descrivi l'alimento corretto"
           }
         }
       }
     },
-    "Previous day balance": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bilancio giorno precedente"
+    "Please enter a valid API key" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inserisci una chiave API valida"
           }
         }
       }
     },
-    "Profile": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profilo"
+    "Point camera at a barcode" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inquadra il codice a barre"
           }
         }
       }
     },
-    "Protein": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Proteine"
+    "Previous day balance" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilancio giorno precedente"
           }
         }
       }
     },
-    "Protein %@": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Proteine %@"
+    "Profile" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profilo"
           }
         }
       }
     },
-    "Quick-add button 1": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pulsante rapido 1"
+    "Protein" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proteine"
           }
         }
       }
     },
-    "Quick-add button 2": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pulsante rapido 2"
+    "Protein %@" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proteine %@"
           }
         }
       }
     },
-    "Quick-add button 3": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pulsante rapido 3"
+    "Quick-add button 1" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulsante rapido 1"
           }
         }
       }
     },
-    "Reads steps, active calories, weight, height, and Apple Watch/Fitness workouts to power adaptive daily goals. Writes every meal and glass of water you log here back to Health, so your intake shows up in Health's Nutrition tab too and workout calories count toward today's target automatically.": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Legge passi, calorie attive, peso, altezza e gli allenamenti di Apple Watch/Fitness per calcolare gli obiettivi giornalieri adattivi. Scrive ogni pasto e bicchiere d'acqua registrato qui su Salute, così i tuoi consumi compaiono anche nella scheda Nutrizione di Salute e le calorie bruciate negli allenamenti si sommano automaticamente all'obiettivo di oggi."
+    "Quick-add button 2" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulsante rapido 2"
           }
         }
       }
     },
-    "Receive periodic notifications to remind you to drink water during the day.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ricevi notifiche periodiche per ricordarti di bere acqua durante il giorno."
+    "Quick-add button 3" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulsante rapido 3"
           }
         }
       }
     },
-    "Recompute": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ricalcola"
+    "Reads steps, active calories, weight, height, and Apple Watch/Fitness workouts to power adaptive daily goals. Writes every meal and glass of water you log here back to Health, so your intake shows up in Health's Nutrition tab too and workout calories count toward today's target automatically." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legge passi, calorie attive, peso, altezza e gli allenamenti di Apple Watch/Fitness per calcolare gli obiettivi giornalieri adattivi. Scrive ogni pasto e bicchiere d'acqua registrato qui su Salute, così i tuoi consumi compaiono anche nella scheda Nutrizione di Salute e le calorie bruciate negli allenamenti si sommano automaticamente all'obiettivo di oggi."
           }
         }
       }
     },
-    "Rowing": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Canottaggio"
+    "Receive periodic notifications to remind you to drink water during the day." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ricevi notifiche periodiche per ricordarti di bere acqua durante il giorno."
           }
         }
       }
     },
-    "Rugby": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rugby"
+    "Recompute" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ricalcola"
           }
         }
       }
     },
-    "Running": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Corsa"
+    "Rowing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canottaggio"
           }
         }
       }
     },
-    "Sailing": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vela"
+    "Rugby" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rugby"
           }
         }
       }
     },
-    "Save and continue": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Salva e continua"
+    "Running" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corsa"
           }
         }
       }
     },
-    "Save key": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Salva chiave"
+    "Sailing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vela"
           }
         }
       }
     },
-    "Save profile": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Salva profilo"
+    "Save and continue" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva e continua"
           }
         }
       }
     },
-    "Save your API key first to load available models": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Salva prima la chiave API per caricare i modelli disponibili"
+    "Save key" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva chiave"
           }
         }
       }
     },
-    "Say what you're eating — added automatically": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Di' cosa stai mangiando — aggiunto automaticamente"
+    "Save profile" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva profilo"
           }
         }
       }
     },
-    "Say what you're eating…": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Di' cosa stai mangiando…"
+    "Save your API key first to load available models" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva prima la chiave API per caricare i modelli disponibili"
           }
         }
       }
     },
-    "ScaScan": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ScaScan"
+    "Say what you're eating — added automatically" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di' cosa stai mangiando — aggiunto automaticamente"
           }
         }
       }
     },
-    "ScaScan uses Google Gemini to analyse food. Get your key at aistudio.google.com.": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ScaScan usa Google Gemini per analizzare il cibo. Ottieni la tua chiave su aistudio.google.com."
+    "Say what you're eating…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di' cosa stai mangiando…"
           }
         }
       }
     },
-    "ScaScan uses Google Gemini to analyze food. Paste your Gemini API key below to get started.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ScaScan usa Google Gemini per analizzare il cibo. Incolla la tua chiave API Gemini qui sotto per iniziare."
+    "Scan" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scansiona"
           }
         }
       }
     },
-    "Scan": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scansiona"
+    "Scan Barcode" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scansiona codice a barre"
           }
         }
       }
     },
-    "Scan Barcode": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scansiona codice a barre"
+    "ScaScan" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ScaScan"
           }
         }
       }
     },
-    "Search Food": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cerca alimento"
+    "ScaScan uses Google Gemini to analyse food. Get your key at aistudio.google.com." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ScaScan usa Google Gemini per analizzare il cibo. Ottieni la tua chiave su aistudio.google.com."
           }
         }
       }
     },
-    "Sedentary": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sedentario"
+    "ScaScan uses Google Gemini to analyze food. Paste your Gemini API key below to get started." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ScaScan usa Google Gemini per analizzare il cibo. Incolla la tua chiave API Gemini qui sotto per iniziare."
           }
         }
       }
     },
-    "Select model": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Seleziona modello"
+    "Search Food" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca alimento"
           }
         }
       }
     },
-    "Select the Gemini model that will analyse your food.": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Seleziona il modello Gemini che analizzerà il tuo cibo."
+    "Sedentary" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sedentario"
           }
         }
       }
     },
-    "Select the Gemini model used for food analysis. Models are fetched live from your API key.": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Seleziona il modello Gemini usato per l'analisi degli alimenti. I modelli vengono caricati in tempo reale dalla tua chiave API."
+    "Select model" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleziona modello"
           }
         }
       }
     },
-    "Set up your API key": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Configura la tua chiave API"
+    "Select the Gemini model that will analyse your food." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleziona il modello Gemini che analizzerà il tuo cibo."
           }
         }
       }
     },
-    "Settings": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impostazioni"
+    "Select the Gemini model used for food analysis. Models are fetched live from your API key." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleziona il modello Gemini usato per l'analisi degli alimenti. I modelli vengono caricati in tempo reale dalla tua chiave API."
           }
         }
       }
     },
-    "Sex": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sesso"
+    "Set up your API key" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configura la tua chiave API"
           }
         }
       }
     },
-    "Skating": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pattinaggio"
+    "Settings" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impostazioni"
           }
         }
       }
     },
-    "Snow Sports": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sport sulla neve"
+    "Sex" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesso"
           }
         }
       }
     },
-    "Soccer": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calcio"
+    "Skating" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pattinaggio"
           }
         }
       }
     },
-    "Sodium": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sodio"
+    "Snow Sports" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sport sulla neve"
           }
         }
       }
     },
-    "Softball": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Softball"
+    "Soccer" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calcio"
           }
         }
       }
     },
-    "Something went wrong": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Qualcosa è andato storto"
+    "Sodium" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sodio"
           }
         }
       }
     },
-    "Squash": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Squash"
+    "Softball" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Softball"
           }
         }
       }
     },
-    "Stair Climbing": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Salita scale"
+    "Something went wrong" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qualcosa è andato storto"
           }
         }
       }
     },
-    "Strength Training": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Allenamento di forza"
+    "Squash" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Squash"
           }
         }
       }
     },
-    "Sugar": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zuccheri"
+    "Stair Climbing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salita scale"
           }
         }
       }
     },
-    "Surfing": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Surf"
+    "Strength Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allenamento di forza"
           }
         }
       }
     },
-    "Swimming": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nuoto"
+    "Sugar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zuccheri"
           }
         }
       }
     },
-    "Sync weight & height": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sincronizza peso e altezza"
+    "Surfing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surf"
           }
         }
       }
     },
-    "Syncing…": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sincronizzazione…"
+    "Swimming" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuoto"
           }
         }
       }
     },
-    "Table Tennis": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ping pong"
+    "Sync weight & height" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizza peso e altezza"
           }
         }
       }
     },
-    "Take a Photo": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scatta una foto"
+    "Syncing…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizzazione…"
           }
         }
       }
     },
-    "Targets based on profile estimate": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obiettivi stimati dal profilo"
+    "Table Tennis" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ping pong"
           }
         }
       }
     },
-    "Targets computed by AI": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obiettivi calcolati dall'IA"
+    "Take a Photo" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scatta una foto"
           }
         }
       }
     },
-    "Tennis": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tennis"
+    "Targets based on profile estimate" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivi stimati dal profilo"
           }
         }
       }
     },
-    "This device (or the Simulator) doesn't expose a camera.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Questo dispositivo (o il Simulatore) non espone una fotocamera."
+    "Targets computed by AI" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivi calcolati dall'IA"
           }
         }
       }
     },
-    "This device (or the Simulator) doesn't support live barcode scanning.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Questo dispositivo (o il Simulatore) non supporta la scansione dal vivo dei codici a barre."
+    "Tennis" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tennis"
           }
         }
       }
     },
-    "Today's intake": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Assunzione di oggi"
+    "This device (or the Simulator) doesn't expose a camera." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo dispositivo (o il Simulatore) non espone una fotocamera."
           }
         }
       }
     },
-    "Today's meals": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pasti di oggi"
+    "This device (or the Simulator) doesn't support live barcode scanning." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo dispositivo (o il Simulatore) non supporta la scansione dal vivo dei codici a barre."
           }
         }
       }
     },
-    "Today's target": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obiettivo di oggi"
+    "Today's intake" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assunzione di oggi"
           }
         }
       }
     },
-    "Today's workouts": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Allenamenti di oggi"
+    "Today's meals" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasti di oggi"
           }
         }
       }
     },
-    "Track & Field": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Atletica leggera"
+    "Today's target" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo di oggi"
           }
         }
       }
     },
-    "Type any food or meal description": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Digita un alimento o una descrizione del pasto"
+    "Today's workouts" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allenamenti di oggi"
           }
         }
       }
     },
-    "Undo": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annulla"
+    "Track & Field" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atletica leggera"
           }
         }
       }
     },
-    "Undo last entry": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annulla ultima voce"
+    "Type any food or meal description" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digita un alimento o una descrizione del pasto"
           }
         }
       }
     },
-    "Used to calculate your daily calorie goal.": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Usati per calcolare il tuo obiettivo calorico giornaliero."
+    "Undo" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulla"
           }
         }
       }
     },
-    "Values are AI-estimated and may vary. Always verify with official food labels.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "I valori sono stimati dall'IA e possono variare. Verifica sempre con le etichette ufficiali."
+    "Undo last entry" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulla ultima voce"
           }
         }
       }
     },
-    "Very active": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Molto attivo"
+    "Used to calculate your daily calorie goal." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usati per calcolare il tuo obiettivo calorico giornaliero."
           }
         }
       }
     },
-    "View details": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dettagli"
+    "Values are AI-estimated and may vary. Always verify with official food labels." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I valori sono stimati dall'IA e possono variare. Verifica sempre con le etichette ufficiali."
           }
         }
       }
     },
-    "Voice recognition isn't available right now on this device.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il riconoscimento vocale non è disponibile al momento su questo dispositivo."
+    "Very active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Molto attivo"
           }
         }
       }
     },
-    "Volleyball": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pallavolo"
+    "View details" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dettagli"
           }
         }
       }
     },
-    "Walking": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Camminata"
+    "Voice recognition isn't available right now on this device." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il riconoscimento vocale non è disponibile al momento su questo dispositivo."
           }
         }
       }
     },
-    "Water": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Acqua"
+    "Volleyball" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pallavolo"
           }
         }
       }
     },
-    "Water Fitness": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fitness in acqua"
+    "Walking" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Camminata"
           }
         }
       }
     },
-    "Water amounts": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quantità d'acqua"
+    "Water" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acqua"
           }
         }
       }
     },
-    "Water today": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Idratazione oggi"
+    "Water amounts" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quantità d'acqua"
           }
         }
       }
     },
-    "Weight & height synced": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Peso e altezza sincronizzati"
+    "Water Fitness" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fitness in acqua"
           }
         }
       }
     },
-    "Weight (kg)": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Peso (kg)"
+    "Water today" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idratazione oggi"
           }
         }
       }
     },
-    "Weight is required": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il peso è obbligatorio"
+    "Weight (kg)" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso (kg)"
           }
         }
       }
     },
-    "Weight trend": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trend del peso"
+    "Weight & height synced" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso e altezza sincronizzati"
           }
         }
       }
     },
-    "Where do I find my key? Go to aistudio.google.com → Get API key. The key is stored locally on this device only and never sent anywhere except to the Gemini API.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dove trovo la mia chiave? Vai su aistudio.google.com → Ottieni chiave API. La chiave è memorizzata solo su questo dispositivo e non viene inviata altrove se non all'API Gemini."
+    "Weight is required" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il peso è obbligatorio"
           }
         }
       }
     },
-    "Widget quick-add": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aggiunta rapida widget"
+    "Weight trend" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trend del peso"
           }
         }
       }
     },
-    "Workout": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Allenamento"
+    "Where do I find my key? Go to aistudio.google.com → Get API key. The key is stored locally on this device only and never sent anywhere except to the Gemini API." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dove trovo la mia chiave? Vai su aistudio.google.com → Ottieni chiave API. La chiave è memorizzata solo su questo dispositivo e non viene inviata altrove se non all'API Gemini."
           }
         }
       }
     },
-    "Wrestling": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lotta"
+    "Widget quick-add" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunta rapida widget"
           }
         }
       }
     },
-    "Yoga": {
-      "extractionState": "stale",
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yoga"
+    "Workout" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allenamento"
           }
         }
       }
     },
-    "Your daily calorie goal is currently estimated. Select a fitness goal below and save your profile to get an AI-computed personalized target.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il tuo obiettivo calorico giornaliero è attualmente stimato. Seleziona un obiettivo fitness qui sotto e salva il profilo per ottenere un obiettivo personalizzato calcolato dall'IA."
+    "Wrestling" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lotta"
           }
         }
       }
     },
-    "e.g. Chicken breast, 100g": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "es. Petto di pollo, 100g"
+    "Yoga" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yoga"
           }
         }
       }
     },
-    "kcal": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "kcal"
+    "Your daily calorie goal is currently estimated. Select a fitness goal below and save your profile to get an AI-computed personalized target." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il tuo obiettivo calorico giornaliero è attualmente stimato. Seleziona un obiettivo fitness qui sotto e salva il profilo per ottenere un obiettivo personalizzato calcolato dall'IA."
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

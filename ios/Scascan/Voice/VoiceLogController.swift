@@ -58,7 +58,20 @@ final class VoiceLogController: NSObject {
             return
         }
 
-        let micGranted = await AVAudioApplication.requestRecordPermission()
+        // Wrapped explicitly (not via the auto-bridged `async` overload):
+        // that overload's completion doesn't reliably hop back onto the
+        // MainActor on this toolchain, leaving `startListening()` below to
+        // run on whatever background dispatch thread the ObjC completion
+        // fired on — AVAudioSession/AVAudioEngine assert they're being
+        // driven from the main thread and trap (`_dispatch_assert_queue_fail`)
+        // when they're not. A manual `CheckedContinuation`, same as the
+        // speech-authorization request above, makes Swift's own actor-hop
+        // machinery respect the MainActor isolation this class declares.
+        let micGranted = await withCheckedContinuation { (continuation: CheckedContinuation<Bool, Never>) in
+            AVAudioApplication.requestRecordPermission { granted in
+                continuation.resume(returning: granted)
+            }
+        }
         guard micGranted else {
             status = .denied
             return
