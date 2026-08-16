@@ -50,7 +50,7 @@ final class LogViewState {
     /// feeding into today's live target".
     private(set) var workoutsToday: [WorkoutSummary] = []
 
-    /// Base target + today's active burn + weight-trend correction + yesterday's
+    /// Base target - today's active burn + weight-trend correction + yesterday's
     /// bleedthrough — the number actually shown as "today's target".
     var liveTarget: Int {
         guard isToday else { return targetInfo.caloriesKcal }

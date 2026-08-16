@@ -32,10 +32,10 @@ struct LogRepositoryTests {
         return LogRepository(modelContainer: container, profileStore: profileStore, health: health, onDataChanged: {})
     }
 
-    @Test("finalTarget sums base + bleedthrough + active + trend")
+    @Test("finalTarget sums base + bleedthrough - active + trend")
     func finalTargetSum() {
         let repo = makeRepository()
-        #expect(repo.finalTarget(base: 2_000, bleedthrough: 100, active: 300, trend: -50) == 2_350)
+        #expect(repo.finalTarget(base: 2_000, bleedthrough: 100, active: 300, trend: -50) == 1_750)
     }
 
     @Test("finalTarget floors at 80% of BMR, never dips below it")
@@ -85,14 +85,14 @@ struct LogRepositoryTests {
         #expect(entries.first?.foodName == "Chicken breast")
     }
 
-    @Test("liveTarget adds today's active calories on top of the base target when Health is connected")
-    func liveTargetIncludesActiveCalories() async throws {
+    @Test("liveTarget subtracts today's active calories from the base target when Health is connected")
+    func liveTargetSubtractsActiveCalories() async throws {
         let health = MockHealthProvider(granted: true, activeCalories: 400, weightHistory: [])
         let repo = makeRepository(health: health)
         let target = try await repo.liveTarget()
         let expectedBase = repo.baseTarget(hasHealth: true)
         // No log entries yesterday -> yesterdayBleedthrough is 0 (no consumption to compare against target).
-        #expect(target >= expectedBase) // active calories only ever add to the base, never subtract
+        #expect(target <= expectedBase) // active calories burned reduce today's allowance, never add to it
     }
 
     @Test("yesterdayBleedthrough caps the carry-over at +/-500 kcal")

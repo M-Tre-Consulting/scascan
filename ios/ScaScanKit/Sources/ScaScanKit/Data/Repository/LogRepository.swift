@@ -3,8 +3,9 @@ import SwiftData
 
 /// Mirrors Android's `data.repository.LogRepository`, including the adaptive
 /// daily-target algorithm: base target (AI-computed or Mifflin-St Jeor) +
-/// yesterday's over/under-eating "bleedthrough" + today's HealthKit active burn
-/// + a slow weight-trend correction, floored at 80% of BMR.
+/// yesterday's over/under-eating "bleedthrough" - today's HealthKit active burn
+/// (or the configured "Watch not worn" fallback) + a slow weight-trend
+/// correction, floored at 80% of BMR.
 ///
 /// SwiftData's `mainContext` is main-actor isolated, so this repository is too —
 /// matches how the original dispatches Room's suspend DAOs back onto the UI
@@ -177,7 +178,11 @@ public final class LogRepository {
     }
 
     public func finalTarget(base: Int, bleedthrough: Int, active: Double, trend: Int) -> Int {
-        let total = base + bleedthrough + Int(active.rounded()) + trend
+        // Active calories burned today (real Watch/Fitness data, or the
+        // "Watch not worn" fallback) reduce today's allowance rather than
+        // padding it — the base target already accounts for the user's
+        // planned activity level, so extra measured burn comes out of it.
+        let total = base + bleedthrough - Int(active.rounded()) + trend
         // Ensure a healthy minimum target (at least 80% of BMR).
         return max(total, Int(Double(bmr()) * 0.8))
     }
@@ -238,7 +243,9 @@ public final class LogRepository {
             ? effectiveActiveCalories(await health.readActiveCaloriesRange(start: start, end: end))
             : 0
 
-        let totalAllowance = Double(base) + activeYesterday
+        // Same convention as `finalTarget`: yesterday's measured active burn
+        // lowered yesterday's allowance rather than raising it.
+        let totalAllowance = Double(base) - activeYesterday
         let rawBalance = totalAllowance - consumed
 
         // If saved (balance > 0): use only 80% to account for body efficiency.

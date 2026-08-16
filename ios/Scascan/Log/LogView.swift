@@ -199,7 +199,7 @@ struct LogView: View {
                     statusChip(for: a.trendStatus)
 
                     breakdownRow("Base target", "\(state.targetInfo.caloriesKcal) kcal")
-                    breakdownRow("Activity today", a.activeKcal > 0 ? "+\(Int(a.activeKcal.rounded())) kcal" : "0 kcal")
+                    breakdownRow("Activity today", a.activeKcal > 0 ? "-\(Int(a.activeKcal.rounded())) kcal" : "0 kcal")
                     breakdownRow(
                         "Previous day balance",
                         state.targetInfo.bleedthroughKcal >= 0
