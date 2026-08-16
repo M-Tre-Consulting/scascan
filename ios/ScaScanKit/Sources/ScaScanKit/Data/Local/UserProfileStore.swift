@@ -32,6 +32,8 @@ public final class UserProfileStore: @unchecked Sendable {
         static let healthConnected = "health_connected"
         static let lastYesterdayActiveCalories = "last_yesterday_active_kcal"
         static let lastYesterdayActiveCaloriesDayStart = "last_yesterday_active_kcal_day_start"
+        static let hydrationScheduleDayKey = "hydration_schedule_day_key"
+        static let hydrationScheduleTimes = "hydration_schedule_times"
         static let waterButton1 = "water_quick_add_1_ml"
         static let waterButton2 = "water_quick_add_2_ml"
         static let waterButton3 = "water_quick_add_3_ml"
@@ -139,6 +141,21 @@ public final class UserProfileStore: @unchecked Sendable {
     public var lastYesterdayActiveCaloriesDayStart: Double {
         get { d.double(forKey: Keys.lastYesterdayActiveCaloriesDayStart) }
         set { d.set(newValue, forKey: Keys.lastYesterdayActiveCaloriesDayStart) }
+    }
+
+    /// Which calendar day `hydrationScheduleTimes` was computed for
+    /// (`"yyyy-M-d"`) — lets `NotificationHelper` tell a fresh day apart from
+    /// "already scheduled today, possibly delayed by a logged water entry".
+    public var hydrationScheduleDayKey: String {
+        get { d.string(forKey: Keys.hydrationScheduleDayKey) ?? "" }
+        set { d.set(newValue, forKey: Keys.hydrationScheduleDayKey) }
+    }
+
+    /// Today's (possibly water-delayed) hydration reminder times, as
+    /// `timeIntervalSince1970` values. See `NotificationHelper.reschedule`.
+    public var hydrationScheduleTimes: [Double]? {
+        get { d.array(forKey: Keys.hydrationScheduleTimes) as? [Double] }
+        set { d.set(newValue, forKey: Keys.hydrationScheduleTimes) }
     }
 
     /// The three quick-add amounts shown as buttons under "Water today" in

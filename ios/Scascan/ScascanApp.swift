@@ -13,12 +13,24 @@ import ScaScanKit
 @main
 struct ScascanApp: App {
     @State private var container = AppContainer()
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environment(container)
                 .onOpenURL(perform: handle)
+                .task { NotificationHelper.refreshHydrationScheduleIfNeeded() }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            // Tops up today's hydration schedule whenever it's stale (a new
+            // calendar day since it was last computed) — see
+            // `NotificationHelper`'s doc comment for why this, rather than a
+            // single set-and-forget repeating trigger, is needed to support
+            // pushing reminders back when water gets logged.
+            if phase == .active {
+                NotificationHelper.refreshHydrationScheduleIfNeeded()
+            }
         }
     }
 

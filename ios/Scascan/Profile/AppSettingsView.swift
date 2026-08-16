@@ -184,7 +184,7 @@ struct AppSettingsView: View {
             )) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Hydration reminder")
-                    Text("Receive periodic notifications to remind you to drink water during the day.")
+                    Text("3 reminders spread evenly across 10:00–20:00. Logging water pushes the next one back — the more you drink, the longer the pause.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -248,14 +248,13 @@ struct AppSettingsView: View {
         container.profileStore.waterRemindersEnabled = enabled
 
         guard enabled else {
-            NotificationHelper.cancelHydrationReminder()
+            NotificationHelper.cancelHydrationReminders()
             return
         }
         Task {
             let granted = await NotificationHelper.requestAuthorization()
             if granted {
-                // Every 3 hours, matching Android's ReminderManager interval.
-                NotificationHelper.scheduleHydrationReminder(interval: 3 * 60 * 60)
+                NotificationHelper.scheduleHydrationReminders()
             } else {
                 waterRemindersEnabled = false
                 container.profileStore.waterRemindersEnabled = false

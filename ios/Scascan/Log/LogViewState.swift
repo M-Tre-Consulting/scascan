@@ -199,6 +199,7 @@ final class LogViewState {
 
     func addWater(_ ml: Int) {
         try? repository.addWater(ml)
+        NotificationHelper.delayHydrationReminders(afterAddingMl: ml)
         reload()
     }
 
