@@ -95,8 +95,17 @@ public final class HealthKitManager: HealthProviding {
     /// user must do that in Settings ▸ Health ▸ Data Access & Devices. This
     /// only resets ScaScan's local "connected" flag so the UI reflects
     /// disconnection; call `openHealthSettings()` alongside it in the UI.
+    ///
+    /// Also clears the shared cache `LogRepository` leaves behind for the
+    /// widget (`isHealthConnected` / cached active-calorie readings) —
+    /// otherwise the widget, which has no direct Health access of its own,
+    /// would keep computing the adaptive target from a frozen, increasingly
+    /// stale snapshot forever after the user disconnects here.
     public func disconnect() {
         defaults.set(false, forKey: Self.requestedKey)
+        profileStore.isHealthConnected = false
+        profileStore.lastActiveCalories = 0
+        profileStore.lastYesterdayActiveCaloriesDayStart = 0
     }
 
     public func openHealthSettings() {

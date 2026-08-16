@@ -113,7 +113,12 @@ public final class GeminiRestClient: Sendable {
                 if isRetryable && retryCount < Self.maxRetries {
                     retryCount += 1
                     let delayMs = 2_000.0 * pow(2.0, Double(retryCount - 1))
-                    try? await Task.sleep(for: .milliseconds(delayMs))
+                    // `try` (not `try?`): if the caller cancels while we're
+                    // backing off (e.g. the user dismisses the analysis
+                    // sheet), this needs to actually stop and propagate the
+                    // cancellation instead of silently sleeping through it
+                    // and firing another network request nobody wants anymore.
+                    try await Task.sleep(for: .milliseconds(delayMs))
                 } else {
                     throw error
                 }
