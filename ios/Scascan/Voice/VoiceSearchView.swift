@@ -23,37 +23,35 @@ struct VoiceSearchView: View {
     }
 
     var body: some View {
-        ZStack {
-            VStack(spacing: 28) {
-                Spacer()
+        VStack(spacing: 28) {
+            Spacer()
 
-                switch phase {
-                case .listening: listeningIcon
-                case .thinking: thinkingContent
-                case .error(let message): errorContent(message)
-                }
-
-                if phase == .listening {
-                    Text(controller.transcript.isEmpty ? String(localized: "Say what you're eating…") : controller.transcript)
-                        .font(.title3)
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(controller.transcript.isEmpty ? .secondary : .primary)
-                        .padding(.horizontal, 24)
-                        .frame(minHeight: 60)
-                        .animation(.default, value: controller.transcript)
-                }
-
-                Spacer()
-                controls
+            switch phase {
+            case .listening: listeningIcon
+            case .thinking: thinkingContent
+            case .error(let message): errorContent(message)
             }
-            .padding(20)
 
-            VStack {
-                topBar
-                Spacer()
+            if phase == .listening {
+                Text(controller.transcript.isEmpty ? String(localized: "Say what you're eating…") : controller.transcript)
+                    .font(.title3)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(controller.transcript.isEmpty ? .secondary : .primary)
+                    .padding(.horizontal, 24)
+                    .frame(minHeight: 60)
+                    .animation(.default, value: controller.transcript)
             }
+
+            Spacer()
+            controls
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .padding(20)
+        // Uses the standard system back button (Liquid Glass, matching every
+        // other pushed screen in the app) instead of a custom one — unlike
+        // Camera/Barcode, this screen has no edge-to-edge live preview under
+        // it that a translucent system nav bar would clash with.
+        .navigationTitle("Log by Voice")
+        .navigationBarTitleDisplayMode(.inline)
         .interactiveDismissDisabled(phase == .thinking)
         .task {
             controller.onFinished = { handleTranscript($0) }
@@ -68,19 +66,6 @@ struct VoiceSearchView: View {
             }
         }
         .onDisappear { controller.cancel() }
-    }
-
-    private var topBar: some View {
-        HStack {
-            Button { controller.cancel(); dismiss() } label: {
-                Image(systemName: "chevron.left")
-                    .font(.body.weight(.semibold))
-                    .padding(12)
-                    .background(.background.secondary, in: Circle())
-            }
-            Spacer()
-        }
-        .padding()
     }
 
     private var listeningIcon: some View {
