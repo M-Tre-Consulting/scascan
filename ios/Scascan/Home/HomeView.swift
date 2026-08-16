@@ -32,6 +32,12 @@ struct HomeView: View {
                     title: "Search Food",
                     subtitle: "Type any food or meal description"
                 ) { path.append(.search) }
+
+                ScanChoiceCard(
+                    icon: "mic.fill",
+                    title: "Log by Voice",
+                    subtitle: "Say what you're eating — added automatically"
+                ) { path.append(.voice) }
             }
             .padding(20)
         }

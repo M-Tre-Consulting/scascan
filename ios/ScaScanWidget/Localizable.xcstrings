@@ -51,12 +51,32 @@
         }
       }
     },
+    "Log by Voice": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra a voce"
+          }
+        }
+      }
+    },
     "Logs water to today's total. Amount is set in ScaScan's Settings.": {
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Registra dell'acqua nel totale di oggi. La quantità si imposta nelle Impostazioni di ScaScan."
+          }
+        }
+      }
+    },
+    "Opens ScaScan and starts listening so you can describe what you're eating.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apre ScaScan e inizia ad ascoltare, così puoi descrivere cosa stai mangiando."
           }
         }
       }

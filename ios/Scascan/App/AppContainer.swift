@@ -22,6 +22,16 @@ final class AppContainer {
     /// the analysis result sheet; presented once at the `MainTabView` level.
     var fixTarget: FixEntryTarget?
 
+    /// An entry that was just auto-added (currently only by voice logging,
+    /// which skips the usual confirm-before-add sheet) and can still be
+    /// undone. `MainTabView` renders this as a briefly-shown banner.
+    struct PendingUndo: Identifiable {
+        let id = UUID()
+        let message: String
+        let entry: LogEntry
+    }
+    var pendingUndo: PendingUndo?
+
     /// Set from `scascan://` URL handling (widget taps, quick actions) —
     /// `MainTabView` observes this to switch tabs / push a route. Mirrors
     /// Android's `MainActivity.handleIntent` bundling `start_tab`.

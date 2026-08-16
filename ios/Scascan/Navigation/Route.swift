@@ -6,6 +6,7 @@ enum Route: Hashable {
     case camera
     case barcode
     case search
+    case voice
     case result(NutritionFacts)
     case settings
 }

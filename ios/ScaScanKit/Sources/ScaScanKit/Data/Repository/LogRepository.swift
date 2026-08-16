@@ -54,12 +54,14 @@ public final class LogRepository {
         return try context.fetch(descriptor)
     }
 
-    public func addEntry(_ facts: NutritionFacts) throws {
+    @discardableResult
+    public func addEntry(_ facts: NutritionFacts) throws -> LogEntry {
         let entry = LogEntry(from: facts)
         context.insert(entry)
         try context.save()
         onDataChanged()
         Task { await health.writeDietaryEntry(entry) }
+        return entry
     }
 
     public func updateEntry(_ entry: LogEntry) throws {

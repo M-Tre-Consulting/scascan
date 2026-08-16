@@ -7,40 +7,43 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		92636337E05A03170EA9F7F5 /* ScaScanKit in Frameworks */ = {isa = PBXBuildFile; productRef = E5912F161CF79828EE763137 /* ScaScanKit */; };
 		12BBA4BEF59C4AD93CBBFAA6 /* ScaScanWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1C5D453316F73CE897FE7394 /* ScaScanWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		92636337E05A03170EA9F7F5 /* ScaScanKit in Frameworks */ = {isa = PBXBuildFile; productRef = E5912F161CF79828EE763137 /* ScaScanKit */; };
 		EDBD7CDEAF5E89F01BF82953 /* ScaScanKit in Frameworks */ = {isa = PBXBuildFile; productRef = B12DD9A1619DFEBEF946C3F7 /* ScaScanKit */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXFileReference section */
-		5FC7400F302F9A30005E0FEF /* Scascan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scascan.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1C5D453316F73CE897FE7394 /* ScaScanWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ScaScanWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-/* End PBXFileReference section */
+/* Begin PBXContainerItemProxy section */
+		987C26C75E28F197BD5E6CB0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5FC74007302F9A2F005E0FEF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C6489C80736B034C0CE28BFD;
+			remoteInfo = ScaScanWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		5FC74011302F9A30005E0FEF /* Scascan */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Scascan;
-			sourceTree = "<group>";
-			exceptions = (
-				3B5E7C6DE029A3ACCA0D47AC /* Exceptions for "Scascan" folder in "Scascan" target */,
+/* Begin PBXCopyFilesBuildPhase section */
+		8947CCA4F19912450E4BD635 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				12BBA4BEF59C4AD93CBBFAA6 /* ScaScanWidgetExtension.appex in Embed Foundation Extensions */,
 			);
+			name = "Embed Foundation Extensions";
 		};
-		1D8A9C3FCC24C7E93A56C39F /* ScaScanWidget */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ScaScanWidget;
-			sourceTree = "<group>";
-			exceptions = (
-				AE5A3CEE7145DA348DEE5EE7 /* Exceptions for "ScaScanWidget" folder in "ScaScanWidgetExtension" target */,
-			);
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1C5D453316F73CE897FE7394 /* ScaScanWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ScaScanWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FC7400F302F9A30005E0FEF /* Scascan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scascan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
 		3B5E7C6DE029A3ACCA0D47AC /* Exceptions for "Scascan" folder in "Scascan" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				InfoPlist-URLTypes.plist,
+				"InfoPlist-URLTypes.plist",
 			);
 			target = 5FC7400E302F9A30005E0FEF /* Scascan */;
 		};
@@ -52,6 +55,25 @@
 			target = C6489C80736B034C0CE28BFD /* ScaScanWidgetExtension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		1D8A9C3FCC24C7E93A56C39F /* ScaScanWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AE5A3CEE7145DA348DEE5EE7 /* Exceptions for "ScaScanWidget" folder in "ScaScanWidgetExtension" target */,
+			);
+			path = ScaScanWidget;
+			sourceTree = "<group>";
+		};
+		5FC74011302F9A30005E0FEF /* Scascan */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3B5E7C6DE029A3ACCA0D47AC /* Exceptions for "Scascan" folder in "Scascan" target */,
+			);
+			path = Scascan;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		5FC7400C302F9A30005E0FEF /* Frameworks */ = {
@@ -67,20 +89,6 @@
 			);
 		};
 /* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		8947CCA4F19912450E4BD635 /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				12BBA4BEF59C4AD93CBBFAA6 /* ScaScanWidgetExtension.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXGroup section */
 		5FC74006302F9A2F005E0FEF = {
@@ -139,8 +147,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			fileSystemSynchronizedGroups = (
 				1D8A9C3FCC24C7E93A56C39F /* ScaScanWidget */,
 			);
@@ -165,7 +171,7 @@
 					5FC7400E302F9A30005E0FEF = {
 						CreatedOnToolsVersion = 27.0;
 						SystemCapabilities = {
-							"com.apple.ApplicationGroups.iOS" = {
+							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
 							};
 							com.apple.HealthKit = {
@@ -176,7 +182,7 @@
 					C6489C80736B034C0CE28BFD = {
 						CreatedOnToolsVersion = 27.0;
 						SystemCapabilities = {
-							"com.apple.ApplicationGroups.iOS" = {
+							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
 							};
 						};
@@ -207,23 +213,13 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXContainerItemProxy section */
-		987C26C75E28F197BD5E6CB0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5FC74007302F9A2F005E0FEF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C6489C80736B034C0CE28BFD;
-			remoteInfo = ScaScanWidgetExtension;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXResourcesBuildPhase section */
-		5FC7400D302F9A30005E0FEF /* Resources */ = {
+		3DB6EC4D7EFB38FD9CA92B09 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
 		};
-		3DB6EC4D7EFB38FD9CA92B09 /* Resources */ = {
+		5FC7400D302F9A30005E0FEF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -252,6 +248,33 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		4DE164BD5DF17804D5399625 /* Release configuration for PBXNativeTarget "ScaScanWidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ScaScanWidget/ScaScanWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N8A766MS7S;
+				INFOPLIST_FILE = ScaScanWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nicoloperri.Scascan.ScaScanWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		5FC74018302F9A30005E0FEF /* Debug configuration for PBXProject "Scascan" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -380,10 +403,12 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Scascan/InfoPlist-URLTypes.plist;
+				INFOPLIST_FILE = "Scascan/InfoPlist-URLTypes.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "ScaScan uses the camera to identify food and scan barcodes for nutritional analysis.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "ScaScan reads your steps, active energy, weight, height, and workouts to compute an adaptive daily calorie target.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "ScaScan writes the meals and water you log to Health, so they show up in the Health app too.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "ScaScan uses the microphone for voice food logging — describe what you're eating and it's added to your log.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "ScaScan transcribes your voice on-device to understand what food you're logging.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -419,10 +444,12 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Scascan/InfoPlist-URLTypes.plist;
+				INFOPLIST_FILE = "Scascan/InfoPlist-URLTypes.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "ScaScan uses the camera to identify food and scan barcodes for nutritional analysis.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "ScaScan reads your steps, active energy, weight, height, and workouts to compute an adaptive daily calorie target.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "ScaScan writes the meals and water you log to Health, so they show up in the Health app too.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "ScaScan uses the microphone for voice food logging — describe what you're eating and it's added to your log.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "ScaScan transcribes your voice on-device to understand what food you're logging.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -455,7 +482,10 @@
 				DEVELOPMENT_TEAM = N8A766MS7S;
 				INFOPLIST_FILE = ScaScanWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nicoloperri.Scascan.ScaScanWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -469,30 +499,6 @@
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
-		};
-		4DE164BD5DF17804D5399625 /* Release configuration for PBXNativeTarget "ScaScanWidgetExtension" */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = ScaScanWidget/ScaScanWidget.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = N8A766MS7S;
-				INFOPLIST_FILE = ScaScanWidget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nicoloperri.Scascan.ScaScanWidget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -531,11 +537,11 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E5912F161CF79828EE763137 /* ScaScanKit */ = {
+		B12DD9A1619DFEBEF946C3F7 /* ScaScanKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ScaScanKit;
 		};
-		B12DD9A1619DFEBEF946C3F7 /* ScaScanKit */ = {
+		E5912F161CF79828EE763137 /* ScaScanKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ScaScanKit;
 		};

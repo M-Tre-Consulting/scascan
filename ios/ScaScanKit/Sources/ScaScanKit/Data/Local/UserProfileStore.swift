@@ -34,6 +34,7 @@ public final class UserProfileStore: @unchecked Sendable {
         static let lastYesterdayActiveCaloriesDayStart = "last_yesterday_active_kcal_day_start"
         static let hydrationScheduleDayKey = "hydration_schedule_day_key"
         static let hydrationScheduleTimes = "hydration_schedule_times"
+        static let pendingVoiceLogRequest = "pending_voice_log_request"
         static let waterButton1 = "water_quick_add_1_ml"
         static let waterButton2 = "water_quick_add_2_ml"
         static let waterButton3 = "water_quick_add_3_ml"
@@ -156,6 +157,17 @@ public final class UserProfileStore: @unchecked Sendable {
     public var hydrationScheduleTimes: [Double]? {
         get { d.array(forKey: Keys.hydrationScheduleTimes) as? [Double] }
         set { d.set(newValue, forKey: Keys.hydrationScheduleTimes) }
+    }
+
+    /// Set by the Control Center "Log by voice" button (which runs in the
+    /// widget extension's own process and can't reach the app's live
+    /// `AppContainer` directly) — the app checks this on every foreground and,
+    /// if set, clears it and opens straight into `VoiceSearchView`, already
+    /// listening. Same shared-flag-on-foreground pattern as the hydration
+    /// schedule refresh.
+    public var pendingVoiceLogRequest: Bool {
+        get { d.bool(forKey: Keys.pendingVoiceLogRequest) }
+        set { d.set(newValue, forKey: Keys.pendingVoiceLogRequest) }
     }
 
     /// The three quick-add amounts shown as buttons under "Water today" in

@@ -33,6 +33,20 @@ struct MainTabView: View {
                 AnalysisProgressBar()
             }
         }
+        .overlay(alignment: .bottom) {
+            if let pending = container.pendingUndo {
+                UndoBanner(message: pending.message) {
+                    try? container.logRepository.deleteEntry(pending.entry)
+                    container.pendingUndo = nil
+                }
+            }
+        }
+        .task(id: container.pendingUndo?.id) {
+            guard container.pendingUndo != nil else { return }
+            try? await Task.sleep(for: .seconds(4))
+            guard !Task.isCancelled else { return }
+            container.pendingUndo = nil
+        }
         .sheet(item: analysisResultBinding) { facts in
             AnalysisResultSheet(
                 facts: facts,
@@ -140,6 +154,7 @@ struct MainTabView: View {
         case .camera: CameraCaptureView()
         case .barcode: BarcodeScanView()
         case .search: SearchView()
+        case .voice: VoiceSearchView()
         case .result(let facts): NutritionResultView(facts: facts)
         case .settings: AppSettingsView()
         }
@@ -157,6 +172,30 @@ private struct AnalysisProgressBar: View {
         .padding(.vertical, 10)
         .background(.regularMaterial, in: Capsule())
         .padding(.bottom, 8)
+    }
+}
+
+private struct UndoBanner: View {
+    let message: String
+    let onUndo: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(Color.scascanBrand)
+            Text(message)
+                .font(.subheadline)
+                .lineLimit(1)
+            Spacer(minLength: 8)
+            Button("Undo", action: onUndo)
+                .font(.subheadline.weight(.semibold))
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(.regularMaterial, in: Capsule())
+        .padding(.horizontal, 20)
+        .padding(.bottom, 8)
+        .transition(.move(edge: .bottom).combined(with: .opacity))
     }
 }
 

@@ -20,7 +20,10 @@ struct ScascanApp: App {
             RootView()
                 .environment(container)
                 .onOpenURL(perform: handle)
-                .task { NotificationHelper.refreshHydrationScheduleIfNeeded() }
+                .task {
+                    NotificationHelper.refreshHydrationScheduleIfNeeded()
+                    consumePendingVoiceLogRequest()
+                }
         }
         .onChange(of: scenePhase) { _, phase in
             // Tops up today's hydration schedule whenever it's stale (a new
@@ -30,8 +33,20 @@ struct ScascanApp: App {
             // pushing reminders back when water gets logged.
             if phase == .active {
                 NotificationHelper.refreshHydrationScheduleIfNeeded()
+                consumePendingVoiceLogRequest()
             }
         }
+    }
+
+    /// Checks the flag `StartVoiceLogIntent` (the Control Center button)
+    /// leaves behind in the shared App Group store, since it runs in the
+    /// widget extension's own process and can't reach this app's live
+    /// `AppContainer` directly. If set, opens straight into voice logging.
+    private func consumePendingVoiceLogRequest() {
+        guard container.profileStore.pendingVoiceLogRequest else { return }
+        container.profileStore.pendingVoiceLogRequest = false
+        container.deepLinkTab = 0
+        container.deepLinkRoute = .voice
     }
 
     /// Handles `scascan://log`, `scascan://camera`, `scascan://barcode`,
