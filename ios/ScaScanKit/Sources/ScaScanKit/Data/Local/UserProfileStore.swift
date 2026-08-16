@@ -30,6 +30,8 @@ public final class UserProfileStore: @unchecked Sendable {
         static let waterReminders = "water_reminders"
         static let lastActiveCalories = "last_active_kcal"
         static let healthConnected = "health_connected"
+        static let lastYesterdayActiveCalories = "last_yesterday_active_kcal"
+        static let lastYesterdayActiveCaloriesDayStart = "last_yesterday_active_kcal_day_start"
         static let waterButton1 = "water_quick_add_1_ml"
         static let waterButton2 = "water_quick_add_2_ml"
         static let waterButton3 = "water_quick_add_3_ml"
@@ -120,6 +122,23 @@ public final class UserProfileStore: @unchecked Sendable {
     public var isHealthConnected: Bool {
         get { d.bool(forKey: Keys.healthConnected) }
         set { d.set(newValue, forKey: Keys.healthConnected) }
+    }
+
+    /// Cached "yesterday" active-calories total (already threshold-adjusted,
+    /// see `LogRepository.effectiveActiveCalories`), plus the start-of-day
+    /// timestamp it refers to. Written by the app whenever it computes
+    /// `yesterdayBleedthrough()` with live Health access, so an out-of-process
+    /// reader with none of its own (the widget) can reuse the exact figure —
+    /// `lastYesterdayActiveCaloriesDayStart` lets it confirm the cached value
+    /// still actually refers to "yesterday" relative to now, rather than
+    /// reusing a stale reading from days ago.
+    public var lastYesterdayActiveCalories: Double {
+        get { d.double(forKey: Keys.lastYesterdayActiveCalories) }
+        set { d.set(newValue, forKey: Keys.lastYesterdayActiveCalories) }
+    }
+    public var lastYesterdayActiveCaloriesDayStart: Double {
+        get { d.double(forKey: Keys.lastYesterdayActiveCaloriesDayStart) }
+        set { d.set(newValue, forKey: Keys.lastYesterdayActiveCaloriesDayStart) }
     }
 
     /// The three quick-add amounts shown as buttons under "Water today" in

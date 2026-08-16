@@ -125,9 +125,53 @@ struct LogRepositoryTests {
         let repo = LogRepository(modelContainer: container, profileStore: profileStore, health: NoopHealthProvider(), onDataChanged: {})
         let target = try await repo.liveTarget()
         let adaptiveBase = repo.baseTarget(hasHealth: true)
-        // No log entries yesterday -> bleedthrough is 0, so the only
-        // adjustment is the cached active calories being subtracted.
-        #expect(target == adaptiveBase - 300)
+        let bleedthrough = try await repo.yesterdayBleedthrough()
+        // No trend (NoopHealthProvider has no weight history) -> the only
+        // adjustments are yesterday's bleedthrough and the cached active
+        // calories being subtracted.
+        #expect(target == adaptiveBase + bleedthrough - 300)
+    }
+
+    @Test("yesterdayBleedthrough reuses the cached active-calories figure when this process has no direct Health access, as long as it's still tagged as \"yesterday\"")
+    func bleedthroughUsesSharedYesterdayCacheWithoutDirectHealthAccess() async throws {
+        let container = ScaScanSchema.makeContainer(inMemory: true)
+        let suiteName = "test.\(UUID().uuidString)"
+        let profileStore = UserProfileStore(defaults: UserDefaults(suiteName: suiteName)!)
+        profileStore.age = 28
+        profileStore.heightCm = 180
+        profileStore.weightKg = 85
+        profileStore.isMale = true
+        profileStore.activityIndex = 2
+        profileStore.goalIndex = 1
+        profileStore.isHealthConnected = true
+
+        let repo = LogRepository(modelContainer: container, profileStore: profileStore, health: NoopHealthProvider(), onDataChanged: {})
+        let yesterdayStart = Calendar.current.startOfDay(for: Date().addingTimeInterval(-86_400))
+
+        // Logged just under yesterday's base allowance, so the balance stays
+        // comfortably unclamped either way — isolating the cache's effect.
+        let base = repo.baseTarget(hasHealth: true)
+        try repo.upsertEntries([
+            LogEntry(
+                timestamp: yesterdayStart.addingTimeInterval(12 * 3_600),
+                foodName: "Test meal", servingSize: "1", calories: Double(base) - 8,
+                protein: 0, carbohydrates: 0, fat: 0, fiber: 0, sugar: 0, sodium: 0
+            )
+        ])
+
+        // Tagged as "yesterday" relative to now -> should be reused.
+        profileStore.lastYesterdayActiveCalories = 400
+        profileStore.lastYesterdayActiveCaloriesDayStart = yesterdayStart.timeIntervalSince1970
+        let withFreshCache = try await repo.yesterdayBleedthrough()
+
+        // Tagged as some day well before yesterday -> stale, must be ignored
+        // (falls back to treating yesterday's active burn as 0).
+        profileStore.lastYesterdayActiveCaloriesDayStart = yesterdayStart.addingTimeInterval(-5 * 86_400).timeIntervalSince1970
+        let withStaleCache = try await repo.yesterdayBleedthrough()
+
+        // Honoring the cached 400kcal burn lowers yesterday's allowance, so
+        // it should yield a meaningfully lower bleedthrough than ignoring it.
+        #expect(withStaleCache > withFreshCache)
     }
 
     @Test("effectiveActiveCalories substitutes the configured base when the reading looks like a missed Watch day")

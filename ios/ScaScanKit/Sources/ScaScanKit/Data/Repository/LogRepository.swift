@@ -256,12 +256,23 @@ public final class LogRepository {
         let liveHealth = await health.hasPermissions()
         let hasHealth = liveHealth || profileStore.isHealthConnected
         let base = baseTarget(hasHealth: hasHealth)
-        // Yesterday's specific active-burn figure has no cached fallback (only
-        // "today so far" is cached) — an out-of-process reader without live
-        // Health access just omits this term rather than approximating it.
-        let activeYesterday = liveHealth
-            ? effectiveActiveCalories(await health.readActiveCaloriesRange(start: start, end: end))
-            : 0
+
+        let activeYesterday: Double
+        if liveHealth {
+            let raw = effectiveActiveCalories(await health.readActiveCaloriesRange(start: start, end: end))
+            activeYesterday = raw
+            // Cache the figure (and which day it belongs to) so an out-of-
+            // process reader with no direct Health access of its own (the
+            // widget) can reuse it below.
+            profileStore.lastYesterdayActiveCalories = raw
+            profileStore.lastYesterdayActiveCaloriesDayStart = start.timeIntervalSince1970
+        } else if hasHealth, profileStore.lastYesterdayActiveCaloriesDayStart == start.timeIntervalSince1970 {
+            // The cache still refers to the same calendar day as "yesterday"
+            // from here, so it's safe to reuse.
+            activeYesterday = profileStore.lastYesterdayActiveCalories
+        } else {
+            activeYesterday = 0
+        }
 
         // Same convention as `finalTarget`: yesterday's measured active burn
         // lowered yesterday's allowance rather than raising it.
