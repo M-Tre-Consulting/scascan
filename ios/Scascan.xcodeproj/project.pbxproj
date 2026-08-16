@@ -10,6 +10,8 @@
 		12BBA4BEF59C4AD93CBBFAA6 /* ScaScanWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1C5D453316F73CE897FE7394 /* ScaScanWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		92636337E05A03170EA9F7F5 /* ScaScanKit in Frameworks */ = {isa = PBXBuildFile; productRef = E5912F161CF79828EE763137 /* ScaScanKit */; };
 		EDBD7CDEAF5E89F01BF82953 /* ScaScanKit in Frameworks */ = {isa = PBXBuildFile; productRef = B12DD9A1619DFEBEF946C3F7 /* ScaScanKit */; };
+		D8D973667A074F5B91D67224 /* ScaScanControl.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A224428404C649EC906F985C /* ScaScanControl.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		74A6AC81A504448688C9F2C4 /* ScaScanKit in Frameworks */ = {isa = PBXBuildFile; productRef = AFDA41D4DFAD4D7DBEF6DB69 /* ScaScanKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -20,6 +22,13 @@
 			remoteGlobalIDString = C6489C80736B034C0CE28BFD;
 			remoteInfo = ScaScanWidgetExtension;
 		};
+		1FDCBDA14C8E49968306D517 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5FC74007302F9A2F005E0FEF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 722B73E46D25424F9A7286FF;
+			remoteInfo = ScaScanControl;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,6 +38,7 @@
 			dstSubfolder = PlugIns;
 			files = (
 				12BBA4BEF59C4AD93CBBFAA6 /* ScaScanWidgetExtension.appex in Embed Foundation Extensions */,
+				D8D973667A074F5B91D67224 /* ScaScanControl.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 		};
@@ -37,6 +47,7 @@
 /* Begin PBXFileReference section */
 		1C5D453316F73CE897FE7394 /* ScaScanWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ScaScanWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FC7400F302F9A30005E0FEF /* Scascan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scascan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A224428404C649EC906F985C /* ScaScanControl.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ScaScanControl.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -53,6 +64,13 @@
 				Info.plist,
 			);
 			target = C6489C80736B034C0CE28BFD /* ScaScanWidgetExtension */;
+		};
+		1FAA936A4FF74FC68B0228FC /* Exceptions for "ScaScanControl" folder in "ScaScanControl" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 722B73E46D25424F9A7286FF /* ScaScanControl */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -73,6 +91,14 @@
 			path = Scascan;
 			sourceTree = "<group>";
 		};
+		FBAE3BA56953421BA3915F10 /* ScaScanControl */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1FAA936A4FF74FC68B0228FC /* Exceptions for "ScaScanControl" folder in "ScaScanControl" target */,
+			);
+			path = ScaScanControl;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +114,12 @@
 				EDBD7CDEAF5E89F01BF82953 /* ScaScanKit in Frameworks */,
 			);
 		};
+		B44C456DA51B4201A76BE335 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				74A6AC81A504448688C9F2C4 /* ScaScanKit in Frameworks */,
+			);
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -96,6 +128,7 @@
 			children = (
 				5FC74011302F9A30005E0FEF /* Scascan */,
 				1D8A9C3FCC24C7E93A56C39F /* ScaScanWidget */,
+				FBAE3BA56953421BA3915F10 /* ScaScanControl */,
 				5FC74010302F9A30005E0FEF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -105,6 +138,7 @@
 			children = (
 				5FC7400F302F9A30005E0FEF /* Scascan.app */,
 				1C5D453316F73CE897FE7394 /* ScaScanWidgetExtension.appex */,
+				A224428404C649EC906F985C /* ScaScanControl.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -125,6 +159,7 @@
 			);
 			dependencies = (
 				1E1CDC2BBEECB00A25DEAB31 /* PBXTargetDependency */,
+				89420974A22A469897C8847B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				5FC74011302F9A30005E0FEF /* Scascan */,
@@ -158,6 +193,27 @@
 			productReference = 1C5D453316F73CE897FE7394 /* ScaScanWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		722B73E46D25424F9A7286FF /* ScaScanControl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B3CAD34A4F64C1EA362462B /* Build configuration list for PBXNativeTarget "ScaScanControl" */;
+			buildPhases = (
+				1A6597724EEB4DA7BAD8AB6B /* Sources */,
+				B44C456DA51B4201A76BE335 /* Frameworks */,
+				DA85670A2CD44FAA93CD80D9 /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				FBAE3BA56953421BA3915F10 /* ScaScanControl */,
+			);
+			name = ScaScanControl;
+			packageProductDependencies = (
+				AFDA41D4DFAD4D7DBEF6DB69 /* ScaScanKit */,
+			);
+			productName = ScaScanControl;
+			productReference = A224428404C649EC906F985C /* ScaScanControl.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -187,6 +243,14 @@
 							};
 						};
 					};
+					722B73E46D25424F9A7286FF = {
+						CreatedOnToolsVersion = 27.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
 				};
 			};
 			buildConfigurationList = 5FC7400A302F9A2F005E0FEF /* Build configuration list for PBXProject "Scascan" */;
@@ -209,6 +273,7 @@
 			targets = (
 				5FC7400E302F9A30005E0FEF /* Scascan */,
 				C6489C80736B034C0CE28BFD /* ScaScanWidgetExtension */,
+				722B73E46D25424F9A7286FF /* ScaScanControl */,
 			);
 		};
 /* End PBXProject section */
@@ -220,6 +285,11 @@
 			);
 		};
 		5FC7400D302F9A30005E0FEF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		DA85670A2CD44FAA93CD80D9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -237,6 +307,11 @@
 			files = (
 			);
 		};
+		1A6597724EEB4DA7BAD8AB6B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -244,6 +319,11 @@
 			isa = PBXTargetDependency;
 			target = C6489C80736B034C0CE28BFD /* ScaScanWidgetExtension */;
 			targetProxy = 987C26C75E28F197BD5E6CB0 /* PBXContainerItemProxy */;
+		};
+		89420974A22A469897C8847B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 722B73E46D25424F9A7286FF /* ScaScanControl */;
+			targetProxy = 1FDCBDA14C8E49968306D517 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -500,6 +580,60 @@
 			};
 			name = Debug;
 		};
+		98681CDA28164D948061E958 /* Debug configuration for PBXNativeTarget "ScaScanControl" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ScaScanControl/ScaScanControl.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N8A766MS7S;
+				INFOPLIST_FILE = ScaScanControl/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nicoloperri.Scascan.ScaScanControl;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		9B8BE1EBF810489797C25B2B /* Release configuration for PBXNativeTarget "ScaScanControl" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ScaScanControl/ScaScanControl.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N8A766MS7S;
+				INFOPLIST_FILE = ScaScanControl/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nicoloperri.Scascan.ScaScanControl;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -527,6 +661,14 @@
 			);
 			defaultConfigurationName = Release;
 		};
+		7B3CAD34A4F64C1EA362462B /* Build configuration list for PBXNativeTarget "ScaScanControl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				98681CDA28164D948061E958 /* Debug configuration for PBXNativeTarget "ScaScanControl" */,
+				9B8BE1EBF810489797C25B2B /* Release configuration for PBXNativeTarget "ScaScanControl" */,
+			);
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -542,6 +684,10 @@
 			productName = ScaScanKit;
 		};
 		E5912F161CF79828EE763137 /* ScaScanKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScaScanKit;
+		};
+		AFDA41D4DFAD4D7DBEF6DB69 /* ScaScanKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ScaScanKit;
 		};

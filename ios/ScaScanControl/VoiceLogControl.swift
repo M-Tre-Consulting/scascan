@@ -7,11 +7,17 @@ import AppIntents
 /// speak; one tap here does all three. See `StartVoiceLogIntent` for the
 /// hand-off to the app process.
 ///
-/// Not part of `ScaScanWidgetBundle`: `ControlWidget` is a distinct protocol
-/// from `Widget` (its own `main()`, not embeddable in a `WidgetBundle`'s
-/// body) but registers from the same `com.apple.widgetkit-extension`
-/// extension point, so it lives here as a standalone declaration in the same
-/// target rather than a second `@main`.
+/// Lives in its own extension target (`ScaScanControl`), separate from the
+/// home screen widget's `ScaScanWidgetExtension`: `ControlWidget` is a
+/// distinct protocol from `Widget` with its own `@main`-style entry point
+/// (`static func main()`) and isn't embeddable inside a `WidgetBundle`'s
+/// `body` — a first attempt at declaring this as a second, non-`@main` type
+/// inside `ScaScanWidgetExtension` alongside `ScaScanWidgetBundle` compiled
+/// fine but was silently never registered by the system (Control Center
+/// never listed it) since nothing ever ran its `main()`. Both extensions use
+/// the same `com.apple.widgetkit-extension` extension point; they just can't
+/// share a target when each needs to be its own entry point.
+@main
 struct VoiceLogControl: ControlWidget {
     var body: some ControlWidgetConfiguration {
         StaticControlConfiguration(kind: "com.nicoloperri.Scascan.VoiceLogControl") {
