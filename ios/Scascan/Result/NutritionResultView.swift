@@ -51,7 +51,7 @@ struct NutritionResultView: View {
                     .foregroundStyle(.secondary)
 
                 Button(added ? "Added to today's log" : "Add to log") {
-                    try? container.logRepository.addEntry(facts)
+                    _ = try? container.logRepository.addEntry(facts)
                     added = true
                 }
                 .buttonStyle(.borderedProminent)

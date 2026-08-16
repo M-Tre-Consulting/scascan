@@ -51,7 +51,7 @@ struct MainTabView: View {
             AnalysisResultSheet(
                 facts: facts,
                 onAdd: {
-                    try? container.logRepository.addEntry(facts)
+                    _ = try? container.logRepository.addEntry(facts)
                     container.analysisManager.dismiss()
                 },
                 onFix: { container.fixTarget = .pending(facts) },

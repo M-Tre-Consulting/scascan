@@ -40,7 +40,6 @@ struct BarcodeScanView: View {
             }
 
             VStack {
-                topBar
                 Spacer()
                 if isSupported && !authDenied {
                     Text("Point camera at a barcode")
@@ -53,26 +52,16 @@ struct BarcodeScanView: View {
                 }
             }
         }
-        .toolbar(.hidden, for: .navigationBar)
+        // Background hidden (not the whole toolbar) so the standard system
+        // back button — Liquid Glass, matching every other pushed screen —
+        // still shows, floating over the live scanner instead of sitting on
+        // a solid bar.
+        .toolbarBackground(.hidden, for: .navigationBar)
         .alert("Camera access needed", isPresented: $authDenied) {
             Button("OK") { dismiss() }
         } message: {
             Text("Camera permission is required to scan barcodes.")
         }
-    }
-
-    private var topBar: some View {
-        HStack {
-            Button { dismiss() } label: {
-                Image(systemName: "chevron.left")
-                    .font(.body.weight(.semibold))
-                    .foregroundStyle(.white)
-                    .padding(12)
-                    .background(.black.opacity(0.4), in: Circle())
-            }
-            Spacer()
-        }
-        .padding()
     }
 
     private func handleScan(_ code: String) {
