@@ -1,12 +1,42 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "-%lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-%lld kcal"
+          }
+        }
+      }
+    },
     "/ %lld kcal" : {
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "/ %lld kcal"
+          }
+        }
+      }
+    },
+    "/ %lld ml" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/ %lld ml"
+          }
+        }
+      }
+    },
+    "%@ kcal (%.2f kg/wk)" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal (%.2f kg/sett)"
           }
         }
       }
@@ -79,12 +109,52 @@
         }
       }
     },
+    "%lld kcal above your %lld kcal target." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal sopra il tuo target di %lld kcal."
+          }
+        }
+      }
+    },
+    "%lld kcal below your %lld kcal target — eating too little counts too." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal sotto il tuo target di %lld kcal — mangiare troppo poco conta anche quello."
+          }
+        }
+      }
+    },
+    "%lld kcal of room left — a good day." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal di margine — buona giornata."
+          }
+        }
+      }
+    },
     "%lld kcal over goal" : {
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld kcal oltre l'obiettivo"
+          }
+        }
+      }
+    },
+    "%lld kcal over, close enough to call it even." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal in più, abbastanza vicino da considerarla pari."
           }
         }
       }
@@ -109,12 +179,32 @@
         }
       }
     },
+    "%lld ml short of the daily goal." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ml sotto l'obiettivo giornaliero."
+          }
+        }
+      }
+    },
     "%lld steps" : {
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld passi"
+          }
+        }
+      }
+    },
+    "%lld%%" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%%"
           }
         }
       }
@@ -131,6 +221,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$lldg proteine · %2$lldg carboidrati · %3$lldg grassi"
+          }
+        }
+      }
+    },
+    "+%lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%lld kcal"
           }
         }
       }
@@ -166,13 +266,42 @@
         }
       }
     },
+    "A 21:00 wrap-up of the day: every meal, your water, and what the day actually cost once activity and yesterday's balance come off. Tap it to open the recap." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un riepilogo della giornata alle 21:00: ogni pasto, l'acqua, e quanto è costata davvero la giornata togliendo attività e saldo di ieri. Toccala per aprire il recap."
+          }
+        }
+      }
+    },
     "Active" : {
-      "extractionState" : "stale",
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Attivo"
+          }
+        }
+      }
+    },
+    "Activity and yesterday's balance come off your intake here, not off the target you saw during the day." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qui attività e saldo di ieri si sottraggono da ciò che hai mangiato, non dal target che hai visto durante la giornata."
+          }
+        }
+      }
+    },
+    "Activity doesn't move your target — it comes off what you ate in the evening recap." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'attività non muove il tuo target — si sottrae da ciò che hai mangiato nel recap serale."
           }
         }
       }
@@ -249,7 +378,6 @@
       }
     },
     "Adjusting" : {
-      "extractionState" : "stale",
       "localizations" : {
         "it" : {
           "stringUnit" : {
@@ -418,7 +546,6 @@
       }
     },
     "Base target" : {
-      "extractionState" : "stale",
       "localizations" : {
         "it" : {
           "stringUnit" : {
@@ -468,6 +595,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Costruire muscolo"
+          }
+        }
+      }
+    },
+    "Burned by activity" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruciate con l'attività"
+          }
+        }
+      }
+    },
+    "Burned today" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruciate oggi"
           }
         }
       }
@@ -576,6 +723,16 @@
         }
       }
     },
+    "Choose day" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli il giorno"
+          }
+        }
+      }
+    },
     "Climbing" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -598,7 +755,6 @@
       }
     },
     "Collecting data…" : {
-      "extractionState" : "stale",
       "localizations" : {
         "it" : {
           "stringUnit" : {
@@ -680,6 +836,16 @@
         }
       }
     },
+    "Credit from the day before" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credito dal giorno prima"
+          }
+        }
+      }
+    },
     "Cricket" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -723,6 +889,16 @@
         }
       }
     },
+    "Daily Recap" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recap giornaliero"
+          }
+        }
+      }
+    },
     "Daily target: %lld kcal (AI-computed)" : {
       "localizations" : {
         "it" : {
@@ -740,6 +916,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Danza"
+          }
+        }
+      }
+    },
+    "Day" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giorno"
           }
         }
       }
@@ -825,6 +1011,16 @@
         }
       }
     },
+    "Eaten" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mangiato"
+          }
+        }
+      }
+    },
     "Elliptical" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -832,6 +1028,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ellittica"
+          }
+        }
+      }
+    },
+    "Evening recap" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recap serale"
           }
         }
       }
@@ -1020,6 +1226,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Obiettivo"
+          }
+        }
+      }
+    },
+    "Goal reached — nicely done." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo raggiunto — bel lavoro."
           }
         }
       }
@@ -1259,6 +1475,16 @@
         }
       }
     },
+    "Meals, water, activity — see how the day landed" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasti, acqua, attività — guarda com'è andata la giornata"
+          }
+        }
+      }
+    },
     "Microphone and Speech Recognition access are needed for voice logging — enable them in Settings ▸ ScaScan." : {
       "localizations" : {
         "it" : {
@@ -1353,6 +1579,16 @@
         }
       }
     },
+    "Nothing logged for this day." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna registrazione per questo giorno."
+          }
+        }
+      }
+    },
     "Notifications" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1374,6 +1610,16 @@
         }
       }
     },
+    "of %lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "su %lld kcal"
+          }
+        }
+      }
+    },
     "OK" : {
       "localizations" : {
         "it" : {
@@ -1385,12 +1631,21 @@
       }
     },
     "On track" : {
-      "extractionState" : "stale",
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "In target"
+          }
+        }
+      }
+    },
+    "Opens at 21:00, once the day's books can close" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si apre alle 21:00, quando i conti della giornata si possono chiudere"
           }
         }
       }
@@ -1412,6 +1667,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Altri nutrienti"
+          }
+        }
+      }
+    },
+    "Over target" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sopra il target"
+          }
+        }
+      }
+    },
+    "Owed from the day before" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debito dal giorno prima"
+          }
+        }
+      }
+    },
+    "P %lldg · C %lldg · F %lldg" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P %lldg · C %lldg · G %lldg"
           }
         }
       }
@@ -1502,7 +1787,6 @@
       }
     },
     "Previous day balance" : {
-      "extractionState" : "stale",
       "localizations" : {
         "it" : {
           "stringUnit" : {
@@ -1604,6 +1888,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ricalcola"
+          }
+        }
+      }
+    },
+    "Replay" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riproduci"
+          }
+        }
+      }
+    },
+    "Right on target" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In pieno target"
           }
         }
       }
@@ -1782,6 +2086,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sedentario"
+          }
+        }
+      }
+    },
+    "See yesterday's recap" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi il recap di ieri"
           }
         }
       }
@@ -2020,6 +2334,16 @@
         }
       }
     },
+    "Target includes a %@%lld kcal weight-trend correction." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il target include una correzione di %@%lld kcal per l'andamento del peso."
+          }
+        }
+      }
+    },
     "Targets based on profile estimate" : {
       "localizations" : {
         "it" : {
@@ -2051,6 +2375,26 @@
         }
       }
     },
+    "The evening recap closes the day's books: everything you ate, minus what you burned and whatever balance yesterday left behind. Until then the Log tab's target stays a clean, unmoving line to aim at." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il recap serale chiude i conti della giornata: tutto quello che hai mangiato, meno quello che hai bruciato e il saldo lasciato da ieri. Fino ad allora il target nella scheda Diario resta una linea ferma a cui mirare."
+          }
+        }
+      }
+    },
+    "The maths" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I conti"
+          }
+        }
+      }
+    },
     "This device (or the Simulator) doesn't expose a camera." : {
       "localizations" : {
         "it" : {
@@ -2067,6 +2411,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Questo dispositivo (o il Simulatore) non supporta la scansione dal vivo dei codici a barre."
+          }
+        }
+      }
+    },
+    "Today" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oggi"
           }
         }
       }
@@ -2092,8 +2446,17 @@
         }
       }
     },
+    "Today's recap opens at 21:00" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il recap di oggi si apre alle 21:00"
+          }
+        }
+      }
+    },
     "Today's target" : {
-      "extractionState" : "stale",
       "localizations" : {
         "it" : {
           "stringUnit" : {
@@ -2110,6 +2473,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Allenamenti di oggi"
+          }
+        }
+      }
+    },
+    "Total eaten" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Totale mangiato"
           }
         }
       }
@@ -2152,6 +2525,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Annulla ultima voce"
+          }
+        }
+      }
+    },
+    "Unlocks in %lldh %lldm" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si sblocca tra %lldh %lldm"
+          }
+        }
+      }
+    },
+    "Unlocks in %lldm" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si sblocca tra %lldm"
           }
         }
       }
@@ -2306,12 +2699,41 @@
       }
     },
     "Weight trend" : {
-      "extractionState" : "stale",
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Trend del peso"
+          }
+        }
+      }
+    },
+    "Well under target" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Molto sotto il target"
+          }
+        }
+      }
+    },
+    "What the day cost" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quanto è costata la giornata"
+          }
+        }
+      }
+    },
+    "What you ate" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cosa hai mangiato"
           }
         }
       }
@@ -2359,6 +2781,16 @@
         }
       }
     },
+    "Yesterday" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ieri"
+          }
+        }
+      }
+    },
     "Yoga" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2380,442 +2812,22 @@
         }
       }
     },
-    "Daily Recap" : {
+    "No verdict for this day" : {
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recap giornaliero"
+            "value" : "Nessun verdetto per questo giorno"
           }
         }
       }
     },
-    "What you ate" : {
+    "Nothing was logged, so there's nothing to weigh up against your target." : {
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cosa hai mangiato"
-          }
-        }
-      }
-    },
-    "Nothing logged for this day." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nessuna registrazione per questo giorno."
-          }
-        }
-      }
-    },
-    "Total eaten" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Totale mangiato"
-          }
-        }
-      }
-    },
-    "P %lldg · C %lldg · F %lldg" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "P %lldg · C %lldg · G %lldg"
-          }
-        }
-      }
-    },
-    "The maths" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "I conti"
-          }
-        }
-      }
-    },
-    "Eaten" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mangiato"
-          }
-        }
-      }
-    },
-    "Burned by activity" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bruciate con l'attività"
-          }
-        }
-      }
-    },
-    "Credit from the day before" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Credito dal giorno prima"
-          }
-        }
-      }
-    },
-    "Owed from the day before" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Debito dal giorno prima"
-          }
-        }
-      }
-    },
-    "What the day cost" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quanto è costata la giornata"
-          }
-        }
-      }
-    },
-    "Activity and yesterday's balance come off your intake here, not off the target you saw during the day." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Qui attività e saldo di ieri si sottraggono da ciò che hai mangiato, non dal target che hai visto durante la giornata."
-          }
-        }
-      }
-    },
-    "Target includes a %@%lld kcal weight-trend correction." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Il target include una correzione di %@%lld kcal per l'andamento del peso."
-          }
-        }
-      }
-    },
-    "/ %lld ml" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "/ %lld ml"
-          }
-        }
-      }
-    },
-    "%lld%%" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld%%"
-          }
-        }
-      }
-    },
-    "Goal reached — nicely done." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Obiettivo raggiunto — bel lavoro."
-          }
-        }
-      }
-    },
-    "%lld ml short of the daily goal." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld ml sotto l'obiettivo giornaliero."
-          }
-        }
-      }
-    },
-    "Right on target" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In pieno target"
-          }
-        }
-      }
-    },
-    "Over target" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sopra il target"
-          }
-        }
-      }
-    },
-    "Well under target" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Molto sotto il target"
-          }
-        }
-      }
-    },
-    "of %lld kcal" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "su %lld kcal"
-          }
-        }
-      }
-    },
-    "%lld kcal of room left — a good day." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld kcal di margine — buona giornata."
-          }
-        }
-      }
-    },
-    "%lld kcal over, close enough to call it even." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld kcal in più, abbastanza vicino da considerarla pari."
-          }
-        }
-      }
-    },
-    "%lld kcal above your %lld kcal target." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld kcal sopra il tuo target di %lld kcal."
-          }
-        }
-      }
-    },
-    "%lld kcal below your %lld kcal target — eating too little counts too." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld kcal sotto il tuo target di %lld kcal — mangiare troppo poco conta anche quello."
-          }
-        }
-      }
-    },
-    "Today's recap opens at 21:00" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Il recap di oggi si apre alle 21:00"
-          }
-        }
-      }
-    },
-    "Unlocks in %lldh %lldm" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Si sblocca tra %lldh %lldm"
-          }
-        }
-      }
-    },
-    "Unlocks in %lldm" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Si sblocca tra %lldm"
-          }
-        }
-      }
-    },
-    "The evening recap closes the day's books: everything you ate, minus what you burned and whatever balance yesterday left behind. Until then the Log tab's target stays a clean, unmoving line to aim at." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Il recap serale chiude i conti della giornata: tutto quello che hai mangiato, meno quello che hai bruciato e il saldo lasciato da ieri. Fino ad allora il target nella scheda Diario resta una linea ferma a cui mirare."
-          }
-        }
-      }
-    },
-    "See yesterday's recap" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vedi il recap di ieri"
-          }
-        }
-      }
-    },
-    "Choose day" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Scegli il giorno"
-          }
-        }
-      }
-    },
-    "Day" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Giorno"
-          }
-        }
-      }
-    },
-    "Replay" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Riproduci"
-          }
-        }
-      }
-    },
-    "Today" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oggi"
-          }
-        }
-      }
-    },
-    "Yesterday" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ieri"
-          }
-        }
-      }
-    },
-    "Evening recap" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recap serale"
-          }
-        }
-      }
-    },
-    "Meals, water, activity — see how the day landed" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pasti, acqua, attività — guarda com'è andata la giornata"
-          }
-        }
-      }
-    },
-    "Opens at 21:00, once the day's books can close" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Si apre alle 21:00, quando i conti della giornata si possono chiudere"
-          }
-        }
-      }
-    },
-    "Burned today" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bruciate oggi"
-          }
-        }
-      }
-    },
-    "Activity doesn't move your target — it comes off what you ate in the evening recap." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "L'attività non muove il tuo target — si sottrae da ciò che hai mangiato nel recap serale."
-          }
-        }
-      }
-    },
-    "+%lld kcal" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "+%lld kcal"
-          }
-        }
-      }
-    },
-    "-%lld kcal" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "-%lld kcal"
-          }
-        }
-      }
-    },
-    "%@ kcal (%.2f kg/wk)" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ kcal (%.2f kg/sett)"
-          }
-        }
-      }
-    },
-    "A 21:00 wrap-up of the day: every meal, your water, and what the day actually cost once activity and yesterday's balance come off. Tap it to open the recap." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Un riepilogo della giornata alle 21:00: ogni pasto, l'acqua, e quanto è costata davvero la giornata togliendo attività e saldo di ieri. Toccala per aprire il recap."
+            "value" : "Non è stato registrato nulla, quindi non c'è niente da confrontare con il tuo target."
           }
         }
       }

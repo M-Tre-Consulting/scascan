@@ -78,9 +78,19 @@ struct DailyRecapView: View {
                             ledgerCard(recap).transition(.recapCard)
                         }
                         if phase >= .verdict {
-                            VerdictHero(recap: recap, ringFill: ringFill)
-                                .id(Self.verdictAnchor)
-                                .transition(.recapCard)
+                            // A day with nothing logged has no verdict to give.
+                            // Rendering the ring anyway would state a confident
+                            // conclusion ("well under target") drawn entirely
+                            // from the absence of data.
+                            if recap.meals.isEmpty {
+                                NoDataCard()
+                                    .id(Self.verdictAnchor)
+                                    .transition(.recapCard)
+                            } else {
+                                VerdictHero(recap: recap, ringFill: ringFill)
+                                    .id(Self.verdictAnchor)
+                                    .transition(.recapCard)
+                            }
                         }
                     } else {
                         ProgressView().frame(maxWidth: .infinity).padding(.vertical, 40)
@@ -97,6 +107,17 @@ struct DailyRecapView: View {
                 await state.load()
                 guard let recap = state.recap else { return }
                 try? await play(recap, proxy: proxy)
+            }
+            // 21:00 is exactly when someone is most likely to already be sitting
+            // on this screen (the notification just fired). Without this it
+            // would stay locked, counting down past zero, until they navigated
+            // away and back.
+            .task(id: state.offsetDays) {
+                let delay = state.unlockDate.timeIntervalSinceNow
+                guard !state.isUnlocked, delay > 0, delay < Self.dayInSeconds else { return }
+                try? await Task.sleep(for: .seconds(delay + 1))
+                guard !Task.isCancelled else { return }
+                replayCount += 1
             }
             .sensoryFeedback(trigger: verdictBump) { _, _ in
                 guard let verdict = state.recap?.verdict else { return nil }
@@ -136,12 +157,16 @@ struct DailyRecapView: View {
                     get: { state.offsetDays },
                     set: { state.select(offsetDays: $0) }
                 )) {
-                    ForEach(0..<DailyRecapState.historyDays, id: \.self) { index in
+                    // Always deep enough to include the day actually on screen —
+                    // the Log tab can walk back further than the picker's
+                    // default reach, and a selection with no matching tag would
+                    // render as an empty picker.
+                    ForEach(state.pickerOffsets, id: \.self) { offset in
                         dayText(
-                            state.label(forOffset: -index),
+                            state.label(forOffset: offset),
                             dateStyle: .dateTime.weekday(.abbreviated).day().month(.abbreviated)
                         )
-                        .tag(-index)
+                        .tag(offset)
                     }
                 }
             } label: {
@@ -342,6 +367,7 @@ struct DailyRecapView: View {
     // MARK: - Choreography
 
     private static let verdictAnchor = "recap.verdict"
+    private static let dayInSeconds: TimeInterval = 24 * 60 * 60
 
     private func resetChoreography() {
         phase = .idle
@@ -507,6 +533,28 @@ private struct VerdictHero: View {
             }
         }
         .padding(.vertical, 20)
+        .frame(maxWidth: .infinity)
+        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+    }
+}
+
+/// Stands in for the verdict on a day with no meals logged.
+private struct NoDataCard: View {
+    var body: some View {
+        VStack(spacing: 10) {
+            Image(systemName: "tray")
+                .font(.system(size: 30))
+                .foregroundStyle(.secondary)
+                .frame(width: 70, height: 70)
+                .background(.quaternary, in: Circle())
+            Text("No verdict for this day")
+                .font(.title3.bold())
+            Text("Nothing was logged, so there's nothing to weigh up against your target.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(24)
         .frame(maxWidth: .infinity)
         .background(.background.secondary, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
     }

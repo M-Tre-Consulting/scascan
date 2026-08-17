@@ -49,6 +49,12 @@ final class DailyRecapState {
         Calendar.current.date(byAdding: .day, value: offsetDays, to: .now) ?? .now
     }
 
+    /// Day offsets the picker offers, newest first — always deep enough to
+    /// include whatever day is currently selected.
+    var pickerOffsets: [Int] {
+        Array(stride(from: 0, through: min(-(Self.historyDays - 1), offsetDays), by: -1))
+    }
+
     /// Labels for the day picker, newest first.
     func label(forOffset offset: Int) -> DayLabel {
         switch offset {
