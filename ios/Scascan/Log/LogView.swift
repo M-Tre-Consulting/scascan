@@ -268,7 +268,10 @@ struct LogView: View {
         }
     }
 
-    private func statusChip(_ text: String, tint: Color) -> some View {
+    // `LocalizedStringResource` rather than `String` for every label below: a
+    // `String` passed into `Text` is never extracted into the string catalog, so
+    // this whole card used to be stuck in English on a localized device.
+    private func statusChip(_ text: LocalizedStringResource, tint: Color) -> some View {
         Text(text)
             .font(.caption.weight(.semibold))
             .padding(.horizontal, 10)
@@ -285,16 +288,18 @@ struct LogView: View {
         }
     }
 
-    private func trendText(_ a: LogViewState.AdaptiveState.Active) -> String {
+    private func trendText(_ a: LogViewState.AdaptiveState.Active) -> LocalizedStringResource {
         if a.trendStatus == .noData { return "Collecting data…" }
         let sign = a.trendAdjustment >= 0 ? "+\(a.trendAdjustment)" : "\(a.trendAdjustment)"
         if let rate = a.weeklyRateKgPerWeek {
-            return String(format: "%@ kcal (%.2f kg/wk)", sign, rate)
+            return "\(sign) kcal (\(rate, specifier: "%.2f") kg/wk)"
         }
         return "\(a.trendAdjustment) kcal"
     }
 
-    private func breakdownRow(_ label: String, _ value: String, emphasized: Bool = false) -> some View {
+    private func breakdownRow(
+        _ label: LocalizedStringResource, _ value: LocalizedStringResource, emphasized: Bool = false
+    ) -> some View {
         HStack {
             Text(label)
             Spacer()

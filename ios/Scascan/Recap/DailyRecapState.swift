@@ -28,13 +28,18 @@ final class DailyRecapState {
 
     var isToday: Bool { offsetDays == 0 }
 
-    var dayTitle: String {
-        switch offsetDays {
-        case 0: return "Today"
-        case -1: return "Yesterday"
-        default: return date.formatted(.dateTime.weekday(.wide))
-        }
+    /// A day's name, keeping translated words and locale-formatted dates apart:
+    /// "Today" needs to reach the string catalog (a `String` handed to `Text` is
+    /// never extracted, so it would ship untranslated), while a date needs
+    /// `Text`'s own formatting — smuggling one through the other gives you
+    /// either an English word or a junk `"%@"` catalog key.
+    enum DayLabel: Equatable {
+        case today
+        case yesterday
+        case other(Date)
     }
+
+    var dayLabel: DayLabel { label(forOffset: offsetDays) }
 
     var daySubtitle: String {
         date.formatted(.dateTime.weekday(.wide).day().month(.wide))
@@ -45,13 +50,11 @@ final class DailyRecapState {
     }
 
     /// Labels for the day picker, newest first.
-    func label(forOffset offset: Int) -> String {
+    func label(forOffset offset: Int) -> DayLabel {
         switch offset {
-        case 0: return "Today"
-        case -1: return "Yesterday"
-        default:
-            let day = Calendar.current.date(byAdding: .day, value: offset, to: .now) ?? .now
-            return day.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated))
+        case 0: return .today
+        case -1: return .yesterday
+        default: return .other(Calendar.current.date(byAdding: .day, value: offset, to: .now) ?? .now)
         }
     }
 

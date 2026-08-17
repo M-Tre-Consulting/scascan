@@ -109,11 +109,22 @@ struct DailyRecapView: View {
 
     private func header(_ state: DailyRecapState) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(state.dayTitle)
+            dayText(state.dayLabel, dateStyle: .dateTime.weekday(.wide))
                 .font(.largeTitle.bold())
             Text(state.daySubtitle)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+        }
+    }
+
+    /// Renders a `DayLabel`: the relative words come from the string catalog,
+    /// the dates from `Text`'s own locale-aware formatting.
+    @ViewBuilder
+    private func dayText(_ label: DailyRecapState.DayLabel, dateStyle: Date.FormatStyle) -> some View {
+        switch label {
+        case .today: Text("Today")
+        case .yesterday: Text("Yesterday")
+        case .other(let date): Text(date, format: dateStyle)
         }
     }
 
@@ -126,7 +137,11 @@ struct DailyRecapView: View {
                     set: { state.select(offsetDays: $0) }
                 )) {
                     ForEach(0..<DailyRecapState.historyDays, id: \.self) { index in
-                        Text(state.label(forOffset: -index)).tag(-index)
+                        dayText(
+                            state.label(forOffset: -index),
+                            dateStyle: .dateTime.weekday(.abbreviated).day().month(.abbreviated)
+                        )
+                        .tag(-index)
                     }
                 }
             } label: {
@@ -290,21 +305,22 @@ struct DailyRecapView: View {
                     .foregroundStyle(.secondary)
             }
 
-            Text(ledgerFootnote(recap))
+            // Two separate Texts rather than one assembled String: a string
+            // built at runtime is never extracted for translation.
+            Text("Activity and yesterday's balance come off your intake here, not off the target you saw during the day.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+            if recap.trendKcal != 0 {
+                Text("Target includes a \(recap.trendKcal > 0 ? "+" : "")\(recap.trendKcal) kcal weight-trend correction.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 
-    private func ledgerFootnote(_ recap: DailyRecap) -> String {
-        var parts = ["Activity and yesterday's balance come off your intake here, not off the target you saw during the day."]
-        if recap.trendKcal != 0 {
-            parts.append("Target includes a \(recap.trendKcal > 0 ? "+" : "")\(recap.trendKcal) kcal weight-trend correction.")
-        }
-        return parts.joined(separator: " ")
-    }
-
-    private func ledgerRow(label: String, icon: String, sign: String, value: Double, tint: Color) -> some View {
+    private func ledgerRow(
+        label: LocalizedStringResource, icon: String, sign: String, value: Double, tint: Color
+    ) -> some View {
         HStack(spacing: 10) {
             Image(systemName: icon)
                 .font(.footnote)
@@ -406,7 +422,7 @@ private struct VerdictHero: View {
         }
     }
 
-    private var headline: String {
+    private var headline: LocalizedStringResource {
         switch recap.verdict {
         case .onTarget: return "Right on target"
         case .over: return "Over target"
@@ -414,7 +430,7 @@ private struct VerdictHero: View {
         }
     }
 
-    private var detail: String {
+    private var detail: LocalizedStringResource {
         let delta = Int(abs(recap.deltaKcal).rounded())
         switch recap.verdict {
         case .onTarget:
@@ -536,7 +552,7 @@ private struct LockedRecapCard: View {
         .background(.background.secondary, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
     }
 
-    private func countdown(from now: Date) -> String {
+    private func countdown(from now: Date) -> LocalizedStringResource {
         let seconds = max(unlockDate.timeIntervalSince(now), 0)
         let hours = Int(seconds) / 3_600
         let minutes = (Int(seconds) % 3_600) / 60
@@ -550,7 +566,7 @@ private struct LockedRecapCard: View {
 /// The recap's card shell: same rounded surface the rest of the app uses, plus
 /// a tinted icon chip so each step of the story is identifiable at a glance.
 private struct RecapCard<Content: View>: View {
-    let title: String
+    let title: LocalizedStringResource
     let icon: String
     let tint: Color
     @ViewBuilder var content: Content
