@@ -28,6 +28,7 @@ public final class UserProfileStore: @unchecked Sendable {
         static let aiFat = "ai_fat"
         static let syncEmail = "sync_email"
         static let waterReminders = "water_reminders"
+        static let dailyRecap = "daily_recap_enabled"
         static let lastActiveCalories = "last_active_kcal"
         static let healthConnected = "health_connected"
         static let lastYesterdayActiveCalories = "last_yesterday_active_kcal"
@@ -108,6 +109,25 @@ public final class UserProfileStore: @unchecked Sendable {
     public var waterRemindersEnabled: Bool {
         get { d.bool(forKey: Keys.waterReminders) }
         set { d.set(newValue, forKey: Keys.waterReminders) }
+    }
+
+    /// The 21:00 "your day, wrapped" notification that opens the evening recap.
+    /// On by default — the recap is where activity and the previous day's
+    /// balance are actually settled (see `DailyRecap`), so an app that never
+    /// mentioned it would be hiding half its own arithmetic.
+    public var dailyRecapEnabled: Bool {
+        get { d.object(forKey: Keys.dailyRecap) == nil ? true : d.bool(forKey: Keys.dailyRecap) }
+        set { d.set(newValue, forKey: Keys.dailyRecap) }
+    }
+
+    /// Daily water goal — the usual ~35 ml per kg of body weight, rounded to a
+    /// tidy 100 ml and clamped to a sane range, with a flat 2 L when there's no
+    /// weight on file yet. Only used to give the recap's water bar something to
+    /// fill toward; nothing in the app blocks or warns on it.
+    public var waterTargetMl: Int {
+        guard weightKg > 0 else { return 2_000 }
+        let derived = Int((weightKg * 35 / 100).rounded()) * 100
+        return min(max(derived, 1_500), 4_000)
     }
 
     /// Cached active calories from HealthKit, used as a fallback when a background

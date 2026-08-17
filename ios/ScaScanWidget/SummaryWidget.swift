@@ -41,10 +41,11 @@ struct SummaryProvider: TimelineProvider {
         let entries = (try? repository.entries(forDateOffset: 0)) ?? []
         let water = (try? repository.waterLogs(forDateOffset: 0)) ?? []
         // The widget process has no HealthKit access of its own — `liveTarget()`
-        // reconstructs the same adaptive (bleedthrough + active-burn-adjusted)
-        // target the app shows using only local data and the shared cache the
-        // app leaves behind (see `UserProfileStore.isHealthConnected` /
-        // `lastActiveCalories`), instead of the plain, unadjusted base.
+        // reconstructs the same adaptive (carry-over-adjusted) target the app
+        // shows using only local data and the shared cache the app leaves behind
+        // (see `UserProfileStore.isHealthConnected`), instead of the plain,
+        // unadjusted base. Today's burn isn't part of it in either process; it's
+        // settled in the evening recap.
         let target = (try? await repository.liveTarget()) ?? repository.dailyCalorieTarget()
         return SummaryEntry(
             date: .now,

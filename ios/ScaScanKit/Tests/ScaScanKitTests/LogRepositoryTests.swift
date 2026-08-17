@@ -32,10 +32,10 @@ struct LogRepositoryTests {
         return LogRepository(modelContainer: container, profileStore: profileStore, health: health, onDataChanged: {})
     }
 
-    @Test("finalTarget sums base + bleedthrough - active + trend")
+    @Test("finalTarget sums base + bleedthrough + trend")
     func finalTargetSum() {
         let repo = makeRepository()
-        #expect(repo.finalTarget(base: 2_000, bleedthrough: 100, active: 300, trend: -50) == 1_750)
+        #expect(repo.finalTarget(base: 2_000, bleedthrough: 100, trend: -50) == 2_050)
     }
 
     @Test("finalTarget floors at 80% of BMR, never dips below it")
@@ -44,7 +44,7 @@ struct LogRepositoryTests {
         let bmr = repo.bmr()
         // A deeply negative bleedthrough would otherwise push the target
         // dangerously low — the floor exists specifically to prevent that.
-        let result = repo.finalTarget(base: 1_200, bleedthrough: -900, active: 0, trend: 0)
+        let result = repo.finalTarget(base: 1_200, bleedthrough: -900, trend: 0)
         #expect(result == Int(Double(bmr) * 0.8))
     }
 
@@ -85,14 +85,59 @@ struct LogRepositoryTests {
         #expect(entries.first?.foodName == "Chicken breast")
     }
 
-    @Test("liveTarget subtracts today's active calories from the base target when Health is connected")
-    func liveTargetSubtractsActiveCalories() async throws {
+    @Test("liveTarget ignores today's active calories entirely — the burn belongs to the evening recap")
+    func liveTargetIgnoresActiveCalories() async throws {
+        let base = MockHealthProvider(granted: true, activeCalories: 0, weightHistory: [])
+        let busy = MockHealthProvider(granted: true, activeCalories: 900, weightHistory: [])
+        // Yesterday's carry-over does legitimately depend on yesterday's burn,
+        // and the mock reports the same figure for any range — so compare with
+        // yesterday's contribution held constant by having nothing logged then.
+        let quietTarget = try await makeRepository(health: base).liveTarget()
+        let busyRepo = makeRepository(health: busy)
+        let busyTarget = try await busyRepo.liveTarget()
+        // Both days' carry-over clamps to +500 (nothing eaten yesterday either
+        // way), so any difference between these two could only come from today's
+        // burn leaking into the target.
+        #expect(quietTarget == busyTarget)
+    }
+
+    @Test("dailyRecap settles the burn and the carry-over against intake, not against the target")
+    func dailyRecapLedger() async throws {
         let health = MockHealthProvider(granted: true, activeCalories: 400, weightHistory: [])
         let repo = makeRepository(health: health)
-        let target = try await repo.liveTarget()
-        let expectedBase = repo.baseTarget(hasHealth: true)
-        // No log entries yesterday -> yesterdayBleedthrough is 0 (no consumption to compare against target).
-        #expect(target <= expectedBase) // active calories burned reduce today's allowance, never add to it
+        let facts = NutritionFacts(
+            foodName: "Pasta", servingSize: "300g", calories: 1_500,
+            protein: 50, carbohydrates: 200, fat: 30, fiber: 8, sugar: 10, sodium: 400
+        )
+        try repo.addEntry(facts)
+
+        let recap = try await repo.dailyRecap(forDateOffset: 0)
+        #expect(recap.meals.count == 1)
+        #expect(recap.consumedKcal == 1_500)
+        #expect(recap.burnedKcal == 400)
+        // Nothing logged yesterday -> the full unused allowance carries over,
+        // clamped to +500.
+        #expect(recap.carryOverKcal == 500)
+        #expect(recap.netKcal == 1_500 - 400 - 500)
+        // The target it's measured against carries neither of those deductions.
+        #expect(recap.targetKcal == repo.finalTarget(base: repo.baseTarget(hasHealth: true), bleedthrough: 0, trend: 0))
+    }
+
+    @Test("dailyRecap's verdict flags over-eating, under-eating, and a day on target")
+    func dailyRecapVerdicts() {
+        func recap(net: Double, target: Int) -> DailyRecap {
+            DailyRecap(
+                dayStart: .now, offsetDays: 0, meals: [], consumedKcal: net, burnedKcal: 0,
+                carryOverKcal: 0, targetKcal: target, trendKcal: 0, waterMl: 0,
+                waterTargetMl: 2_000, proteinG: 0, carbsG: 0, fatG: 0
+            )
+        }
+        #expect(recap(net: 2_000, target: 2_000).verdict == .onTarget)
+        // Inside the 100 kcal grace band above the target.
+        #expect(recap(net: 2_080, target: 2_000).verdict == .onTarget)
+        #expect(recap(net: 2_400, target: 2_000).verdict == .over)
+        // Below 75% of the target reads as under-eating, not as a win.
+        #expect(recap(net: 1_400, target: 2_000).verdict == .under)
     }
 
     @Test("yesterdayBleedthrough caps the carry-over at +/-500 kcal")
@@ -126,10 +171,12 @@ struct LogRepositoryTests {
         let target = try await repo.liveTarget()
         let adaptiveBase = repo.baseTarget(hasHealth: true)
         let bleedthrough = try await repo.yesterdayBleedthrough()
-        // No trend (NoopHealthProvider has no weight history) -> the only
-        // adjustments are yesterday's bleedthrough and the cached active
-        // calories being subtracted.
-        #expect(target == adaptiveBase + bleedthrough - 300)
+        // No trend (NoopHealthProvider has no weight history), and today's burn
+        // never touches the target — so yesterday's bleedthrough is the only
+        // adjustment left. What the shared flag buys here is the *adaptive* base
+        // (1.2x BMR) instead of the plain profile target.
+        #expect(target == adaptiveBase + bleedthrough)
+        #expect(adaptiveBase != repo.dailyCalorieTarget())
     }
 
     @Test("yesterdayBleedthrough reuses the cached active-calories figure when this process has no direct Health access, as long as it's still tagged as \"yesterday\"")
@@ -169,9 +216,10 @@ struct LogRepositoryTests {
         profileStore.lastYesterdayActiveCaloriesDayStart = yesterdayStart.addingTimeInterval(-5 * 86_400).timeIntervalSince1970
         let withStaleCache = try await repo.yesterdayBleedthrough()
 
-        // Honoring the cached 400kcal burn lowers yesterday's allowance, so
-        // it should yield a meaningfully lower bleedthrough than ignoring it.
-        #expect(withStaleCache > withFreshCache)
+        // Honoring the cached 400kcal burn raises what yesterday could afford to
+        // eat, so it should yield a meaningfully *higher* carry-over than
+        // ignoring it does.
+        #expect(withFreshCache > withStaleCache)
     }
 
     @Test("effectiveActiveCalories substitutes the configured base when the reading looks like a missed Watch day")

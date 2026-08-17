@@ -16,9 +16,19 @@ import UserNotifications
 /// rather than running unattended for days. Fine for an app opened to log
 /// meals throughout the day; a multi-day-ahead schedule could be added later
 /// if that turns out to matter.
+///
+/// The 21:00 evening-recap notification below has no Android counterpart at all,
+/// and — since its time never moves — can be a single repeating trigger that
+/// keeps firing whether or not the app gets opened.
 public enum NotificationHelper {
     public static let hydrationReminderIdentifierPrefix = "scascan.hydration_reminder"
     public static let analysisCompleteIdentifier = "scascan.analysis_complete"
+    public static let dailyRecapIdentifier = "scascan.daily_recap"
+
+    /// The hour the day's books close: when the recap notification fires, and
+    /// the hour before which today's recap stays locked. Both the scheduler and
+    /// the UI's lock read this, so they can't drift apart.
+    public static let recapHour = 21
 
     /// Reminders are spread across this daily window — nobody wants a
     /// hydration ping at 3am.
@@ -29,6 +39,15 @@ public enum NotificationHelper {
     @discardableResult
     public static func requestAuthorization() async -> Bool {
         (try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])) ?? false
+    }
+
+    /// Whether notifications are actually allowed right now — for reflecting the
+    /// real state back into a settings toggle after a refused prompt.
+    public static func hasAuthorization() async -> Bool {
+        switch await UNUserNotificationCenter.current().notificationSettings().authorizationStatus {
+        case .authorized, .provisional, .ephemeral: return true
+        default: return false
+        }
     }
 
     /// Turns the hydration schedule on (or resets it): 3 reminders spread
@@ -60,6 +79,58 @@ public enum NotificationHelper {
 
     public static func cancelHydrationReminders() {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: reminderIdentifiers)
+    }
+
+    // MARK: - Evening recap
+
+    /// Keeps the 21:00 recap notification in sync with the user's preference.
+    /// Safe (and cheap) to call on every launch/foreground: re-adding a request
+    /// with the same identifier replaces it rather than stacking duplicates.
+    ///
+    /// Unlike the hydration reminders, this one *can* be a single repeating
+    /// trigger — the time never moves — so the schedule survives indefinitely
+    /// without the app being opened. The trade-off is that a repeating
+    /// notification's text is fixed at scheduling time, so the body can't quote
+    /// the day's actual numbers; it invites the user in instead.
+    public static func refreshDailyRecap(profileStore: UserProfileStore = .shared) async {
+        guard profileStore.dailyRecapEnabled else {
+            cancelDailyRecap()
+            return
+        }
+        guard await requestAuthorization() else { return }
+
+        let content = UNMutableNotificationContent()
+        content.title = "Your day, wrapped"
+        content.body = "See what you ate, what you burned, and how you landed against your target."
+        content.sound = .default
+
+        let trigger = UNCalendarNotificationTrigger(
+            dateMatching: DateComponents(hour: recapHour, minute: 0), repeats: true
+        )
+        try? await UNUserNotificationCenter.current().add(
+            UNNotificationRequest(identifier: dailyRecapIdentifier, content: content, trigger: trigger)
+        )
+    }
+
+    public static func cancelDailyRecap() {
+        UNUserNotificationCenter.current()
+            .removePendingNotificationRequests(withIdentifiers: [dailyRecapIdentifier])
+    }
+
+    /// Whether the recap for a given day offset (0 = today) is unlocked yet.
+    /// Past days always are; today's opens at `recapHour`, since a "recap"
+    /// assembled at lunchtime would just be the Log tab with extra steps.
+    public static func isRecapUnlocked(offsetDays: Int, now: Date = .now) -> Bool {
+        guard offsetDays == 0 else { return offsetDays < 0 }
+        return Calendar.current.component(.hour, from: now) >= recapHour
+    }
+
+    /// When today's recap unlocks — used for the countdown on the locked screen.
+    public static func recapUnlockDate(now: Date = .now) -> Date {
+        let calendar = Calendar.current
+        return calendar.date(
+            bySettingHour: recapHour, minute: 0, second: 0, of: now, matchingPolicy: .nextTime
+        ) ?? calendar.startOfDay(for: now).addingTimeInterval(Double(recapHour) * 3_600)
     }
 
     public static func postAnalysisComplete(foodName: String, calories: Int) {

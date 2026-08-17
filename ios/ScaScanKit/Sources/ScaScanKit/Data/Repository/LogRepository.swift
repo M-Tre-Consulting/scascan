@@ -3,9 +3,16 @@ import SwiftData
 
 /// Mirrors Android's `data.repository.LogRepository`, including the adaptive
 /// daily-target algorithm: base target (AI-computed or Mifflin-St Jeor) +
-/// yesterday's over/under-eating "bleedthrough" - today's HealthKit active burn
-/// (or the configured "Watch not worn" fallback) + a slow weight-trend
+/// yesterday's over/under-eating "bleedthrough" + a slow weight-trend
 /// correction, floored at 80% of BMR.
+///
+/// Note what the target deliberately does *not* include: today's active burn.
+/// A target that grows every time the Watch syncs another walk is a moving
+/// goalpost — you can never tell whether you're doing well, because the line
+/// keeps moving. Instead the day's burn is settled once, in the evening recap
+/// (`dailyRecap(forDateOffset:)`), as a deduction from what was eaten. Same
+/// arithmetic, but it reads as a result rather than a shifting allowance. See
+/// `DailyRecap`.
 ///
 /// SwiftData's `mainContext` is main-actor isolated, so this repository is too —
 /// matches how the original dispatches Room's suspend DAOs back onto the UI
@@ -166,28 +173,9 @@ public final class LogRepository {
         let hasHealth = liveHealth || profileStore.isHealthConnected
         let bleedthrough = try await yesterdayBleedthrough()
         let base = baseTarget(hasHealth: hasHealth)
+        let trend = hasHealth ? trendAdjustment(await health.readWeightHistory(pastDays: 28)) : 0
 
-        var activeKcal = liveHealth ? await health.readActiveCalories(offsetDays: 0) : 0
-        // Background restriction fallback: if the live read comes back empty
-        // (or this process can't read Health at all, e.g. the widget) but we
-        // have a cached value (e.g. from the widget's last successful
-        // refresh), use it.
-        if hasHealth, activeKcal <= 0.1, profileStore.lastActiveCalories > 0 {
-            activeKcal = profileStore.lastActiveCalories
-        } else if liveHealth, activeKcal > 0.1 {
-            profileStore.lastActiveCalories = activeKcal
-        }
-        if hasHealth { activeKcal = effectiveActiveCalories(activeKcal) }
-
-        let trend: Int
-        if hasHealth {
-            let history = await health.readWeightHistory(pastDays: 28)
-            trend = trendAdjustment(history)
-        } else {
-            trend = 0
-        }
-
-        return finalTarget(base: base, bleedthrough: bleedthrough, active: activeKcal, trend: trend)
+        return finalTarget(base: base, bleedthrough: bleedthrough, trend: trend)
     }
 
     public func baseTarget(hasHealth: Bool) -> Int {
@@ -195,14 +183,12 @@ public final class LogRepository {
         return isAiComputed() ? dailyCalorieTarget() : Int(Double(bmr()) * 1.2) + goalOffset()
     }
 
-    public func finalTarget(base: Int, bleedthrough: Int, active: Double, trend: Int) -> Int {
-        // Active calories burned today (real Watch/Fitness data, or the
-        // "Watch not worn" fallback) reduce today's allowance rather than
-        // padding it — the base target already accounts for the user's
-        // planned activity level, so extra measured burn comes out of it.
-        let total = base + bleedthrough - Int(active.rounded()) + trend
+    /// The number shown as "today's target" all day long. Intentionally free of
+    /// today's active burn — that lands in the evening recap instead, see this
+    /// type's doc comment.
+    public func finalTarget(base: Int, bleedthrough: Int, trend: Int) -> Int {
         // Ensure a healthy minimum target (at least 80% of BMR).
-        return max(total, Int(Double(bmr()) * 0.8))
+        max(base + bleedthrough + trend, Int(Double(bmr()) * 0.8))
     }
 
     /// Below `activeCaloriesWornThreshold` kcal for a whole day is treated as
@@ -250,42 +236,108 @@ public final class LogRepository {
     }
 
     public func yesterdayBleedthrough() async throws -> Int {
-        let (start, end) = dayRange(offsetDays: -1)
+        try await carryOverBalance(intoDayStarting: dayRange(offsetDays: 0).start)
+    }
 
-        let yesterdayEntries = try entries(from: start, to: end)
-        let consumed = yesterdayEntries.reduce(0.0) { $0 + $1.calories }
+    /// The balance the day *before* `dayStart` left behind: its whole allowance
+    /// (base target plus whatever activity it credited back) minus what was
+    /// actually eaten.
+    public func carryOverBalance(intoDayStarting dayStart: Date) async throws -> Int {
+        let start = dayStart.addingTimeInterval(-Self.dayInterval)
+        let consumed = try entries(from: start, to: dayStart).reduce(0.0) { $0 + $1.calories }
 
-        let liveHealth = await health.hasPermissions()
-        let hasHealth = liveHealth || profileStore.isHealthConnected
+        let hasHealth = await health.hasPermissions() || profileStore.isHealthConnected
         let base = baseTarget(hasHealth: hasHealth)
+        let active = await activeCalories(forDayStarting: start)
 
-        let activeYesterday: Double
-        if liveHealth {
-            let raw = effectiveActiveCalories(await health.readActiveCaloriesRange(start: start, end: end))
-            activeYesterday = raw
-            // Cache the figure (and which day it belongs to) so an out-of-
-            // process reader with no direct Health access of its own (the
-            // widget) can reuse it below.
-            profileStore.lastYesterdayActiveCalories = raw
-            profileStore.lastYesterdayActiveCaloriesDayStart = start.timeIntervalSince1970
-        } else if hasHealth, profileStore.lastYesterdayActiveCaloriesDayStart == start.timeIntervalSince1970 {
-            // The cache still refers to the same calendar day as "yesterday"
-            // from here, so it's safe to reuse.
-            activeYesterday = profileStore.lastYesterdayActiveCalories
-        } else {
-            activeYesterday = 0
-        }
-
-        // Same convention as `finalTarget`: yesterday's measured active burn
-        // lowered yesterday's allowance rather than raising it.
-        let totalAllowance = Double(base) - activeYesterday
-        let rawBalance = totalAllowance - consumed
+        // Same convention as the recap: a day's measured burn is part of what
+        // that day could afford to eat.
+        let rawBalance = (Double(base) + active) - consumed
 
         // If saved (balance > 0): use only 80% to account for body efficiency.
         // If overspent (balance < 0): carry over 100% to keep the user accountable.
         // Cap at ±500 kcal to keep today's target healthy and achievable.
         let adjustedBalance = rawBalance > 0 ? rawBalance * 0.8 : rawBalance
         return Int(adjustedBalance.rounded()).clamped(to: -500...500)
+    }
+
+    /// A day's active-energy burn, already run through the "Watch wasn't worn"
+    /// substitution, with the shared caches standing in for processes that
+    /// can't reach HealthKit themselves (the widget) — see
+    /// `UserProfileStore.lastActiveCalories` / `lastYesterdayActiveCalories`.
+    private func activeCalories(forDayStarting start: Date) async -> Double {
+        let end = start.addingTimeInterval(Self.dayInterval)
+        let todayStart = dayRange(offsetDays: 0).start
+        let yesterdayStart = dayRange(offsetDays: -1).start
+
+        if await health.hasPermissions() {
+            let value = effectiveActiveCalories(await health.readActiveCaloriesRange(start: start, end: end))
+            if start == yesterdayStart {
+                // Cache the figure (and which day it belongs to) so an
+                // out-of-process reader with no Health access of its own can
+                // reuse it — it feeds the widget's carry-over.
+                profileStore.lastYesterdayActiveCalories = value
+                profileStore.lastYesterdayActiveCaloriesDayStart = start.timeIntervalSince1970
+            }
+            return value
+        }
+
+        guard profileStore.isHealthConnected else { return 0 }
+        if start == todayStart, profileStore.lastActiveCalories > 0 {
+            return effectiveActiveCalories(profileStore.lastActiveCalories)
+        }
+        // Only trust the cached "yesterday" figure while it still refers to the
+        // same calendar day as yesterday from here.
+        if start == yesterdayStart,
+           profileStore.lastYesterdayActiveCaloriesDayStart == start.timeIntervalSince1970 {
+            return profileStore.lastYesterdayActiveCalories
+        }
+        return 0
+    }
+
+    // MARK: - Evening recap
+
+    /// Closes out a day's books: everything eaten, the water logged, and the
+    /// two deductions (activity burned, the previous day's balance) that turn
+    /// gross intake into what the day actually cost. See `DailyRecap`.
+    public func dailyRecap(forDateOffset offsetDays: Int) async throws -> DailyRecap {
+        let (start, end) = dayRange(offsetDays: offsetDays)
+        let dayEntries = try entries(from: start, to: end)
+
+        let hasHealth = await health.hasPermissions() || profileStore.isHealthConnected
+        let base = baseTarget(hasHealth: hasHealth)
+        // A past day's weight trend isn't recoverable — the correction is
+        // computed from the *current* 28-day window — so it only applies to
+        // today, where it's the same number the Log tab is showing.
+        let trend: Int
+        if offsetDays == 0, hasHealth {
+            trend = trendAdjustment(await health.readWeightHistory(pastDays: 28))
+        } else {
+            trend = 0
+        }
+
+        return DailyRecap(
+            dayStart: start,
+            offsetDays: offsetDays,
+            meals: dayEntries
+                .sorted { $0.timestamp < $1.timestamp }
+                .map {
+                    DailyRecap.Meal(
+                        id: $0.id, name: $0.foodName, servingSize: $0.servingSize,
+                        kcal: $0.calories, loggedAt: $0.timestamp
+                    )
+                },
+            consumedKcal: dayEntries.reduce(0.0) { $0 + $1.calories },
+            burnedKcal: await activeCalories(forDayStarting: start),
+            carryOverKcal: try await carryOverBalance(intoDayStarting: start),
+            targetKcal: finalTarget(base: base, bleedthrough: 0, trend: trend),
+            trendKcal: trend,
+            waterMl: try waterTotal(from: start, to: end),
+            waterTargetMl: profileStore.waterTargetMl,
+            proteinG: dayEntries.reduce(0.0) { $0 + $1.protein },
+            carbsG: dayEntries.reduce(0.0) { $0 + $1.carbohydrates },
+            fatG: dayEntries.reduce(0.0) { $0 + $1.fat }
+        )
     }
 }
 

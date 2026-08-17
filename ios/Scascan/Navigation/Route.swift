@@ -9,4 +9,7 @@ enum Route: Hashable {
     case voice
     case result(NutritionFacts)
     case settings
+    /// The evening recap for a given day offset (0 = today, -1 = yesterday, …).
+    /// No Android counterpart — see `DailyRecapView`.
+    case recap(Int)
 }

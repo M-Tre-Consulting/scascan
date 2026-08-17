@@ -6,6 +6,7 @@ import ScaScanKit
 /// water tracking, the adaptive-target card, and the meal entry list.
 struct LogView: View {
     @Environment(AppContainer.self) private var container
+    @Binding var path: [Route]
     @State private var state: LogViewState?
     @State private var showingSummary = false
 
@@ -37,6 +38,7 @@ struct LogView: View {
             VStack(alignment: .leading, spacing: 20) {
                 dateNavigation(state)
                 calorieSummary(state)
+                recapLink(state)
                 macroSummary(state)
                 waterSection(state)
                 adaptiveCard(state)
@@ -86,6 +88,41 @@ struct LogView: View {
                     total: Double(max(state.liveTarget, 1))
                 )
             }
+        }
+        .buttonStyle(.plain)
+    }
+
+    /// Entry point to the evening recap for whichever day is on screen — the
+    /// only place activity burn and the previous day's balance are actually
+    /// settled against intake. See `DailyRecapView`.
+    private func recapLink(_ state: LogViewState) -> some View {
+        let unlocked = NotificationHelper.isRecapUnlocked(offsetDays: state.dateOffset)
+        return Button { path.append(.recap(state.dateOffset)) } label: {
+            HStack(spacing: 14) {
+                Image(systemName: "moon.stars.fill")
+                    .font(.title3)
+                    .frame(width: 40, height: 40)
+                    .background(.indigo.opacity(0.15), in: Circle())
+                    .foregroundStyle(.indigo)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Evening recap")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.primary)
+                    Text(unlocked
+                         ? "Meals, water, activity — see how the day landed"
+                         : "Opens at 21:00, once the day's books can close")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer(minLength: 4)
+                Image(systemName: unlocked ? "chevron.right" : "lock.fill")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(14)
+            .background(.background.secondary, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .buttonStyle(.plain)
     }
@@ -155,7 +192,7 @@ struct LogView: View {
     @ViewBuilder
     private func workoutsSection(_ state: LogViewState) -> some View {
         if !state.workoutsToday.isEmpty {
-            SectionCard(title: "Today's workouts", subtitle: "From Apple Watch / Fitness — already counted in \"Activity today\" above.") {
+            SectionCard(title: "Today's workouts", subtitle: "From Apple Watch / Fitness — already part of \"Burned today\" above, and credited in the evening recap.") {
                 VStack(spacing: 10) {
                     ForEach(state.workoutsToday) { workout in
                         HStack {
@@ -199,7 +236,6 @@ struct LogView: View {
                     statusChip(for: a.trendStatus)
 
                     breakdownRow("Base target", "\(state.targetInfo.caloriesKcal) kcal")
-                    breakdownRow("Activity today", a.activeKcal > 0 ? "-\(Int(a.activeKcal.rounded())) kcal" : "0 kcal")
                     breakdownRow(
                         "Previous day balance",
                         state.targetInfo.bleedthroughKcal >= 0
@@ -209,6 +245,18 @@ struct LogView: View {
                     breakdownRow("Weight trend", trendText(a))
                     Divider()
                     breakdownRow("Today's target", "\(state.liveTarget) kcal", emphasized: true)
+
+                    // Deliberately below the divider, and deliberately not part
+                    // of the sum: a target that grew every time the Watch synced
+                    // would be a goalpost that never stands still. The burn is
+                    // settled once, in the evening recap. See `DailyRecap`.
+                    VStack(alignment: .leading, spacing: 4) {
+                        breakdownRow("Burned today", "\(Int(a.activeKcal.rounded())) kcal")
+                        Text("Activity doesn't move your target — it comes off what you ate in the evening recap.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.top, 2)
 
                     if a.trendStatus == .noData {
                         Text("Add weight readings in Health to enable trend-based fine-tuning.")

@@ -23,6 +23,7 @@ struct ScascanApp: App {
                 .task {
                     NotificationHelper.refreshHydrationScheduleIfNeeded()
                     pollForPendingVoiceLogRequest()
+                    await NotificationHelper.refreshDailyRecap()
                 }
         }
         .onChange(of: scenePhase) { _, phase in
@@ -34,6 +35,7 @@ struct ScascanApp: App {
             if phase == .active {
                 NotificationHelper.refreshHydrationScheduleIfNeeded()
                 pollForPendingVoiceLogRequest()
+                Task { await NotificationHelper.refreshDailyRecap() }
             }
         }
     }
@@ -57,7 +59,8 @@ struct ScascanApp: App {
     }
 
     /// Handles `scascan://log`, `scascan://camera`, `scascan://barcode`,
-    /// `scascan://search` — the widget's tap targets. Mirrors Android's
+    /// `scascan://search`, `scascan://voice`, `scascan://recap[?day=-1]` — the
+    /// widget's tap targets, plus the voice and recap screens. Mirrors Android's
     /// `ACTION_OPEN_LOG` / `ACTION_QUICK_SCAN` / `ACTION_QUICK_BARCODE` /
     /// `ACTION_QUICK_SEARCH` intent actions.
     private func handle(_ url: URL) {
@@ -76,6 +79,12 @@ struct ScascanApp: App {
         case "voice":
             container.deepLinkTab = 0
             container.deepLinkRoute = .voice
+        case "recap":
+            // Optional `?day=-1` picks an earlier day; defaults to today.
+            let day = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?.first { $0.name == "day" }?.value
+            container.deepLinkTab = 1
+            container.deepLinkRoute = .recap(min(Int(day ?? "") ?? 0, 0))
         default:
             break
         }

@@ -13,6 +13,7 @@ struct AppSettingsView: View {
     @State private var apiKeyInput = ""
     @State private var keyError: String?
     @State private var waterRemindersEnabled = false
+    @State private var dailyRecapEnabled = true
     @State private var keySavedMessage: String?
 
     @State private var healthConnected = false
@@ -42,6 +43,7 @@ struct AppSettingsView: View {
         .onAppear {
             apiKeyInput = container.keyStore.apiKey
             waterRemindersEnabled = container.profileStore.waterRemindersEnabled
+            dailyRecapEnabled = container.profileStore.dailyRecapEnabled
             waterButton1 = container.profileStore.waterButton1Ml
             waterButton2 = container.profileStore.waterButton2Ml
             waterButton3 = container.profileStore.waterButton3Ml
@@ -107,7 +109,7 @@ struct AppSettingsView: View {
     private var healthSection: some View {
         SectionCard(
             title: "Apple Health",
-            subtitle: "Reads steps, active calories, weight, height, and Apple Watch/Fitness workouts to power adaptive daily goals. Writes every meal and glass of water you log here back to Health, so your intake shows up in Health's Nutrition tab too and workout calories count toward today's target automatically."
+            subtitle: "Reads steps, active calories, weight, height, and Apple Watch/Fitness workouts to power adaptive daily goals. Writes every meal and glass of water you log here back to Health, so your intake shows up in Health's Nutrition tab too, and everything you burn gets credited in the evening recap."
         ) {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
@@ -140,7 +142,7 @@ struct AppSettingsView: View {
     private var fitnessFallbackSection: some View {
         SectionCard(
             title: "Fitness base fallback",
-            subtitle: "If Health reports under 100 kcal burned for a day, ScaScan assumes the Apple Watch wasn't worn and adds this flat amount to the target instead — otherwise it uses whatever Fitness/Watch actually reports."
+            subtitle: "If Health reports under 100 kcal burned for a day, ScaScan assumes the Apple Watch wasn't worn and credits this flat amount for that day instead — otherwise it uses whatever Fitness/Watch actually reports."
         ) {
             Stepper(value: $fitnessBaseFallback, in: 0...2_000, step: 50) {
                 HStack {
@@ -185,6 +187,20 @@ struct AppSettingsView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Hydration reminder")
                     Text("3 reminders spread evenly across 10:00–20:00. Logging water pushes the next one back — the more you drink, the longer the pause.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Divider()
+
+            Toggle(isOn: Binding(
+                get: { dailyRecapEnabled },
+                set: { setDailyRecapEnabled($0) }
+            )) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Evening recap")
+                    Text("A 21:00 wrap-up of the day: every meal, your water, and what the day actually cost once activity and yesterday's balance come off. Tap it to open the recap.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -240,6 +256,21 @@ struct AppSettingsView: View {
             if let kg { container.profileStore.weightKg = kg }
             if let cm { container.profileStore.heightCm = Int(cm) }
             healthMessage = "Weight & height synced"
+        }
+    }
+
+    private func setDailyRecapEnabled(_ enabled: Bool) {
+        dailyRecapEnabled = enabled
+        container.profileStore.dailyRecapEnabled = enabled
+        Task {
+            await NotificationHelper.refreshDailyRecap()
+            // Authorization can be refused — reflect what actually got scheduled
+            // rather than leaving the switch claiming a notification that won't
+            // arrive.
+            if enabled, !(await NotificationHelper.hasAuthorization()) {
+                dailyRecapEnabled = false
+                container.profileStore.dailyRecapEnabled = false
+            }
         }
     }
 

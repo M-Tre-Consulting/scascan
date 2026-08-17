@@ -38,6 +38,10 @@ final class AppContainer {
     var deepLinkTab: Int?
     var deepLinkRoute: Route?
 
+    /// Retained for its lifetime — `UNUserNotificationCenter.delegate` is a weak
+    /// reference, so nothing else would keep it alive.
+    private var notificationCoordinator: NotificationCoordinator?
+
     init(modelContainer: ModelContainer = ScaScanSchema.makeContainer()) {
         self.modelContainer = modelContainer
         self.keyStore = .shared
@@ -66,6 +70,10 @@ final class AppContainer {
                 self?.consumePendingVoiceLogRequestIfNeeded()
             }
         }
+
+        // Set here, during launch, because a notification tap that launched the
+        // app is only delivered to a delegate that already exists by then.
+        self.notificationCoordinator = NotificationCoordinator(container: self)
     }
 
     /// Checks the flag `StartVoiceLogIntent` (Siri / Shortcuts) leaves behind.

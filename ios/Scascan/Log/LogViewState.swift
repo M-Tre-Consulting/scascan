@@ -50,23 +50,16 @@ final class LogViewState {
     /// feeding into today's live target".
     private(set) var workoutsToday: [WorkoutSummary] = []
 
-    /// Base target - today's active burn + weight-trend correction + yesterday's
-    /// bleedthrough — the number actually shown as "today's target".
+    /// Base target + yesterday's bleedthrough + the weight-trend correction —
+    /// the number actually shown as "today's target". Today's active burn is
+    /// deliberately absent; it's settled in the evening recap instead, see
+    /// `DailyRecap`.
     var liveTarget: Int {
         guard isToday else { return targetInfo.caloriesKcal }
-        let active: Double
-        let trend: Int
-        if case .active(let a) = adaptiveState {
-            active = a.activeKcal
-            trend = a.trendAdjustment
-        } else {
-            active = 0
-            trend = 0
-        }
+        let trend: Int = if case .active(let a) = adaptiveState { a.trendAdjustment } else { 0 }
         return repository.finalTarget(
             base: targetInfo.caloriesKcal,
             bleedthrough: targetInfo.bleedthroughKcal,
-            active: active,
             trend: trend
         )
     }

@@ -8,6 +8,10 @@ struct MainTabView: View {
     @Environment(AppContainer.self) private var container
     @State private var selection = 0
     @State private var path: [Route] = []
+    /// The Log tab pushes too (the evening recap), so it needs its own stack —
+    /// sharing one path across tabs would move the pushed screen under whichever
+    /// tab happened to be showing.
+    @State private var logPath: [Route] = []
 
     var body: some View {
         TabView(selection: $selection) {
@@ -18,8 +22,9 @@ struct MainTabView: View {
                 }
             }
             Tab("Log", systemImage: "fork.knife", value: 1) {
-                NavigationStack {
-                    LogView()
+                NavigationStack(path: $logPath) {
+                    LogView(path: $logPath)
+                        .navigationDestination(for: Route.self) { destination(for: $0) }
                 }
             }
             Tab("Profile", systemImage: "person.crop.circle", value: 2) {
@@ -75,15 +80,28 @@ struct MainTabView: View {
         } message: {
             Text(analysisErrorMessage)
         }
-        .onChange(of: container.deepLinkTab) { _, tab in
-            guard let tab else { return }
+        // A deep link can be set *before* this view exists — a notification tap
+        // or a Siri intent that cold-launched the app resolves during launch,
+        // and `onChange` only fires for changes after installation. So the
+        // pending link is drained on appearance as well as on change.
+        .task { applyPendingDeepLink() }
+        .onChange(of: container.deepLinkTab) { _, _ in applyPendingDeepLink() }
+        .onChange(of: container.deepLinkRoute) { _, _ in applyPendingDeepLink() }
+    }
+
+    private func applyPendingDeepLink() {
+        if let tab = container.deepLinkTab {
             selection = tab
             container.deepLinkTab = nil
         }
-        .onChange(of: container.deepLinkRoute) { _, route in
-            guard let route else { return }
+        guard let route = container.deepLinkRoute else { return }
+        container.deepLinkRoute = nil
+        // The recap lives under Log; everything else under Scan.
+        if case .recap = route {
+            selection = 1
+            logPath = [route]
+        } else {
             path.append(route)
-            container.deepLinkRoute = nil
         }
     }
 
@@ -157,6 +175,7 @@ struct MainTabView: View {
         case .voice: VoiceSearchView()
         case .result(let facts): NutritionResultView(facts: facts)
         case .settings: AppSettingsView()
+        case .recap(let offsetDays): DailyRecapView(initialOffsetDays: offsetDays)
         }
     }
 }
