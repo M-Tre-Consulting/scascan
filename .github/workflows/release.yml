@@ -66,16 +66,28 @@ jobs:
 
       # Gradle signs the APK itself as part of assembleRelease (see signingConfigs.release in
       # app/build.gradle.kts) — no separate apksigner/openssl step needed.
+      #
+      # Secrets are passed via env: and read as shell variables ($VAR), not interpolated
+      # directly into the run: script (${{ secrets.X }} inline) — GitHub substitutes that
+      # textually into the script *before* bash parses it, so a password containing a quote,
+      # backtick, $, or & breaks the script's syntax (or worse). $VAR expansion doesn't have
+      # that problem: the value is a single opaque string no matter what's in it.
       - name: Build release APK
         working-directory: android
+        env:
+          VERSION_NAME: ${{ needs.version.outputs.version }}
+          VERSION_CODE: ${{ needs.version.outputs.version_code }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           gradle assembleRelease \
-            -PversionName="${{ needs.version.outputs.version }}" \
-            -PversionCode="${{ needs.version.outputs.version_code }}" \
+            -PversionName="$VERSION_NAME" \
+            -PversionCode="$VERSION_CODE" \
             -PandroidReleaseStoreFile="release.keystore.jks" \
-            -PandroidReleaseStorePassword="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" \
-            -PandroidReleaseKeyAlias="${{ secrets.ANDROID_KEY_ALIAS }}" \
-            -PandroidReleaseKeyPassword="${{ secrets.ANDROID_KEY_PASSWORD }}"
+            -PandroidReleaseStorePassword="$ANDROID_KEYSTORE_PASSWORD" \
+            -PandroidReleaseKeyAlias="$ANDROID_KEY_ALIAS" \
+            -PandroidReleaseKeyPassword="$ANDROID_KEY_PASSWORD"
 
       - uses: actions/upload-artifact@v4
         with:
