@@ -1,7 +1,26 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git *)"
+      "Bash(gh auth *)",
+      "Artifact",
+      "Bash(brew list *)",
+      "Bash(brew install *)",
+      "Read(//tmp/**)",
+      "Bash(cd *)",
+      "Bash(gh repo *)",
+      "Bash(mkdir -p ios)",
+      "Bash(git mv *)",
+      "Bash(mv Scascan.xcodeproj Scascan ios/)",
+      "Bash(git remote *)",
+      "Bash(git fetch *)",
+      "Bash(git merge upstream/main --allow-unrelated-histories -m 'Merge upstream Android codebase from M-Tre-Consulting/scascan *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git rm *)",
+      "Bash(git push *)",
+      "Bash(xcodebuild -list -project Scascan.xcodeproj)",
+      "Bash(xcodebuild build *)",
+      "Bash(xcodebuild -showBuildSettings -project Scascan.xcodeproj -scheme Scascan)"
     ]
   }
 }

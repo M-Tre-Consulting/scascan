@@ -1,0 +1,134 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "/ %lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/ %lld kcal"
+          }
+        }
+      }
+    },
+    "%lld" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        }
+      }
+    },
+    "%lld ml" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ml"
+          }
+        }
+      }
+    },
+    "Add Water" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi acqua"
+          }
+        }
+      }
+    },
+    "Daily Summary" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riepilogo giornaliero"
+          }
+        }
+      }
+    },
+    "Log by Voice" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra a voce"
+          }
+        }
+      }
+    },
+    "Logs water to today's total. Amount is set in ScaScan's Settings." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra dell'acqua nel totale di oggi. La quantità si imposta nelle Impostazioni di ScaScan."
+          }
+        }
+      }
+    },
+    "Opens ScaScan and starts listening so you can describe what you're eating." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apre ScaScan e inizia ad ascoltare, così puoi descrivere cosa stai mangiando."
+          }
+        }
+      }
+    },
+    "P %lldg · C %lldg · F %lldg" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "P %1$lldg · C %2$lldg · F %3$lldg"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P %1$lldg · C %2$lldg · G %3$lldg"
+          }
+        }
+      }
+    },
+    "Removes the most recently logged water entry." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rimuove l'ultima voce d'acqua registrata."
+          }
+        }
+      }
+    },
+    "Track today's calories, macros, and water at a glance." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monitora calorie, macronutrienti e acqua di oggi con un'occhiata."
+          }
+        }
+      }
+    },
+    "Undo Water" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulla acqua"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

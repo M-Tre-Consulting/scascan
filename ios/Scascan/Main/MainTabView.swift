@@ -1,0 +1,223 @@
+import SwiftUI
+import ScaScanKit
+
+/// Mirrors Android's `MainFragment` (ViewPager2 shell) + `MainTabsAdapter`.
+/// `TabView` gives swipeable paging and the tab bar natively, replacing both
+/// the custom animated bottom-nav view and the ViewPager2 wiring in one shot.
+struct MainTabView: View {
+    @Environment(AppContainer.self) private var container
+    @State private var selection = 0
+    @State private var path: [Route] = []
+    /// The Log tab pushes too (the evening recap), so it needs its own stack —
+    /// sharing one path across tabs would move the pushed screen under whichever
+    /// tab happened to be showing.
+    @State private var logPath: [Route] = []
+
+    var body: some View {
+        TabView(selection: $selection) {
+            Tab("Scan", systemImage: "house.fill", value: 0) {
+                NavigationStack(path: $path) {
+                    HomeView(path: $path)
+                        .navigationDestination(for: Route.self) { destination(for: $0) }
+                }
+            }
+            Tab("Log", systemImage: "fork.knife", value: 1) {
+                NavigationStack(path: $logPath) {
+                    LogView(path: $logPath)
+                        .navigationDestination(for: Route.self) { destination(for: $0) }
+                }
+            }
+            Tab("Profile", systemImage: "person.crop.circle", value: 2) {
+                NavigationStack {
+                    ProfileView()
+                }
+            }
+        }
+        .overlay(alignment: .bottom) {
+            if container.analysisManager.state == .processing {
+                AnalysisProgressBar()
+            }
+        }
+        .overlay(alignment: .bottom) {
+            if let pending = container.pendingUndo {
+                UndoBanner(message: pending.message) {
+                    try? container.logRepository.deleteEntry(pending.entry)
+                    container.pendingUndo = nil
+                }
+            }
+        }
+        .task(id: container.pendingUndo?.id) {
+            guard container.pendingUndo != nil else { return }
+            try? await Task.sleep(for: .seconds(4))
+            guard !Task.isCancelled else { return }
+            container.pendingUndo = nil
+        }
+        .sheet(item: analysisResultBinding) { facts in
+            AnalysisResultSheet(
+                facts: facts,
+                onAdd: {
+                    _ = try? container.logRepository.addEntry(facts)
+                    container.analysisManager.dismiss()
+                },
+                onFix: { container.fixTarget = .pending(facts) },
+                onViewDetails: {
+                    container.analysisManager.dismiss()
+                    path.append(.result(facts))
+                    selection = 0
+                },
+                onDismiss: { container.analysisManager.dismiss() }
+            )
+            .presentationDetents([.medium, .large])
+        }
+        .sheet(item: fixTargetBinding) { target in
+            FixEntrySheet(target: target) { correction in
+                await applyFix(target, correction: correction)
+            }
+            .presentationDetents([.medium])
+        }
+        .alert("Something went wrong", isPresented: analysisErrorPresented) {
+            Button("OK", role: .cancel) { container.analysisManager.dismiss() }
+        } message: {
+            Text(analysisErrorMessage)
+        }
+        // A deep link can be set *before* this view exists — a notification tap
+        // or a Siri intent that cold-launched the app resolves during launch,
+        // and `onChange` only fires for changes after installation. So the
+        // pending link is drained on appearance as well as on change.
+        .task { applyPendingDeepLink() }
+        .onChange(of: container.deepLinkTab) { _, _ in applyPendingDeepLink() }
+        .onChange(of: container.deepLinkRoute) { _, _ in applyPendingDeepLink() }
+    }
+
+    private func applyPendingDeepLink() {
+        if let tab = container.deepLinkTab {
+            selection = tab
+            container.deepLinkTab = nil
+        }
+        guard let route = container.deepLinkRoute else { return }
+        container.deepLinkRoute = nil
+        // The recap lives under Log; everything else under Scan.
+        if case .recap = route {
+            selection = 1
+            logPath = [route]
+        } else {
+            path.append(route)
+        }
+    }
+
+    /// Bridges `AnalysisManager.State.complete` to a `.sheet(item:)` binding.
+    private var analysisResultBinding: Binding<NutritionFacts?> {
+        Binding(
+            get: {
+                if case .complete(let facts) = container.analysisManager.state { return facts }
+                return nil
+            },
+            set: { if $0 == nil { container.analysisManager.dismiss() } }
+        )
+    }
+
+    private var fixTargetBinding: Binding<FixEntryTarget?> {
+        Binding(get: { container.fixTarget }, set: { container.fixTarget = $0 })
+    }
+
+    /// Bridges `AnalysisManager.State.error` to an `.alert` — previously this
+    /// state existed but nothing ever displayed it, so a failed scan/search/
+    /// pending-item fix looked exactly like a silent no-op.
+    private var analysisErrorPresented: Binding<Bool> {
+        Binding(
+            get: { if case .error = container.analysisManager.state { return true }; return false },
+            set: { if !$0 { container.analysisManager.dismiss() } }
+        )
+    }
+
+    private var analysisErrorMessage: String {
+        if case .error(let message) = container.analysisManager.state { return message }
+        return ""
+    }
+
+    private func applyFix(_ target: FixEntryTarget, correction: String) async -> FixOutcome {
+        switch target {
+        case .pending(let facts):
+            // Fire-and-forget into the shared AnalysisManager: it owns the
+            // global processing state (AnalysisProgressBar + the error alert
+            // above), and on success re-opens the result sheet with the
+            // corrected facts — so this sheet can close right away.
+            container.analysisManager.fixPending(facts, correction: correction)
+            return .success
+        case .logged(let entry):
+            do {
+                let facts = try await container.nutritionRepository.fixEntry(
+                    foodName: entry.foodName, servingSize: entry.servingSize, correction: correction
+                )
+                entry.foodName = facts.foodName
+                entry.servingSize = facts.servingSize
+                entry.calories = facts.calories
+                entry.protein = facts.protein
+                entry.carbohydrates = facts.carbohydrates
+                entry.fat = facts.fat
+                entry.fiber = facts.fiber
+                entry.sugar = facts.sugar
+                entry.sodium = facts.sodium
+                try container.logRepository.updateEntry(entry)
+                return .success
+            } catch {
+                return .failure(error.localizedDescription)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func destination(for route: Route) -> some View {
+        switch route {
+        case .camera: CameraCaptureView()
+        case .barcode: BarcodeScanView()
+        case .search: SearchView()
+        case .voice: VoiceSearchView()
+        case .result(let facts): NutritionResultView(facts: facts)
+        case .settings: AppSettingsView()
+        case .recap(let offsetDays): DailyRecapView(initialOffsetDays: offsetDays)
+        }
+    }
+}
+
+private struct AnalysisProgressBar: View {
+    var body: some View {
+        HStack(spacing: 10) {
+            ProgressView()
+            Text("Analyzing…")
+                .font(.subheadline)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(.regularMaterial, in: Capsule())
+        .padding(.bottom, 8)
+    }
+}
+
+private struct UndoBanner: View {
+    let message: String
+    let onUndo: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(Color.scascanBrand)
+            Text(message)
+                .font(.subheadline)
+                .lineLimit(1)
+            Spacer(minLength: 8)
+            Button("Undo", action: onUndo)
+                .font(.subheadline.weight(.semibold))
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(.regularMaterial, in: Capsule())
+        .padding(.horizontal, 20)
+        .padding(.bottom, 8)
+        .transition(.move(edge: .bottom).combined(with: .opacity))
+    }
+}
+
+extension NutritionFacts: @retroactive Identifiable {
+    public var id: String { foodName + servingSize }
+}

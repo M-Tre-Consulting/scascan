@@ -58,6 +58,35 @@ jobs:
           name: android-release
           path: android/app/build/outputs/apk/release/*.apk
 
+  # Build verification only — no signing/App Store Connect upload yet, since
+  # that needs Apple Developer Program secrets (a distribution certificate,
+  # provisioning profile, and an App Store Connect API key) that aren't
+  # configured in this repo. Once they are, extend this job with
+  # `xcodebuild archive` + `-exportArchive` + `xcrun altool`/App Store
+  # Connect API upload, mirroring the android job's sign-then-upload shape.
+  # Runs independently of the android job/release — a red iOS build here
+  # doesn't block an Android release going out.
+  ios:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select latest Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Resolve Swift Package dependencies
+        working-directory: ios
+        run: xcodebuild -resolvePackageDependencies -project Scascan.xcodeproj -scheme Scascan
+
+      - name: Build (unsigned)
+        working-directory: ios
+        run: |
+          xcodebuild build \
+            -project Scascan.xcodeproj \
+            -scheme Scascan \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO
+
   release:
     needs: android
     runs-on: ubuntu-latest
@@ -76,3 +105,5 @@ jobs:
             ## Installation
 
             **Android** — Install the APK directly or add this repo to [Obtainium](https://github.com/ImranR98/Obtainium) for automatic updates.
+
+            **iOS** — Not yet distributed via TestFlight/App Store; build from source in Xcode (`ios/Scascan.xcodeproj`, iOS 26+).

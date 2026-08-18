@@ -1,0 +1,2837 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "-%lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-%lld kcal"
+          }
+        }
+      }
+    },
+    "/ %lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/ %lld kcal"
+          }
+        }
+      }
+    },
+    "/ %lld ml" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/ %lld ml"
+          }
+        }
+      }
+    },
+    "%@ kcal (%.2f kg/wk)" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal (%.2f kg/sett)"
+          }
+        }
+      }
+    },
+    "%@%lld kcal from yesterday" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$lld kcal from yesterday"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@%2$lld kcal da ieri"
+          }
+        }
+      }
+    },
+    "%lld" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        }
+      }
+    },
+    "%lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal"
+          }
+        }
+      }
+    },
+    "%lld kcal · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld kcal · %2$@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld kcal · %2$@"
+          }
+        }
+      }
+    },
+    "%lld kcal • %lldg P • %lldg C • %lldg F" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld kcal • %2$lldg P • %3$lldg C • %4$lldg F"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld kcal • %2$lldg P • %3$lldg C • %4$lldg G"
+          }
+        }
+      }
+    },
+    "%lld kcal above your %lld kcal target." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal sopra il tuo target di %lld kcal."
+          }
+        }
+      }
+    },
+    "%lld kcal below your %lld kcal target — eating too little counts too." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal sotto il tuo target di %lld kcal — mangiare troppo poco conta anche quello."
+          }
+        }
+      }
+    },
+    "%lld kcal of room left — a good day." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal di margine — buona giornata."
+          }
+        }
+      }
+    },
+    "%lld kcal over goal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal oltre l'obiettivo"
+          }
+        }
+      }
+    },
+    "%lld kcal over, close enough to call it even." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal in più, abbastanza vicino da considerarla pari."
+          }
+        }
+      }
+    },
+    "%lld kcal remaining" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kcal rimanenti"
+          }
+        }
+      }
+    },
+    "%lld ml" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ml"
+          }
+        }
+      }
+    },
+    "%lld ml short of the daily goal." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ml sotto l'obiettivo giornaliero."
+          }
+        }
+      }
+    },
+    "%lld steps" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld passi"
+          }
+        }
+      }
+    },
+    "%lld%%" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%%"
+          }
+        }
+      }
+    },
+    "%lldg protein · %lldg carbs · %lldg fat" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lldg protein · %2$lldg carbs · %3$lldg fat"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lldg proteine · %2$lldg carboidrati · %3$lldg grassi"
+          }
+        }
+      }
+    },
+    "+%lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%lld kcal"
+          }
+        }
+      }
+    },
+    "+%lldml" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%lldml"
+          }
+        }
+      }
+    },
+    "3 reminders spread evenly across 10:00–20:00. Logging water pushes the next one back — the more you drink, the longer the pause." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 promemoria distribuiti in modo uniforme tra le 10:00 e le 20:00. Registrare acqua sposta più in là il successivo — più bevi, più lunga la pausa."
+          }
+        }
+      }
+    },
+    "100/250/500ml won't fit everyone's glass or bottle — set your own quick-add amounts here, for both the Log tab and the home screen widget." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100/250/500ml non vanno bene per il bicchiere o la bottiglia di tutti: imposta qui le tue quantità rapide, sia per la scheda Diario che per il widget nella schermata Home."
+          }
+        }
+      }
+    },
+    "A 21:00 wrap-up of the day: every meal, your water, and what the day actually cost once activity and yesterday's balance come off. Tap it to open the recap." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un riepilogo della giornata alle 21:00: ogni pasto, l'acqua, e quanto è costata davvero la giornata togliendo attività e saldo di ieri. Toccala per aprire il recap."
+          }
+        }
+      }
+    },
+    "Active" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attivo"
+          }
+        }
+      }
+    },
+    "Activity and yesterday's balance come off your intake here, not off the target you saw during the day." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qui attività e saldo di ieri si sottraggono da ciò che hai mangiato, non dal target che hai visto durante la giornata."
+          }
+        }
+      }
+    },
+    "Activity doesn't move your target — it comes off what you ate in the evening recap." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'attività non muove il tuo target — si sottrae da ciò che hai mangiato nel recap serale."
+          }
+        }
+      }
+    },
+    "Activity level" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Livello di attività"
+          }
+        }
+      }
+    },
+    "Adaptive targets" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivi adattativi"
+          }
+        }
+      }
+    },
+    "Add to log" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi al diario"
+          }
+        }
+      }
+    },
+    "Add weight readings in Health to enable trend-based fine-tuning." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi misurazioni del peso in Salute per abilitare la correzione basata sul trend."
+          }
+        }
+      }
+    },
+    "Added %@ · %lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunto %1$@ · %2$lld kcal"
+          }
+        }
+      }
+    },
+    "Added to today's log" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunto al diario di oggi"
+          }
+        }
+      }
+    },
+    "Adding to your log…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunta al diario…"
+          }
+        }
+      }
+    },
+    "Adjusting" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adattamento"
+          }
+        }
+      }
+    },
+    "Age" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Età"
+          }
+        }
+      }
+    },
+    "Age is required" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'età è obbligatoria"
+          }
+        }
+      }
+    },
+    "AI Model" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modello IA"
+          }
+        }
+      }
+    },
+    "AI-computed target" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo calcolato dall'IA"
+          }
+        }
+      }
+    },
+    "AI-powered nutritional analysis" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analisi nutrizionale con intelligenza artificiale"
+          }
+        }
+      }
+    },
+    "American Football" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Football americano"
+          }
+        }
+      }
+    },
+    "Amount" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quantità"
+          }
+        }
+      }
+    },
+    "Analyze" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analizza"
+          }
+        }
+      }
+    },
+    "Analyzing…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analisi in corso…"
+          }
+        }
+      }
+    },
+    "API key saved" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiave API salvata"
+          }
+        }
+      }
+    },
+    "Apple Health" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Salute"
+          }
+        }
+      }
+    },
+    "Apply fix" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Applica correzione"
+          }
+        }
+      }
+    },
+    "Archery" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiro con l'arco"
+          }
+        }
+      }
+    },
+    "Badminton" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Badminton"
+          }
+        }
+      }
+    },
+    "Barcode scanning unavailable" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scansione codice a barre non disponibile"
+          }
+        }
+      }
+    },
+    "Base target" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo base"
+          }
+        }
+      }
+    },
+    "Baseball" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baseball"
+          }
+        }
+      }
+    },
+    "Basketball" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basket"
+          }
+        }
+      }
+    },
+    "Boxing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boxe"
+          }
+        }
+      }
+    },
+    "Build muscle" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Costruire muscolo"
+          }
+        }
+      }
+    },
+    "Burned by activity" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruciate con l'attività"
+          }
+        }
+      }
+    },
+    "Burned today" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruciate oggi"
+          }
+        }
+      }
+    },
+    "Calories" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calorie"
+          }
+        }
+      }
+    },
+    "Camera access needed" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accesso alla fotocamera necessario"
+          }
+        }
+      }
+    },
+    "Camera permission is required to scan barcodes." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il permesso alla fotocamera è necessario per scansionare i codici a barre."
+          }
+        }
+      }
+    },
+    "Camera permission is required to use this feature." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il permesso alla fotocamera è necessario per usare questa funzione."
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulla"
+          }
+        }
+      }
+    },
+    "Capture failed" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cattura non riuscita"
+          }
+        }
+      }
+    },
+    "Carbohydrates" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carboidrati"
+          }
+        }
+      }
+    },
+    "Carbs" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carboidrati"
+          }
+        }
+      }
+    },
+    "Carbs %@" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carboidrati %@"
+          }
+        }
+      }
+    },
+    "Choose a model" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli un modello"
+          }
+        }
+      }
+    },
+    "Choose day" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli il giorno"
+          }
+        }
+      }
+    },
+    "Climbing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrampicata"
+          }
+        }
+      }
+    },
+    "Close" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiudi"
+          }
+        }
+      }
+    },
+    "Collecting data…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raccolta dati…"
+          }
+        }
+      }
+    },
+    "Computing your personalized targets…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calcolo obiettivi personalizzati…"
+          }
+        }
+      }
+    },
+    "Connect Apple Health" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collega Apple Salute"
+          }
+        }
+      }
+    },
+    "Connect Apple Health to enable adaptive targets." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collega Apple Salute per abilitare gli obiettivi adattativi."
+          }
+        }
+      }
+    },
+    "Connected" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connesso"
+          }
+        }
+      }
+    },
+    "Cooldown" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Defaticamento"
+          }
+        }
+      }
+    },
+    "Core Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allenamento core"
+          }
+        }
+      }
+    },
+    "Correct food (e.g. Turkey breast, 150g)" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alimento corretto (es. Petto di tacchino, 150g)"
+          }
+        }
+      }
+    },
+    "Credit from the day before" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credito dal giorno prima"
+          }
+        }
+      }
+    },
+    "Cricket" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cricket"
+          }
+        }
+      }
+    },
+    "Cross Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cross training"
+          }
+        }
+      }
+    },
+    "Currently identified as:" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attualmente identificato come:"
+          }
+        }
+      }
+    },
+    "Cycling" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ciclismo"
+          }
+        }
+      }
+    },
+    "Daily Recap" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recap giornaliero"
+          }
+        }
+      }
+    },
+    "Daily target: %lld kcal (AI-computed)" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo giornaliero: %lld kcal (calcolato dall'IA)"
+          }
+        }
+      }
+    },
+    "Dance" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Danza"
+          }
+        }
+      }
+    },
+    "Day" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giorno"
+          }
+        }
+      }
+    },
+    "Describe a food or meal to get its nutritional facts." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descrivi un alimento o un pasto per ottenere i valori nutrizionali."
+          }
+        }
+      }
+    },
+    "Describe the correct food and ScaScan will recalculate the nutritional values." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descrivi l'alimento corretto e ScaScan ricalcolerà i valori nutrizionali."
+          }
+        }
+      }
+    },
+    "Disconnect" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnetti"
+          }
+        }
+      }
+    },
+    "Disconnected" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnesso"
+          }
+        }
+      }
+    },
+    "Disconnected locally — to fully revoke access, open Health ▸ Data Access & Devices." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnesso localmente — per revocare completamente l'accesso, apri Salute ▸ Accesso ai dati e dispositivi."
+          }
+        }
+      }
+    },
+    "Dismiss" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignora"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fatto"
+          }
+        }
+      }
+    },
+    "e.g. Chicken breast, 100g" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "es. Petto di pollo, 100g"
+          }
+        }
+      }
+    },
+    "Eaten" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mangiato"
+          }
+        }
+      }
+    },
+    "Elliptical" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ellittica"
+          }
+        }
+      }
+    },
+    "Evening recap" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recap serale"
+          }
+        }
+      }
+    },
+    "Extra active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estremamente attivo"
+          }
+        }
+      }
+    },
+    "Fat" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grassi"
+          }
+        }
+      }
+    },
+    "Fat %@" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grassi %@"
+          }
+        }
+      }
+    },
+    "Female" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Femmina"
+          }
+        }
+      }
+    },
+    "Fencing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scherma"
+          }
+        }
+      }
+    },
+    "Fiber" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fibre"
+          }
+        }
+      }
+    },
+    "Fitness base fallback" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunta base da Fitness"
+          }
+        }
+      }
+    },
+    "Fitness goal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo fitness"
+          }
+        }
+      }
+    },
+    "Fix" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correggi"
+          }
+        }
+      }
+    },
+    "Fix this entry" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correggi questa voce"
+          }
+        }
+      }
+    },
+    "Flexibility" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flessibilità"
+          }
+        }
+      }
+    },
+    "From Apple Watch / Fitness — already counted in \"Activity today\" above." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Da Apple Watch / Fitness — già conteggiati in \"Attività di oggi\" qui sopra."
+          }
+        }
+      }
+    },
+    "Functional Strength Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allenamento funzionale"
+          }
+        }
+      }
+    },
+    "Gemini API key" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiave API Gemini"
+          }
+        }
+      }
+    },
+    "Gemini model" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modello Gemini"
+          }
+        }
+      }
+    },
+    "Get my free key" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ottieni chiave gratuita"
+          }
+        }
+      }
+    },
+    "Get started" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inizia"
+          }
+        }
+      }
+    },
+    "Goal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo"
+          }
+        }
+      }
+    },
+    "Goal reached — nicely done." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo raggiunto — bel lavoro."
+          }
+        }
+      }
+    },
+    "Golf" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Golf"
+          }
+        }
+      }
+    },
+    "Gymnastics" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ginnastica"
+          }
+        }
+      }
+    },
+    "Health data isn't available on this device." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I dati di Salute non sono disponibili su questo dispositivo."
+          }
+        }
+      }
+    },
+    "Height (cm)" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altezza (cm)"
+          }
+        }
+      }
+    },
+    "Height is required" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'altezza è obbligatoria"
+          }
+        }
+      }
+    },
+    "HIIT" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HIIT"
+          }
+        }
+      }
+    },
+    "Hiking" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escursionismo"
+          }
+        }
+      }
+    },
+    "Hockey" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hockey"
+          }
+        }
+      }
+    },
+    "Hydration reminder" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Promemoria idratazione"
+          }
+        }
+      }
+    },
+    "Identify food from any image" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Identifica il cibo da qualsiasi immagine"
+          }
+        }
+      }
+    },
+    "If Health reports under 100 kcal burned for a day, ScaScan assumes the Apple Watch wasn't worn and adds this flat amount to the target instead — otherwise it uses whatever Fitness/Watch actually reports." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se Salute registra meno di 100 kcal bruciate in un giorno, ScaScan presume che l'Apple Watch non sia stato indossato e aggiunge questa quantità fissa all'obiettivo — altrimenti usa quanto riportato realmente da Fitness/Watch."
+          }
+        }
+      }
+    },
+    "kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kcal"
+          }
+        }
+      }
+    },
+    "Lightly active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leggermente attivo"
+          }
+        }
+      }
+    },
+    "Loading available models…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caricamento modelli disponibili…"
+          }
+        }
+      }
+    },
+    "Log" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diario"
+          }
+        }
+      }
+    },
+    "Log by Voice" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra a voce"
+          }
+        }
+      }
+    },
+    "Look up any product by barcode" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca un prodotto tramite codice a barre"
+          }
+        }
+      }
+    },
+    "Lose weight" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perdere peso"
+          }
+        }
+      }
+    },
+    "Macros" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Macronutrienti"
+          }
+        }
+      }
+    },
+    "Maintain weight" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenere il peso"
+          }
+        }
+      }
+    },
+    "Male" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maschio"
+          }
+        }
+      }
+    },
+    "Martial Arts" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arti marziali"
+          }
+        }
+      }
+    },
+    "Meals, water, activity — see how the day landed" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasti, acqua, attività — guarda com'è andata la giornata"
+          }
+        }
+      }
+    },
+    "Microphone and Speech Recognition access are needed for voice logging — enable them in Settings ▸ ScaScan." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Servono i permessi per Microfono e Riconoscimento vocale per la registrazione a voce — attivali in Impostazioni ▸ ScaScan."
+          }
+        }
+      }
+    },
+    "Mixed Cardio" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cardio misto"
+          }
+        }
+      }
+    },
+    "Moderately active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moderatamente attivo"
+          }
+        }
+      }
+    },
+    "Name" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nome"
+          }
+        }
+      }
+    },
+    "Name is required" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il nome è obbligatorio"
+          }
+        }
+      }
+    },
+    "No camera available" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna fotocamera disponibile"
+          }
+        }
+      }
+    },
+    "No entries yet — scan or search a food to get started." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna voce ancora — scansiona o cerca un alimento per iniziare."
+          }
+        }
+      }
+    },
+    "No models found for this API key" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun modello trovato per questa chiave API"
+          }
+        }
+      }
+    },
+    "No weight data found in Health" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun dato di peso trovato in Salute"
+          }
+        }
+      }
+    },
+    "Nothing logged for this day." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna registrazione per questo giorno."
+          }
+        }
+      }
+    },
+    "Notifications" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifiche"
+          }
+        }
+      }
+    },
+    "Nutritional Facts" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valori nutrizionali"
+          }
+        }
+      }
+    },
+    "of %lld kcal" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "su %lld kcal"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "On track" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In target"
+          }
+        }
+      }
+    },
+    "Opens at 21:00, once the day's books can close" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si apre alle 21:00, quando i conti della giornata si possono chiudere"
+          }
+        }
+      }
+    },
+    "Opens ScaScan and starts listening so you can describe what you're eating." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apre ScaScan e inizia ad ascoltare così puoi descrivere cosa stai mangiando."
+          }
+        }
+      }
+    },
+    "Other nutrients" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altri nutrienti"
+          }
+        }
+      }
+    },
+    "Over target" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sopra il target"
+          }
+        }
+      }
+    },
+    "Owed from the day before" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debito dal giorno prima"
+          }
+        }
+      }
+    },
+    "P %lldg · C %lldg · F %lldg" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P %lldg · C %lldg · G %lldg"
+          }
+        }
+      }
+    },
+    "Paddle Sports" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sport con la pagaia"
+          }
+        }
+      }
+    },
+    "Per serving" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per porzione"
+          }
+        }
+      }
+    },
+    "Personal Details" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dati personali"
+          }
+        }
+      }
+    },
+    "Personalized targets not set" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivi personalizzati non impostati"
+          }
+        }
+      }
+    },
+    "Pilates" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pilates"
+          }
+        }
+      }
+    },
+    "Please describe the correct food" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descrivi l'alimento corretto"
+          }
+        }
+      }
+    },
+    "Please enter a valid API key" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inserisci una chiave API valida"
+          }
+        }
+      }
+    },
+    "Point camera at a barcode" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inquadra il codice a barre"
+          }
+        }
+      }
+    },
+    "Previous day balance" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilancio giorno precedente"
+          }
+        }
+      }
+    },
+    "Profile" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profilo"
+          }
+        }
+      }
+    },
+    "Protein" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proteine"
+          }
+        }
+      }
+    },
+    "Protein %@" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proteine %@"
+          }
+        }
+      }
+    },
+    "Quick-add button 1" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulsante rapido 1"
+          }
+        }
+      }
+    },
+    "Quick-add button 2" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulsante rapido 2"
+          }
+        }
+      }
+    },
+    "Quick-add button 3" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulsante rapido 3"
+          }
+        }
+      }
+    },
+    "Reads steps, active calories, weight, height, and Apple Watch/Fitness workouts to power adaptive daily goals. Writes every meal and glass of water you log here back to Health, so your intake shows up in Health's Nutrition tab too and workout calories count toward today's target automatically." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legge passi, calorie attive, peso, altezza e gli allenamenti di Apple Watch/Fitness per calcolare gli obiettivi giornalieri adattivi. Scrive ogni pasto e bicchiere d'acqua registrato qui su Salute, così i tuoi consumi compaiono anche nella scheda Nutrizione di Salute e le calorie bruciate negli allenamenti si sommano automaticamente all'obiettivo di oggi."
+          }
+        }
+      }
+    },
+    "Receive periodic notifications to remind you to drink water during the day." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ricevi notifiche periodiche per ricordarti di bere acqua durante il giorno."
+          }
+        }
+      }
+    },
+    "Recompute" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ricalcola"
+          }
+        }
+      }
+    },
+    "Replay" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riproduci"
+          }
+        }
+      }
+    },
+    "Right on target" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In pieno target"
+          }
+        }
+      }
+    },
+    "Rowing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canottaggio"
+          }
+        }
+      }
+    },
+    "Rugby" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rugby"
+          }
+        }
+      }
+    },
+    "Running" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corsa"
+          }
+        }
+      }
+    },
+    "Sailing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vela"
+          }
+        }
+      }
+    },
+    "Save and continue" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva e continua"
+          }
+        }
+      }
+    },
+    "Save key" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva chiave"
+          }
+        }
+      }
+    },
+    "Save profile" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva profilo"
+          }
+        }
+      }
+    },
+    "Save your API key first to load available models" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva prima la chiave API per caricare i modelli disponibili"
+          }
+        }
+      }
+    },
+    "Say what you're eating — added automatically" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di' cosa stai mangiando — aggiunto automaticamente"
+          }
+        }
+      }
+    },
+    "Say what you're eating…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di' cosa stai mangiando…"
+          }
+        }
+      }
+    },
+    "Scan" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scansiona"
+          }
+        }
+      }
+    },
+    "Scan Barcode" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scansiona codice a barre"
+          }
+        }
+      }
+    },
+    "ScaScan" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ScaScan"
+          }
+        }
+      }
+    },
+    "ScaScan uses Google Gemini to analyse food. Get your key at aistudio.google.com." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ScaScan usa Google Gemini per analizzare il cibo. Ottieni la tua chiave su aistudio.google.com."
+          }
+        }
+      }
+    },
+    "ScaScan uses Google Gemini to analyze food. Paste your Gemini API key below to get started." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ScaScan usa Google Gemini per analizzare il cibo. Incolla la tua chiave API Gemini qui sotto per iniziare."
+          }
+        }
+      }
+    },
+    "Search Food" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca alimento"
+          }
+        }
+      }
+    },
+    "Sedentary" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sedentario"
+          }
+        }
+      }
+    },
+    "See yesterday's recap" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi il recap di ieri"
+          }
+        }
+      }
+    },
+    "Select model" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleziona modello"
+          }
+        }
+      }
+    },
+    "Select the Gemini model that will analyse your food." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleziona il modello Gemini che analizzerà il tuo cibo."
+          }
+        }
+      }
+    },
+    "Select the Gemini model used for food analysis. Models are fetched live from your API key." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleziona il modello Gemini usato per l'analisi degli alimenti. I modelli vengono caricati in tempo reale dalla tua chiave API."
+          }
+        }
+      }
+    },
+    "Set up your API key" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configura la tua chiave API"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impostazioni"
+          }
+        }
+      }
+    },
+    "Sex" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesso"
+          }
+        }
+      }
+    },
+    "Skating" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pattinaggio"
+          }
+        }
+      }
+    },
+    "Snow Sports" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sport sulla neve"
+          }
+        }
+      }
+    },
+    "Soccer" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calcio"
+          }
+        }
+      }
+    },
+    "Sodium" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sodio"
+          }
+        }
+      }
+    },
+    "Softball" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Softball"
+          }
+        }
+      }
+    },
+    "Something went wrong" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qualcosa è andato storto"
+          }
+        }
+      }
+    },
+    "Squash" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Squash"
+          }
+        }
+      }
+    },
+    "Stair Climbing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salita scale"
+          }
+        }
+      }
+    },
+    "Strength Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allenamento di forza"
+          }
+        }
+      }
+    },
+    "Sugar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zuccheri"
+          }
+        }
+      }
+    },
+    "Surfing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surf"
+          }
+        }
+      }
+    },
+    "Swimming" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuoto"
+          }
+        }
+      }
+    },
+    "Sync weight & height" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizza peso e altezza"
+          }
+        }
+      }
+    },
+    "Syncing…" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizzazione…"
+          }
+        }
+      }
+    },
+    "Table Tennis" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ping pong"
+          }
+        }
+      }
+    },
+    "Take a Photo" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scatta una foto"
+          }
+        }
+      }
+    },
+    "Target includes a %@%lld kcal weight-trend correction." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il target include una correzione di %@%lld kcal per l'andamento del peso."
+          }
+        }
+      }
+    },
+    "Targets based on profile estimate" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivi stimati dal profilo"
+          }
+        }
+      }
+    },
+    "Targets computed by AI" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivi calcolati dall'IA"
+          }
+        }
+      }
+    },
+    "Tennis" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tennis"
+          }
+        }
+      }
+    },
+    "The evening recap closes the day's books: everything you ate, minus what you burned and whatever balance yesterday left behind. Until then the Log tab's target stays a clean, unmoving line to aim at." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il recap serale chiude i conti della giornata: tutto quello che hai mangiato, meno quello che hai bruciato e il saldo lasciato da ieri. Fino ad allora il target nella scheda Diario resta una linea ferma a cui mirare."
+          }
+        }
+      }
+    },
+    "The maths" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I conti"
+          }
+        }
+      }
+    },
+    "This device (or the Simulator) doesn't expose a camera." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo dispositivo (o il Simulatore) non espone una fotocamera."
+          }
+        }
+      }
+    },
+    "This device (or the Simulator) doesn't support live barcode scanning." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo dispositivo (o il Simulatore) non supporta la scansione dal vivo dei codici a barre."
+          }
+        }
+      }
+    },
+    "Today" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oggi"
+          }
+        }
+      }
+    },
+    "Today's intake" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assunzione di oggi"
+          }
+        }
+      }
+    },
+    "Today's meals" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasti di oggi"
+          }
+        }
+      }
+    },
+    "Today's recap opens at 21:00" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il recap di oggi si apre alle 21:00"
+          }
+        }
+      }
+    },
+    "Today's target" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obiettivo di oggi"
+          }
+        }
+      }
+    },
+    "Today's workouts" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allenamenti di oggi"
+          }
+        }
+      }
+    },
+    "Total eaten" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Totale mangiato"
+          }
+        }
+      }
+    },
+    "Track & Field" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atletica leggera"
+          }
+        }
+      }
+    },
+    "Type any food or meal description" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digita un alimento o una descrizione del pasto"
+          }
+        }
+      }
+    },
+    "Undo" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulla"
+          }
+        }
+      }
+    },
+    "Undo last entry" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulla ultima voce"
+          }
+        }
+      }
+    },
+    "Unlocks in %lldh %lldm" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si sblocca tra %lldh %lldm"
+          }
+        }
+      }
+    },
+    "Unlocks in %lldm" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si sblocca tra %lldm"
+          }
+        }
+      }
+    },
+    "Used to calculate your daily calorie goal." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usati per calcolare il tuo obiettivo calorico giornaliero."
+          }
+        }
+      }
+    },
+    "Values are AI-estimated and may vary. Always verify with official food labels." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I valori sono stimati dall'IA e possono variare. Verifica sempre con le etichette ufficiali."
+          }
+        }
+      }
+    },
+    "Very active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Molto attivo"
+          }
+        }
+      }
+    },
+    "View details" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dettagli"
+          }
+        }
+      }
+    },
+    "Voice recognition isn't available right now on this device." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il riconoscimento vocale non è disponibile al momento su questo dispositivo."
+          }
+        }
+      }
+    },
+    "Volleyball" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pallavolo"
+          }
+        }
+      }
+    },
+    "Walking" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Camminata"
+          }
+        }
+      }
+    },
+    "Water" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acqua"
+          }
+        }
+      }
+    },
+    "Water amounts" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quantità d'acqua"
+          }
+        }
+      }
+    },
+    "Water Fitness" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fitness in acqua"
+          }
+        }
+      }
+    },
+    "Water today" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idratazione oggi"
+          }
+        }
+      }
+    },
+    "Weight (kg)" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso (kg)"
+          }
+        }
+      }
+    },
+    "Weight & height synced" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso e altezza sincronizzati"
+          }
+        }
+      }
+    },
+    "Weight is required" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il peso è obbligatorio"
+          }
+        }
+      }
+    },
+    "Weight trend" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trend del peso"
+          }
+        }
+      }
+    },
+    "Well under target" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Molto sotto il target"
+          }
+        }
+      }
+    },
+    "What the day cost" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quanto è costata la giornata"
+          }
+        }
+      }
+    },
+    "What you ate" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cosa hai mangiato"
+          }
+        }
+      }
+    },
+    "Where do I find my key? Go to aistudio.google.com → Get API key. The key is stored locally on this device only and never sent anywhere except to the Gemini API." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dove trovo la mia chiave? Vai su aistudio.google.com → Ottieni chiave API. La chiave è memorizzata solo su questo dispositivo e non viene inviata altrove se non all'API Gemini."
+          }
+        }
+      }
+    },
+    "Widget quick-add" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunta rapida widget"
+          }
+        }
+      }
+    },
+    "Workout" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allenamento"
+          }
+        }
+      }
+    },
+    "Wrestling" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lotta"
+          }
+        }
+      }
+    },
+    "Yesterday" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ieri"
+          }
+        }
+      }
+    },
+    "Yoga" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yoga"
+          }
+        }
+      }
+    },
+    "Your daily calorie goal is currently estimated. Select a fitness goal below and save your profile to get an AI-computed personalized target." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il tuo obiettivo calorico giornaliero è attualmente stimato. Seleziona un obiettivo fitness qui sotto e salva il profilo per ottenere un obiettivo personalizzato calcolato dall'IA."
+          }
+        }
+      }
+    },
+    "No verdict for this day" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun verdetto per questo giorno"
+          }
+        }
+      }
+    },
+    "Nothing was logged, so there's nothing to weigh up against your target." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non è stato registrato nulla, quindi non c'è niente da confrontare con il tuo target."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

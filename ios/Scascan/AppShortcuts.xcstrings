@@ -1,0 +1,73 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Log a meal with ${applicationName}" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra un pasto con ${applicationName}"
+          }
+        }
+      }
+    },
+    "Log by voice with ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Log by voice with ${applicationName}",
+              "Log food with ${applicationName}",
+              "Log a meal with ${applicationName}",
+              "Voice log with ${applicationName}",
+              "Track food with ${applicationName}"
+            ]
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Registra a voce con ${applicationName}"
+          }
+        }
+      }
+    },
+    "Log food with ${applicationName}" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra cibo con ${applicationName}"
+          }
+        }
+      }
+    },
+    "Track food with ${applicationName}" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traccia il cibo con ${applicationName}"
+          }
+        }
+      }
+    },
+    "Voice log with ${applicationName}" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diario vocale con ${applicationName}"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

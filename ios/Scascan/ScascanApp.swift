@@ -1,0 +1,92 @@
+//
+//  ScascanApp.swift
+//  Scascan
+//
+//  Created by Nicolò Perri on 14/8/26.
+//
+
+import SwiftUI
+import ScaScanKit
+
+/// Mirrors Android's `ScaScanApplication.kt` + `MainActivity.kt` entry point,
+/// including `handleIntent`'s deep-link handling for widget taps / quick actions.
+@main
+struct ScascanApp: App {
+    @State private var container = AppContainer()
+    @Environment(\.scenePhase) private var scenePhase
+
+    var body: some Scene {
+        WindowGroup {
+            RootView()
+                .environment(container)
+                .onOpenURL(perform: handle)
+                .task {
+                    NotificationHelper.refreshHydrationScheduleIfNeeded()
+                    pollForPendingVoiceLogRequest()
+                    await NotificationHelper.refreshDailyRecap()
+                }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            // Tops up today's hydration schedule whenever it's stale (a new
+            // calendar day since it was last computed) — see
+            // `NotificationHelper`'s doc comment for why this, rather than a
+            // single set-and-forget repeating trigger, is needed to support
+            // pushing reminders back when water gets logged.
+            if phase == .active {
+                NotificationHelper.refreshHydrationScheduleIfNeeded()
+                pollForPendingVoiceLogRequest()
+                Task { await NotificationHelper.refreshDailyRecap() }
+            }
+        }
+    }
+
+    /// A single check right on launch/foreground isn't reliable: the system
+    /// can finish bringing this app to `.active` before (or while)
+    /// `StartVoiceLogIntent.perform()` has actually written the flag in the
+    /// other process — there's no ordering guarantee between "app becomes
+    /// active" and "the intent that caused it finishes running" — and since
+    /// there's no further scenePhase change to catch a late write, a single
+    /// check can silently miss the request entirely. Poll briefly instead.
+    /// (`VoiceLogSignal`, observed in `AppContainer`, covers the separate
+    /// case where scenePhase doesn't change at all.)
+    private func pollForPendingVoiceLogRequest() {
+        Task {
+            for _ in 0..<15 {
+                if container.consumePendingVoiceLogRequestIfNeeded() { return }
+                try? await Task.sleep(for: .milliseconds(200))
+            }
+        }
+    }
+
+    /// Handles `scascan://log`, `scascan://camera`, `scascan://barcode`,
+    /// `scascan://search`, `scascan://voice`, `scascan://recap[?day=-1]` — the
+    /// widget's tap targets, plus the voice and recap screens. Mirrors Android's
+    /// `ACTION_OPEN_LOG` / `ACTION_QUICK_SCAN` / `ACTION_QUICK_BARCODE` /
+    /// `ACTION_QUICK_SEARCH` intent actions.
+    private func handle(_ url: URL) {
+        switch url.host {
+        case "log":
+            container.deepLinkTab = 1
+        case "camera":
+            container.deepLinkTab = 0
+            container.deepLinkRoute = .camera
+        case "barcode":
+            container.deepLinkTab = 0
+            container.deepLinkRoute = .barcode
+        case "search":
+            container.deepLinkTab = 0
+            container.deepLinkRoute = .search
+        case "voice":
+            container.deepLinkTab = 0
+            container.deepLinkRoute = .voice
+        case "recap":
+            // Optional `?day=-1` picks an earlier day; defaults to today.
+            let day = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?.first { $0.name == "day" }?.value
+            container.deepLinkTab = 1
+            container.deepLinkRoute = .recap(min(Int(day ?? "") ?? 0, 0))
+        default:
+            break
+        }
+    }
+}
