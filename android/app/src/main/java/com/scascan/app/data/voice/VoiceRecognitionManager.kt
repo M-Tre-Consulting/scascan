@@ -44,6 +44,12 @@ class VoiceRecognitionManager @Inject constructor(
         val r = SpeechRecognizer.createSpeechRecognizer(context)
         recognizer = r
 
+        // The on-device model can pass its live partial-result confidence check but then fail
+        // its stricter final-confidence check (ERROR_NO_MATCH) for the same utterance — so a
+        // "no match" error with a good partial transcript already in hand is treated as success
+        // instead of a false "didn't understand".
+        var lastPartial = ""
+
         r.setRecognitionListener(object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {
                 trySend(VoiceState.Listening)
@@ -54,7 +60,7 @@ class VoiceRecognitionManager @Inject constructor(
                     ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                     ?.firstOrNull()
                     .orEmpty()
-                trySend(VoiceState.FinalResult(text))
+                trySend(VoiceState.FinalResult(text.ifBlank { lastPartial }))
                 close()
             }
 
@@ -62,14 +68,20 @@ class VoiceRecognitionManager @Inject constructor(
                 val text = partialResults
                     ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                     ?.firstOrNull()
-                if (!text.isNullOrBlank()) trySend(VoiceState.PartialResult(text))
+                if (!text.isNullOrBlank()) {
+                    lastPartial = text
+                    trySend(VoiceState.PartialResult(text))
+                }
             }
 
             override fun onError(error: Int) {
-                val reason = when (error) {
-                    SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> REASON_NO_MATCH
-                    else -> REASON_GENERIC
+                val isNoMatch = error == SpeechRecognizer.ERROR_NO_MATCH || error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT
+                if (isNoMatch && lastPartial.isNotBlank()) {
+                    trySend(VoiceState.FinalResult(lastPartial))
+                    close()
+                    return
                 }
+                val reason = if (isNoMatch) REASON_NO_MATCH else REASON_GENERIC
                 trySend(VoiceState.Error(reason))
                 close()
             }
