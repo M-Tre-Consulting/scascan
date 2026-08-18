@@ -1,6 +1,7 @@
 .gradle/
 local.properties
 build/
+app/google-services.json
 *.apk
 *.aab
 *.keystore

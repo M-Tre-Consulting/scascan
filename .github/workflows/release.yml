@@ -37,6 +37,15 @@ jobs:
         with:
           gradle-version: '9.4.1'
 
+      # The google-services Gradle plugin fails the build outright if this file is missing —
+      # decode it from a repo secret the same way the signing key/cert are handled below.
+      # Set GOOGLE_SERVICES_JSON to the base64 of android/app/google-services.json
+      # (from the Firebase console: Project settings > General > your Android app).
+      - name: Write google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: printf '%s' "$GOOGLE_SERVICES_JSON" | base64 --decode > android/app/google-services.json
+
       - name: Install JetBrains JDK 21
         run: |
           url=$(curl -s "https://api.foojay.io/disco/v3.0/packages?jdk_version=21&distribution=jetbrains&architecture=x64&operating_system=linux&package_type=jdk&release_status=ga&latest=per_distro" | \

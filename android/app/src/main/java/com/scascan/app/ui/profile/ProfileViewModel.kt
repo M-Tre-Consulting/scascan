@@ -8,7 +8,8 @@ import com.scascan.app.data.local.UserProfileStore
 import com.scascan.app.data.remote.GeminiRestClient
 import com.scascan.app.data.remote.ModelInfo
 import com.scascan.app.data.repository.NutritionRepository
-import com.scascan.app.data.sync.DriveSyncManager
+import com.scascan.app.data.sync.AuthManager
+import com.scascan.app.data.sync.FirestoreSyncManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import android.content.Context
@@ -25,7 +26,8 @@ class ProfileViewModel @Inject constructor(
     val healthManager: HealthConnectManager,
     private val client: GeminiRestClient,
     private val nutritionRepository: NutritionRepository,
-    private val syncManager: DriveSyncManager,
+    private val authManager: AuthManager,
+    private val syncManager: FirestoreSyncManager,
     private val reminderManager: com.scascan.app.data.reminder.ReminderManager
 ) : ViewModel() {
 
@@ -92,15 +94,40 @@ class ProfileViewModel @Inject constructor(
         _targetState.value = TargetState.Idle
     }
 
-    fun triggerSync(accessToken: String, email: String? = null) {
+    /** Signs in with Google (via Credential Manager) if needed, then syncs. [activityContext]
+     *  must be an Activity context — required by Credential Manager to host its picker UI. */
+    fun signInAndSync(activityContext: Context) {
         _syncState.value = SyncState.Syncing
         viewModelScope.launch {
-            syncManager.sync(accessToken)
-                .onSuccess { 
-                    if (email != null) profileStore.syncEmail = email
-                    _syncState.value = SyncState.Success 
+            authManager.signIn(activityContext)
+                .onSuccess { user ->
+                    profileStore.syncEmail = user.email ?: "Connected"
+                    if (profileStore.name.isBlank() && !user.displayName.isNullOrBlank()) {
+                        profileStore.name = user.displayName!!
+                    }
+                    runSync()
                 }
-                .onFailure { _syncState.value = SyncState.Error(it.message ?: "Sync failed") }
+                .onFailure { _syncState.value = SyncState.Error(it.message ?: "Sign-in failed") }
+        }
+    }
+
+    /** Syncs using the already-signed-in account (e.g. a manual "Sync now" tap). */
+    fun syncNow() {
+        _syncState.value = SyncState.Syncing
+        viewModelScope.launch { runSync() }
+    }
+
+    private suspend fun runSync() {
+        syncManager.sync()
+            .onSuccess { _syncState.value = SyncState.Success }
+            .onFailure { _syncState.value = SyncState.Error(it.message ?: "Sync failed") }
+    }
+
+    fun signOutGoogle() {
+        viewModelScope.launch {
+            authManager.signOut()
+            profileStore.syncEmail = ""
+            _syncState.value = SyncState.Idle
         }
     }
 

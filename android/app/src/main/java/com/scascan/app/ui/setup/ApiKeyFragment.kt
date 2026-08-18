@@ -1,21 +1,16 @@
 package com.scascan.app.ui.setup
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.auth.api.identity.AuthorizationRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.common.api.Scope
 import com.google.android.material.snackbar.Snackbar
 import com.scascan.app.R
 import com.scascan.app.data.local.GeminiKeyStore
@@ -38,21 +33,6 @@ class ApiKeyFragment : Fragment() {
     lateinit var keyStore: GeminiKeyStore
 
     private val viewModel: ProfileViewModel by viewModels()
-
-    private val requestDriveAuth = registerForActivityResult(
-        ActivityResultContracts.StartIntentSenderForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val authResult = Identity.getAuthorizationClient(requireActivity())
-                .getAuthorizationResultFromIntent(result.data)
-            authResult.accessToken?.let { 
-                if (viewModel.profileStore.syncEmail.isBlank()) {
-                    viewModel.profileStore.syncEmail = "Connected"
-                }
-                viewModel.triggerSync(it) 
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,7 +65,7 @@ class ApiKeyFragment : Fragment() {
 
         binding.btnSave.setOnClickListener { attemptSaveKey() }
         binding.btnGetStarted.setOnClickListener { finish() }
-        binding.btnStartupSync.setOnClickListener { startDriveSync() }
+        binding.btnStartupSync.setOnClickListener { viewModel.signInAndSync(requireActivity()) }
         
         binding.btnGetKey.setOnClickListener {
             val intent = android.content.Intent(android.content.Intent.ACTION_VIEW,
@@ -117,33 +97,6 @@ class ApiKeyFragment : Fragment() {
                     .show()
             }
         }
-    }
-
-    private fun startDriveSync() {
-        val request = AuthorizationRequest.builder()
-            .setRequestedScopes(listOf(Scope("https://www.googleapis.com/auth/drive.appdata")))
-            .build()
-        
-        Identity.getAuthorizationClient(requireActivity())
-            .authorize(request)
-            .addOnSuccessListener { result ->
-                if (result.hasResolution()) {
-                    val pendingIntent = result.pendingIntent
-                    requestDriveAuth.launch(
-                        androidx.activity.result.IntentSenderRequest.Builder(pendingIntent!!).build()
-                    )
-                } else {
-                    result.accessToken?.let { 
-                        if (viewModel.profileStore.syncEmail.isBlank()) {
-                            viewModel.profileStore.syncEmail = "Connected"
-                        }
-                        viewModel.triggerSync(it) 
-                    }
-                }
-            }
-            .addOnFailureListener { e ->
-                Snackbar.make(binding.root, "Auth failed: ${e.message}", Snackbar.LENGTH_LONG).show()
-            }
     }
 
     private fun observeSyncState() {
