@@ -40,86 +40,103 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingHorizontal="4dp"
-            android:gravity="center">
+            android:paddingHorizontal="6dp"
+            android:gravity="center"
+            android:animateLayoutChanges="true">
 
-            <!-- Home -->
-            <FrameLayout
+            <!-- Home — the active item expands into a filled, labeled capsule; inactive
+                 items stay icon-only. Mirrors Material 3's expressive nav-bar item shape. -->
+            <LinearLayout
                 android:id="@+id/btnNavHome"
-                android:layout_width="64dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="3dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:background="@drawable/nav_pill_selector"
                 android:clickable="true"
                 android:focusable="true">
-                <View
-                    android:id="@+id/bgNavHome"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/nav_indicator_background"
-                    android:alpha="0"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8" />
                 <ImageView
                     android:id="@+id/ivNavHome"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_gravity="center"
                     android:src="@drawable/ic_camera"
                     android:contentDescription="@string/nav_scan"
                     app:tint="?attr/colorOnSurfaceVariant" />
-            </FrameLayout>
+                <TextView
+                    android:id="@+id/tvNavHomeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/nav_scan"
+                    style="@style/TextAppearance.Material3.LabelLarge"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <!-- Log -->
-            <FrameLayout
+            <LinearLayout
                 android:id="@+id/btnNavLog"
-                android:layout_width="64dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="3dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:background="@drawable/nav_pill_selector"
                 android:clickable="true"
                 android:focusable="true">
-                <View
-                    android:id="@+id/bgNavLog"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/nav_indicator_background"
-                    android:alpha="0"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8" />
                 <ImageView
                     android:id="@+id/ivNavLog"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_gravity="center"
                     android:src="@drawable/ic_nav_log"
                     android:contentDescription="@string/nav_log"
                     app:tint="?attr/colorOnSurfaceVariant" />
-            </FrameLayout>
+                <TextView
+                    android:id="@+id/tvNavLogLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/nav_log"
+                    style="@style/TextAppearance.Material3.LabelLarge"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <!-- Profile -->
-            <FrameLayout
+            <LinearLayout
                 android:id="@+id/btnNavProfile"
-                android:layout_width="64dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="3dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:background="@drawable/nav_pill_selector"
                 android:clickable="true"
                 android:focusable="true">
-                <View
-                    android:id="@+id/bgNavProfile"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/nav_indicator_background"
-                    android:alpha="0"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8" />
                 <ImageView
                     android:id="@+id/ivNavProfile"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_gravity="center"
                     android:src="@drawable/ic_nav_profile"
                     android:contentDescription="@string/nav_profile"
                     app:tint="?attr/colorOnSurfaceVariant" />
-            </FrameLayout>
+                <TextView
+                    android:id="@+id/tvNavProfileLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/nav_profile"
+                    style="@style/TextAppearance.Material3.LabelLarge"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:visibility="gone" />
+            </LinearLayout>
 
         </LinearLayout>
 

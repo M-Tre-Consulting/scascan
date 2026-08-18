@@ -122,33 +122,36 @@ class MainFragment : Fragment() {
     }
 
     private fun updateNavIcons(position: Int) {
-        val activeColor = com.google.android.material.color.MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorPrimary)
+        val activeColor = com.google.android.material.color.MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorOnPrimary)
         val inactiveColor = com.google.android.material.color.MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorOnSurfaceVariant)
 
-        animateNavButton(binding.bgNavHome, binding.ivNavHome, position == 0, activeColor, inactiveColor)
-        animateNavButton(binding.bgNavLog, binding.ivNavLog, position == 1, activeColor, inactiveColor)
-        animateNavButton(binding.bgNavProfile, binding.ivNavProfile, position == 2, activeColor, inactiveColor)
+        animateNavButton(binding.btnNavHome, binding.ivNavHome, binding.tvNavHomeLabel, position == 0, activeColor, inactiveColor)
+        animateNavButton(binding.btnNavLog, binding.ivNavLog, binding.tvNavLogLabel, position == 1, activeColor, inactiveColor)
+        animateNavButton(binding.btnNavProfile, binding.ivNavProfile, binding.tvNavProfileLabel, position == 2, activeColor, inactiveColor)
     }
 
-    private fun animateNavButton(bg: View, iv: android.widget.ImageView, isSelected: Boolean, activeColor: Int, inactiveColor: Int) {
-        val duration = 350L
-        val targetAlpha = if (isSelected) 1f else 0f
-        val targetScale = if (isSelected) 1f else 0.4f
+    /**
+     * The active tab expands into a filled, labeled capsule (Material 3's expressive nav-bar
+     * shape); inactive tabs stay icon-only. `customNav`'s animateLayoutChanges handles the
+     * width/position transition as the label appears — the pill background itself is a state
+     * selector (nav_pill_selector), so an instant state flip is enough to look like a morph.
+     */
+    private fun animateNavButton(
+        container: View,
+        iv: android.widget.ImageView,
+        label: android.widget.TextView,
+        isSelected: Boolean,
+        activeColor: Int,
+        inactiveColor: Int
+    ) {
+        container.isSelected = isSelected
+        label.isVisible = isSelected
+
+        val duration = 250L
         val targetColor = if (isSelected) activeColor else inactiveColor
-
-        // Pixel-like spring animation for the indicator
-        bg.animate()
-            .alpha(targetAlpha)
-            .scaleX(targetScale)
-            .scaleY(targetScale)
-            .setDuration(duration)
-            .setInterpolator(android.view.animation.OvershootInterpolator(1.2f))
-            .start()
-
-        // Icon color transition
         val currentColor = iv.tag as? Int ?: inactiveColor
         iv.tag = targetColor
-        
+
         android.animation.ValueAnimator.ofArgb(currentColor, targetColor).apply {
             setDuration(duration)
             addUpdateListener { iv.setColorFilter(it.animatedValue as Int) }

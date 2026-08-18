@@ -288,14 +288,12 @@
     <!-- Floating pill top bar -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/topBar"
+        style="@style/Widget.App.PillBar"
         android:layout_width="wrap_content"
         android:layout_height="52dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="26dp"
-        app:cardElevation="6dp"
-        app:cardBackgroundColor="?attr/colorSurface"
-        app:strokeWidth="0dp">
+        app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
 
         <LinearLayout
             android:layout_width="wrap_content"
