@@ -9,7 +9,26 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  # Single source of truth for the release version, shared by the android and ios jobs so
+  # they can never disagree — both derive their platform-native version fields from the same
+  # tag here instead of each parsing GITHUB_REF_NAME independently.
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.compute.outputs.version }}
+      version_code: ${{ steps.compute.outputs.version_code }}
+    steps:
+      - name: Compute version from tag
+        id: compute
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          IFS='.' read -r major minor patch <<< "$VERSION"
+          VERSION_CODE=$(( major * 10000 + minor * 100 + patch ))
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "version_code=$VERSION_CODE" >> "$GITHUB_OUTPUT"
+
   android:
+    needs: version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,16 +48,9 @@ jobs:
           echo "JAVA_HOME=$HOME/.jbr" >> "$GITHUB_ENV"
           echo "$HOME/.jbr/bin" >> "$GITHUB_PATH"
 
-      - name: Set version from tag
-        run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
-          IFS='.' read -r major minor patch <<< "$VERSION"
-          echo "VERSION_CODE=$(( major * 10000 + minor * 100 + patch ))" >> "$GITHUB_ENV"
-
       - name: Build release APK
         working-directory: android
-        run: gradle assembleRelease -PversionName="$VERSION" -PversionCode="$VERSION_CODE"
+        run: gradle assembleRelease -PversionName="${{ needs.version.outputs.version }}" -PversionCode="${{ needs.version.outputs.version_code }}"
 
       - name: Sign APK
         env:
@@ -67,6 +79,7 @@ jobs:
   # Runs independently of the android job/release — a red iOS build here
   # doesn't block an Android release going out.
   ios:
+    needs: version
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
@@ -94,7 +107,9 @@ jobs:
             -project Scascan.xcodeproj \
             -scheme Scascan \
             -destination 'generic/platform=iOS Simulator' \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            MARKETING_VERSION="${{ needs.version.outputs.version }}" \
+            CURRENT_PROJECT_VERSION="${{ needs.version.outputs.version_code }}"
 
   release:
     needs: android
