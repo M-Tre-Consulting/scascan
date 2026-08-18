@@ -78,9 +78,18 @@ jobs:
   # Connect API upload, mirroring the android job's sign-then-upload shape.
   # Runs independently of the android job/release — a red iOS build here
   # doesn't block an Android release going out.
+  #
+  # continue-on-error: the project's pbxproj is saved by Xcode 27
+  # (objectVersion 110, LastUpgradeCheck 2700) — a beta not yet on any
+  # GitHub-hosted runner (macos-15's newest is Xcode 26.3). Every run fails
+  # at "resolve package dependencies" with "future Xcode project file
+  # format" until GitHub ships Xcode 27 on hosted runners. Soft-failing
+  # keeps the job visible as a warning instead of a misleading hard error.
+  # Remove continue-on-error once Xcode 27 is available here.
   ios:
     needs: version
     runs-on: macos-15
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 
