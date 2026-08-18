@@ -32,21 +32,21 @@ class LogRepository @Inject constructor(
         return dao.getEntriesForRange(start, end)
     }
 
-    suspend fun addEntry(facts: NutritionFacts) {
-        dao.insert(
-            LogEntry(
-                foodName = facts.foodName,
-                servingSize = facts.servingSize,
-                calories = facts.calories,
-                protein = facts.protein,
-                carbohydrates = facts.carbohydrates,
-                fat = facts.fat,
-                fiber = facts.fiber,
-                sugar = facts.sugar,
-                sodium = facts.sodium
-            )
+    suspend fun addEntry(facts: NutritionFacts): LogEntry {
+        val entry = LogEntry(
+            foodName = facts.foodName,
+            servingSize = facts.servingSize,
+            calories = facts.calories,
+            protein = facts.protein,
+            carbohydrates = facts.carbohydrates,
+            fat = facts.fat,
+            fiber = facts.fiber,
+            sugar = facts.sugar,
+            sodium = facts.sodium
         )
+        val id = dao.insert(entry)
         com.scascan.app.ui.widget.SummaryWidgetProvider.triggerUpdate(context)
+        return entry.copy(id = id)
     }
 
     suspend fun updateEntry(entry: LogEntry) {

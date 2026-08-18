@@ -5,10 +5,12 @@
     <string name="btn_take_photo">Take a Photo</string>
     <string name="btn_scan_barcode">Scan Barcode</string>
     <string name="btn_search_food">Search Food</string>
+    <string name="btn_voice_log">Voice Log</string>
     <string name="btn_analyze">Analyze</string>
     <string name="card_camera_desc">Identify food from any image</string>
     <string name="card_barcode_desc">Look up any product by barcode</string>
     <string name="card_search_desc">Type any food or meal description</string>
+    <string name="card_voice_desc">Speak what you ate</string>
     <string name="search_title">Search Food</string>
     <string name="search_description">Describe a food or meal to get its nutritional facts.</string>
     <string name="search_hint">e.g. Chicken breast, 100g</string>
@@ -17,9 +19,20 @@
     <string name="analyzing">Analyzing…</string>
     <string name="camera_frame_hint">Frame the food within the square</string>
     <string name="permission_camera_denied">Camera permission is required to use this feature</string>
+
+    <!-- Voice logging -->
+    <string name="voice_log_hint">Tap the mic and say what you ate</string>
+    <string name="voice_log_listening">Listening…</string>
+    <string name="voice_log_processing">Looking that up…</string>
+    <string name="voice_log_added">Added %1$s</string>
+    <string name="voice_log_error_generic">Couldn\'t understand that — try again</string>
+    <string name="voice_log_permission_needed">Microphone access is needed for voice logging</string>
+    <string name="voice_log_open_settings">Open Settings</string>
+    <string name="action_undo">Undo</string>
     <string name="label_camera">Take Photo</string>
     <string name="label_barcode_scan">Scan Barcode</string>
     <string name="label_search">Search Food</string>
+    <string name="label_voice_log">Voice Log</string>
     <string name="label_result">Nutritional Facts</string>
     <string name="per_serving">Per serving</string>
     <string name="nutrient_calories">Calories</string>

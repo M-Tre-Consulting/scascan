@@ -5,10 +5,12 @@
     <string name="btn_take_photo">Scatta una foto</string>
     <string name="btn_scan_barcode">Scansiona codice a barre</string>
     <string name="btn_search_food">Cerca alimento</string>
+    <string name="btn_voice_log">Registrazione vocale</string>
     <string name="btn_analyze">Analizza</string>
     <string name="card_camera_desc">Identifica il cibo da qualsiasi immagine</string>
     <string name="card_barcode_desc">Cerca un prodotto tramite codice a barre</string>
     <string name="card_search_desc">Digita un alimento o una descrizione del pasto</string>
+    <string name="card_voice_desc">Racconta cosa hai mangiato</string>
     <string name="search_title">Cerca alimento</string>
     <string name="search_description">Descrivi un alimento o un pasto per ottenere i valori nutrizionali.</string>
     <string name="search_hint">es. Petto di pollo, 100g</string>
@@ -17,9 +19,20 @@
     <string name="analyzing">Analisi in corso…</string>
     <string name="camera_frame_hint">Inquadra il cibo all\'interno del quadrato</string>
     <string name="permission_camera_denied">Il permesso alla fotocamera è necessario per questa funzione</string>
+
+    <!-- Voice logging -->
+    <string name="voice_log_hint">Tocca il microfono e racconta cosa hai mangiato</string>
+    <string name="voice_log_listening">In ascolto…</string>
+    <string name="voice_log_processing">Ricerca in corso…</string>
+    <string name="voice_log_added">Aggiunto %1$s</string>
+    <string name="voice_log_error_generic">Non ho capito — riprova</string>
+    <string name="voice_log_permission_needed">Il permesso al microfono è necessario per la registrazione vocale</string>
+    <string name="voice_log_open_settings">Apri impostazioni</string>
+    <string name="action_undo">Annulla</string>
     <string name="label_camera">Scatta foto</string>
     <string name="label_barcode_scan">Scansiona</string>
     <string name="label_search">Cerca alimento</string>
+    <string name="label_voice_log">Registrazione vocale</string>
     <string name="label_result">Valori nutrizionali</string>
     <string name="per_serving">Per porzione</string>
     <string name="nutrient_calories">Calorie</string>

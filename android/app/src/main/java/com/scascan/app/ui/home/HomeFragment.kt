@@ -50,6 +50,10 @@ class HomeFragment : Fragment() {
             it.hapticClick()
             findNavController().navigate(R.id.action_main_to_search)
         }
+        binding.cardVoice.setOnClickListener {
+            it.hapticClick()
+            findNavController().navigate(R.id.action_main_to_voice)
+        }
     }
 
     override fun onDestroyView() {

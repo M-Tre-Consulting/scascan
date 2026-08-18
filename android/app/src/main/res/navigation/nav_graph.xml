@@ -44,6 +44,13 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_down" />
         <action
+            android:id="@+id/action_main_to_voice"
+            app:destination="@id/voiceLogFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
+        <action
             android:id="@+id/action_main_to_result"
             app:destination="@id/nutritionResultFragment"
             app:enterAnim="@anim/slide_in_right"
@@ -103,6 +110,11 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+
+    <fragment
+        android:id="@+id/voiceLogFragment"
+        android:name="com.scascan.app.ui.voice.VoiceLogFragment"
+        android:label="@string/label_voice_log" />
 
     <fragment
         android:id="@+id/nutritionResultFragment"
