@@ -33,7 +33,13 @@ class VoiceLogViewModel @Inject constructor(
         data class Transcribed(val text: String) : UiState()
         object Working : UiState()
         data class Added(val entry: LogEntry) : UiState()
-        data class Error(val reason: String) : UiState()
+        /**
+         * [transcript] is set only when the error happened *after* a successful transcription
+         * (i.e. the food lookup failed) — the fragment uses its presence to tell that apart from
+         * a genuine "didn't understand the speech" failure, which otherwise look identical to
+         * the user (both just end the flow with no entry added).
+         */
+        data class Error(val reason: String, val transcript: String? = null) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
@@ -79,7 +85,7 @@ class VoiceLogViewModel @Inject constructor(
                     _uiState.value = UiState.Added(entry)
                 }
                 .onFailure { e ->
-                    _uiState.value = UiState.Error(e.message ?: VoiceRecognitionManager.REASON_GENERIC)
+                    _uiState.value = UiState.Error(e.message ?: VoiceRecognitionManager.REASON_GENERIC, transcript)
                 }
         }
     }

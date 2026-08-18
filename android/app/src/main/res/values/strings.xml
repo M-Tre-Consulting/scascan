@@ -26,6 +26,7 @@
     <string name="voice_log_processing">Looking that up…</string>
     <string name="voice_log_added">Added %1$s</string>
     <string name="voice_log_error_generic">Couldn\'t understand that — try again</string>
+    <string name="voice_log_error_lookup">Couldn\'t find nutrition info for “%1$s” — try again</string>
     <string name="voice_log_permission_needed">Microphone access is needed for voice logging</string>
     <string name="voice_log_open_settings">Open Settings</string>
     <string name="action_undo">Undo</string>

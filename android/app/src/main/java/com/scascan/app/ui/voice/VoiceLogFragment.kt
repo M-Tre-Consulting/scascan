@@ -139,7 +139,11 @@ class VoiceLogFragment : Fragment() {
             }
             is VoiceLogViewModel.UiState.Error -> {
                 binding.root.hapticReject()
-                binding.tvVoiceStatus.text = getString(R.string.voice_log_error_generic)
+                binding.tvVoiceStatus.text = if (state.transcript != null) {
+                    getString(R.string.voice_log_error_lookup, state.transcript)
+                } else {
+                    getString(R.string.voice_log_error_generic)
+                }
                 binding.tvVoiceTranscript.isVisible = false
             }
         }

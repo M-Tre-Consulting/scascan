@@ -26,6 +26,7 @@
     <string name="voice_log_processing">Ricerca in corso…</string>
     <string name="voice_log_added">Aggiunto %1$s</string>
     <string name="voice_log_error_generic">Non ho capito — riprova</string>
+    <string name="voice_log_error_lookup">Non ho trovato informazioni nutrizionali per «%1$s» — riprova</string>
     <string name="voice_log_permission_needed">Il permesso al microfono è necessario per la registrazione vocale</string>
     <string name="voice_log_open_settings">Apri impostazioni</string>
     <string name="action_undo">Annulla</string>
