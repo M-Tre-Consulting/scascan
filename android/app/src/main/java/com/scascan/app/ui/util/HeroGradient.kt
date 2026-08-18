@@ -35,18 +35,22 @@ fun View.applyHeroGradient(startAttr: Int, endAttr: Int, cornerRadiusPx: Float, 
  * entrance instead of everything popping in at once. Plain ViewPropertyAnimator, so it
  * already respects the system's reduced-motion / animator-duration-scale setting.
  */
-fun ViewGroup.staggerChildrenIn(staggerMs: Long = 40L, startTranslationDp: Float = 16f) {
+fun ViewGroup.staggerChildrenIn(staggerMs: Long = 70L, startTranslationDp: Float = 28f) {
     val startTranslationPx = startTranslationDp * resources.displayMetrics.density
     for (i in 0 until childCount) {
         val child = getChildAt(i)
         child.alpha = 0f
         child.translationY = startTranslationPx
+        child.scaleX = 0.94f
+        child.scaleY = 0.94f
         child.animate()
             .alpha(1f)
             .translationY(0f)
+            .scaleX(1f)
+            .scaleY(1f)
             .setStartDelay(i * staggerMs)
-            .setDuration(280L)
-            .setInterpolator(DecelerateInterpolator())
+            .setDuration(420L)
+            .setInterpolator(DecelerateInterpolator(1.5f))
             .start()
     }
 }

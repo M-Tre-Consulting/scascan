@@ -80,11 +80,22 @@ class NutritionResultFragment : Fragment() {
     private fun bindFacts(facts: NutritionFacts) {
         binding.tvFoodName.text = facts.foodName
         binding.tvServingSize.text = facts.servingSize
-        binding.tvCaloriesValue.text = facts.calories.roundToInt().toString()
 
+        val caloriesTarget = facts.calories.roundToInt()
+        android.animation.ValueAnimator.ofInt(0, caloriesTarget).apply {
+            duration = 800L
+            interpolator = android.view.animation.DecelerateInterpolator(1.5f)
+            addUpdateListener { binding.tvCaloriesValue.text = (it.animatedValue as Int).toString() }
+            start()
+        }
+
+        // A single-hue fade (green → neutral surface) rather than a two-hue sweep: the
+        // macro ring already carries three distinct hues (primary/secondary/tertiary), so a
+        // primaryContainer→tertiaryContainer background competed with it for attention instead
+        // of framing it.
         binding.heroContent.applyHeroGradient(
             startAttr = com.google.android.material.R.attr.colorPrimaryContainer,
-            endAttr = com.google.android.material.R.attr.colorTertiaryContainer,
+            endAttr = com.google.android.material.R.attr.colorSurfaceContainerHigh,
             cornerRadiusPx = 28f * resources.displayMetrics.density
         )
         binding.macroRing.setMacros(facts.protein, facts.carbohydrates, facts.fat)

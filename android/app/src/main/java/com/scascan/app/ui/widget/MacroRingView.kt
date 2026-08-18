@@ -1,11 +1,13 @@
 package com.scascan.app.ui.widget
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import com.google.android.material.color.MaterialColors
 
 /**
@@ -44,6 +46,12 @@ class MacroRingView @JvmOverloads constructor(
     private var fatSweep = 0f
 
     private val arcRect = RectF()
+    private var sweepAnimator: ValueAnimator? = null
+
+    override fun onDetachedFromWindow() {
+        sweepAnimator?.cancel()
+        super.onDetachedFromWindow()
+    }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -55,24 +63,44 @@ class MacroRingView @JvmOverloads constructor(
         invalidate()
     }
 
-    /** Grams in, converted to a share of total calories (protein/carbs 4 kcal/g, fat 9 kcal/g). */
+    /**
+     * Grams in, converted to a share of total calories (protein/carbs 4 kcal/g, fat 9 kcal/g).
+     * Sweeps animate in from zero together rather than snapping to their final angles, so the
+     * ring reads as the screen's signature moment instead of a static chart.
+     */
     fun setMacros(proteinG: Double, carbsG: Double, fatG: Double) {
         val proteinKcal = proteinG * 4.0
         val carbsKcal = carbsG * 4.0
         val fatKcal = fatG * 9.0
         val total = proteinKcal + carbsKcal + fatKcal
 
+        val targetProtein: Float
+        val targetCarbs: Float
+        val targetFat: Float
         if (total <= 0.0) {
-            proteinSweep = 0f
-            carbsSweep = 0f
-            fatSweep = 0f
+            targetProtein = 0f
+            targetCarbs = 0f
+            targetFat = 0f
         } else {
             val available = 360f - gapDegrees * 3f
-            proteinSweep = (proteinKcal / total * available).toFloat()
-            carbsSweep = (carbsKcal / total * available).toFloat()
-            fatSweep = (fatKcal / total * available).toFloat()
+            targetProtein = (proteinKcal / total * available).toFloat()
+            targetCarbs = (carbsKcal / total * available).toFloat()
+            targetFat = (fatKcal / total * available).toFloat()
         }
-        invalidate()
+
+        sweepAnimator?.cancel()
+        sweepAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 800L
+            interpolator = DecelerateInterpolator(1.5f)
+            addUpdateListener {
+                val f = it.animatedValue as Float
+                proteinSweep = targetProtein * f
+                carbsSweep = targetCarbs * f
+                fatSweep = targetFat * f
+                invalidate()
+            }
+            start()
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
