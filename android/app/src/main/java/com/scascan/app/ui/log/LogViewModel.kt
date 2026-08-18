@@ -30,6 +30,7 @@ class LogViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val logRepository: LogRepository,
     private val nutritionRepository: NutritionRepository,
+    private val reminderManager: com.scascan.app.data.reminder.ReminderManager,
     val healthManager: HealthConnectManager
 ) : ViewModel() {
 
@@ -75,6 +76,7 @@ class LogViewModel @Inject constructor(
 
     fun addWater(ml: Int) {
         viewModelScope.launch { logRepository.addWater(ml) }
+        reminderManager.onWaterLogged(ml)
     }
 
     fun removeLastWater() {

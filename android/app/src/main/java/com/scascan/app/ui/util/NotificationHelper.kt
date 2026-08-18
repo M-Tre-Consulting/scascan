@@ -34,10 +34,10 @@ class NotificationHelper @Inject constructor(
         // 2. Reminders channel
         val reminderChannel = NotificationChannel(
             CHANNEL_REMINDERS,
-            "Reminders",
+            context.getString(R.string.notif_channel_reminders_name),
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
-            description = "Hydration and daily logging reminders"
+            description = context.getString(R.string.notif_channel_reminders_desc)
         }
 
         nm.createNotificationChannels(listOf(analysisChannel, reminderChannel))
@@ -84,8 +84,8 @@ class NotificationHelper @Inject constructor(
 
         val notification = NotificationCompat.Builder(context, CHANNEL_REMINDERS)
             .setSmallIcon(R.drawable.ic_nav_log)
-            .setContentTitle("Time to hydrate!")
-            .setContentText("Stay on track with your water goal. Log a glass now.")
+            .setContentTitle(context.getString(R.string.notif_hydration_title))
+            .setContentText(context.getString(R.string.notif_hydration_text))
             .setContentIntent(pending)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

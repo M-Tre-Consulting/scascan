@@ -68,6 +68,21 @@ class UserProfileStore @Inject constructor(
         get() = prefs.getBoolean(KEY_WATER_REMINDERS, false)
         set(v) { prefs.edit(commit = true) { putBoolean(KEY_WATER_REMINDERS, v) } }
 
+    /** Reference "typical" quick-add amount (ml), used to normalize proportional reminder push-back. */
+    var typicalQuickAddMl: Int
+        get() = prefs.getInt(KEY_TYPICAL_QUICK_ADD, DEFAULT_QUICK_ADD_ML)
+        set(v) { prefs.edit(commit = true) { putInt(KEY_TYPICAL_QUICK_ADD, v) } }
+
+    /** Epoch-day stamp of [reminderSlotsCsv], so a stale schedule from a previous day isn't reused. */
+    var reminderSlotsDayStamp: Long
+        get() = prefs.getLong(KEY_REMINDER_DAY_STAMP, 0L)
+        set(v) { prefs.edit(commit = true) { putLong(KEY_REMINDER_DAY_STAMP, v) } }
+
+    /** Today's hydration reminder slots, as comma-joined epoch-millis, so a push-back survives relaunch. */
+    var reminderSlotsCsv: String
+        get() = prefs.getString(KEY_REMINDER_SLOTS, "") ?: ""
+        set(v) { prefs.edit(commit = true) { putString(KEY_REMINDER_SLOTS, v) } }
+
     /** Cached active calories from Health Connect to support Widget background updates. */
     var lastActiveCalories: Float
         get() = prefs.getFloat(KEY_LAST_ACTIVE_CALORIES, 0f)
@@ -183,6 +198,10 @@ class UserProfileStore @Inject constructor(
         private const val KEY_NAME        = "user_name"
         private const val KEY_SYNC_EMAIL   = "sync_email"
         private const val KEY_WATER_REMINDERS = "water_reminders"
+        private const val KEY_TYPICAL_QUICK_ADD = "typical_quick_add_ml"
+        private const val KEY_REMINDER_DAY_STAMP = "reminder_slots_day_stamp"
+        private const val KEY_REMINDER_SLOTS = "reminder_slots_csv"
+        private const val DEFAULT_QUICK_ADD_ML = 250
         private const val KEY_LAST_ACTIVE_CALORIES = "last_active_kcal"
         private const val KEY_ACTIVE_FALLBACK = "active_calorie_fallback"
         const val DEFAULT_CALORIES = 2_000

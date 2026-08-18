@@ -151,6 +151,10 @@
     <string name="notif_channel_desc">Notifies when background food analysis is complete</string>
     <string name="notif_analysis_title">Analysis ready</string>
     <string name="notif_analysis_text">%1$s · %2$d kcal — tap to add to log</string>
+    <string name="notif_channel_reminders_name">Reminders</string>
+    <string name="notif_channel_reminders_desc">Hydration and daily logging reminders</string>
+    <string name="notif_hydration_title">Time to hydrate!</string>
+    <string name="notif_hydration_text">Stay on track with your water goal. Log a glass now.</string>
 
     <!-- Fix entry bottom sheet -->
     <string name="fix_entry_title">Fix this entry</string>

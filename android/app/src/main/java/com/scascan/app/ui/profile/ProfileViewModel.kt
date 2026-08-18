@@ -156,8 +156,7 @@ class ProfileViewModel @Inject constructor(
     fun setWaterRemindersEnabled(enabled: Boolean) {
         profileStore.waterRemindersEnabled = enabled
         if (enabled) {
-            // Schedule every 3 hours during typical awake time (9am - 9pm logic simplified for now)
-            reminderManager.scheduleHydrationReminder(3 * 60 * 60 * 1000L)
+            reminderManager.topUpTodaySchedule()
         } else {
             reminderManager.cancelHydrationReminder()
         }

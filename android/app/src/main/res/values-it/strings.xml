@@ -151,6 +151,10 @@
     <string name="notif_channel_desc">Notifica quando l\'analisi in background è completata</string>
     <string name="notif_analysis_title">Analisi completata</string>
     <string name="notif_analysis_text">%1$s · %2$d kcal — tocca per aggiungere al diario</string>
+    <string name="notif_channel_reminders_name">Promemoria</string>
+    <string name="notif_channel_reminders_desc">Promemoria di idratazione e registrazione giornaliera</string>
+    <string name="notif_hydration_title">Ora di idratarsi!</string>
+    <string name="notif_hydration_text">Resta in linea con il tuo obiettivo di acqua. Registra un bicchiere adesso.</string>
 
     <!-- Fix entry bottom sheet -->
     <string name="fix_entry_title">Correggi questa voce</string>
