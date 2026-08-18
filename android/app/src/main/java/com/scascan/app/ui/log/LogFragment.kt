@@ -19,6 +19,7 @@ import com.scascan.app.data.local.WaterLog
 import com.scascan.app.data.model.MacroTargets
 import com.scascan.app.databinding.FragmentLogBinding
 import com.scascan.app.databinding.ItemLogEntryBinding
+import com.scascan.app.ui.util.applyHeroGradient
 import com.scascan.app.ui.util.hapticClick
 import com.scascan.app.ui.util.hapticConfirm
 import com.scascan.app.ui.util.hapticReject
@@ -54,6 +55,12 @@ class LogFragment : Fragment() {
             binding.root.updatePadding(top = statusBar)
             insets
         }
+
+        binding.heroCaloriesContent.applyHeroGradient(
+            startAttr = com.google.android.material.R.attr.colorPrimaryContainer,
+            endAttr = com.google.android.material.R.attr.colorSecondaryContainer,
+            cornerRadiusPx = 28f * resources.displayMetrics.density
+        )
 
         setupDateNavigation()
         setupFixResultListener()

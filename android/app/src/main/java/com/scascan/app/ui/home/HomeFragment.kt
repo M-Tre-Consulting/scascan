@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.scascan.app.R
 import com.scascan.app.databinding.FragmentHomeBinding
+import com.scascan.app.ui.util.addPressScale
 import com.scascan.app.ui.util.hapticClick
+import com.scascan.app.ui.util.staggerChildrenIn
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,6 +56,11 @@ class HomeFragment : Fragment() {
             it.hapticClick()
             findNavController().navigate(R.id.action_main_to_voice)
         }
+
+        listOf(binding.cardCamera, binding.cardBarcode, binding.cardSearch, binding.cardVoice)
+            .forEach { it.addPressScale() }
+
+        binding.contentContainer.staggerChildrenIn()
     }
 
     override fun onDestroyView() {

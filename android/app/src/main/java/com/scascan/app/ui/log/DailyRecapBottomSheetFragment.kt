@@ -12,6 +12,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.scascan.app.R
 import com.scascan.app.data.repository.LogRepository
 import com.scascan.app.databinding.FragmentDailyRecapBottomSheetBinding
+import com.scascan.app.ui.util.applyHeroGradient
+import com.scascan.app.ui.util.staggerChildrenIn
 
 /**
  * Settles a single day's calorie ledger — eaten, burned, carried over — as a one-time
@@ -59,15 +61,40 @@ class DailyRecapBottomSheetFragment : BottomSheetDialogFragment() {
         val waterMl = a.getInt(KEY_WATER_ML)
         val waterTargetMl = a.getInt(KEY_WATER_TARGET_ML)
 
-        val (verdictText, verdictColorAttr) = when (verdict) {
-            LogRepository.RecapVerdict.OVER -> getString(R.string.log_recap_verdict_over) to com.google.android.material.R.attr.colorError
-            LogRepository.RecapVerdict.UNDER -> getString(R.string.log_recap_verdict_under) to com.google.android.material.R.attr.colorTertiary
-            LogRepository.RecapVerdict.ON_TARGET -> getString(R.string.log_recap_verdict_on_target) to com.google.android.material.R.attr.colorPrimary
-            LogRepository.RecapVerdict.NO_DATA -> "" to com.google.android.material.R.attr.colorOnSurfaceVariant
+        val (verdictText, verdictColorAttr, gradientStartAttr, gradientEndAttr) = when (verdict) {
+            LogRepository.RecapVerdict.OVER -> VerdictStyle(
+                getString(R.string.log_recap_verdict_over),
+                com.google.android.material.R.attr.colorError,
+                com.google.android.material.R.attr.colorErrorContainer,
+                com.google.android.material.R.attr.colorTertiaryContainer
+            )
+            LogRepository.RecapVerdict.UNDER -> VerdictStyle(
+                getString(R.string.log_recap_verdict_under),
+                com.google.android.material.R.attr.colorTertiary,
+                com.google.android.material.R.attr.colorSecondaryContainer,
+                com.google.android.material.R.attr.colorSurfaceContainerHigh
+            )
+            LogRepository.RecapVerdict.ON_TARGET -> VerdictStyle(
+                getString(R.string.log_recap_verdict_on_target),
+                com.google.android.material.R.attr.colorPrimary,
+                com.google.android.material.R.attr.colorTertiaryContainer,
+                com.google.android.material.R.attr.colorPrimaryContainer
+            )
+            LogRepository.RecapVerdict.NO_DATA -> VerdictStyle(
+                "",
+                com.google.android.material.R.attr.colorOnSurfaceVariant,
+                com.google.android.material.R.attr.colorSurfaceContainerHigh,
+                com.google.android.material.R.attr.colorSurfaceContainerHigh
+            )
         }
         binding.tvRecapVerdict.text = verdictText
         binding.tvRecapVerdict.setTextColor(
             com.google.android.material.color.MaterialColors.getColor(binding.root, verdictColorAttr)
+        )
+        binding.heroVerdictContent.applyHeroGradient(
+            startAttr = gradientStartAttr,
+            endAttr = gradientEndAttr,
+            cornerRadiusPx = 28f * resources.displayMetrics.density
         )
 
         binding.tvRecapNet.text = getString(R.string.log_adaptive_kcal, net)
@@ -84,12 +111,22 @@ class DailyRecapBottomSheetFragment : BottomSheetDialogFragment() {
         binding.tvRecapWater.text = getString(R.string.log_summary_consumed_of, waterMl, waterTargetMl)
         binding.progressRecapWater.max = waterTargetMl.coerceAtLeast(1)
         binding.progressRecapWater.progress = waterMl.coerceIn(0, waterTargetMl)
+
+        binding.layoutRecapContent.staggerChildrenIn()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+    /** Per-verdict styling: display text, the accent used for [tvRecapVerdict], and the hero card's gradient. */
+    private data class VerdictStyle(
+        val text: String,
+        val textColorAttr: Int,
+        val gradientStartAttr: Int,
+        val gradientEndAttr: Int
+    )
 
     companion object {
         private const val KEY_DATE_LABEL = "date_label"

@@ -22,6 +22,7 @@ import com.scascan.app.data.local.GeminiKeyStore
 import com.scascan.app.data.remote.ModelInfo
 import com.scascan.app.databinding.FragmentApiKeyBinding
 import com.scascan.app.ui.profile.ProfileViewModel
+import com.scascan.app.ui.util.applyHeroGradient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -64,6 +65,12 @@ class ApiKeyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.heroSetupBackdrop.applyHeroGradient(
+            startAttr = com.google.android.material.R.attr.colorPrimaryContainer,
+            endAttr = com.google.android.material.R.attr.colorTertiaryContainer,
+            cornerRadiusPx = 36f * resources.displayMetrics.density
+        )
 
         // Returning user on cold launch — both key and model already saved
         if (keyStore.hasKey() && keyStore.selectedModel.isNotBlank() && isInitialLaunch()) {

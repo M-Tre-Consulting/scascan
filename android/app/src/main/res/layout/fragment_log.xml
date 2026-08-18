@@ -89,12 +89,12 @@
             android:layout_marginBottom="12dp"
             android:clickable="true"
             android:focusable="true"
-            app:cardBackgroundColor="?attr/colorPrimaryContainer"
             app:cardCornerRadius="28dp"
             app:cardElevation="0dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
+                android:id="@+id/heroCaloriesContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -667,7 +667,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:gravity="center_vertical"
                         android:layout_marginBottom="4dp">
+                        <View
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/dot_indicator"
+                            android:backgroundTint="?attr/colorPrimary" />
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -687,7 +694,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:gravity="center_vertical"
                         android:layout_marginBottom="4dp">
+                        <View
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/dot_indicator"
+                            android:backgroundTint="?attr/colorSecondary" />
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -707,7 +721,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:gravity="center_vertical"
                         android:layout_marginBottom="4dp">
+                        <View
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/dot_indicator"
+                            android:backgroundTint="?attr/colorTertiary" />
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -727,7 +748,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:gravity="center_vertical"
                         android:layout_marginBottom="14dp">
+                        <View
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/dot_indicator"
+                            android:backgroundTint="?attr/colorOutline" />
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

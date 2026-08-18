@@ -45,6 +45,8 @@
     <string name="nutrient_water">Water</string>
     <string name="value_grams">%.1f g</string>
     <string name="value_milligrams">%.0f mg</string>
+    <string name="value_grams_of_percent">%1$.1f g · %2$.0f%%</string>
+    <string name="unit_kcal">kcal</string>
     <string name="ai_disclaimer">Values are AI-estimated and may vary. Always verify with official food labels.</string>
     <string name="btn_add_to_log">Add to log</string>
     <string name="log_added">Added to today\'s log</string>

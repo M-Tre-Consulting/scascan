@@ -13,6 +13,7 @@
         android:fillViewport="true">
 
         <LinearLayout
+            android:id="@+id/contentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -37,100 +38,87 @@
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Calories pill card (prominent) -->
+            <!-- Hero card: macro ring + calorie total + macro legend -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="?attr/colorPrimaryContainer"
                 app:cardCornerRadius="28dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="0dp">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="24dp"
-                    android:paddingVertical="20dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/nutrient_calories"
-                        style="@style/TextAppearance.Material3.TitleLarge"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnPrimaryContainer" />
-
-                    <TextView
-                        android:id="@+id/tvCaloriesValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/TextAppearance.Material3.DisplaySmall"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorPrimary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" kcal"
-                        style="@style/TextAppearance.Material3.BodyMedium"
-                        android:textColor="?attr/colorOnPrimaryContainer"
-                        android:layout_gravity="bottom"
-                        android:paddingBottom="6dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Macros card -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="?attr/colorSurfaceVariant"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp">
-
-                <LinearLayout
+                    android:id="@+id/heroContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingHorizontal="24dp"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="8dp">
+                    android:paddingTop="24dp"
+                    android:paddingBottom="20dp">
 
-                    <TextView
+                    <FrameLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/per_serving"
-                        style="@style/TextAppearance.Material3.LabelSmall"
-                        android:textAllCaps="true"
-                        android:letterSpacing="0.1"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:layout_marginBottom="16dp" />
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="20dp">
+
+                        <com.scascan.app.ui.widget.MacroRingView
+                            android:id="@+id/macroRing"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical"
+                            android:gravity="center_horizontal">
+
+                            <TextView
+                                android:id="@+id/tvCaloriesValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                style="@style/TextAppearance.Material3.DisplaySmall"
+                                android:textStyle="bold"
+                                android:textColor="?attr/colorOnPrimaryContainer" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/unit_kcal"
+                                style="@style/TextAppearance.Material3.LabelMedium"
+                                android:textColor="?attr/colorOnPrimaryContainer"
+                                android:alpha="0.8" />
+                        </LinearLayout>
+                    </FrameLayout>
 
                     <!-- Protein -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="12dp">
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="10dp">
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/dot_indicator"
+                            android:backgroundTint="?attr/colorPrimary" />
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/nutrient_protein"
                             style="@style/TextAppearance.Material3.BodyLarge"
-                            android:textColor="?attr/colorOnSurfaceVariant" />
+                            android:textColor="?attr/colorOnPrimaryContainer" />
                         <TextView
                             android:id="@+id/tvProteinValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/TextAppearance.Material3.BodyLarge"
                             android:textStyle="bold"
-                            android:textColor="?attr/colorOnSurface" />
+                            android:textColor="?attr/colorOnPrimaryContainer" />
                     </LinearLayout>
 
                     <!-- Carbohydrates -->
@@ -138,21 +126,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="12dp">
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="10dp">
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/dot_indicator"
+                            android:backgroundTint="?attr/colorSecondary" />
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/nutrient_carbs"
                             style="@style/TextAppearance.Material3.BodyLarge"
-                            android:textColor="?attr/colorOnSurfaceVariant" />
+                            android:textColor="?attr/colorOnPrimaryContainer" />
                         <TextView
                             android:id="@+id/tvCarbsValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/TextAppearance.Material3.BodyLarge"
                             android:textStyle="bold"
-                            android:textColor="?attr/colorOnSurface" />
+                            android:textColor="?attr/colorOnPrimaryContainer" />
                     </LinearLayout>
 
                     <!-- Fat -->
@@ -160,21 +155,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="20dp">
+                        android:gravity="center_vertical">
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/dot_indicator"
+                            android:backgroundTint="?attr/colorTertiary" />
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/nutrient_fat"
                             style="@style/TextAppearance.Material3.BodyLarge"
-                            android:textColor="?attr/colorOnSurfaceVariant" />
+                            android:textColor="?attr/colorOnPrimaryContainer" />
                         <TextView
                             android:id="@+id/tvFatValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/TextAppearance.Material3.BodyLarge"
                             android:textStyle="bold"
-                            android:textColor="?attr/colorOnSurface" />
+                            android:textColor="?attr/colorOnPrimaryContainer" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -203,7 +204,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:gravity="center_vertical"
                         android:layout_marginBottom="12dp">
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/dot_indicator"
+                            android:backgroundTint="?attr/colorOutline" />
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -225,7 +233,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:gravity="center_vertical"
                         android:layout_marginBottom="12dp">
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/dot_indicator"
+                            android:backgroundTint="?attr/colorOutline" />
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -247,7 +262,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:gravity="center_vertical"
                         android:layout_marginBottom="20dp">
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/dot_indicator"
+                            android:backgroundTint="?attr/colorOutline" />
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

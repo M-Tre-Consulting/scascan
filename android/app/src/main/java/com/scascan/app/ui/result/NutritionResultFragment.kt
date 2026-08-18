@@ -15,6 +15,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.scascan.app.R
 import com.scascan.app.data.model.NutritionFacts
 import com.scascan.app.databinding.FragmentNutritionResultBinding
+import com.scascan.app.ui.util.applyHeroGradient
+import com.scascan.app.ui.util.staggerChildrenIn
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -56,6 +58,7 @@ class NutritionResultFragment : Fragment() {
 
         bindFacts(facts)
         observeLogState()
+        binding.contentContainer.staggerChildrenIn()
 
         binding.btnAddToLog.setOnClickListener {
             viewModel.addToLog(facts)
@@ -78,9 +81,22 @@ class NutritionResultFragment : Fragment() {
         binding.tvFoodName.text = facts.foodName
         binding.tvServingSize.text = facts.servingSize
         binding.tvCaloriesValue.text = facts.calories.roundToInt().toString()
-        binding.tvProteinValue.text = getString(R.string.value_grams, facts.protein)
-        binding.tvCarbsValue.text = getString(R.string.value_grams, facts.carbohydrates)
-        binding.tvFatValue.text = getString(R.string.value_grams, facts.fat)
+
+        binding.heroContent.applyHeroGradient(
+            startAttr = com.google.android.material.R.attr.colorPrimaryContainer,
+            endAttr = com.google.android.material.R.attr.colorTertiaryContainer,
+            cornerRadiusPx = 28f * resources.displayMetrics.density
+        )
+        binding.macroRing.setMacros(facts.protein, facts.carbohydrates, facts.fat)
+
+        val proteinKcal = facts.protein * 4.0
+        val carbsKcal = facts.carbohydrates * 4.0
+        val fatKcal = facts.fat * 9.0
+        val totalKcal = (proteinKcal + carbsKcal + fatKcal).coerceAtLeast(1.0)
+        binding.tvProteinValue.text = getString(R.string.value_grams_of_percent, facts.protein, proteinKcal / totalKcal * 100)
+        binding.tvCarbsValue.text = getString(R.string.value_grams_of_percent, facts.carbohydrates, carbsKcal / totalKcal * 100)
+        binding.tvFatValue.text = getString(R.string.value_grams_of_percent, facts.fat, fatKcal / totalKcal * 100)
+
         binding.tvFiberValue.text = getString(R.string.value_grams, facts.fiber)
         binding.tvSugarValue.text = getString(R.string.value_grams, facts.sugar)
         binding.tvSodiumValue.text = getString(R.string.value_milligrams, facts.sodium)
