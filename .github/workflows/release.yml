@@ -72,7 +72,16 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Select latest Xcode
-        run: sudo xcode-select -s /Applications/Xcode.app
+        run: |
+          # The macos-15 runner ships several Xcode versions, but /Applications/Xcode.app
+          # (the "default") lags behind — currently 16.4, which can't even parse a project
+          # saved by the Xcode 26 toolchain this iOS 26.0-targeting project needs. Pick the
+          # highest-versioned Xcode_*.app actually installed instead of trusting the default.
+          XCODE_APP=$(ls -d /Applications/Xcode_*.app 2>/dev/null | sort -V | tail -1)
+          if [ -z "$XCODE_APP" ]; then XCODE_APP="/Applications/Xcode.app"; fi
+          echo "Selecting $XCODE_APP"
+          sudo xcode-select -s "$XCODE_APP"
+          xcodebuild -version
 
       - name: Resolve Swift Package dependencies
         working-directory: ios
