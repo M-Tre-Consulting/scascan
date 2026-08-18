@@ -14,8 +14,8 @@ android {
         applicationId = "com.scascan.app"
         minSdk = 26
         targetSdk = 37
-        versionCode = (project.findProperty("versionCode") as String?)?.toInt() ?: 2
-        versionName = (project.findProperty("versionName") as String?) ?: "1.1"
+        versionCode = (project.findProperty("versionCode") as String?)?.toInt() ?: 20300
+        versionName = (project.findProperty("versionName") as String?) ?: "2.3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
