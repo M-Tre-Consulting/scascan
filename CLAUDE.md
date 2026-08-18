@@ -10,7 +10,10 @@ have already caused shipped bugs, and how to actually verify a change — the un
 tests can't be run in this project as configured, so "it builds" is not
 verification.
 
-The root `README.md` documents the Android app only.
+The root `README.md` is the monorepo overview (feature parity table, both tech stacks,
+both repo layouts). `ios/ARCHITECTURE.md` is still the only source for the iOS
+implementation detail — storage, nutrition math, concurrency, localization, and
+how to verify a change.
 
 ## Working agreements
 

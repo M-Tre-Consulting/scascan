@@ -3,7 +3,8 @@
 Written for someone (or some Claude session) picking this up cold. It covers how
 the iOS app is built, the arithmetic it runs on, the conventions that are easy to
 break without noticing, and how to verify a change is actually working. The root
-`README.md` documents the *Android* original only — this file is the iOS side.
+`README.md` is the monorepo overview; this file is the deep dive on the iOS side
+specifically.
 
 Everything here was true as of **v1.1 (build 2)**, the release that added voice
 logging, plus the evening-recap work that landed on `main` after it.

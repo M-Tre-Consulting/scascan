@@ -1,32 +1,64 @@
 # ScaScan
 
-A native mobile app that uses AI to instantly retrieve nutritional facts from food — by taking a photo, scanning a barcode, or searching by name.
+A native mobile app that uses AI to instantly retrieve nutritional facts from food — by taking a photo, scanning a barcode, searching by name, or (iOS only) speaking it.
+
+Two native codebases, one product: **`android/`** is the original Kotlin app, **`ios/`** is a SwiftUI port that is now the active line of work. This file is the monorepo overview; for the full iOS technical handover (module layout, the nutrition arithmetic, concurrency and localization traps, how to verify a change) see **[`ios/ARCHITECTURE.md`](ios/ARCHITECTURE.md)**.
 
 ---
 
 ## Features
 
-- 📷 **Photo analysis** — point your camera at any food and get an AI-generated nutrition breakdown
-- 🔍 **Barcode scanning** — scan a product barcode for detailed nutritional data
-- ✏️ **Text search** — type any food or meal description to look up its facts
-- 🤖 **Powered by Gemini** — Google's Gemini 1.5 Flash model handles all food recognition and analysis
-- **Offline-capable UI** — only the AI call requires a network connection
+| | Android | iOS |
+|---|---|---|
+| 📷 Photo analysis | ✅ | ✅ |
+| 🔍 Barcode scanning (camera) | ✅ (ML Kit / ZXing) | ✅ (VisionKit `DataScanner`) |
+| ✏️ Text search | ✅ | ✅ |
+| 🎙️ Voice logging (speak what you ate) | ❌ | ✅ on-device speech recognition, Siri/Shortcuts intent |
+| 🤖 Powered by Gemini | ✅ | ✅ (user's own API key on both) |
+| Barcode-photo OCR fallback (photo → digits → OpenFoodFacts → vision ID) | ❌ | ✅ |
+| Health sync | ✅ Health Connect | ✅ HealthKit |
+| Adaptive daily calorie target (BMR, activity, carry-over, weight trend) | ✅ | ✅ |
+| Evening recap (burn settled once at day's end instead of live in the target) | ❌ | ✅ |
+| "Watch wasn't worn" fallback for missing activity data | ❌ | ✅ |
+| Smart hydration reminders (reschedule remaining ones by amount logged) | ❌ (fixed periodic reminder) | ✅ |
+| Homescreen widget (calories/macros/water, quick add) | ✅ | ✅ |
+| Cloud backup | ✅ Google Drive | ❌ (would need CloudKit + paid account; deliberately absent) |
+| Deep links / App Intents | — | ✅ `scascan://` scheme + Siri Shortcuts |
+| Offline-capable UI | ✅ (only the AI call needs network) | ✅ |
+
+See [§17 of `ios/ARCHITECTURE.md`](ios/ARCHITECTURE.md#17-where-things-stand--open-threads) for the current list of known gaps and open threads on the iOS side.
 
 ---
 
 ## Architecture
 
-ScaScan follows **Clean Architecture** with an **MVVM** presentation layer, organized into three layers:
+Both apps follow **Clean Architecture** with an **MVVM** presentation layer.
 
-- **Data Layer**: Houses remote APIs (Gemini rest client & OpenFoodFacts client), local SQLite database (Room), repositories, managers for Health Connect and Drive sync, and background workers.
-- **Domain Layer**: Contains business-focused Use Cases representing the app's core feature set.
-- **Presentation Layer (UI)**: Built with View Binding and Jetpack Navigation. The single [MainActivity](file:///home/quark/Projects/scascan/android/app/src/main/java/com/scascan/app/MainActivity.kt) hosts the main [navigation graph](file:///home/quark/Projects/scascan/android/app/src/main/res/navigation/nav_graph.xml). It uses a central [MainFragment](file:///home/quark/Projects/scascan/android/app/src/main/java/com/scascan/app/ui/main/MainFragment.kt) with a ViewPager2 to manage the Home, Log, and Profile tabs.
+### Android
+
+Three layers in a single Gradle module:
+
+- **Data Layer**: remote APIs (Gemini REST client & OpenFoodFacts client), local SQLite database (Room), repositories, managers for Health Connect and Drive sync, and background workers.
+- **Domain Layer**: business-focused Use Cases representing the app's core feature set.
+- **Presentation Layer (UI)**: View Binding and Jetpack Navigation. The single [MainActivity](android/app/src/main/java/com/scascan/app/MainActivity.kt) hosts the main [navigation graph](android/app/src/main/res/navigation/nav_graph.xml), with a central [MainFragment](android/app/src/main/java/com/scascan/app/ui/main/MainFragment.kt) using a ViewPager2 for the Home, Log, and Profile tabs.
 
 Dependency injection is handled by **Hilt**.
+
+### iOS
+
+An Xcode project plus a local Swift package:
+
+- **`ScaScanKit`**: everything that isn't a view — SwiftData models, repositories, HealthKit, the Gemini and OpenFoodFacts clients, notifications, the shared `UserProfileStore`. Shared by the app and the widget extension.
+- **`Scascan`** (app target): SwiftUI views, view state, App Intents. Folders map to screens (`Home/`, `Log/`, `Camera/`, `Scan/`, `Search/`, `Voice/`, `Recap/`, `Result/`, `Profile/`, `Setup/`) plus `App/` (composition root — plain manual DI through the SwiftUI environment, no framework), `Main/` (tab host), `Navigation/`, `Shared/`.
+- **`ScaScanWidget`**: widget extension, reads the same App Group store as the app.
+
+Full detail — storage, the nutrition math, HealthKit bridging, voice logging, the evening recap, notifications, concurrency traps, localization — lives in [`ios/ARCHITECTURE.md`](ios/ARCHITECTURE.md).
 
 ---
 
 ## Tech Stack
+
+### Android
 
 | Layer | Technology | Version / Description |
 |---|---|---|
@@ -42,6 +74,22 @@ Dependency injection is handled by **Hilt**.
 | **AI Processing** | Google Gemini API | Raw client (`GeminiRestClient`) |
 | **Navigation** | Jetpack Navigation Component | 2.7.7 |
 | **Build Tools** | Android Gradle Plugin (AGP) | 9.2.1 (with version catalogs) |
+
+### iOS
+
+| Layer | Technology | Version / Description |
+|---|---|---|
+| **Language** | Swift | 6.0, Swift 6 language mode, `MainActor` default isolation |
+| **UI** | SwiftUI | Deployment target iOS 26.0 |
+| **Local Database** | SwiftData | `LogEntry` / `WaterLog`, stored in the App Group container so the widget can read it directly |
+| **Preferences / cross-process state** | App Group `UserDefaults` | behind `UserProfileStore` |
+| **Secrets** | Keychain | Gemini API key only |
+| **Health Sync** | HealthKit | steps, active energy, weight, workouts |
+| **Speech** | `SFSpeechRecognizer` + `AVAudioEngine` | on-device, offline voice logging |
+| **Camera / Barcode** | AVFoundation + VisionKit `DataScanner` | |
+| **AI Processing** | Google Gemini REST API | user's own key, `GeminiRestClient` |
+| **Siri / Shortcuts** | App Intents | `StartVoiceLogIntent` |
+| **Widget** | WidgetKit | 30-min timeline + on-data-change refresh |
 
 ---
 
@@ -90,31 +138,45 @@ scascan/
 │   │   └── libs.versions.toml # Centralized Gradle version catalog
 │   ├── build.gradle.kts       # Project-level build configuration
 │   └── settings.gradle.kts
-└── ios/                       # Native iOS placeholder (coming soon)
+├── ios/                        # Native iOS app (Swift/SwiftUI)
+│   ├── ARCHITECTURE.md         # Full iOS technical handover — read before touching this app
+│   ├── Scascan.xcodeproj
+│   ├── Scascan/                 # App target: SwiftUI views, view state, App Intents
+│   │   ├── Home/ Log/ Camera/ Scan/ Search/ Voice/ Recap/ Result/ Profile/ Setup/
+│   │   ├── App/                 # Composition root, root/tab-level view state
+│   │   ├── Main/                # Tab host
+│   │   ├── Navigation/
+│   │   └── Shared/
+│   ├── ScaScanKit/              # Local Swift package: models, repositories, HealthKit,
+│   │   │                        # Gemini/OpenFoodFacts clients, notifications, UserProfileStore
+│   │   └── Tests/
+│   └── ScaScanWidget/           # Widget extension target
+└── LICENSE
 ```
 
-### Key Files
-- **App Manifest**: [AndroidManifest.xml](file:///home/quark/Projects/scascan/android/app/src/main/AndroidManifest.xml)
-- **Navigation Graph**: [nav_graph.xml](file:///home/quark/Projects/scascan/android/app/src/main/res/navigation/nav_graph.xml)
-- **Dependency Version Catalog**: [libs.versions.toml](file:///home/quark/Projects/scascan/android/gradle/libs.versions.toml)
-- **Host Activity**: [MainActivity.kt](file:///home/quark/Projects/scascan/android/app/src/main/java/com/scascan/app/MainActivity.kt)
-- **Application Class**: [ScaScanApplication.kt](file:///home/quark/Projects/scascan/android/app/src/main/java/com/scascan/app/ScaScanApplication.kt)
-- **App-level Build configuration**: [build.gradle.kts](file:///home/quark/Projects/scascan/android/app/build.gradle.kts)
-- **Project-level Build configuration**: [build.gradle.kts](file:///home/quark/Projects/scascan/android/build.gradle.kts)
-- **Settings configuration**: [settings.gradle.kts](file:///home/quark/Projects/scascan/android/settings.gradle.kts)
+### Key Android files
+- **App Manifest**: [AndroidManifest.xml](android/app/src/main/AndroidManifest.xml)
+- **Navigation Graph**: [nav_graph.xml](android/app/src/main/res/navigation/nav_graph.xml)
+- **Dependency Version Catalog**: [libs.versions.toml](android/gradle/libs.versions.toml)
+- **Host Activity**: [MainActivity.kt](android/app/src/main/java/com/scascan/app/MainActivity.kt)
+- **Application Class**: [ScaScanApplication.kt](android/app/src/main/java/com/scascan/app/ScaScanApplication.kt)
+- **App-level Build configuration**: [build.gradle.kts](android/app/build.gradle.kts)
+- **Project-level Build configuration**: [build.gradle.kts](android/build.gradle.kts)
+- **Settings configuration**: [settings.gradle.kts](android/settings.gradle.kts)
 
+### Key iOS files
+- **Composition root**: [AppContainer.swift](ios/Scascan/App/AppContainer.swift)
+- **Nutrition math**: [LogRepository](ios/ScaScanKit) (see [§5 of ARCHITECTURE.md](ios/ARCHITECTURE.md#5-the-nutrition-maths))
+- **Voice logging**: [VoiceLogController.swift](ios/Scascan/Voice/VoiceLogController.swift)
+- **Evening recap**: [DailyRecapView.swift](ios/Scascan/Recap/DailyRecapView.swift)
 
 ---
 
 ## Getting Started
 
-### Prerequisites
+### Android
 
-- Android Studio Hedgehog or later
-- Android SDK 26+
-- A [Google AI Studio](https://aistudio.google.com) API key
-
-### Setup
+**Prerequisites:** Android Studio Hedgehog or later, Android SDK 26+, a [Google AI Studio](https://aistudio.google.com) API key.
 
 1. Clone the repository:
    ```bash
@@ -131,9 +193,19 @@ scascan/
 
 > **Note:** The Gemini API key is injected at build time via `BuildConfig` and never shipped in source control. Do not commit `local.properties`.
 
+### iOS
+
+**Prerequisites:** Xcode with iOS 26 SDK, Swift 6 toolchain.
+
+1. Open `ios/Scascan.xcodeproj` in Xcode and run the `Scascan` scheme on a simulator or device.
+2. On first launch, `RootView` stops at the setup screen until a Gemini API key is entered by hand (there is no build-time injection on iOS) — the key is then stored in the Keychain.
+3. See [§15 of `ios/ARCHITECTURE.md`](ios/ARCHITECTURE.md#15-building-running-verifying) for command-line build/install/launch steps and for why `swift test` / `xcodebuild test` can't be used to verify changes in this project as configured — "it builds" is not verification.
+
 ---
 
 ## Screens
+
+### Android
 
 | Screen | Description |
 |---|---|
@@ -146,6 +218,19 @@ scascan/
 | **Nutrition Result** | Detail view highlighting serving details, calories, macronutrients, and custom macro targets. |
 | **Meal & Water Log** | Chronological logs of consumed food and daily water intake, including summaries and adjustments. |
 | **Profile & Settings** | Manage user characteristics (Mifflin-St Jeor formula calculation), set Gemini AI model preferences, and back up/restore logs via Google Drive. |
+
+### iOS
+
+| Screen | Description |
+|---|---|
+| **Setup** | First-run Gemini API key entry. |
+| **Scan** | Four cards: photo, barcode, text search, voice. |
+| **Camera / Barcode** | Edge-to-edge AVFoundation capture and VisionKit `DataScanner`. |
+| **Search** | Free-text food/meal lookup. |
+| **Voice** | Speak what you ate; auto-transcribed and auto-logged with a 4-second undo banner. Also reachable via Siri/Shortcuts. |
+| **Log** | Date navigation, calorie/macro progress, water quick-add, adaptive-target breakdown, today's workouts, meal list. |
+| **Evening Recap** | Unlocks at 21:00; settles the day's activity burn as a deduction from intake and renders an animated verdict (over/under/on target). |
+| **Profile & Settings** | Profile fields, goals, AI target computation, API key, model picker, Health, fitness fallback, water amounts, notification toggles. |
 
 ---
 
