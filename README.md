@@ -1,6 +1,6 @@
 # ScaScan
 
-A native mobile app that uses AI to instantly retrieve nutritional facts from food — by taking a photo, scanning a barcode, searching by name, or (iOS only) speaking it.
+A native mobile app that uses AI to instantly retrieve nutritional facts from food — by taking a photo, scanning a barcode, searching by name, or speaking it.
 
 Two native codebases, one product: **`android/`** is the original Kotlin app, **`ios/`** is a SwiftUI port that is now the active line of work. This file is the monorepo overview; for the full iOS technical handover (module layout, the nutrition arithmetic, concurrency and localization traps, how to verify a change) see **[`ios/ARCHITECTURE.md`](ios/ARCHITECTURE.md)**.
 
@@ -13,14 +13,14 @@ Two native codebases, one product: **`android/`** is the original Kotlin app, **
 | 📷 Photo analysis | ✅ | ✅ |
 | 🔍 Barcode scanning (camera) | ✅ (ML Kit / ZXing) | ✅ (VisionKit `DataScanner`) |
 | ✏️ Text search | ✅ | ✅ |
-| 🎙️ Voice logging (speak what you ate) | ❌ | ✅ on-device speech recognition, Siri/Shortcuts intent |
+| 🎙️ Voice logging (speak what you ate) | ✅ on-device speech recognition, falls back to online | ✅ on-device speech recognition, Siri/Shortcuts intent |
 | 🤖 Powered by Gemini | ✅ | ✅ (user's own API key on both) |
 | Barcode-photo OCR fallback (photo → digits → OpenFoodFacts → vision ID) | ❌ | ✅ |
 | Health sync | ✅ Health Connect | ✅ HealthKit |
 | Adaptive daily calorie target (BMR, activity, carry-over, weight trend) | ✅ | ✅ |
-| Evening recap (burn settled once at day's end instead of live in the target) | ❌ | ✅ |
-| "Watch wasn't worn" fallback for missing activity data | ❌ | ✅ |
-| Smart hydration reminders (reschedule remaining ones by amount logged) | ❌ (fixed periodic reminder) | ✅ |
+| Evening recap (burn settled once at day's end instead of live in the target) | ✅ | ✅ (animated, staged reveal) |
+| "Watch wasn't worn" fallback for missing activity data | ✅ (configurable in Settings) | ✅ |
+| Smart hydration reminders (reschedule remaining ones by amount logged) | ✅ | ✅ |
 | Homescreen widget (calories/macros/water, quick add) | ✅ | ✅ |
 | Cloud backup | ✅ Google Drive | ❌ (would need CloudKit + paid account; deliberately absent) |
 | Deep links / App Intents | — | ✅ `scascan://` scheme + Siri Shortcuts |
@@ -68,6 +68,7 @@ Full detail — storage, the nutrition math, HealthKit bridging, voice logging, 
 | **Background Work** | WorkManager | 2.9.0 (offline analysis scheduling) |
 | **Camera Feed** | CameraX | 1.6.1 |
 | **Barcode Detection** | Google ML Kit / ZXing | Core 3.5.3 |
+| **Speech** | `android.speech.SpeechRecognizer` | prefers on-device, falls back to online |
 | **Health Sync** | Google Health Connect | 1.1.0-rc01 |
 | **Cloud Backups** | Google Drive API | v3 |
 | **Networking** | OkHttp & HttpURLConnection | OkHttp 4.12.0 |
@@ -108,11 +109,11 @@ scascan/
 │   │       │   │   ├── health/     # Google Health Connect integration
 │   │       │   │   ├── local/      # Room database, SharedPreferences, models
 │   │       │   │   ├── model/      # Data transfer models (NutritionFacts, targets)
-│   │       │   │   ├── receiver/   # Broadcast receivers (reminders)
-│   │       │   │   ├── reminder/   # Meal notification scheduling
+│   │       │   │   ├── reminder/   # Hydration reminder scheduling (WorkManager)
 │   │       │   │   ├── remote/     # Gemini and OpenFoodFacts API clients
 │   │       │   │   ├── repository/ # Log and nutrition repositories
 │   │       │   │   ├── sync/       # Google Drive backup and restore
+│   │       │   │   ├── voice/      # SpeechRecognizer wrapper for voice logging
 │   │       │   │   └── worker/     # WorkManager background analysis workers
 │   │       │   ├── di/        # Hilt Dependency Injection modules
 │   │       │   ├── domain/    # Domain layer: Feature-specific business logic
@@ -120,7 +121,7 @@ scascan/
 │   │       │   ├── ui/        # Presentation layer: Fragments and ViewModels
 │   │       │   │   ├── camera/ # Live camera scanner feed (CameraX)
 │   │       │   │   ├── home/   # Main portal for scanning choices
-│   │       │   │   ├── log/    # Meal history and water logging
+│   │       │   │   ├── log/    # Meal history, water logging, evening recap
 │   │       │   │   ├── main/   # ViewPager2 shell coordinating tabs
 │   │       │   │   ├── profile/# User profile, macro targets, settings
 │   │       │   │   ├── result/ # Macro/micro nutrition presentation
@@ -128,6 +129,7 @@ scascan/
 │   │       │   │   ├── search/ # Food textual query lookup
 │   │       │   │   ├── setup/  # First-run API key input
 │   │       │   │   ├── util/   # View extensions and notification helpers
+│   │       │   │   ├── voice/  # Voice logging screen and view model
 │   │       │   │   └── widget/ # Daily nutrition homescreen widget
 │   │       │   ├── MainActivity.kt
 │   │       │   └── ScaScanApplication.kt
@@ -163,6 +165,8 @@ scascan/
 - **App-level Build configuration**: [build.gradle.kts](android/app/build.gradle.kts)
 - **Project-level Build configuration**: [build.gradle.kts](android/build.gradle.kts)
 - **Settings configuration**: [settings.gradle.kts](android/settings.gradle.kts)
+- **Nutrition math & evening recap**: [LogRepository.kt](android/app/src/main/java/com/scascan/app/data/repository/LogRepository.kt)
+- **Voice logging**: [VoiceLogViewModel.kt](android/app/src/main/java/com/scascan/app/ui/voice/VoiceLogViewModel.kt)
 
 ### Key iOS files
 - **Composition root**: [AppContainer.swift](ios/Scascan/App/AppContainer.swift)
@@ -211,13 +215,15 @@ scascan/
 |---|---|
 | **API Key Setup** | First-run setup to input and save the Google Gemini API Key. |
 | **Main (Tab Host)** | A view pager shell hosting the Home, Log, and Profile views. |
-| **Home** | Portal presenting choices for Image Capture, Barcode Scan, and Text Search. |
+| **Home** | Portal presenting choices for Image Capture, Barcode Scan, Text Search, and Voice Log. |
 | **Camera** | Live CameraX viewfinder preview with capture shutter to analyze food images. |
 | **Barcode Scan** | Camera feed to capture and process product barcodes. |
 | **Search** | Free-text input to quickly lookup food/meal descriptions. |
+| **Voice Log** | Speak what you ate; on-device transcription (falls back to online), added to the log immediately with a 4-second Undo. |
 | **Nutrition Result** | Detail view highlighting serving details, calories, macronutrients, and custom macro targets. |
-| **Meal & Water Log** | Chronological logs of consumed food and daily water intake, including summaries and adjustments. |
-| **Profile & Settings** | Manage user characteristics (Mifflin-St Jeor formula calculation), set Gemini AI model preferences, and back up/restore logs via Google Drive. |
+| **Meal & Water Log** | Chronological logs of consumed food and daily water intake, including summaries and adjustments, plus an "Evening recap" card that unlocks at 21:00. |
+| **Evening Recap** | Settles the day's activity burn as a deduction from intake and shows a verdict (over/under/on target). |
+| **Profile & Settings** | Manage user characteristics (Mifflin-St Jeor formula calculation), set Gemini AI model preferences, configure the activity fallback estimate, and back up/restore logs via Google Drive. |
 
 ### iOS
 
