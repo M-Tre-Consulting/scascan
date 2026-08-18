@@ -62,7 +62,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="20dp">
 
-                        <com.scascan.app.ui.widget.MacroRingView
+                        <com.mtreconsulting.scascan.ui.widget.MacroRingView
                             android:id="@+id/macroRing"
                             android:layout_width="150dp"
                             android:layout_height="150dp" />

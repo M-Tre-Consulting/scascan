@@ -1,1 +1,1 @@
--keep class com.scascan.app.data.model.** { *; }
+-keep class com.mtreconsulting.scascan.data.model.** { *; }

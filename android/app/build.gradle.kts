@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.scascan.app"
+    namespace = "com.mtreconsulting.scascan"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.scascan.app"
+        applicationId = "com.mtreconsulting.scascan"
         minSdk = 26
         targetSdk = 37
         versionCode = (project.findProperty("versionCode") as String?)?.toInt() ?: 20400

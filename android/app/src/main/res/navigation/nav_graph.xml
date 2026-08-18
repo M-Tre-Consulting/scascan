@@ -8,7 +8,7 @@
     <!-- First-run setup -->
     <fragment
         android:id="@+id/apiKeyFragment"
-        android:name="com.scascan.app.ui.setup.ApiKeyFragment"
+        android:name="com.mtreconsulting.scascan.ui.setup.ApiKeyFragment"
         android:label="@string/setup_title">
         <action
             android:id="@+id/action_apiKeyFragment_to_mainFragment"
@@ -20,7 +20,7 @@
     <!-- Main tab host -->
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.scascan.app.ui.main.MainFragment"
+        android:name="com.mtreconsulting.scascan.ui.main.MainFragment"
         android:label="ScaScan">
         <action
             android:id="@+id/action_main_to_camera"
@@ -68,13 +68,13 @@
 
     <fragment
         android:id="@+id/appSettingsFragment"
-        android:name="com.scascan.app.ui.profile.AppSettingsFragment"
+        android:name="com.mtreconsulting.scascan.ui.profile.AppSettingsFragment"
         android:label="@string/settings_title" />
 
     <!-- Detail screens -->
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.scascan.app.ui.camera.CameraFragment"
+        android:name="com.mtreconsulting.scascan.ui.camera.CameraFragment"
         android:label="@string/label_camera">
         <action
             android:id="@+id/action_cameraFragment_to_nutritionResultFragment"
@@ -87,7 +87,7 @@
 
     <fragment
         android:id="@+id/barcodeScanFragment"
-        android:name="com.scascan.app.ui.scan.BarcodeScanFragment"
+        android:name="com.mtreconsulting.scascan.ui.scan.BarcodeScanFragment"
         android:label="@string/label_barcode_scan">
         <action
             android:id="@+id/action_barcodeScanFragment_to_nutritionResultFragment"
@@ -100,7 +100,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.scascan.app.ui.search.SearchFragment"
+        android:name="com.mtreconsulting.scascan.ui.search.SearchFragment"
         android:label="@string/label_search">
         <action
             android:id="@+id/action_searchFragment_to_nutritionResultFragment"
@@ -113,16 +113,16 @@
 
     <fragment
         android:id="@+id/voiceLogFragment"
-        android:name="com.scascan.app.ui.voice.VoiceLogFragment"
+        android:name="com.mtreconsulting.scascan.ui.voice.VoiceLogFragment"
         android:label="@string/label_voice_log" />
 
     <fragment
         android:id="@+id/nutritionResultFragment"
-        android:name="com.scascan.app.ui.result.NutritionResultFragment"
+        android:name="com.mtreconsulting.scascan.ui.result.NutritionResultFragment"
         android:label="@string/label_result">
         <argument
             android:name="nutritionFacts"
-            app:argType="com.scascan.app.data.model.NutritionFacts" />
+            app:argType="com.mtreconsulting.scascan.data.model.NutritionFacts" />
     </fragment>
 
 </navigation>
