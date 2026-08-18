@@ -29,9 +29,16 @@ jobs:
           echo "JAVA_HOME=$HOME/.jbr" >> "$GITHUB_ENV"
           echo "$HOME/.jbr/bin" >> "$GITHUB_PATH"
 
+      - name: Set version from tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          IFS='.' read -r major minor patch <<< "$VERSION"
+          echo "VERSION_CODE=$(( major * 10000 + minor * 100 + patch ))" >> "$GITHUB_ENV"
+
       - name: Build release APK
         working-directory: android
-        run: gradle assembleRelease
+        run: gradle assembleRelease -PversionName="$VERSION" -PversionCode="$VERSION_CODE"
 
       - name: Sign APK
         env:
