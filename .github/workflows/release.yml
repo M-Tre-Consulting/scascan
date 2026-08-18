@@ -79,17 +79,16 @@ jobs:
   # Runs independently of the android job/release — a red iOS build here
   # doesn't block an Android release going out.
   #
-  # continue-on-error: the project's pbxproj is saved by Xcode 27
+  # Disabled (if: false): the project's pbxproj is saved by Xcode 27
   # (objectVersion 110, LastUpgradeCheck 2700) — a beta not yet on any
   # GitHub-hosted runner (macos-15's newest is Xcode 26.3). Every run fails
   # at "resolve package dependencies" with "future Xcode project file
-  # format" until GitHub ships Xcode 27 on hosted runners. Soft-failing
-  # keeps the job visible as a warning instead of a misleading hard error.
-  # Remove continue-on-error once Xcode 27 is available here.
+  # format", and continue-on-error still surfaced a run on every release tag.
+  # Re-enable (drop the `if:`) once Xcode 27 is available on hosted runners.
   ios:
     needs: version
     runs-on: macos-15
-    continue-on-error: true
+    if: false
     steps:
       - uses: actions/checkout@v4
 
