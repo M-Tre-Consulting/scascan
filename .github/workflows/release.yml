@@ -57,22 +57,25 @@ jobs:
           echo "JAVA_HOME=$HOME/.jbr" >> "$GITHUB_ENV"
           echo "$HOME/.jbr/bin" >> "$GITHUB_PATH"
 
+      # Decoded straight into app/ — build.gradle.kts's signingConfigs.release resolves
+      # androidReleaseStoreFile relative to the :app module dir, not the shell's cwd.
+      - name: Decode release keystore
+        env:
+          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+        run: printf '%s' "$ANDROID_KEYSTORE" | base64 --decode > android/app/release.keystore.jks
+
+      # Gradle signs the APK itself as part of assembleRelease (see signingConfigs.release in
+      # app/build.gradle.kts) — no separate apksigner/openssl step needed.
       - name: Build release APK
         working-directory: android
-        run: gradle assembleRelease -PversionName="${{ needs.version.outputs.version }}" -PversionCode="${{ needs.version.outputs.version_code }}"
-
-      - name: Sign APK
-        env:
-          SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY }}
-          SIGNING_CERT: ${{ secrets.ANDROID_SIGNING_CERT }}
         run: |
-          printf '%s' "$SIGNING_KEY" | base64 --decode > /tmp/signing-key.pem
-          printf '%s' "$SIGNING_CERT" | base64 --decode > /tmp/signing-cert.pem
-          openssl pkcs8 -topk8 -nocrypt -in /tmp/signing-key.pem -out /tmp/signing-key.pk8 -outform DER
-          openssl x509 -in /tmp/signing-cert.pem -out /tmp/signing-cert.der -outform DER
-          APKSIGNER=$(find "$ANDROID_SDK_ROOT" -name "apksigner" -not -name "*.bat" | sort -V | tail -1)
-          APK=$(find android/app/build/outputs/apk/release -name "*.apk" | head -1)
-          "$APKSIGNER" sign --key /tmp/signing-key.pk8 --cert /tmp/signing-cert.der "$APK"
+          gradle assembleRelease \
+            -PversionName="${{ needs.version.outputs.version }}" \
+            -PversionCode="${{ needs.version.outputs.version_code }}" \
+            -PandroidReleaseStoreFile="release.keystore.jks" \
+            -PandroidReleaseStorePassword="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" \
+            -PandroidReleaseKeyAlias="${{ secrets.ANDROID_KEY_ALIAS }}" \
+            -PandroidReleaseKeyPassword="${{ secrets.ANDROID_KEY_PASSWORD }}"
 
       - uses: actions/upload-artifact@v4
         with:

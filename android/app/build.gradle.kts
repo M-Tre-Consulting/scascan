@@ -23,6 +23,22 @@ android {
         // API key is entered by the user at runtime, not baked into the APK
     }
 
+    // Populated only when the four androidRelease* Gradle properties are passed in (CI does
+    // this via -P flags after decoding a keystore secret — see release.yml). Left unassigned
+    // for local `assembleRelease` runs, which then just produce an unsigned APK instead of
+    // failing the Gradle config phase.
+    val releaseStoreFile = project.findProperty("androidReleaseStoreFile") as String?
+    if (releaseStoreFile != null) {
+        signingConfigs {
+            create("release") {
+                storeFile = file(releaseStoreFile)
+                storePassword = project.findProperty("androidReleaseStorePassword") as String?
+                keyAlias = project.findProperty("androidReleaseKeyAlias") as String?
+                keyPassword = project.findProperty("androidReleaseKeyPassword") as String?
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -30,6 +46,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            if (releaseStoreFile != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 
