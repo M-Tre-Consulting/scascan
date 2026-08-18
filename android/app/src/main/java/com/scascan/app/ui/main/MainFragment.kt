@@ -107,10 +107,20 @@ class MainFragment : Fragment() {
     }
 
     private fun setupBottomNav() {
+        // A plain, mutable GradientDrawable per item (not a state-list selector) so the fill
+        // color can be cross-faded by animateNavButton instead of hard-cut on selection change.
+        listOf(binding.btnNavHome, binding.btnNavLog, binding.btnNavProfile).forEach { btn ->
+            btn.background = android.graphics.drawable.GradientDrawable().apply {
+                shape = android.graphics.drawable.GradientDrawable.RECTANGLE
+                cornerRadius = 24f * resources.displayMetrics.density
+                setColor(android.graphics.Color.TRANSPARENT)
+            }
+        }
+
         binding.btnNavHome.setOnClickListener { it.hapticClick(); updateSelection(0) }
         binding.btnNavLog.setOnClickListener { it.hapticClick(); updateSelection(1) }
         binding.btnNavProfile.setOnClickListener { it.hapticClick(); updateSelection(2) }
-        
+
         // Initial state
         updateNavIcons(0)
     }
@@ -124,17 +134,30 @@ class MainFragment : Fragment() {
     private fun updateNavIcons(position: Int) {
         val activeColor = com.google.android.material.color.MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorOnPrimary)
         val inactiveColor = com.google.android.material.color.MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorOnSurfaceVariant)
+        val activeFill = com.google.android.material.color.MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorPrimary)
 
-        animateNavButton(binding.btnNavHome, binding.ivNavHome, binding.tvNavHomeLabel, position == 0, activeColor, inactiveColor)
-        animateNavButton(binding.btnNavLog, binding.ivNavLog, binding.tvNavLogLabel, position == 1, activeColor, inactiveColor)
-        animateNavButton(binding.btnNavProfile, binding.ivNavProfile, binding.tvNavProfileLabel, position == 2, activeColor, inactiveColor)
+        // One explicit, self-contained transition per call (not `animateLayoutChanges`) covers
+        // the width/position change as labels appear/disappear. Implicit LayoutTransition could
+        // be left mid-animation — with orphaned internal animators — if a page swipe fired the
+        // next call before the previous one settled; TransitionManager instead cancels/replaces
+        // cleanly on every call, so the pill can never get stuck mid-morph.
+        val transition = androidx.transition.AutoTransition().apply {
+            duration = NAV_ANIM_DURATION
+            interpolator = android.view.animation.PathInterpolator(0.2f, 0f, 0f, 1f)
+        }
+        androidx.transition.TransitionManager.beginDelayedTransition(binding.customNav, transition)
+
+        animateNavButton(binding.btnNavHome, binding.ivNavHome, binding.tvNavHomeLabel, position == 0, activeColor, inactiveColor, activeFill)
+        animateNavButton(binding.btnNavLog, binding.ivNavLog, binding.tvNavLogLabel, position == 1, activeColor, inactiveColor, activeFill)
+        animateNavButton(binding.btnNavProfile, binding.ivNavProfile, binding.tvNavProfileLabel, position == 2, activeColor, inactiveColor, activeFill)
     }
 
     /**
      * The active tab expands into a filled, labeled capsule (Material 3's expressive nav-bar
-     * shape); inactive tabs stay icon-only. `customNav`'s animateLayoutChanges handles the
-     * width/position transition as the label appears — the pill background itself is a state
-     * selector (nav_pill_selector), so an instant state flip is enough to look like a morph.
+     * shape); inactive tabs stay icon-only. Unlike a state-list drawable (an instant hard cut
+     * between two fixed drawables), the pill's own fill color is cross-faded via ValueAnimator
+     * alongside the icon tint and a small overshoot "pop" on the icon, so selecting a tab reads
+     * as one continuous morph rather than a snap.
      */
     private fun animateNavButton(
         container: View,
@@ -142,20 +165,41 @@ class MainFragment : Fragment() {
         label: android.widget.TextView,
         isSelected: Boolean,
         activeColor: Int,
-        inactiveColor: Int
+        inactiveColor: Int,
+        activeFill: Int
     ) {
+        val wasSelected = container.isSelected
+        if (wasSelected == isSelected) return
         container.isSelected = isSelected
         label.isVisible = isSelected
 
-        val duration = 250L
-        val targetColor = if (isSelected) activeColor else inactiveColor
-        val currentColor = iv.tag as? Int ?: inactiveColor
-        iv.tag = targetColor
+        val targetIconColor = if (isSelected) activeColor else inactiveColor
+        val currentIconColor = iv.tag as? Int ?: inactiveColor
+        iv.tag = targetIconColor
 
-        android.animation.ValueAnimator.ofArgb(currentColor, targetColor).apply {
-            setDuration(duration)
+        android.animation.ValueAnimator.ofArgb(currentIconColor, targetIconColor).apply {
+            duration = NAV_ANIM_DURATION
             addUpdateListener { iv.setColorFilter(it.animatedValue as Int) }
             start()
+        }
+
+        val bg = container.background as android.graphics.drawable.GradientDrawable
+        val previousFill = if (wasSelected) activeFill else android.graphics.Color.TRANSPARENT
+        val targetFill = if (isSelected) activeFill else android.graphics.Color.TRANSPARENT
+        android.animation.ValueAnimator.ofArgb(previousFill, targetFill).apply {
+            duration = NAV_ANIM_DURATION
+            addUpdateListener { bg.setColor(it.animatedValue as Int) }
+            start()
+        }
+
+        if (isSelected) {
+            iv.scaleX = 0.75f
+            iv.scaleY = 0.75f
+            iv.animate()
+                .scaleX(1f).scaleY(1f)
+                .setDuration(340L)
+                .setInterpolator(android.view.animation.OvershootInterpolator(2.5f))
+                .start()
         }
     }
 
@@ -248,5 +292,6 @@ class MainFragment : Fragment() {
 
     companion object {
         private const val RESULT_SHEET_TAG = "analysis_result_sheet"
+        private const val NAV_ANIM_DURATION = 260L
     }
 }

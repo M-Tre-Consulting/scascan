@@ -41,8 +41,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:paddingHorizontal="6dp"
-            android:gravity="center"
-            android:animateLayoutChanges="true">
+            android:gravity="center">
 
             <!-- Home — the active item expands into a filled, labeled capsule; inactive
                  items stay icon-only. Mirrors Material 3's expressive nav-bar item shape. -->
@@ -54,7 +53,6 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:paddingHorizontal="16dp"
-                android:background="@drawable/nav_pill_selector"
                 android:clickable="true"
                 android:focusable="true">
                 <ImageView
@@ -85,7 +83,6 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:paddingHorizontal="16dp"
-                android:background="@drawable/nav_pill_selector"
                 android:clickable="true"
                 android:focusable="true">
                 <ImageView
@@ -116,7 +113,6 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:paddingHorizontal="16dp"
-                android:background="@drawable/nav_pill_selector"
                 android:clickable="true"
                 android:focusable="true">
                 <ImageView
