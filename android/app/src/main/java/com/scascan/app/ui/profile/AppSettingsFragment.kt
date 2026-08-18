@@ -294,7 +294,25 @@ class AppSettingsFragment : Fragment() {
         binding.btnSyncWeight.setOnClickListener { it.hapticClick(); syncFromHc() }
         binding.btnDisconnectHc.setOnClickListener { it.hapticTick(); disconnectHc() }
 
+        setupActiveFallback()
         checkHcStatus()
+    }
+
+    private fun setupActiveFallback() {
+        binding.etActiveFallback.setText(viewModel.profileStore.activeCalorieFallbackKcal.toString())
+        binding.etActiveFallback.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) saveActiveFallback()
+        }
+        binding.etActiveFallback.setOnEditorActionListener { _, _, _ -> saveActiveFallback(); true }
+    }
+
+    private fun saveActiveFallback() {
+        val value = binding.etActiveFallback.text?.toString()?.toIntOrNull()
+        if (value != null && value >= 0) {
+            viewModel.profileStore.activeCalorieFallbackKcal = value
+        } else {
+            binding.etActiveFallback.setText(viewModel.profileStore.activeCalorieFallbackKcal.toString())
+        }
     }
 
     private fun checkHcStatus() {

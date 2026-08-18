@@ -58,6 +58,7 @@ class LogFragment : Fragment() {
         setupDateNavigation()
         setupFixResultListener()
         setupSummaryCards()
+        setupRecapCard()
         setupWaterTracking()
         observeState()
         viewModel.loadHealthData()
@@ -129,7 +130,7 @@ class LogFragment : Fragment() {
             totalFiber     = entries.sumOf { it.fiber },
             totalSodiumMg  = entries.sumOf { it.sodium },
             totalWater     = water.sumOf { it.amountMl },
-            calorieTarget  = targetInfo.caloriesKcal + activeKcal + trendAdj + targetInfo.bleedthroughKcal,
+            calorieTarget  = targetInfo.caloriesKcal + trendAdj + targetInfo.bleedthroughKcal,
             proteinTarget  = targetInfo.macros.proteinG,
             carbsTarget    = targetInfo.macros.carbsG,
             fatTarget      = targetInfo.macros.fatG,
@@ -140,6 +141,39 @@ class LogFragment : Fragment() {
             isAiComputed   = targetInfo.isAiComputed,
             dateLabel      = viewModel.selectedDateLabel.value
         ).show(childFragmentManager, "daily_summary")
+    }
+
+    // Evening recap
+    private fun setupRecapCard() {
+        binding.cardRecap.setOnClickListener {
+            it.hapticClick()
+            showRecap()
+        }
+        updateRecapCard()
+    }
+
+    private fun isRecapUnlocked(): Boolean {
+        if (!viewModel.isToday.value) return true
+        return java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY) >= 21
+    }
+
+    private fun updateRecapCard() {
+        binding.tvRecapStatus.text = if (isRecapUnlocked())
+            getString(R.string.log_recap_cta)
+        else
+            getString(R.string.log_recap_locked_status)
+    }
+
+    private fun showRecap() {
+        if (!isRecapUnlocked()) return
+        if (childFragmentManager.findFragmentByTag("daily_recap") != null) return
+        val offsetDays = viewModel.currentDateOffset
+        val dateLabel = viewModel.selectedDateLabel.value
+        viewLifecycleOwner.lifecycleScope.launch {
+            val recap = viewModel.getDailyRecap(offsetDays)
+            DailyRecapBottomSheetFragment.newInstance(recap, dateLabel)
+                .show(childFragmentManager, "daily_recap")
+        }
     }
 
     // Fix entry
@@ -212,13 +246,14 @@ class LogFragment : Fragment() {
 
     // Rendering
     private fun renderScreen(state: RenderState) {
-        val activeKcal = (state.adaptive as? LogViewModel.AdaptiveState.Active)?.activeKcal ?: 0.0
         val trendAdj   = (state.adaptive as? LogViewModel.AdaptiveState.Active)?.trendAdjustment ?: 0
         val bleedthrough = state.targetInfo.bleedthroughKcal
         
-        // Use repository to compute final target with health floors (coercion)
+        // Use repository to compute final target with health floors (coercion).
+        // Today's live activity burn is deliberately excluded — it's settled once, in the
+        // evening recap, not folded into a target that would otherwise shift on every HC sync.
         val totalTarget = if (viewModel.isToday.value) {
-            viewModel.getFinalTarget(state.targetInfo.caloriesKcal, bleedthrough, activeKcal, trendAdj)
+            viewModel.getFinalTarget(state.targetInfo.caloriesKcal, bleedthrough, trendAdj)
         } else {
             state.targetInfo.caloriesKcal
         }
@@ -227,6 +262,7 @@ class LogFragment : Fragment() {
         renderWater(state.water)
         renderHealthMetrics(state.adaptive)
         renderAdaptiveCard(state.adaptive, state.targetInfo)
+        updateRecapCard()
     }
 
     private fun renderWater(water: List<WaterLog>) {
@@ -381,7 +417,7 @@ class LogFragment : Fragment() {
                 }
 
                 binding.tvAdaptiveTotal.text = getString(
-                    R.string.log_adaptive_kcal, baseTarget + activeKcal + trendAdj + bleedthrough
+                    R.string.log_adaptive_kcal, baseTarget + trendAdj + bleedthrough
                 )
 
                 val noData = adaptive.trendStatus == LogViewModel.AdaptiveState.TrendStatus.NoData

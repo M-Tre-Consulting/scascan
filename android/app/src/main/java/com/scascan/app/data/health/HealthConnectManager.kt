@@ -31,6 +31,10 @@ class HealthConnectManager @Inject constructor(
     companion object {
         private const val TAG = "HealthConnectManager"
 
+        /** Below this, a day's active-energy read is treated as a missing/unworn tracker
+         * rather than genuine inactivity — even a pocketed phone accumulates more than this. */
+        private const val WATCH_NOT_WORN_THRESHOLD_KCAL = 100.0
+
         val PERMISSIONS = setOf(
             HealthPermission.getReadPermission(StepsRecord::class),
             HealthPermission.getReadPermission(ActiveCaloriesBurnedRecord::class),
@@ -100,7 +104,21 @@ class HealthConnectManager @Inject constructor(
         return start to end
     }
 
+    /**
+     * Active-calorie burn for [start, end), with a flat fallback substituted whenever the
+     * raw read looks like a missing/unworn tracker (see [WATCH_NOT_WORN_THRESHOLD_KCAL]).
+     * Every caller (today, yesterday's bleedthrough, past-day paging) funnels through here.
+     */
     suspend fun readActiveCaloriesRange(start: Instant, end: Instant): Double {
+        val raw = readRawActiveCaloriesRange(start, end)
+        return if (raw < WATCH_NOT_WORN_THRESHOLD_KCAL) {
+            profileStore.activeCalorieFallbackKcal.toDouble()
+        } else {
+            raw
+        }
+    }
+
+    private suspend fun readRawActiveCaloriesRange(start: Instant, end: Instant): Double {
         val c = client ?: return 0.0
         return try {
             // 1. Try ActiveCaloriesBurnedRecord first (Most accurate for "active" burn)

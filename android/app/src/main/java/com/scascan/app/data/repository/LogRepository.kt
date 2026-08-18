@@ -87,6 +87,9 @@ class LogRepository @Inject constructor(
         
         // Background restriction fallback: if live read returns 0, but we have a cached value, use it.
         // This is primarily for the home screen widget which can't always read HC data in the background.
+        // Note: HealthConnectManager.readActiveCaloriesRange() now substitutes its own flat
+        // "watch not worn" estimate (>= 100 kcal) whenever HC has data but it's near-zero, so this
+        // branch is mostly only reachable via a real background-read failure, not a low-activity day.
         if (hasHc && activeKcal <= 0.1 && profileStore.lastActiveCalories > 0) {
             activeKcal = profileStore.lastActiveCalories.toDouble()
         } else if (hasHc && activeKcal > 0.1) {
@@ -100,8 +103,8 @@ class LogRepository @Inject constructor(
         } else {
             0
         }
-        
-        return computeFinalTarget(baseTarget, bleedthrough, activeKcal, trendAdjustment)
+
+        return computeFinalTarget(baseTarget, bleedthrough, trendAdjustment)
     }
 
     fun getBaseTarget(hasHc: Boolean): Int {
@@ -116,8 +119,14 @@ class LogRepository @Inject constructor(
         }
     }
 
-    fun computeFinalTarget(base: Int, bleedthrough: Int, active: Double, trend: Int): Int {
-        val total = base + bleedthrough + active.roundToInt() + trend
+    /**
+     * The live/displayed daily target: base + carry-over + weight trend.
+     * Deliberately excludes today's measured activity burn — that's settled once, in the
+     * evening recap ([getDailyRecap]), as a deduction from intake, so the number the user is
+     * aiming at doesn't shift every time Health Connect syncs fresh activity mid-day.
+     */
+    fun computeFinalTarget(base: Int, bleedthrough: Int, trend: Int): Int {
+        val total = base + bleedthrough + trend
         // Ensure a healthy minimum target (at least 80% of BMR)
         return total.coerceAtLeast((bmr() * 0.8).toInt())
     }
@@ -149,22 +158,27 @@ class LogRepository @Inject constructor(
 
     suspend fun getWaterTotalForRangeSync(start: Long, end: Long): Int = waterDao.getTotalForRangeSync(start, end) ?: 0
 
-    suspend fun getYesterdayBleedthrough(): Int {
+    private fun dayRangeMs(offsetDays: Int): Pair<Long, Long> {
         val cal = Calendar.getInstance().apply {
-            add(Calendar.DAY_OF_YEAR, -1)
+            add(Calendar.DAY_OF_YEAR, offsetDays)
             set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
         }
-        val startMs = cal.timeInMillis
-        val endMs = startMs + DAY_MS
-        
-        // 1. Consumed yesterday
-        val yesterdayEntries = dao.getEntriesForRangeSync(startMs, endMs)
-        val consumed = yesterdayEntries.sumOf { it.calories }
-        
-        // 2. Base Allowance yesterday
+        val start = cal.timeInMillis
+        return start to (start + DAY_MS)
+    }
+
+    /** What the day before [offsetDays] left behind — carries into [offsetDays] as bleedthrough. */
+    private suspend fun bleedthroughInto(offsetDays: Int): Int {
+        val (startMs, endMs) = dayRangeMs(offsetDays - 1)
+
+        // 1. Consumed on the previous day
+        val prevEntries = dao.getEntriesForRangeSync(startMs, endMs)
+        val consumed = prevEntries.sumOf { it.calories }
+
+        // 2. Base Allowance on the previous day
         // If Health Connect is active, we use a Sedentary (1.2x) base to avoid double-counting activity
         val hasHc = healthManager.hasPermissions()
         val baseTarget = if (hasHc) {
@@ -176,26 +190,91 @@ class LogRepository @Inject constructor(
         } else {
             dailyCalorieTarget().toDouble()
         }
-        
-        // 3. Active Burn yesterday
+
+        // 3. Active Burn on the previous day
         val startInstant = java.time.Instant.ofEpochMilli(startMs)
         val endInstant = java.time.Instant.ofEpochMilli(endMs)
-        val activeYesterday = if (hasHc) {
+        val activePrevDay = if (hasHc) {
             healthManager.readActiveCaloriesRange(startInstant, endInstant)
         } else {
             0.0
         }
-        
-        val totalAllowanceYesterday = baseTarget + activeYesterday
-        val rawBalance = totalAllowanceYesterday - consumed
-        
+
+        val totalAllowancePrevDay = baseTarget + activePrevDay
+        val rawBalance = totalAllowancePrevDay - consumed
+
         // 4. Smart Logic:
         // - If saved (balance > 0): Use only 80% to account for body efficiency.
         // - If overspent (balance < 0): Carry over 100% to keep you accountable.
-        // - Cap at ±500 kcal to keep today's target healthy and achievable.
+        // - Cap at ±500 kcal to keep the receiving day's target healthy and achievable.
         val adjustedBalance = if (rawBalance > 0) rawBalance * 0.8 else rawBalance
-        
+
         return adjustedBalance.roundToInt().coerceIn(-500, 500)
+    }
+
+    suspend fun getYesterdayBleedthrough(): Int = bleedthroughInto(0)
+
+    enum class RecapVerdict { OVER, UNDER, ON_TARGET, NO_DATA }
+
+    data class DailyRecap(
+        val eaten: Int,
+        val burned: Int,
+        val carryOver: Int,
+        val net: Int,
+        val target: Int,
+        val verdict: RecapVerdict,
+        val waterMl: Int,
+        val waterTargetMl: Int
+    )
+
+    /**
+     * Settles the given day once: net = eaten − burned − carryOver, compared against
+     * base + weightTrend (no carry-over, no burn — those are already accounted for in net).
+     * Mirrors iOS's evening recap ledger (see ios/ARCHITECTURE.md §5.4).
+     */
+    suspend fun getDailyRecap(offsetDays: Int): DailyRecap {
+        val (startMs, endMs) = dayRangeMs(offsetDays)
+
+        val entries = dao.getEntriesForRangeSync(startMs, endMs)
+        val eaten = entries.sumOf { it.calories }.roundToInt()
+        val water = waterDao.getTotalForRangeSync(startMs, endMs) ?: 0
+
+        val hasHc = healthManager.hasPermissions()
+        val carryOver = bleedthroughInto(offsetDays)
+
+        val trend = if (offsetDays == 0 && hasHc) {
+            calculateTrendAdjustment(healthManager.readWeightHistory(28))
+        } else {
+            0
+        }
+        val target = (getBaseTarget(hasHc) + trend).coerceAtLeast((bmr() * 0.8).toInt())
+
+        val burned = if (hasHc) {
+            val startInstant = java.time.Instant.ofEpochMilli(startMs)
+            val endInstant = java.time.Instant.ofEpochMilli(endMs)
+            healthManager.readActiveCaloriesRange(startInstant, endInstant).roundToInt()
+        } else {
+            0
+        }
+
+        val net = eaten - burned - carryOver
+        val verdict = when {
+            entries.isEmpty() -> RecapVerdict.NO_DATA
+            net > target + 100 -> RecapVerdict.OVER
+            net < target * 0.75 -> RecapVerdict.UNDER
+            else -> RecapVerdict.ON_TARGET
+        }
+
+        return DailyRecap(
+            eaten = eaten,
+            burned = burned,
+            carryOver = carryOver,
+            net = net,
+            target = target,
+            verdict = verdict,
+            waterMl = water,
+            waterTargetMl = profileStore.waterTargetMl()
+        )
     }
 
     suspend fun upsertEntries(entries: List<LogEntry>) = dao.upsertAll(entries)

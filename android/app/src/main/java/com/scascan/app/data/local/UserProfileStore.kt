@@ -73,6 +73,13 @@ class UserProfileStore @Inject constructor(
         get() = prefs.getFloat(KEY_LAST_ACTIVE_CALORIES, 0f)
         set(v) { prefs.edit(commit = true) { putFloat(KEY_LAST_ACTIVE_CALORIES, v) } }
 
+    /** Flat kcal estimate substituted when a whole day's Health Connect active-energy read
+     * looks like a missing/unworn tracker rather than genuine inactivity. User-configurable
+     * in Settings. See [com.scascan.app.data.health.HealthConnectManager]. */
+    var activeCalorieFallbackKcal: Int
+        get() = prefs.getInt(KEY_ACTIVE_FALLBACK, DEFAULT_ACTIVE_FALLBACK)
+        set(v) { prefs.edit(commit = true) { putInt(KEY_ACTIVE_FALLBACK, v) } }
+
     fun hasProfile(): Boolean = age > 0 && heightCm > 0 && weightKg > 0f
 
     /** Returns the AI-computed target if available, otherwise falls back to Mifflin-St Jeor TDEE with goal adjustment. */
@@ -154,6 +161,13 @@ class UserProfileStore @Inject constructor(
         }
     }
 
+    /** ~35 ml per kg of body weight, rounded to 100 ml, clamped 1500–4000, 2000 when weight is unknown. */
+    fun waterTargetMl(): Int {
+        if (weightKg <= 0f) return 2000
+        val raw = weightKg * 35.0
+        return (Math.round(raw / 100.0) * 100).toInt().coerceIn(1500, 4000)
+    }
+
     companion object {
         private const val PREFS_NAME      = "scascan_profile"
         private const val KEY_AGE         = "age"
@@ -170,6 +184,8 @@ class UserProfileStore @Inject constructor(
         private const val KEY_SYNC_EMAIL   = "sync_email"
         private const val KEY_WATER_REMINDERS = "water_reminders"
         private const val KEY_LAST_ACTIVE_CALORIES = "last_active_kcal"
+        private const val KEY_ACTIVE_FALLBACK = "active_calorie_fallback"
         const val DEFAULT_CALORIES = 2_000
+        const val DEFAULT_ACTIVE_FALLBACK = 500
     }
 }

@@ -115,6 +115,21 @@
     <string name="log_adaptive_hint_connect">Connect Health Connect in Profile to enable adaptive targets.</string>
     <string name="log_adaptive_hint_weight">Add weight readings in Health Connect to enable trend-based fine-tuning.</string>
 
+    <!-- Daily recap -->
+    <string name="log_recap_title">Evening Recap</string>
+    <string name="log_recap_locked_status">Unlocks at 9:00 PM</string>
+    <string name="log_recap_cta">Tap to view</string>
+    <string name="log_recap_eaten">Eaten</string>
+    <string name="log_recap_burned">Burned</string>
+    <string name="log_recap_carry_over">Carried over</string>
+    <string name="log_recap_target">Target</string>
+    <string name="log_recap_verdict_over">Over target</string>
+    <string name="log_recap_verdict_under">Under target</string>
+    <string name="log_recap_verdict_on_target">On target</string>
+    <string name="log_recap_verdict_no_data">No meals logged</string>
+    <string name="log_recap_water">Water</string>
+    <string name="log_summary_activity_details_title">Activity Details</string>
+
     <string name="widget_placeholder_consumed">0</string>
     <string name="widget_placeholder_target">/ 2000 kcal</string>
     <string name="widget_placeholder_macros">P: 0g · C: 0g · F: 0g · 0ml</string>
@@ -197,6 +212,8 @@
     <string name="profile_key_saved">API key saved</string>
     <string name="profile_health_title">Health Connect</string>
     <string name="profile_health_desc">Connect your Google Health data to enable calorie tracking and adaptive daily goals.</string>
+    <string name="settings_active_fallback_title">Fitness base fallback (kcal)</string>
+    <string name="settings_active_fallback_desc">Used when your tracker wasn\'t worn for a whole day, instead of showing 0.</string>
     <string name="profile_notif_water_title">Hydration reminder</string>
     <string name="profile_notif_water_desc">Receive periodic notifications to remind you to drink water during the day.</string>
     <string name="profile_about_desc">Uses Gemini AI for nutritional analysis · Built with Material 3 Expressive</string>

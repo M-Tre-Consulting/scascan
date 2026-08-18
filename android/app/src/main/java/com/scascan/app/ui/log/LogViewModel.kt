@@ -68,6 +68,8 @@ class LogViewModel @Inject constructor(
         .flatMapLatest { offset -> logRepository.waterLogsForDateOffset(offset) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
+    val currentDateOffset: Int get() = _dateOffset.value
+
     fun goToPreviousDay() { _dateOffset.value--; loadHealthData() }
     fun goToNextDay() { if (_dateOffset.value < 0) { _dateOffset.value++; loadHealthData() } }
 
@@ -239,9 +241,12 @@ class LogViewModel @Inject constructor(
         }
     }
 
-    fun getFinalTarget(base: Int, bleedthrough: Int, active: Double, trend: Int): Int {
-        return logRepository.computeFinalTarget(base, bleedthrough, active, trend)
+    fun getFinalTarget(base: Int, bleedthrough: Int, trend: Int): Int {
+        return logRepository.computeFinalTarget(base, bleedthrough, trend)
     }
+
+    suspend fun getDailyRecap(offsetDays: Int): LogRepository.DailyRecap =
+        logRepository.getDailyRecap(offsetDays)
 
     // Log entry operations
     fun deleteEntry(entry: LogEntry) {

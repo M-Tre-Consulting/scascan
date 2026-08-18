@@ -115,6 +115,21 @@
     <string name="log_adaptive_hint_connect">Collega Health Connect nel Profilo per abilitare gli obiettivi adattativi.</string>
     <string name="log_adaptive_hint_weight">Aggiungi misurazioni del peso in Health Connect per abilitare la correzione basata sul trend.</string>
 
+    <!-- Daily recap -->
+    <string name="log_recap_title">Riepilogo serale</string>
+    <string name="log_recap_locked_status">Si sblocca alle 21:00</string>
+    <string name="log_recap_cta">Tocca per visualizzare</string>
+    <string name="log_recap_eaten">Consumate</string>
+    <string name="log_recap_burned">Bruciate</string>
+    <string name="log_recap_carry_over">Riportate dal giorno precedente</string>
+    <string name="log_recap_target">Obiettivo</string>
+    <string name="log_recap_verdict_over">Sopra l\'obiettivo</string>
+    <string name="log_recap_verdict_under">Sotto l\'obiettivo</string>
+    <string name="log_recap_verdict_on_target">In linea con l\'obiettivo</string>
+    <string name="log_recap_verdict_no_data">Nessun pasto registrato</string>
+    <string name="log_recap_water">Acqua</string>
+    <string name="log_summary_activity_details_title">Dettagli attività</string>
+
     <string name="widget_placeholder_consumed">0</string>
     <string name="widget_placeholder_target">/ 2.000 kcal</string>
     <string name="widget_placeholder_macros">P: 0g · C: 0g · F: 0g · 0ml</string>
@@ -197,6 +212,8 @@
     <string name="profile_key_saved">Chiave API salvata</string>
     <string name="profile_health_title">Health Connect</string>
     <string name="profile_health_desc">Collega i tuoi dati Google Health per abilitare il monitoraggio calorico e gli obiettivi giornalieri adattativi.</string>
+    <string name="settings_active_fallback_title">Stima base attività (kcal)</string>
+    <string name="settings_active_fallback_desc">Usata quando il tuo dispositivo non è stato indossato per un\'intera giornata, al posto di mostrare 0.</string>
     <string name="profile_notif_water_title">Promemoria idratazione</string>
     <string name="profile_notif_water_desc">Ricevi notifiche periodiche per ricordarti di bere acqua durante il giorno.</string>
     <string name="profile_about_desc">Usa Gemini AI per l\'analisi nutrizionale · Realizzato con Material 3 Expressive</string>
