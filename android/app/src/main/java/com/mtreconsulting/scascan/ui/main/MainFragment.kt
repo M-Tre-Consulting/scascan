@@ -31,6 +31,11 @@ class MainFragment : Fragment() {
     @Inject lateinit var analysisManager: AnalysisManager
     @Inject lateinit var logRepository: LogRepository
 
+    // Tracks the in-flight ValueAnimator per nav-pill view, so a rapid double-tap cancels the
+    // previous one instead of running two conflicting animators on the same icon/background.
+    private val iconTintAnimators = HashMap<View, android.animation.ValueAnimator>()
+    private val fillAnimators = HashMap<View, android.animation.ValueAnimator>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -136,35 +141,20 @@ class MainFragment : Fragment() {
         val inactiveColor = com.google.android.material.color.MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorOnSurfaceVariant)
         val activeFill = com.google.android.material.color.MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorPrimary)
 
-        // One explicit, self-contained transition per call (not `animateLayoutChanges`) covers
-        // the width/position change as labels appear/disappear. Implicit LayoutTransition could
-        // be left mid-animation — with orphaned internal animators — if a page swipe fired the
-        // next call before the previous one settled; TransitionManager instead cancels/replaces
-        // cleanly on every call, so the pill can never get stuck mid-morph.
-        //
-        // ChangeBounds only — not AutoTransition, which bundles a Fade in/out. A Fade left
-        // mid-animation by an interrupting call can strand the label at a partial (invisible)
-        // alpha while its layout space, already resolved by ChangeBounds, stays reserved: the
-        // exact "space held but no text" bug this replaces. label.isVisible below still switches
-        // instantly, but ChangeBounds smoothly animates the resulting container width/position
-        // regardless of why a child's visibility changed — no separate fade needed.
-        val transition = androidx.transition.ChangeBounds().apply {
-            duration = NAV_ANIM_DURATION
-            interpolator = android.view.animation.PathInterpolator(0.2f, 0f, 0f, 1f)
-        }
-        androidx.transition.TransitionManager.beginDelayedTransition(binding.customNav, transition)
-
         animateNavButton(binding.btnNavHome, binding.ivNavHome, binding.tvNavHomeLabel, position == 0, activeColor, inactiveColor, activeFill)
         animateNavButton(binding.btnNavLog, binding.ivNavLog, binding.tvNavLogLabel, position == 1, activeColor, inactiveColor, activeFill)
         animateNavButton(binding.btnNavProfile, binding.ivNavProfile, binding.tvNavProfileLabel, position == 2, activeColor, inactiveColor, activeFill)
     }
 
     /**
-     * The active tab expands into a filled, labeled capsule (Material 3's expressive nav-bar
-     * shape); inactive tabs stay icon-only. Unlike a state-list drawable (an instant hard cut
-     * between two fixed drawables), the pill's own fill color is cross-faded via ValueAnimator
-     * alongside the icon tint and a small overshoot "pop" on the icon, so selecting a tab reads
-     * as one continuous morph rather than a snap.
+     * The active tab expands into a filled, labeled capsule; inactive tabs stay icon-only.
+     * Deliberately NOT using TransitionManager/ChangeBounds here anymore — it left the label
+     * stuck invisible (with its layout space still reserved) when a new call interrupted one
+     * still in flight, e.g. from a fast tab swipe. label.isVisible below is a plain, synchronous
+     * visibility switch: no animation to interrupt means no way to get stuck mid-transition.
+     * Only the icon tint / pill fill color / icon "pop" are still animated, each explicitly
+     * cancelled before restarting so rapid taps can't leave two conflicting animators running
+     * on the same view.
      */
     private fun animateNavButton(
         container: View,
@@ -184,7 +174,8 @@ class MainFragment : Fragment() {
         val currentIconColor = iv.tag as? Int ?: inactiveColor
         iv.tag = targetIconColor
 
-        android.animation.ValueAnimator.ofArgb(currentIconColor, targetIconColor).apply {
+        iconTintAnimators.remove(iv)?.cancel()
+        iconTintAnimators[iv] = android.animation.ValueAnimator.ofArgb(currentIconColor, targetIconColor).apply {
             duration = NAV_ANIM_DURATION
             addUpdateListener { iv.setColorFilter(it.animatedValue as Int) }
             start()
@@ -193,13 +184,15 @@ class MainFragment : Fragment() {
         val bg = container.background as android.graphics.drawable.GradientDrawable
         val previousFill = if (wasSelected) activeFill else android.graphics.Color.TRANSPARENT
         val targetFill = if (isSelected) activeFill else android.graphics.Color.TRANSPARENT
-        android.animation.ValueAnimator.ofArgb(previousFill, targetFill).apply {
+        fillAnimators.remove(container)?.cancel()
+        fillAnimators[container] = android.animation.ValueAnimator.ofArgb(previousFill, targetFill).apply {
             duration = NAV_ANIM_DURATION
             addUpdateListener { bg.setColor(it.animatedValue as Int) }
             start()
         }
 
         if (isSelected) {
+            iv.animate().cancel()
             iv.scaleX = 0.75f
             iv.scaleY = 0.75f
             iv.animate()
@@ -294,6 +287,10 @@ class MainFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        iconTintAnimators.values.forEach { it.cancel() }
+        iconTintAnimators.clear()
+        fillAnimators.values.forEach { it.cancel() }
+        fillAnimators.clear()
         _binding = null
     }
 
