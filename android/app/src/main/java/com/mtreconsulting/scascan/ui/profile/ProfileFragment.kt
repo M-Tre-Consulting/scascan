@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -104,14 +103,14 @@ class ProfileFragment : Fragment() {
             binding.toggleGroupSex.hapticTick()
         }
 
-        binding.activitySelector.setAdapter(
-            ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, activityLabels)
-        )
+        // setSimpleItems (not setAdapter with a plain ArrayAdapter) — a plain adapter's default
+        // Filterable behavior filters the popup list against whatever text is already in the
+        // field, so pre-filling the field with the current value below leaves only that one
+        // entry matching itself. setSimpleItems always shows the full list regardless of text.
+        binding.activitySelector.setSimpleItems(activityLabels)
         binding.activitySelector.setText(activityLabels[profile.activityIndex], false)
 
-        binding.goalSelector.setAdapter(
-            ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, goalLabels)
-        )
+        binding.goalSelector.setSimpleItems(goalLabels)
         binding.goalSelector.setText(goalLabels[profile.goalIndex], false)
 
         if (profile.aiCalorieTarget > 0) {

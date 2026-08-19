@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
@@ -341,9 +340,9 @@ class AppSettingsFragment : Fragment() {
         }
 
         val labels = models.map { it.displayName }
-        binding.modelSelector.setAdapter(
-            ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, labels)
-        )
+        // setSimpleItems, not setAdapter — see ProfileFragment.setupPersonalInfo for why a plain
+        // ArrayAdapter's built-in filtering breaks this once the field is pre-filled below.
+        binding.modelSelector.setSimpleItems(labels.toTypedArray())
         binding.modelSelector.isEnabled = true
         binding.tilModel.helperText = null
 

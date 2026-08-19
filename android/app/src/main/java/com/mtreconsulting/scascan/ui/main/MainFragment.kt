@@ -141,7 +141,14 @@ class MainFragment : Fragment() {
         // be left mid-animation — with orphaned internal animators — if a page swipe fired the
         // next call before the previous one settled; TransitionManager instead cancels/replaces
         // cleanly on every call, so the pill can never get stuck mid-morph.
-        val transition = androidx.transition.AutoTransition().apply {
+        //
+        // ChangeBounds only — not AutoTransition, which bundles a Fade in/out. A Fade left
+        // mid-animation by an interrupting call can strand the label at a partial (invisible)
+        // alpha while its layout space, already resolved by ChangeBounds, stays reserved: the
+        // exact "space held but no text" bug this replaces. label.isVisible below still switches
+        // instantly, but ChangeBounds smoothly animates the resulting container width/position
+        // regardless of why a child's visibility changed — no separate fade needed.
+        val transition = androidx.transition.ChangeBounds().apply {
             duration = NAV_ANIM_DURATION
             interpolator = android.view.animation.PathInterpolator(0.2f, 0f, 0f, 1f)
         }
