@@ -315,7 +315,7 @@ class LogFragment : Fragment() {
         binding.entriesContainer.removeAllViews()
         binding.tvEmptyLog.isVisible = entries.isEmpty()
 
-        entries.forEach { entry ->
+        entries.forEachIndexed { index, entry ->
             val item = ItemLogEntryBinding.inflate(layoutInflater, binding.entriesContainer, true)
             item.tvFoodName.text = entry.foodName
             item.tvNutrientSummary.text = buildString {
@@ -329,9 +329,27 @@ class LogFragment : Fragment() {
                 FixEntryBottomSheetFragment.newInstance(entry.id, entry.foodName)
                     .show(childFragmentManager, "fix_entry")
             }
-            item.btnRemove.setOnClickListener { it.hapticReject(); viewModel.deleteEntry(entry) }
+            item.btnRemove.setOnClickListener {
+                it.hapticReject()
+                // Shrink-and-fade before the actual delete, so removal reads as a deliberate
+                // action instead of the row just vanishing when the list re-renders.
+                item.root.animate()
+                    .scaleX(0.85f).scaleY(0.85f).alpha(0f)
+                    .setDuration(180L)
+                    .withEndAction { viewModel.deleteEntry(entry) }
+                    .start()
+            }
+
             item.root.alpha = 0f
-            item.root.animate().alpha(1f).setDuration(200).start()
+            item.root.translationY = 20f * resources.displayMetrics.density
+            item.root.scaleX = 0.96f
+            item.root.scaleY = 0.96f
+            item.root.animate()
+                .alpha(1f).translationY(0f).scaleX(1f).scaleY(1f)
+                .setStartDelay(index * 35L)
+                .setDuration(320L)
+                .setInterpolator(android.view.animation.DecelerateInterpolator(1.5f))
+                .start()
         }
     }
 
