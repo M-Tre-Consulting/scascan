@@ -194,8 +194,8 @@
     <string name="hc_sync_weight">Sync weight &amp; height</string>
     <string name="hc_weight_synced">Weight &amp; height synced</string>
     <string name="profile_sync_error">Sync failed: %s</string>
-    <string name="profile_sync_disconnect">Disconnect Google Drive</string>
-    <string name="profile_sync_disconnected">Disconnected from Google Drive</string>
+    <string name="profile_sync_disconnect">Disconnect Google account</string>
+    <string name="profile_sync_disconnected">Disconnected from Google</string>
     <string name="hc_weight_unavailable">No weight data found in Health Connect</string>
     <string name="hc_steps">%d steps</string>
     <string name="hc_active_kcal">%d kcal</string>
@@ -220,7 +220,7 @@
     <string name="profile_section_settings">App Settings</string>
     <string name="profile_section_notifications">Notifications</string>
     <string name="profile_sync_title">Cloud Sync</string>
-    <string name="profile_sync_desc">Keep your logs and profile in sync across your devices using Google Drive.</string>
+    <string name="profile_sync_desc">Keep your logs and profile in sync across your devices with your Google account.</string>
     <string name="profile_sync_btn_google">Sign in &amp; Sync</string>
     <string name="profile_sync_now">Sync now</string>
     <string name="profile_sync_status_connected">Connected as %s</string>

@@ -145,14 +145,13 @@ class AppSettingsFragment : Fragment() {
             getString(R.string.profile_sync_btn_google)
         }
 
-        binding.chipGoogleSyncStatus.text = if (connected) {
-            if (email == "Connected") {
-                getString(R.string.hc_connected)
-            } else {
-                getString(R.string.profile_sync_status_connected, email)
-            }
+        // Chip stays short (fixed layout weight) — the email, which can be arbitrarily long,
+        // goes in the full-width description line instead so it can wrap normally.
+        binding.chipGoogleSyncStatus.text = getString(if (connected) R.string.hc_connected else R.string.hc_disconnected)
+        binding.tvSyncDesc.text = if (connected && email != "Connected") {
+            getString(R.string.profile_sync_status_connected, email)
         } else {
-            getString(R.string.hc_disconnected)
+            getString(R.string.profile_sync_desc)
         }
 
         binding.btnDisconnectGoogle.isVisible = connected

@@ -194,8 +194,8 @@
     <string name="hc_sync_weight">Sincronizza peso e altezza</string>
     <string name="hc_weight_synced">Peso e altezza sincronizzati</string>
     <string name="profile_sync_error">Sincronizzazione fallita: %s</string>
-    <string name="profile_sync_disconnect">Disconnetti Google Drive</string>
-    <string name="profile_sync_disconnected">Disconnesso da Google Drive</string>
+    <string name="profile_sync_disconnect">Disconnetti account Google</string>
+    <string name="profile_sync_disconnected">Disconnesso da Google</string>
     <string name="hc_weight_unavailable">Nessun dato di peso trovato in Health Connect</string>
     <string name="hc_steps">%d passi</string>
     <string name="hc_active_kcal">%d kcal</string>
@@ -220,7 +220,7 @@
     <string name="profile_section_settings">Impostazioni App</string>
     <string name="profile_section_notifications">Notifiche</string>
     <string name="profile_sync_title">Sincronizzazione Cloud</string>
-    <string name="profile_sync_desc">Sincronizza il tuo diario e profilo su tutti i tuoi dispositivi tramite Google Drive.</string>
+    <string name="profile_sync_desc">Sincronizza il tuo diario e profilo su tutti i tuoi dispositivi con il tuo account Google.</string>
     <string name="profile_sync_btn_google">Accedi e Sincronizza</string>
     <string name="profile_sync_now">Sincronizza ora</string>
     <string name="profile_sync_status_connected">Connesso come %s</string>
