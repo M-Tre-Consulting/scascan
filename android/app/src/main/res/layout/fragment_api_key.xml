@@ -25,7 +25,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                app:cardCornerRadius="36dp"
+                app:cardCornerRadius="60dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="0dp">
                 <View
