@@ -236,6 +236,10 @@
     <string name="settings_active_fallback_desc">Used when your tracker wasn\'t worn for a whole day, instead of showing 0.</string>
     <string name="profile_notif_water_title">Hydration reminder</string>
     <string name="profile_notif_water_desc">Receive periodic notifications to remind you to drink water during the day.</string>
+    <string name="profile_notif_quiet_hours_title">Quiet hours</string>
+    <string name="profile_notif_quiet_hours_from">From (hour)</string>
+    <string name="profile_notif_quiet_hours_to">To (hour)</string>
+    <string name="profile_notif_quiet_hours_desc">No reminders will be sent between these hours — handy for sleep.</string>
     <string name="profile_about_desc">Uses Gemini AI for nutritional analysis · Built with Material 3 Expressive</string>
     <string name="profile_model_title">AI Model</string>
     <string name="profile_model_desc">Select the Gemini model used for food analysis. Models are fetched live from your API key.</string>

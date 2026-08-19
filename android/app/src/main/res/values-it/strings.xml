@@ -236,6 +236,10 @@
     <string name="settings_active_fallback_desc">Usata quando il tuo dispositivo non è stato indossato per un\'intera giornata, al posto di mostrare 0.</string>
     <string name="profile_notif_water_title">Promemoria idratazione</string>
     <string name="profile_notif_water_desc">Ricevi notifiche periodiche per ricordarti di bere acqua durante il giorno.</string>
+    <string name="profile_notif_quiet_hours_title">Fascia di silenzio</string>
+    <string name="profile_notif_quiet_hours_from">Da (ora)</string>
+    <string name="profile_notif_quiet_hours_to">A (ora)</string>
+    <string name="profile_notif_quiet_hours_desc">Nessun promemoria verrà inviato in questa fascia oraria — comodo per la notte.</string>
     <string name="profile_about_desc">Usa Gemini AI per l\'analisi nutrizionale · Realizzato con Material 3 Expressive</string>
     <string name="profile_model_title">Modello IA</string>
     <string name="profile_model_desc">Seleziona il modello Gemini per l\'analisi degli alimenti. I modelli vengono caricati in tempo reale dalla tua chiave API.</string>

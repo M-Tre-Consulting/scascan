@@ -68,6 +68,15 @@ class UserProfileStore @Inject constructor(
         get() = prefs.getBoolean(KEY_WATER_REMINDERS, false)
         set(v) { prefs.edit(commit = true) { putBoolean(KEY_WATER_REMINDERS, v) } }
 
+    /** Hydration reminders never fire between [reminderQuietHoursStart] and [reminderQuietHoursEnd] (24h, local time). */
+    var reminderQuietHoursStart: Int
+        get() = prefs.getInt(KEY_QUIET_HOURS_START, DEFAULT_QUIET_HOURS_START)
+        set(v) { prefs.edit(commit = true) { putInt(KEY_QUIET_HOURS_START, v.coerceIn(0, 23)) } }
+
+    var reminderQuietHoursEnd: Int
+        get() = prefs.getInt(KEY_QUIET_HOURS_END, DEFAULT_QUIET_HOURS_END)
+        set(v) { prefs.edit(commit = true) { putInt(KEY_QUIET_HOURS_END, v.coerceIn(0, 23)) } }
+
     /** Reference "typical" quick-add amount (ml), used to normalize proportional reminder push-back. */
     var typicalQuickAddMl: Int
         get() = prefs.getInt(KEY_TYPICAL_QUICK_ADD, DEFAULT_QUICK_ADD_ML)
@@ -198,6 +207,10 @@ class UserProfileStore @Inject constructor(
         private const val KEY_NAME        = "user_name"
         private const val KEY_SYNC_EMAIL   = "sync_email"
         private const val KEY_WATER_REMINDERS = "water_reminders"
+        private const val KEY_QUIET_HOURS_START = "reminder_quiet_hours_start"
+        private const val KEY_QUIET_HOURS_END = "reminder_quiet_hours_end"
+        private const val DEFAULT_QUIET_HOURS_START = 20
+        private const val DEFAULT_QUIET_HOURS_END = 10
         private const val KEY_TYPICAL_QUICK_ADD = "typical_quick_add_ml"
         private const val KEY_REMINDER_DAY_STAMP = "reminder_slots_day_stamp"
         private const val KEY_REMINDER_SLOTS = "reminder_slots_csv"

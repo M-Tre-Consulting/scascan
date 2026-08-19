@@ -67,6 +67,13 @@ class ReminderManager @Inject constructor(
         slots.forEachIndexed { index, epochMs -> scheduleSlot(index, epochMs) }
     }
 
+    /** Forces today's schedule to recompute against the (just-changed) quiet-hours window,
+     *  instead of reusing whatever was already cached for today under the old one. */
+    fun onQuietHoursChanged() {
+        profileStore.reminderSlotsCsv = ""
+        topUpTodaySchedule()
+    }
+
     fun cancelHydrationReminder() {
         for (i in 0 until SLOT_COUNT) workManager.cancelUniqueWork(workName(i))
         profileStore.reminderSlotsCsv = ""
@@ -84,15 +91,20 @@ class ReminderManager @Inject constructor(
         workManager.enqueueUniqueWork(workName(index), ExistingWorkPolicy.REPLACE, request)
     }
 
+    /** The active (non-quiet) window, derived from the user's quiet-hours setting — reminders
+     *  only ever get scheduled between when quiet hours end and when they start again. */
+    private fun windowStartHour() = profileStore.reminderQuietHoursEnd
+    private fun windowEndHour() = profileStore.reminderQuietHoursStart
+
     private fun evenSlotsFor(day: LocalDate): List<Long> {
-        val startMs = day.atTime(WINDOW_START_HOUR, 0).atZone(zone).toInstant().toEpochMilli()
+        val startMs = day.atTime(windowStartHour(), 0).atZone(zone).toInstant().toEpochMilli()
         val endMs = windowEnd(day)
         val step = (endMs - startMs) / (SLOT_COUNT + 1)
         return (1..SLOT_COUNT).map { startMs + step * it }
     }
 
     private fun windowEnd(day: LocalDate): Long =
-        day.atTime(WINDOW_END_HOUR, 0).atZone(zone).toInstant().toEpochMilli()
+        day.atTime(windowEndHour(), 0).atZone(zone).toInstant().toEpochMilli()
 
     private fun parseSlots(csv: String): List<Long> = csv.split(",").mapNotNull { it.toLongOrNull() }
 
@@ -101,8 +113,6 @@ class ReminderManager @Inject constructor(
     private fun workName(index: Int) = "hydration_slot_$index"
 
     companion object {
-        private const val WINDOW_START_HOUR = 10
-        private const val WINDOW_END_HOUR = 20
         private const val SLOT_COUNT = 3
 
         /** How much a "typical" quick-add push the remaining reminders back by. Tunable. */

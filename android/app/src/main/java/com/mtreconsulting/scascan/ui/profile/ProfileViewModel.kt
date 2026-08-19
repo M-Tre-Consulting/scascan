@@ -188,4 +188,12 @@ class ProfileViewModel @Inject constructor(
             reminderManager.cancelHydrationReminder()
         }
     }
+
+    fun updateReminderQuietHours(startHour: Int, endHour: Int) {
+        profileStore.reminderQuietHoursStart = startHour
+        profileStore.reminderQuietHoursEnd = endHour
+        if (profileStore.waterRemindersEnabled) {
+            reminderManager.onQuietHoursChanged()
+        }
+    }
 }
