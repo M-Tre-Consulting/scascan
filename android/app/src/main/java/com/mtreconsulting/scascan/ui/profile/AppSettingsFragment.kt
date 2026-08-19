@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -70,6 +71,12 @@ class AppSettingsFragment : Fragment() {
             binding.topBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = statusBar + (16 * resources.displayMetrics.density).toInt()
             }
+            // Content padding must track the same inset the floating topBar's margin does —
+            // a fixed dp value here falls short (content sliding under the bar) on any device
+            // whose status bar is taller than whatever this was last tuned against.
+            binding.contentContainer.updatePadding(
+                top = statusBar + (84 * resources.displayMetrics.density).toInt()
+            )
             insets
         }
 
@@ -85,8 +92,10 @@ class AppSettingsFragment : Fragment() {
 
     private fun setupNotifications() {
         binding.switchWaterReminder.isChecked = viewModel.profileStore.waterRemindersEnabled
+        binding.layoutQuietHours.isVisible = viewModel.profileStore.waterRemindersEnabled
         binding.switchWaterReminder.setOnCheckedChangeListener { _, isChecked ->
             binding.switchWaterReminder.hapticTick()
+            binding.layoutQuietHours.isVisible = isChecked
             if (isChecked) {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
                     val permission = android.Manifest.permission.POST_NOTIFICATIONS
@@ -101,6 +110,24 @@ class AppSettingsFragment : Fragment() {
             }
             viewModel.setWaterRemindersEnabled(isChecked)
         }
+
+        binding.etQuietHoursStart.setText(viewModel.profileStore.reminderQuietHoursStart.toString())
+        binding.etQuietHoursEnd.setText(viewModel.profileStore.reminderQuietHoursEnd.toString())
+        binding.etQuietHoursStart.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) saveQuietHours() }
+        binding.etQuietHoursEnd.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) saveQuietHours() }
+    }
+
+    private fun saveQuietHours() {
+        val start = binding.etQuietHoursStart.text?.toString()?.toIntOrNull()?.coerceIn(0, 23)
+        val end = binding.etQuietHoursEnd.text?.toString()?.toIntOrNull()?.coerceIn(0, 23)
+        if (start == null || end == null) {
+            binding.etQuietHoursStart.setText(viewModel.profileStore.reminderQuietHoursStart.toString())
+            binding.etQuietHoursEnd.setText(viewModel.profileStore.reminderQuietHoursEnd.toString())
+            return
+        }
+        binding.etQuietHoursStart.setText(start.toString())
+        binding.etQuietHoursEnd.setText(end.toString())
+        viewModel.updateReminderQuietHours(start, end)
     }
 
     private fun observeActionState() {

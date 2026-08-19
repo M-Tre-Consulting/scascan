@@ -12,11 +12,12 @@
         android:fillViewport="true">
 
         <LinearLayout
+            android:id="@+id/contentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingHorizontal="20dp"
-            android:paddingTop="116dp"
+            android:paddingTop="84dp"
             android:paddingBottom="32dp">
 
             <!-- API Key & Model Section -->
@@ -328,6 +329,82 @@
                         style="@style/TextAppearance.Material3.BodySmall"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_marginTop="4dp" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutQuietHours"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/profile_notif_quiet_hours_title"
+                            style="@style/TextAppearance.Material3.LabelLarge"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:layout_marginBottom="8dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="@string/profile_notif_quiet_hours_from"
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                                app:boxCornerRadiusBottomEnd="14dp"
+                                app:boxCornerRadiusBottomStart="14dp"
+                                app:boxCornerRadiusTopEnd="14dp"
+                                app:boxCornerRadiusTopStart="14dp">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etQuietHoursStart"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number"
+                                    android:maxLength="2" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="—"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:layout_marginHorizontal="12dp" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="@string/profile_notif_quiet_hours_to"
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                                app:boxCornerRadiusBottomEnd="14dp"
+                                app:boxCornerRadiusBottomStart="14dp"
+                                app:boxCornerRadiusTopEnd="14dp"
+                                app:boxCornerRadiusTopStart="14dp">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etQuietHoursEnd"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number"
+                                    android:maxLength="2" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/profile_notif_quiet_hours_desc"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:layout_marginTop="8dp" />
+                    </LinearLayout>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
